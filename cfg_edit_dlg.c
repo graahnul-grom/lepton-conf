@@ -4,9 +4,9 @@
 
 struct _row_data
 {
-    EdaConfig* ctx_;
+    EdaConfig*   ctx_;
     const gchar* group_;
-    const gchar* name_;
+    const gchar* key_;
     const gchar* val_;
 };
 
@@ -21,6 +21,27 @@ enum
     COL_DATA,     // hidden
     NUM_COLS
 };
+
+
+
+// TODO: row_data: free memory
+//
+static row_data*
+mk_data( EdaConfig*   ctx,
+         const gchar* group,
+         const gchar* key,
+         const gchar* val )
+{
+//    struct _row_data* data = g_malloc( sizeof( struct _row_data ) );
+    row_data* data = g_malloc( sizeof( row_data ) );
+//        memset( &data, 0, sizeof( row_data ) );
+    data->ctx_   = ctx;
+    data->group_ = group ? g_strdup( group ) : NULL;
+    data->key_   = key   ? g_strdup( key )   : NULL;
+    data->val_   = val   ? g_strdup( val )   : NULL;
+
+    return data;
+}
 
 
 
@@ -58,6 +79,7 @@ add_row( cfg_edit_dlg* dlg,
          gboolean      inh,
          const gchar*  val,
          gboolean      editable,
+         gpointer      data,
          GtkTreeIter*  it_parent )
 {
     GtkTreeIter it;
@@ -68,10 +90,10 @@ add_row( cfg_edit_dlg* dlg,
                         colid_inh(),      inh,
                         colid_val(),      val,
                         colid_editable(), editable,
-                        colid_data(),     NULL, // // //
+                        colid_data(),     data,
                         -1 );
 
-    gtk_tree_view_expand_all( dlg->tree_v_ );
+//    gtk_tree_view_expand_all( dlg->tree_v_ );
 
     return it;
 }
@@ -117,7 +139,7 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* data )
 
     const gchar* txt = gtk_entry_get_text( ent );
 
-    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_apply(): %s\n", txt );
+    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_apply(): [%s]\n", txt );
 
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
     GtkTreeIter it;
@@ -140,9 +162,9 @@ static void
 cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
 //                         GtkTreePath*       path,
 //                         GtkTreeViewColumn* column,
-                         gpointer*          data )
+                         gpointer*          p )
 {
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) data;
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
 
@@ -156,20 +178,25 @@ cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
 
     GtkTreeModel* model = gtk_tree_view_get_model( tree );
 
+
+
+    row_data* data = NULL; // NOTE: data
+    gtk_tree_model_get( model, &it, colid_data(), &data, -1 );
+//    printf( "cfg_edit_dlg::cfg_edit_dlg_on_row_sel(): %s\n", data->val_ );
+
+
+
     gchar* name = NULL;
     gtk_tree_model_get( model, &it, colid_name(), &name, -1 );
 
     gboolean editable = FALSE;
     gtk_tree_model_get( model, &it, colid_editable(), &editable, -1 );
 
-//    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit(): %s [%d]\n", name, editable );
-
     g_free( name );
 
 
     gchar* val = NULL;
     gtk_tree_model_get( model, &it, colid_val(), &val, -1 );
-//        printf( "    == [%s]\n", val );
 
     gtk_entry_set_text( ent, val );
     g_free( val );
@@ -276,12 +303,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     dlg->store_ = gtk_tree_store_new(
         cols_cnt(),
-        G_TYPE_STRING
-        , G_TYPE_BOOLEAN
-        , G_TYPE_STRING
-        , G_TYPE_BOOLEAN
-        , G_TYPE_BOOLEAN
-        , G_TYPE_POINTER
+        G_TYPE_STRING     // name
+        , G_TYPE_BOOLEAN  // inherited
+        , G_TYPE_STRING   // val
+        , G_TYPE_BOOLEAN  // editable
+        , G_TYPE_POINTER  // NOTE: data
     );
 
     dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
@@ -416,7 +442,6 @@ load_keys( EdaConfig*    ctx,
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
         const gchar* name = pp[ ndx ];
-//        printf( "    [%s]\n", name );
 
         gchar* val = eda_config_get_string( ctx, group, name, &err );
         if ( val == NULL )
@@ -426,7 +451,6 @@ load_keys( EdaConfig*    ctx,
             {
                 printf( "    err: %s\n", err->message );
             }
-//            val = g_strdup( "[err]" );
             continue;
         }
 
@@ -439,9 +463,11 @@ load_keys( EdaConfig*    ctx,
         }
         g_clear_error( &err );
 
+        row_data* data = mk_data( ctx, group, name, val ); // NOTE: data
+
         gboolean editable = file_writable;
 
-        add_row( dlg, name, inh, val, editable, itParent );
+        add_row( dlg, name, inh, val, editable, data, itParent );
 
         g_free( val );
 
@@ -498,11 +524,13 @@ load_groups( EdaConfig*    ctx,
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
         const gchar* name = pp[ ndx ];
-//        printf( "  <%s>\n", name );
 
         if ( strstr( name, "dialog-geometry" ) == NULL )
         {
-            GtkTreeIter it = add_row( dlg, name, FALSE, "", FALSE, itParent );
+            row_data* data = mk_data( ctx, name, NULL, NULL ); // NOTE: data
+
+            GtkTreeIter it = add_row( dlg, name, FALSE, "", FALSE, data, itParent );
+
             load_keys( ctx, name, dlg, &it, file_writable );
         }
     }
@@ -533,12 +561,15 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                  fname );
     }
 
+    row_data* data = mk_data( ctx, NULL, NULL, NULL ); // NOTE: data
+
     gboolean inh = eda_config_get_parent( ctx ) != NULL;
 
-    GtkTreeIter it = add_row( dlg, name, inh, str, FALSE, NULL );
+    GtkTreeIter it = add_row( dlg, name, inh, str, FALSE, data, NULL );
 
     load_groups( ctx, fname, dlg, &it, wok );
-}
+
+} // load_ctx()
 
 
 
