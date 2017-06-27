@@ -18,6 +18,11 @@ int main( int argc, char* argv[] )
 
         printf( "chk cfg_edit_dlg: prop1: [%d]\n", g_value_get_int( &gv ) );
 
+
+//        gtk_window_set_default_size( GTK_WINDOW(w), 600, 400 );
+        gtk_widget_set_size_request( w, 800, 500 );
+
+
         gtk_dialog_run( GTK_DIALOG( w ) );
 
 //        g_signal_connect( G_OBJECT( w ),

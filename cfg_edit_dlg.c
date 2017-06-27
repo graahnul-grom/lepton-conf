@@ -209,6 +209,14 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     load_cfg( dlg );
 
+    /* expand 0 level, collapse 1st level: */
+    gtk_tree_view_collapse_all( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_path_new_from_string( "0" );
+    if ( path )
+        gtk_tree_view_expand_row( dlg->tree_v_, path, FALSE );
+    else
+        printf( " >> !path" );
+
 
     // content area:
     //
@@ -277,7 +285,7 @@ load_keys( EdaConfig*    ctx,
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
         const gchar* name = pp[ ndx ];
-        printf( "    [%s]\n", name );
+//        printf( "    [%s]\n", name );
 
         gchar* val = eda_config_get_string( ctx, group, name, &err );
         if ( val == NULL )
@@ -339,7 +347,7 @@ load_groups( EdaConfig*    ctx,
 
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
-        printf( "  <%s>\n", pp[ndx] );
+//        printf( "  <%s>\n", pp[ndx] );
         GtkTreeIter it = add_row( dlg, pp[ndx], "", itParent );
 
         load_keys( ctx, pp[ndx], dlg, &it );
