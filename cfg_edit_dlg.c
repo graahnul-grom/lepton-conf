@@ -108,15 +108,15 @@ cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* data )
 
 static void
 cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
-                         GtkTreePath*       path,
-                         GtkTreeViewColumn* column,
+//                         GtkTreePath*       path,
+//                         GtkTreeViewColumn* column,
                          gpointer*          data )
 {
     // NOTE: segfault on accessing [dlg] members
 
-//    cfg_edit_dlg* dlg = (cfg_edit_dlg*) data;
-//    if ( !dlg )
-//        return;
+    GtkEntry* ent = (GtkEntry*) data;
+    if ( !ent )
+        return;
 
     GtkTreeSelection* sel = gtk_tree_view_get_selection( tree );
 
@@ -144,6 +144,10 @@ cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
             gchar* val = NULL;
             gtk_tree_model_get( model, &it, colid_val(), &val, -1 );
             printf( "    == [%s]\n", val );
+
+            gtk_entry_set_text( ent, val );
+//            gtk_entry_set_text( ent, g_strdup( val ) );
+
             g_free( val );
         }
 
@@ -352,7 +356,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       "cursor-changed",
 //                      "row-activated",
                       G_CALLBACK( &cfg_edit_dlg_on_row_sel ),
-                      dlg );
+                      ent );
 }
 
 
