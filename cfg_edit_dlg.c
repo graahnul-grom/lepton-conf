@@ -99,24 +99,39 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
 
 static void
-cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* p )
+cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* data )
 {
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return;
+    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit()\n" );
+}
 
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+
+
+static void
+cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
+                         GtkTreePath*       path,
+                         GtkTreeViewColumn* column,
+                         gpointer*          data )
+{
+    // NOTE: segfault on accessing [dlg] members
+
+//    cfg_edit_dlg* dlg = (cfg_edit_dlg*) data;
+//    if ( !dlg )
+//        return;
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( tree );
 
     GtkTreeIter it;
     gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
 
     if ( res )
     {
+        GtkTreeModel* model = gtk_tree_view_get_model( tree );
+
         gchar* name = NULL;
-        gtk_tree_model_get( dlg->model_, &it, colid_name(), &name, -1 );
+        gtk_tree_model_get( model, &it, colid_name(), &name, -1 );
 
         gboolean editable = FALSE;
-        gtk_tree_model_get( dlg->model_, &it, colid_editable(), &editable, -1 );
+        gtk_tree_model_get( model, &it, colid_editable(), &editable, -1 );
 
         printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit(): %s [%d]\n",
                 name,
@@ -124,17 +139,17 @@ cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* p )
 
         g_free( name );
 
-
         if ( editable )
         {
             gchar* val = NULL;
-            gtk_tree_model_get( dlg->model_, &it, colid_val(), &val, -1 );
+            gtk_tree_model_get( model, &it, colid_val(), &val, -1 );
             printf( "    == [%s]\n", val );
+            g_free( val );
         }
 
-    }
+    } // if res
 
-}
+} // cfg_edit_dlg_on_row_sel()
 
 
 
@@ -293,12 +308,24 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
 
 
+
+    GtkWidget* box = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* ent = gtk_entry_new();
+    gtk_box_pack_start( GTK_BOX( box ), ent, TRUE, TRUE, 10 );
+
+    GtkWidget* btn_apply = gtk_button_new_with_mnemonic( "_apply" );
+    gtk_box_pack_start( GTK_BOX( box ), btn_apply, FALSE, FALSE, 10 );
+
+    gtk_box_pack_start( GTK_BOX( ca ),  box, FALSE, FALSE, 0 );
+
+
+
     // action area:
     //
     GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
 
-    GtkWidget* btn_apply = gtk_button_new_with_mnemonic( "_apply" );
-    gtk_box_pack_start( GTK_BOX( aa ), btn_apply, FALSE, FALSE, 0 );
+
 
     GtkWidget* btn_edit = gtk_button_new_with_mnemonic( "_edit" );
     gtk_box_pack_start( GTK_BOX( aa ), btn_edit, FALSE, FALSE, 0 );
@@ -319,6 +346,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( btn_edit ),
                       "clicked",
                       G_CALLBACK( &cfg_edit_dlg_on_btn_edit ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
+                      "cursor-changed",
+//                      "row-activated",
+                      G_CALLBACK( &cfg_edit_dlg_on_row_sel ),
                       dlg );
 }
 
