@@ -347,10 +347,14 @@ load_groups( EdaConfig*    ctx,
 
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
-//        printf( "  <%s>\n", pp[ndx] );
-        GtkTreeIter it = add_row( dlg, pp[ndx], "", itParent );
+        const gchar* name = pp[ ndx ];
+//        printf( "  <%s>\n", name );
 
-        load_keys( ctx, pp[ndx], dlg, &it );
+        if ( strstr( name, "gschem.dialog-geometry" ) == NULL )
+        {
+            GtkTreeIter it = add_row( dlg, name, "", itParent );
+            load_keys( ctx, name, dlg, &it );
+        }
     }
 
     g_strfreev( pp );
@@ -363,15 +367,21 @@ static void
 load_cfg( cfg_edit_dlg* dlg )
 {
     EdaConfig* ctx = NULL;
+    GtkTreeIter it;
+    const gchar* fname = NULL;
 //    ctx = eda_config_get_default_context();
 //    ctx = eda_config_get_system_context();
-    ctx = eda_config_get_user_context();
+
 //    ctx = eda_config_get_context_for_path( "." );
 
-    const gchar* fname = eda_config_get_filename( ctx );
+    ctx = eda_config_get_user_context();
+    fname = eda_config_get_filename( ctx );
+    it = add_row( dlg, "|| user ||", fname ? fname : "", NULL );
+    load_groups( ctx, fname, dlg, &it );
 
-    GtkTreeIter it = add_row( dlg, "|| user ||", fname ? fname : "", NULL );
-
+    ctx = eda_config_get_context_for_path( "." );
+    fname = eda_config_get_filename( ctx );
+    it = add_row( dlg, "|| path: [.] ||", fname ? fname : "", NULL );
     load_groups( ctx, fname, dlg, &it );
 }
 
