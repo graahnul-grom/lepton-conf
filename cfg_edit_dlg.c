@@ -139,17 +139,17 @@ cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
 
         g_free( name );
 
-        if ( editable )
-        {
-            gchar* val = NULL;
-            gtk_tree_model_get( model, &it, colid_val(), &val, -1 );
-            printf( "    == [%s]\n", val );
 
-            gtk_entry_set_text( ent, val );
-//            gtk_entry_set_text( ent, g_strdup( val ) );
+        gchar* val = NULL;
+        gtk_tree_model_get( model, &it, colid_val(), &val, -1 );
+//        printf( "    == [%s]\n", val );
 
-            g_free( val );
-        }
+        gtk_entry_set_text( ent, val );
+
+        g_free( val );
+
+        gtk_editable_set_editable( GTK_EDITABLE( ent ), editable );
+//        gtk_widget_set_sensitive( GTK_WIDGET( ent ), editable );
 
     } // if res
 
