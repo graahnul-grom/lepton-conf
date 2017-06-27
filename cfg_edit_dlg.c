@@ -189,11 +189,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
 
+
     // view:
     //
     dlg->tree_w_ = gtk_tree_view_new_with_model( dlg->model_ );
     dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
+
 
     // tree view columns:
     //
@@ -201,11 +203,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     add_col( dlg->tree_v_, ren_text, "text",   colid_name(), "name" );
     add_col( dlg->tree_v_, ren_text, "text",   colid_val(), "val" );
 
-    // tree vire content:
 //    GtkTreeIter it = add_row( dlg, "[name]", "[val]", NULL );
 //    it = add_row( dlg, "123", "456", &it );
 
+
     load_cfg( dlg );
+
 
     // content area:
     //
@@ -213,7 +216,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     GtkWidget* lab = gtk_label_new( "eklmn!" );
     gtk_box_pack_start( GTK_BOX( ca ), lab, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( ca ), dlg->tree_w_, FALSE, FALSE, 0 );
+
+    GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    gtk_container_add( GTK_CONTAINER( wscroll ), dlg->tree_w_ );
+    gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
 
 
     // action area:
@@ -222,8 +230,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     GtkWidget* btn = gtk_button_new_with_mnemonic( "_apply" );
     gtk_box_pack_start( GTK_BOX( aa ), btn, FALSE, FALSE, 0 );
-
-
 
 
     gtk_widget_show_all( GTK_WIDGET(dlg) );
@@ -238,6 +244,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &cfg_edit_dlg_on_btn_apply ),
                       NULL );
 }
+
+
+
 
 
 
