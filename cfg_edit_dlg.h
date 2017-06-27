@@ -52,6 +52,7 @@ struct _cfg_edit_dlg
     GtkTreeView*  tree_v_;
 
     GtkWidget*    ent_;
+    GtkWidget*    btn_apply_;
 };
 
 typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;

@@ -2,12 +2,23 @@
 #include <liblepton/liblepton.h>
 #include <liblepton/libgedaguile.h>
 
+struct _row_data
+{
+    EdaConfig* ctx_;
+    const gchar* group_;
+    const gchar* name_;
+    const gchar* val_;
+};
+
+typedef struct _row_data row_data;
+
 enum
 {
     COL_NAME,
     COL_INH,
     COL_VAL,
     COL_EDITABLE, // hidden
+    COL_DATA,     // hidden
     NUM_COLS
 };
 
@@ -21,6 +32,7 @@ static int colid_name()     { return COL_NAME; }
 static int colid_inh()      { return COL_INH; }
 static int colid_val()      { return COL_VAL; }
 static int colid_editable() { return COL_EDITABLE; }
+static int colid_data()     { return COL_DATA; }
 static int cols_cnt()       { return NUM_COLS; }
 
 
@@ -56,6 +68,7 @@ add_row( cfg_edit_dlg* dlg,
                         colid_inh(),      inh,
                         colid_val(),      val,
                         colid_editable(), editable,
+                        colid_data(),     NULL, // // //
                         -1 );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
@@ -267,6 +280,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
         , G_TYPE_STRING
         , G_TYPE_BOOLEAN
         , G_TYPE_BOOLEAN
+        , G_TYPE_POINTER
     );
 
     dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
@@ -328,8 +342,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->ent_ = gtk_entry_new();
     gtk_box_pack_start( GTK_BOX( box ), dlg->ent_, TRUE, TRUE, 10 );
 
-    GtkWidget* btn_apply = gtk_button_new_with_mnemonic( "_apply" );
-    gtk_box_pack_start( GTK_BOX( box ), btn_apply, FALSE, FALSE, 10 );
+    dlg->btn_apply_ = gtk_button_new_with_mnemonic( "_apply" );
+    gtk_box_pack_start( GTK_BOX( box ), dlg->btn_apply_, FALSE, FALSE, 10 );
 
     gtk_box_pack_start( GTK_BOX( ca ),  box, FALSE, FALSE, 0 );
 
@@ -338,8 +352,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // action area:
     //
     GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
-
-
 
     GtkWidget* btn_edit = gtk_button_new_with_mnemonic( "_edit" );
     gtk_box_pack_start( GTK_BOX( aa ), btn_edit, FALSE, FALSE, 0 );
@@ -352,7 +364,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &cfg_edit_dlg_on_delete_event ),
                       NULL );
 
-    g_signal_connect( G_OBJECT( btn_apply ),
+    g_signal_connect( G_OBJECT( dlg->btn_apply_ ),
                       "clicked",
                       G_CALLBACK( &cfg_edit_dlg_on_btn_apply ),
                       dlg );
@@ -367,6 +379,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 //                      "row-activated",
                       G_CALLBACK( &cfg_edit_dlg_on_row_sel ),
                       dlg );
+
+    g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
 }
 
 
