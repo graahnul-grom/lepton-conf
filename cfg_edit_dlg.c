@@ -324,7 +324,8 @@ static void
 load_keys( EdaConfig*    ctx,
            const gchar*  group,
            cfg_edit_dlg* dlg,
-           GtkTreeIter*  itParent )
+           GtkTreeIter*  itParent,
+           gboolean      file_writable )
 {
     gsize len = 0;
     GError* err = NULL;
@@ -367,7 +368,7 @@ load_keys( EdaConfig*    ctx,
         }
         g_clear_error( &err );
 
-        gboolean editable = inh; // // //
+        gboolean editable = file_writable;
 
         add_row( dlg, name, inh, val, editable, itParent );
 
@@ -384,7 +385,8 @@ static void
 load_groups( EdaConfig*    ctx,
              const gchar*  fname,
              cfg_edit_dlg* dlg,
-             GtkTreeIter*  itParent )
+             GtkTreeIter*  itParent,
+             gboolean      file_writable )
 {
     if ( fname != NULL )
     {
@@ -422,7 +424,7 @@ load_groups( EdaConfig*    ctx,
         if ( strstr( name, "dialog-geometry" ) == NULL )
         {
             GtkTreeIter it = add_row( dlg, name, FALSE, "", FALSE, itParent );
-            load_keys( ctx, name, dlg, &it );
+            load_keys( ctx, name, dlg, &it, file_writable );
         }
     }
 
@@ -437,12 +439,14 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
     const gchar* fname = eda_config_get_filename( ctx );
 
+    gboolean wok = FALSE;
     gchar str[ PATH_MAX ] = "";
+
     if ( fname != NULL )
     {
         gboolean exist = access( fname, F_OK ) == 0;
         gboolean rok = access( fname, R_OK ) == 0;
-        gboolean wok = access( fname, W_OK ) == 0;
+        wok = access( fname, W_OK ) == 0;
         sprintf( str, "[%s%s%s] %s",
                  exist ? "f" : "-",
                  rok ? "r" : "-",
@@ -454,7 +458,7 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
     GtkTreeIter it = add_row( dlg, name, inh, str, FALSE, NULL );
 
-    load_groups( ctx, fname, dlg, &it );
+    load_groups( ctx, fname, dlg, &it, wok );
 }
 
 
