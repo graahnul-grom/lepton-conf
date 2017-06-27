@@ -175,6 +175,7 @@ cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
     g_free( val );
 
     gtk_editable_set_editable( GTK_EDITABLE( ent ), editable );
+    gtk_widget_set_sensitive( dlg->btn_apply_, editable );
 
 } // cfg_edit_dlg_on_row_sel()
 
