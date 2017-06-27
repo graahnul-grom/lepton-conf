@@ -7,6 +7,7 @@ enum
     COL_NAME,
     COL_INH,
     COL_VAL,
+    COL_EDITABLE, // hidden
     NUM_COLS
 };
 
@@ -16,10 +17,11 @@ static void load_cfg( cfg_edit_dlg* dlg );
 
 
 
-static int colid_name()  { return COL_NAME; }
-static int colid_inh()   { return COL_INH; }
-static int colid_val()   { return COL_VAL; }
-static int cols_cnt()    { return NUM_COLS; }
+static int colid_name()     { return COL_NAME; }
+static int colid_inh()      { return COL_INH; }
+static int colid_val()      { return COL_VAL; }
+static int colid_editable() { return COL_EDITABLE; }
+static int cols_cnt()       { return NUM_COLS; }
 
 
 static void
@@ -43,14 +45,17 @@ add_row( cfg_edit_dlg* dlg,
          const gchar*  name,
          gboolean      inh,
          const gchar*  val,
+         gboolean      editable,
          GtkTreeIter*  it_parent )
 {
     GtkTreeIter it;
     gtk_tree_store_append( dlg->store_, &it, it_parent );
-    gtk_tree_store_set( dlg->store_, &it,
-                        colid_name(), name,
-                        colid_inh(),  inh,
-                        colid_val(),  val,
+    gtk_tree_store_set( dlg->store_,
+                        &it,
+                        colid_name(),     name,
+                        colid_inh(),      inh,
+                        colid_val(),      val,
+                        colid_editable(), editable,
                         -1 );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
@@ -86,7 +91,7 @@ cfg_edit_dlg_on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* p )
 
 
 static void
-cfg_edit_dlg_on_btn_apply( GtkButton* dlg, gpointer* p )
+cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 {
     printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_apply()\n" );
 }
@@ -94,9 +99,32 @@ cfg_edit_dlg_on_btn_apply( GtkButton* dlg, gpointer* p )
 
 
 static void
-cfg_edit_dlg_on_btn_edit( GtkButton* dlg, gpointer* p )
+cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* p )
 {
-    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit()\n" );
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+
+    if ( res )
+    {
+        gchar* name = NULL;
+        gtk_tree_model_get( dlg->model_, &it, colid_name(), &name, -1 );
+
+        gboolean editable = FALSE;
+        gtk_tree_model_get( dlg->model_, &it, colid_editable(), &editable, -1 );
+
+        printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit(): %s [%d]\n",
+                name,
+                editable );
+
+        g_free( name );
+    }
+
 }
 
 
@@ -196,9 +224,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     dlg->store_ = gtk_tree_store_new(
         cols_cnt(),
-        G_TYPE_STRING,
-        G_TYPE_BOOLEAN,
         G_TYPE_STRING
+        , G_TYPE_BOOLEAN
+        , G_TYPE_STRING
+        , G_TYPE_BOOLEAN
+        , G_TYPE_BOOLEAN
     );
 
     dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
@@ -280,7 +310,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( btn_edit ),
                       "clicked",
                       G_CALLBACK( &cfg_edit_dlg_on_btn_edit ),
-                      NULL );
+                      dlg );
 }
 
 
@@ -337,8 +367,9 @@ load_keys( EdaConfig*    ctx,
         }
         g_clear_error( &err );
 
+        gboolean editable = inh; // // //
 
-        add_row( dlg, name, inh, val, itParent );
+        add_row( dlg, name, inh, val, editable, itParent );
 
         g_free( val );
     }
@@ -390,7 +421,7 @@ load_groups( EdaConfig*    ctx,
 
         if ( strstr( name, "dialog-geometry" ) == NULL )
         {
-            GtkTreeIter it = add_row( dlg, name, FALSE, "", itParent );
+            GtkTreeIter it = add_row( dlg, name, FALSE, "", FALSE, itParent );
             load_keys( ctx, name, dlg, &it );
         }
     }
@@ -421,7 +452,7 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
     gboolean inh = eda_config_get_parent( ctx ) != NULL;
 
-    GtkTreeIter it = add_row( dlg, name, inh, str, NULL );
+    GtkTreeIter it = add_row( dlg, name, inh, str, FALSE, NULL );
 
     load_groups( ctx, fname, dlg, &it );
 }
