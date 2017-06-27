@@ -389,9 +389,22 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
     const gchar* fname = eda_config_get_filename( ctx );
 
+    gchar str[ PATH_MAX ] = "";
+    if ( fname != NULL )
+    {
+        gboolean exist = access( fname, F_OK ) == 0;
+        gboolean rok = access( fname, R_OK ) == 0;
+        gboolean wok = access( fname, W_OK ) == 0;
+        sprintf( str, "[%s%s%s] %s",
+                 exist ? "f" : "-",
+                 rok ? "r" : "-",
+                 wok ? "w" : "-",
+                 fname );
+    }
+
     gboolean inh = eda_config_get_parent( ctx ) != NULL;
 
-    GtkTreeIter it = add_row( dlg, name, fname ? fname : "", inh, NULL );
+    GtkTreeIter it = add_row( dlg, name, str, inh, NULL );
 
     load_groups( ctx, fname, dlg, &it );
 }
