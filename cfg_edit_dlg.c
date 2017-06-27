@@ -209,13 +209,18 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     load_cfg( dlg );
 
-    /* expand 0 level, collapse 1st level: */
+
+    // collapse 0 level, expand 1st level:
+    //
     gtk_tree_view_collapse_all( dlg->tree_v_ );
-    GtkTreePath* path = gtk_tree_path_new_from_string( "0" );
-    if ( path )
-        gtk_tree_view_expand_row( dlg->tree_v_, path, FALSE );
-    else
-        printf( " >> !path" );
+
+    GtkTreePath* path0 = gtk_tree_path_new_from_string( "0" );
+    if ( path0 )
+        gtk_tree_view_expand_row( dlg->tree_v_, path0, FALSE );
+
+    GtkTreePath* path1 = gtk_tree_path_new_from_string( "1" );
+    if ( path1 )
+        gtk_tree_view_expand_row( dlg->tree_v_, path1, FALSE );
 
 
     // content area:
