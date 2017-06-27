@@ -42,6 +42,7 @@ static GtkTreeIter
 add_row( cfg_edit_dlg* dlg,
          const gchar*  name,
          const gchar*  val,
+         gboolean      inh,
          GtkTreeIter*  it_parent )
 {
     GtkTreeIter it;
@@ -49,6 +50,7 @@ add_row( cfg_edit_dlg* dlg,
     gtk_tree_store_set( dlg->store_, &it,
                         colid_name(), name,
                         colid_val(),  val,
+                        colid_inh(),  inh,
                         -1 );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
@@ -288,7 +290,6 @@ load_keys( EdaConfig*    ctx,
         {
             printf( "    err: %s\n", err->message );
         }
-
         g_clear_error( &err );
         return;
     }
@@ -310,7 +311,17 @@ load_keys( EdaConfig*    ctx,
             continue;
         }
 
-        add_row( dlg, name, val, itParent );
+
+        gboolean inh = eda_config_is_inherited( ctx, group, name, &err );
+        if ( err != NULL )
+        {
+            printf( " >> load_keys(): !eda_config_is_inherited()\n" );
+            printf( "    err: %s\n", err->message );
+        }
+        g_clear_error( &err );
+
+
+        add_row( dlg, name, val, inh, itParent );
 
         g_free( val );
     }
@@ -362,7 +373,7 @@ load_groups( EdaConfig*    ctx,
 
         if ( strstr( name, "gschem.dialog-geometry" ) == NULL )
         {
-            GtkTreeIter it = add_row( dlg, name, "", itParent );
+            GtkTreeIter it = add_row( dlg, name, "", FALSE, itParent );
             load_keys( ctx, name, dlg, &it );
         }
     }
@@ -378,7 +389,9 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
     const gchar* fname = eda_config_get_filename( ctx );
 
-    GtkTreeIter it = add_row( dlg, name, fname ? fname : "", NULL );
+    gboolean inh = eda_config_get_parent( ctx ) != NULL;
+
+    GtkTreeIter it = add_row( dlg, name, fname ? fname : "", inh, NULL );
 
     load_groups( ctx, fname, dlg, &it );
 }
