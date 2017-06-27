@@ -123,6 +123,15 @@ cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* p )
                 editable );
 
         g_free( name );
+
+
+        if ( editable )
+        {
+            gchar* val = NULL;
+            gtk_tree_model_get( dlg->model_, &it, colid_val(), &val, -1 );
+            printf( "    == [%s]\n", val );
+        }
+
     }
 
 }
@@ -373,7 +382,15 @@ load_keys( EdaConfig*    ctx,
         add_row( dlg, name, inh, val, editable, itParent );
 
         g_free( val );
-    }
+
+        // if key is inherited, also mark group as inherited:
+        //
+        if ( inh )
+        {
+            gtk_tree_store_set( dlg->store_, itParent, colid_inh(), TRUE, -1 );
+        }
+
+    } // for keys
 
     g_strfreev( pp );
 
