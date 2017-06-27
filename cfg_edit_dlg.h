@@ -45,6 +45,11 @@ struct _cfg_edit_dlg
     GtkDialog parent;
 
     int prop1_;
+
+    GtkTreeStore* store_;
+    GtkTreeModel* model_;
+    GtkWidget*    tree_w_;
+    GtkTreeView*  tree_v_;
 };
 
 typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;
