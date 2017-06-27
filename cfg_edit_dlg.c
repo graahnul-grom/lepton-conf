@@ -93,13 +93,24 @@ cfg_edit_dlg_on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* data )
 static void
 cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* data )
 {
-    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_apply()\n" );
-
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) data;
     if ( !dlg )
         return;
 
-    gtk_editable_get_editable( GTK_EDITABLE( dlg->ent_ ) );
+    GtkEntry* ent = GTK_ENTRY( dlg->ent_ );
+
+    if ( !gtk_editable_get_editable( GTK_EDITABLE( ent ) ) )
+        return;
+
+    const gchar* txt = gtk_entry_get_text( ent );
+
+    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_apply(): %s\n", txt );
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    if ( !res )
+        return;
 }
 
 
@@ -138,9 +149,7 @@ cfg_edit_dlg_on_row_sel( GtkTreeView*       tree,
     gboolean editable = FALSE;
     gtk_tree_model_get( model, &it, colid_editable(), &editable, -1 );
 
-    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit(): %s [%d]\n",
-            name,
-            editable );
+//    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit(): %s [%d]\n", name, editable );
 
     g_free( name );
 
@@ -346,7 +355,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( btn_apply ),
                       "clicked",
                       G_CALLBACK( &cfg_edit_dlg_on_btn_apply ),
-                      NULL );
+                      dlg );
 
     g_signal_connect( G_OBJECT( btn_edit ),
                       "clicked",
