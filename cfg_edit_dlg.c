@@ -369,28 +369,23 @@ load_groups( EdaConfig*    ctx,
 
 
 static void
-load_cfg( cfg_edit_dlg* dlg )
+load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
-    EdaConfig* ctx = NULL;
-    GtkTreeIter it;
-    const gchar* fname = NULL;
-//    ctx = eda_config_get_default_context();
-//    ctx = eda_config_get_system_context();
+    const gchar* fname = eda_config_get_filename( ctx );
 
-//    ctx = eda_config_get_context_for_path( "." );
+    GtkTreeIter it = add_row( dlg, name, fname ? fname : "", NULL );
 
-    ctx = eda_config_get_user_context();
-    fname = eda_config_get_filename( ctx );
-    it = add_row( dlg, "|| user ||", fname ? fname : "", NULL );
-    load_groups( ctx, fname, dlg, &it );
-
-    ctx = eda_config_get_context_for_path( "." );
-    fname = eda_config_get_filename( ctx );
-    it = add_row( dlg, "|| path: [.] ||", fname ? fname : "", NULL );
     load_groups( ctx, fname, dlg, &it );
 }
 
 
 
-
+static void
+load_cfg( cfg_edit_dlg* dlg )
+{
+    load_ctx( eda_config_get_default_context(),       "DEFAULT",  dlg );
+    load_ctx( eda_config_get_system_context(),        "SYSTEM",   dlg );
+    load_ctx( eda_config_get_user_context(),          "USER",     dlg );
+    load_ctx( eda_config_get_context_for_path( "." ), "PATH [.]", dlg );
+}
 
