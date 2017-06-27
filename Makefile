@@ -3,7 +3,15 @@ SRC=chk.c cfg_edit_dlg.c
 CFLAGS=-Wall -ansi -std=c99 -O0 -ggdb -pthread
 # CPPFLAGS=-DG_DISABLE_CHECKS
 
-OPTGTK=`pkg-config --libs --cflags gtk+-2.0`
+OPT_GTK=`pkg-config --libs --cflags gtk+-2.0`
+OPT_GUILE=`pkg-config --libs --cflags guile-2.0`
+
+gaf_dir=$(lepton)/bin.dmn
+libgeda_name=liblepton
+gaf_pk_dir=$(gaf_dir)/lib/pkgconfig
+OPT_LIBGEDA=`PKG_CONFIG_PATH=$(gaf_pk_dir) pkg-config --libs --cflags $(libgeda_name)`
+
+
 
 all: $(EXE)
 	@echo "done."
@@ -13,5 +21,6 @@ clean:
 	@echo "done."
 
 $(EXE): $(SRC)
-	cc $(CFLAGS) -o $(EXE) $(SRC) $(OPTGTK)
+	cc $(CFLAGS) -o $(EXE) $(SRC) \
+	$(OPT_GTK) $(OPT_GUILE) $(OPT_LIBGEDA)
 
