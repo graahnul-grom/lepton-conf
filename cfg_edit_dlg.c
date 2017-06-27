@@ -84,10 +84,19 @@ cfg_edit_dlg_on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* p )
 }
 
 
+
 static void
 cfg_edit_dlg_on_btn_apply( GtkButton* dlg, gpointer* p )
 {
     printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_apply()\n" );
+}
+
+
+
+static void
+cfg_edit_dlg_on_btn_edit( GtkButton* dlg, gpointer* p )
+{
+    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit()\n" );
 }
 
 
@@ -249,8 +258,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
 
-    GtkWidget* btn = gtk_button_new_with_mnemonic( "_apply" );
-    gtk_box_pack_start( GTK_BOX( aa ), btn, FALSE, FALSE, 0 );
+    GtkWidget* btn_apply = gtk_button_new_with_mnemonic( "_apply" );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_apply, FALSE, FALSE, 0 );
+
+    GtkWidget* btn_edit = gtk_button_new_with_mnemonic( "_edit" );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_edit, FALSE, FALSE, 0 );
 
 
     gtk_widget_show_all( GTK_WIDGET(dlg) );
@@ -260,9 +272,14 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &cfg_edit_dlg_on_delete_event ),
                       NULL );
 
-    g_signal_connect( G_OBJECT( btn ),
+    g_signal_connect( G_OBJECT( btn_apply ),
                       "clicked",
                       G_CALLBACK( &cfg_edit_dlg_on_btn_apply ),
+                      NULL );
+
+    g_signal_connect( G_OBJECT( btn_edit ),
+                      "clicked",
+                      G_CALLBACK( &cfg_edit_dlg_on_btn_edit ),
                       NULL );
 }
 
