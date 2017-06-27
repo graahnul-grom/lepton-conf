@@ -13,14 +13,39 @@ static int colid_name()  { return COL_1_NAME; }
 static int colid_val()   { return COL_2_VAL; }
 static int cols_cnt()    { return NUM_COLS; }
 
-static void col_add( GtkTreeView* tree, GtkCellRenderer* ren,
-              const gchar* prop, gint col_id, const gchar* title )
+
+static void
+add_col( GtkTreeView*     tree,
+         GtkCellRenderer* ren,
+         const gchar*     prop,
+         gint             col_id,
+         const gchar*     title )
 {
     GtkTreeViewColumn* col = gtk_tree_view_column_new();
     gtk_tree_view_column_set_title( col, title );
     gtk_tree_view_column_pack_start( col, ren, TRUE );
     gtk_tree_view_column_add_attribute( col, ren, prop, col_id );
     gtk_tree_view_append_column( tree, col );
+}
+
+
+
+static GtkTreeIter
+add_row( cfg_edit_dlg* dlg,
+         const gchar*  name,
+         const gchar*  val,
+         GtkTreeIter*  it_parent )
+{
+    GtkTreeIter it;
+    gtk_tree_store_append( dlg->store_, &it, it_parent );
+    gtk_tree_store_set( dlg->store_, &it,
+                        colid_name(), name,
+                        colid_val(),  val,
+                        -1 );
+
+    gtk_tree_view_expand_all( dlg->tree_v_ );
+
+    return it;
 }
 
 
@@ -167,8 +192,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // tree view columns:
     //
     GtkCellRenderer* ren_text = gtk_cell_renderer_text_new();
+    add_col( dlg->tree_v_, ren_text, "text",   colid_name(), "name" );
+    add_col( dlg->tree_v_, ren_text, "text",   colid_val(), "val" );
 
-    col_add( dlg->tree_v_, ren_text, "text",   colid_name(), "cfg name" );
+    // tree vire content:
+    GtkTreeIter it = add_row( dlg, "[name]", "[val]", NULL );
+    it = add_row( dlg, "123", "456", &it );
 
 
     // content area:
