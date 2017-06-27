@@ -1,10 +1,9 @@
 #!/bin/sh
 
-# cd `dirname $0`
+LIB="${lepton}/bin.master/lib"
+EXE="/home/dmn/prj/4lepton/cfg_edit_dlg.git/chk"
 
-export LD_LIBRARY_PATH=$lepton/bin.master/lib
 
-# ./chk
-
-/home/dmn/prj/4lepton/cfg_edit_dlg/chk
+export LD_LIBRARY_PATH=${LIB}
+$EXE
 

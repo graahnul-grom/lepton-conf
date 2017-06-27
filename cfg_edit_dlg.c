@@ -6,6 +6,7 @@ enum
 {
     COL_1_NAME,
     COL_2_VAL,
+    COL_3_INH,
     NUM_COLS
 };
 
@@ -17,6 +18,7 @@ static void load_cfg( cfg_edit_dlg* dlg );
 
 static int colid_name()  { return COL_1_NAME; }
 static int colid_val()   { return COL_2_VAL; }
+static int colid_inh()   { return COL_3_INH; }
 static int cols_cnt()    { return NUM_COLS; }
 
 
@@ -184,7 +186,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->store_ = gtk_tree_store_new(
         cols_cnt(),
         G_TYPE_STRING,
-        G_TYPE_STRING
+        G_TYPE_STRING,
+        G_TYPE_BOOLEAN
     );
 
     dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
@@ -200,8 +203,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // tree view columns:
     //
     GtkCellRenderer* ren_text = gtk_cell_renderer_text_new();
+    GtkCellRenderer* ren_bool = gtk_cell_renderer_toggle_new();
+
     add_col( dlg->tree_v_, ren_text, "text",   colid_name(), "name" );
     add_col( dlg->tree_v_, ren_text, "text",   colid_val(), "val" );
+    add_col( dlg->tree_v_, ren_bool, "active", colid_inh(), "inh" );
 
 //    GtkTreeIter it = add_row( dlg, "[name]", "[val]", NULL );
 //    it = add_row( dlg, "123", "456", &it );
@@ -295,14 +301,13 @@ load_keys( EdaConfig*    ctx,
         gchar* val = eda_config_get_string( ctx, group, name, &err );
         if ( val == NULL )
         {
-            printf( " >> load_keys( %s ): !eda_config_get_string( %s )\n",
-                    group, name );
+            printf( " >> load_keys( %s ): !eda_config_get_string( %s )\n", group, name );
             if ( err != NULL )
             {
                 printf( "    err: %s\n", err->message );
             }
-
-            val = g_strdup( "[err]" );
+//            val = g_strdup( "[err]" );
+            continue;
         }
 
         add_row( dlg, name, val, itParent );
