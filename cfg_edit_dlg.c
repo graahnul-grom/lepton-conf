@@ -4,9 +4,9 @@
 
 enum
 {
-    COL_1_NAME,
-    COL_2_VAL,
-    COL_3_INH,
+    COL_NAME,
+    COL_INH,
+    COL_VAL,
     NUM_COLS
 };
 
@@ -16,9 +16,9 @@ static void load_cfg( cfg_edit_dlg* dlg );
 
 
 
-static int colid_name()  { return COL_1_NAME; }
-static int colid_val()   { return COL_2_VAL; }
-static int colid_inh()   { return COL_3_INH; }
+static int colid_name()  { return COL_NAME; }
+static int colid_inh()   { return COL_INH; }
+static int colid_val()   { return COL_VAL; }
 static int cols_cnt()    { return NUM_COLS; }
 
 
@@ -41,16 +41,16 @@ add_col( GtkTreeView*     tree,
 static GtkTreeIter
 add_row( cfg_edit_dlg* dlg,
          const gchar*  name,
-         const gchar*  val,
          gboolean      inh,
+         const gchar*  val,
          GtkTreeIter*  it_parent )
 {
     GtkTreeIter it;
     gtk_tree_store_append( dlg->store_, &it, it_parent );
     gtk_tree_store_set( dlg->store_, &it,
                         colid_name(), name,
-                        colid_val(),  val,
                         colid_inh(),  inh,
+                        colid_val(),  val,
                         -1 );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
@@ -188,8 +188,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->store_ = gtk_tree_store_new(
         cols_cnt(),
         G_TYPE_STRING,
-        G_TYPE_STRING,
-        G_TYPE_BOOLEAN
+        G_TYPE_BOOLEAN,
+        G_TYPE_STRING
     );
 
     dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
@@ -208,8 +208,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     GtkCellRenderer* ren_bool = gtk_cell_renderer_toggle_new();
 
     add_col( dlg->tree_v_, ren_text, "text",   colid_name(), "name" );
-    add_col( dlg->tree_v_, ren_text, "text",   colid_val(), "val" );
-    add_col( dlg->tree_v_, ren_bool, "active", colid_inh(), "inh" );
+    add_col( dlg->tree_v_, ren_bool, "active", colid_inh(),  "inherited" );
+    add_col( dlg->tree_v_, ren_text, "text",   colid_val(),  "value" );
 
 //    GtkTreeIter it = add_row( dlg, "[name]", "[val]", NULL );
 //    it = add_row( dlg, "123", "456", &it );
@@ -321,7 +321,7 @@ load_keys( EdaConfig*    ctx,
         g_clear_error( &err );
 
 
-        add_row( dlg, name, val, inh, itParent );
+        add_row( dlg, name, inh, val, itParent );
 
         g_free( val );
     }
@@ -371,9 +371,9 @@ load_groups( EdaConfig*    ctx,
         const gchar* name = pp[ ndx ];
 //        printf( "  <%s>\n", name );
 
-        if ( strstr( name, "gschem.dialog-geometry" ) == NULL )
+        if ( strstr( name, "dialog-geometry" ) == NULL )
         {
-            GtkTreeIter it = add_row( dlg, name, "", FALSE, itParent );
+            GtkTreeIter it = add_row( dlg, name, FALSE, "", itParent );
             load_keys( ctx, name, dlg, &it );
         }
     }
@@ -404,7 +404,7 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
     gboolean inh = eda_config_get_parent( ctx ) != NULL;
 
-    GtkTreeIter it = add_row( dlg, name, str, inh, NULL );
+    GtkTreeIter it = add_row( dlg, name, inh, str, NULL );
 
     load_groups( ctx, fname, dlg, &it );
 }
