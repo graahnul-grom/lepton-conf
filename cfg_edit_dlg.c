@@ -432,6 +432,15 @@ cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
     const gchar* fname = ctx_get_fname( rdata->ctx_, &exist, &rok, &wok );
     if ( !fname )
         return;
+
+    GError* err = NULL;
+    GAppInfo* ai =
+    g_app_info_create_from_commandline( "gvim",
+                                        NULL,
+                                        G_APP_INFO_CREATE_NONE,
+                                        &err );
+    if ( ai )
+        g_app_info_launch( ai, NULL, NULL, &err );
 }
 
 
@@ -786,11 +795,20 @@ load_groups( EdaConfig*    ctx,
         if ( strstr( name, "dialog-geometry" ) != NULL )
             continue;
 
+        // NOTE: data:
+        //
+        row_data* rdata = mk_data( ctx,
+                                   NULL,  // group
+                                   NULL,  // key
+                                   NULL,  // val
+                                   FALSE  // ro
+                                 );
+
         GtkTreeIter it = add_row( dlg,
                                   name,    // name
                                   FALSE,   // inh
                                   "",      // val
-                                  NULL,    // data
+                                  rdata,   // data
                                   itParent
                                 );
 
@@ -824,13 +842,22 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                  fname );
     }
 
+    // NOTE: data:
+    //
+    row_data* rdata = mk_data( ctx,
+                               NULL,  // group
+                               NULL,  // key
+                               NULL,  // val
+                               FALSE  // ro
+                             );
+
     gboolean inh = eda_config_get_parent( ctx ) != NULL;
 
     GtkTreeIter it = add_row( dlg,
                               name,  // name
                               inh,   // inh
                               str,   // val
-                              NULL,  // data
+                              rdata, // data
                               NULL
                             );
 
