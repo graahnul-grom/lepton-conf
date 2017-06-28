@@ -74,6 +74,8 @@ static int cols_cnt()       { return NUM_COLS; }
 
 
 
+// {post}: caller must free [name], [val]
+//
 static gboolean
 cur_row_get_fields( cfg_edit_dlg* dlg, // GtkTreeView* tree,
                     gchar**      name,
@@ -112,6 +114,50 @@ cur_row_get_fields( cfg_edit_dlg* dlg, // GtkTreeView* tree,
 
 
 
+// {post}: caller must free {ret}
+//
+static const gchar*
+cur_row_get_field_val( cfg_edit_dlg* dlg )
+{
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    if ( !res )
+    {
+        printf( " >> >> cur_row_get_field_val(): !sel\n");
+        return NULL;
+    }
+
+    gchar* val = NULL;
+    gtk_tree_model_get( dlg->model_, &it, colid_val(), &val, -1 );
+
+    return val;
+
+} // cur_row_get_field_val()
+
+
+
+static row_data*
+cur_row_get_field_data( cfg_edit_dlg* dlg )
+{
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    if ( !res )
+    {
+        printf( " >> >> cur_row_get_field_data(): !sel\n");
+        return NULL;
+    }
+
+    row_data* data = NULL;
+    gtk_tree_model_get( dlg->model_, &it, colid_data(), &data, -1 );
+
+    return data;
+
+} // cur_row_get_field_data()
+
+
+
 static void
 cur_row_set_field_val( cfg_edit_dlg* dlg,
                         const gchar*  val )
@@ -121,18 +167,13 @@ cur_row_set_field_val( cfg_edit_dlg* dlg,
     gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
     if ( !res )
     {
-        printf( " >> >> cur_row_set_fields(): !sel\n");
+        printf( " >> >> cur_row_set_field_val(): !sel\n");
         return;
     }
-//    GtkTreeModel* model = gtk_tree_view_get_model( tree );
-
 
     gtk_tree_store_set( dlg->store_,
                         &it,
-//                        colid_name(),     name,
-//                        colid_inh(),      inh,
-                        colid_val(),      val,
-//                        colid_data(),     data,
+                        colid_val(), val,
                         -1 );
 }
 
