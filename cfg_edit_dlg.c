@@ -8,6 +8,8 @@ struct _row_data
     const gchar* group_;
     const gchar* key_;
     const gchar* val_;
+    gboolean     inh_;
+    gboolean     ro_;  // read-only
 };
 
 typedef struct _row_data row_data;
@@ -30,15 +32,18 @@ static row_data*
 mk_data( EdaConfig*   ctx,
          const gchar* group,
          const gchar* key,
-         const gchar* val )
+         const gchar* val,
+         gboolean     inh,
+         gboolean     ro )
 {
-//    struct _row_data* data = g_malloc( sizeof( struct _row_data ) );
     row_data* data = g_malloc( sizeof( row_data ) );
-//        memset( &data, 0, sizeof( row_data ) );
+
     data->ctx_   = ctx;
     data->group_ = group ? g_strdup( group ) : NULL;
     data->key_   = key   ? g_strdup( key )   : NULL;
     data->val_   = val   ? g_strdup( val )   : NULL;
+    data->inh_   = inh;
+    data->ro_    = ro;
 
     return data;
 }
@@ -463,7 +468,15 @@ load_keys( EdaConfig*    ctx,
         }
         g_clear_error( &err );
 
-        row_data* data = mk_data( ctx, group, name, val ); // NOTE: data
+        // NOTE: data:
+        //
+        row_data* data = mk_data( ctx,
+                                  group,         // group
+                                  name,          // key
+                                  val,           // val
+                                  inh,           // inh
+                                  !file_writable // ro
+                                );
 
         gboolean editable = file_writable;
 
@@ -475,6 +488,8 @@ load_keys( EdaConfig*    ctx,
         //
         if ( inh )
         {
+            // TODO: update data
+            //
             gtk_tree_store_set( dlg->store_, itParent, colid_inh(), TRUE, -1 );
         }
 
@@ -527,7 +542,15 @@ load_groups( EdaConfig*    ctx,
 
         if ( strstr( name, "dialog-geometry" ) == NULL )
         {
-            row_data* data = mk_data( ctx, name, NULL, NULL ); // NOTE: data
+            // NOTE: data:
+            //
+            row_data* data = mk_data( ctx,
+                                      name,  // group
+                                      NULL,  // key
+                                      NULL,  // val
+                                      FALSE, // inh
+                                      TRUE   // ro
+                                    );
 
             GtkTreeIter it = add_row( dlg, name, FALSE, "", FALSE, data, itParent );
 
@@ -561,9 +584,17 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                  fname );
     }
 
-    row_data* data = mk_data( ctx, NULL, NULL, NULL ); // NOTE: data
-
     gboolean inh = eda_config_get_parent( ctx ) != NULL;
+
+    // NOTE: data:
+    //
+    row_data* data = mk_data( ctx,
+                              NULL, // group
+                              NULL, // key
+                              NULL, // val
+                              inh,  // inh
+                              TRUE  // ro
+                            );
 
     GtkTreeIter it = add_row( dlg, name, inh, str, FALSE, data, NULL );
 
