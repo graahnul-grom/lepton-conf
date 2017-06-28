@@ -483,15 +483,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     load_cfg( dlg );
 
 
-    // collapse 0 level, expand 1st level:
-    //
-    gtk_tree_view_collapse_all( dlg->tree_v_ );
-
-    GtkTreePath* path0 = gtk_tree_path_new_from_string( "0" );
+//    gtk_tree_view_collapse_all( dlg->tree_v_ );
+    GtkTreePath* path0 = gtk_tree_path_new_from_string( "2" );
     if ( path0 )
         gtk_tree_view_expand_row( dlg->tree_v_, path0, FALSE );
 
-    GtkTreePath* path1 = gtk_tree_path_new_from_string( "1" );
+    GtkTreePath* path1 = gtk_tree_path_new_from_string( "3" );
     if ( path1 )
         gtk_tree_view_expand_row( dlg->tree_v_, path1, FALSE );
 
@@ -500,9 +497,17 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG(dlg) );
 
-    GtkWidget* lab = gtk_label_new( "eklmn!" );
-    gtk_box_pack_start( GTK_BOX( ca ), lab, FALSE, FALSE, 0 );
+    // label:
+    //
+    gchar* cwd = g_get_current_dir();
+    gchar str[ PATH_MAX ] = "";
+    sprintf( str, "cwd: %s", cwd );
+    GtkWidget* lab = gtk_label_new( str );
+    g_free( cwd );
+    gtk_box_pack_start( GTK_BOX( ca ), lab, FALSE, TRUE, 0 );
 
+    // scrolled win:
+    //
     GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
@@ -510,12 +515,17 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
 
 
-
+    // box:
+    //
     GtkWidget* box = gtk_hbox_new( FALSE, 0 );
 
+    // edit val field:
+    //
     dlg->ent_ = gtk_entry_new();
     gtk_box_pack_start( GTK_BOX( box ), dlg->ent_, TRUE, TRUE, 10 );
 
+    // apply btn:
+    //
     dlg->btn_apply_ = gtk_button_new_with_mnemonic( "_apply" );
     gtk_box_pack_start( GTK_BOX( box ), dlg->btn_apply_, FALSE, FALSE, 10 );
 
@@ -527,11 +537,14 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
 
+    // reload btn:
+    //
     GtkWidget* btn_reload = gtk_button_new_with_mnemonic( "_reload" );
     gtk_box_pack_start( GTK_BOX( aa ), btn_reload, FALSE, FALSE, 0 );
 
 
     gtk_widget_show_all( GTK_WIDGET(dlg) );
+
 
     g_signal_connect( G_OBJECT( dlg ),
                       "delete-event",

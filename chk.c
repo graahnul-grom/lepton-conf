@@ -20,7 +20,7 @@ int main( int argc, char* argv[] )
 
 
 //        gtk_window_set_default_size( GTK_WINDOW(w), 600, 400 );
-        gtk_widget_set_size_request( w, 800, 500 );
+        gtk_widget_set_size_request( w, 900, 600 );
 
 
         gtk_dialog_run( GTK_DIALOG( w ) );
