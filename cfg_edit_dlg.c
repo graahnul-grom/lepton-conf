@@ -25,7 +25,6 @@ enum
     COL_NAME,
     COL_INH,
     COL_VAL,
-    COL_EDITABLE, // hidden
     COL_DATA,     // hidden
     NUM_COLS
 };
@@ -74,7 +73,6 @@ static void load_cfg( cfg_edit_dlg* dlg );
 static int colid_name()     { return COL_NAME; }
 static int colid_inh()      { return COL_INH; }
 static int colid_val()      { return COL_VAL; }
-static int colid_editable() { return COL_EDITABLE; }
 static int colid_data()     { return COL_DATA; }
 static int cols_cnt()       { return NUM_COLS; }
 
@@ -100,7 +98,6 @@ add_row( cfg_edit_dlg* dlg,
          const gchar*  name,
          gboolean      inh,
          const gchar*  val,
-         gboolean      editable,
          gpointer      data,
          GtkTreeIter*  it_parent )
 {
@@ -111,7 +108,6 @@ add_row( cfg_edit_dlg* dlg,
                         colid_name(),     name,
                         colid_inh(),      inh,
                         colid_val(),      val,
-                        colid_editable(), editable,
                         colid_data(),     data,
                         -1 );
 
@@ -177,16 +173,6 @@ cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* data )
 {
     printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit()\n" );
 }
-
-
-
-
-//static void
-//row_get_data()
-//{
-//    row_data* data = NULL;
-//    gtk_tree_model_get( model, &it, colid_data(), &data, -1 );
-//}
 
 
 
@@ -360,8 +346,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
         G_TYPE_STRING     // name
         , G_TYPE_BOOLEAN  // inherited
         , G_TYPE_STRING   // val
-        , G_TYPE_BOOLEAN  // editable
-        , G_TYPE_POINTER  // NOTE: data
+        , G_TYPE_POINTER  // data
     );
 
     dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
@@ -382,9 +367,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     add_col( dlg->tree_v_, ren_text, "text",   colid_name(), "name" );
     add_col( dlg->tree_v_, ren_bool, "active", colid_inh(),  "inherited" );
     add_col( dlg->tree_v_, ren_text, "text",   colid_val(),  "value" );
-
-//    GtkTreeIter it = add_row( dlg, "[name]", "[val]", NULL );
-//    it = add_row( dlg, "123", "456", &it );
 
 
     load_cfg( dlg );
@@ -523,11 +505,15 @@ load_keys( EdaConfig*    ctx,
                                   group,         // group
                                   name,          // key
                                   val,           // val
-//                                  inh,           // inh
                                   !file_writable // ro
                                 );
 
-        add_row( dlg, name, inh, val, file_writable, data, itParent );
+        add_row( dlg,
+                 name,
+                 inh,
+                 val,
+                 data,
+                 itParent );
 
         g_free( val );
 
@@ -590,7 +576,6 @@ load_groups( EdaConfig*    ctx,
                                   name,    // name
                                   FALSE,   // inh
                                   "",      // val
-                                  FALSE,   // editable
                                   NULL,    // data
                                   itParent
                                 );
@@ -631,7 +616,6 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                               name,  // name
                               inh,   // inh
                               str,   // val
-                              FALSE, // editable
                               NULL,  // data
                               NULL
                             );
