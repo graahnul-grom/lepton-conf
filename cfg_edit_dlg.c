@@ -247,14 +247,6 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
 
 
-    static void
-    cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* data )
-    {
-        printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit()\n" );
-    }
-
-
-
 static void
 cur_row_set_fields_val( cfg_edit_dlg* dlg,
 //                    const gchar*  name,
@@ -355,11 +347,23 @@ cfg_edit_dlg_on_row_sel( GtkTreeView* tree,
 
 
 
+static void
+cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    gtk_tree_store_clear( dlg->store_ );
+    load_cfg( dlg );
+}
+
+
+
+
 /*
  * *****************************************************************
- *
  *  gobject-specific stuff:
- *
  * *****************************************************************
  */
 
@@ -523,8 +527,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
 
-    GtkWidget* btn_edit = gtk_button_new_with_mnemonic( "_edit" );
-    gtk_box_pack_start( GTK_BOX( aa ), btn_edit, FALSE, FALSE, 0 );
+    GtkWidget* btn_reload = gtk_button_new_with_mnemonic( "_reload" );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_reload, FALSE, FALSE, 0 );
 
 
     gtk_widget_show_all( GTK_WIDGET(dlg) );
@@ -539,9 +543,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &cfg_edit_dlg_on_btn_apply ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_edit ),
+    g_signal_connect( G_OBJECT( btn_reload ),
                       "clicked",
-                      G_CALLBACK( &cfg_edit_dlg_on_btn_edit ),
+                      G_CALLBACK( &cfg_edit_dlg_on_btn_reload ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
