@@ -53,6 +53,14 @@ mk_data( EdaConfig*   ctx,
 
 
 
+static void load_cfg( cfg_edit_dlg* dlg );
+
+static int colid_name()     { return COL_NAME; }
+static int colid_inh()      { return COL_INH; }
+static int colid_val()      { return COL_VAL; }
+static int colid_data()     { return COL_DATA; }
+static int cols_cnt()       { return NUM_COLS; }
+
 // {ret}: what is to be displayed in "name" tree column
 //
 //static const gchar*
@@ -71,22 +79,66 @@ cur_row_get_fields( cfg_edit_dlg* dlg, // GtkTreeView* tree,
                     gchar**      name,
                     gchar**      val,
                     gboolean*    editable,
-                    row_data**   data );
+                    row_data**   data )
+{
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    if ( !res )
+    {
+        printf( " >> >> cur_row_get_fields(): !sel\n");
+        return FALSE;
+    }
+//    GtkTreeModel* model = gtk_tree_view_get_model( tree );
+
+    gchar* n = NULL;
+    gtk_tree_model_get( dlg->model_, &it, colid_name(), &n, -1 );
+    *name = n;
+
+    gchar* v = NULL;
+    gtk_tree_model_get( dlg->model_, &it, colid_val(), &v, -1 );
+    *val = v;
+
+    row_data* ptr = NULL;
+    gtk_tree_model_get( dlg->model_, &it, colid_data(), &ptr, -1 );
+
+    *editable = ptr ? !ptr->ro_ : FALSE;
+
+    *data = ptr;
+
+    return TRUE;
+
+} // cur_row_get_fields()
+
+
+
 static void
-cur_row_set_fields_val( cfg_edit_dlg* dlg,
-                        const gchar*  val );
+cur_row_set_field_val( cfg_edit_dlg* dlg,
+                        const gchar*  val )
+{
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    if ( !res )
+    {
+        printf( " >> >> cur_row_set_fields(): !sel\n");
+        return;
+    }
+//    GtkTreeModel* model = gtk_tree_view_get_model( tree );
+
+
+    gtk_tree_store_set( dlg->store_,
+                        &it,
+//                        colid_name(),     name,
+//                        colid_inh(),      inh,
+                        colid_val(),      val,
+//                        colid_data(),     data,
+                        -1 );
+}
 
 
 
-static void load_cfg( cfg_edit_dlg* dlg );
 
-
-
-static int colid_name()     { return COL_NAME; }
-static int colid_inh()      { return COL_INH; }
-static int colid_val()      { return COL_VAL; }
-static int colid_data()     { return COL_DATA; }
-static int cols_cnt()       { return NUM_COLS; }
 
 
 static void
@@ -123,10 +175,10 @@ add_row( cfg_edit_dlg* dlg,
                         colid_data(),     data,
                         -1 );
 
-//    gtk_tree_view_expand_all( dlg->tree_v_ );
-
     return it;
 }
+
+
 
 
 
@@ -143,6 +195,8 @@ dispose( GObject* obj );
 
 G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 // G_DEFINE_TYPE (GschemObjectPropertiesWidget, gschem_object_properties_widget, GSCHEM_TYPE_BIN);
+
+
 
 
 
@@ -235,7 +289,7 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     }
 
 
-    cur_row_set_fields_val( dlg, new_val );
+    cur_row_set_field_val( dlg, new_val );
 
     // NOTE: update data
     //
@@ -244,73 +298,6 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
 
 } // cfg_edit_dlg_on_btn_apply()
-
-
-
-static void
-cur_row_set_fields_val( cfg_edit_dlg* dlg,
-//                    const gchar*  name,
-                    const gchar*  val )
-                    // const row_data* data )
-{
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
-    GtkTreeIter it;
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    if ( !res )
-    {
-        printf( " >> >> cur_row_set_fields(): !sel\n");
-        return;
-    }
-//    GtkTreeModel* model = gtk_tree_view_get_model( tree );
-
-
-    gtk_tree_store_set( dlg->store_,
-                        &it,
-//                        colid_name(),     name,
-//                        colid_inh(),      inh,
-                        colid_val(),      val,
-//                        colid_data(),     data,
-                        -1 );
-}
-
-
-
-// {post}: caller must free [name], [val]
-//
-static gboolean
-cur_row_get_fields( cfg_edit_dlg* dlg, // GtkTreeView* tree,
-                    gchar**      name,
-                    gchar**      val,
-                    gboolean*    editable,
-                    row_data**   data )
-{
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
-    GtkTreeIter it;
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    if ( !res )
-    {
-        printf( " >> >> cur_row_get_fields(): !sel\n");
-        return FALSE;
-    }
-//    GtkTreeModel* model = gtk_tree_view_get_model( tree );
-
-    gchar* n = NULL;
-    gtk_tree_model_get( dlg->model_, &it, colid_name(), &n, -1 );
-    *name = n;
-
-    gchar* v = NULL;
-    gtk_tree_model_get( dlg->model_, &it, colid_val(), &v, -1 );
-    *val = v;
-
-    row_data* ptr = NULL;
-    gtk_tree_model_get( dlg->model_, &it, colid_data(), &ptr, -1 );
-
-    *editable = ptr ? !ptr->ro_ : FALSE;
-
-    *data = ptr;
-
-    return TRUE;
-}
 
 
 
