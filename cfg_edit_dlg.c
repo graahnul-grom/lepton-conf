@@ -72,6 +72,9 @@ cur_row_get_fields( GtkTreeView* tree,
                     gchar**      val,
                     gboolean*    editable,
                     row_data**   data );
+static void
+cur_row_set_fields_val( cfg_edit_dlg* dlg,
+                        const gchar*  val );
 
 
 
@@ -178,19 +181,98 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     if ( !res )
         return;
 
+    g_free( name );
+    g_free( val );
+
 
     printf( " >> on_btn_apply(): [%s::%s]: [%s] => [%s]\n",
             rdata->group_, rdata->key_, rdata->val_, txt );
 
+    // noop:
+    //
+    if ( g_strcmp0( rdata->val_, txt ) == 0 )
+    {
+        printf( " >> on_btn_apply(): NOOP\n" );
+        return;
+    }
 
-}
+    // set:
+    //
+    eda_config_set_string( rdata->ctx_,
+                           rdata->group_,
+                           rdata->key_,
+                           txt );
+
+    // save:
+    //
+    GError* err = NULL;
+    res = eda_config_save( rdata->ctx_, &err );
+    if ( !res )
+    {
+        printf( " >> on_btn_apply(): !eda_config_save()\n" );
+        if ( err != NULL )
+            printf( "    err: %s\n", err->message );
+        g_clear_error( &err );
+        return;
+    }
+
+    // get:
+    //
+    gchar* new_val = eda_config_get_string( rdata->ctx_,
+                                            rdata->group_,
+                                            rdata->key_,
+                                            &err );
+
+
+    if ( new_val == NULL )
+    {
+        printf( " >> on_btn_apply(): !eda_config_get_string()\n" );
+        if ( err != NULL )
+            printf( "    err: %s\n", err->message );
+        g_clear_error( &err );
+        return;
+    }
+
+
+    cur_row_set_fields_val( dlg, new_val );
+
+
+} // cfg_edit_dlg_on_btn_apply()
+
+
+
+    static void
+    cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* data )
+    {
+        printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit()\n" );
+    }
 
 
 
 static void
-cfg_edit_dlg_on_btn_edit( GtkButton* btn, gpointer* data )
+cur_row_set_fields_val( cfg_edit_dlg* dlg,
+//                    const gchar*  name,
+                    const gchar*  val )
+                    // const row_data* data )
 {
-    printf( "cfg_edit_dlg::cfg_edit_dlg_on_btn_edit()\n" );
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    if ( !res )
+    {
+        printf( " >> >> cur_row_set_fields(): !sel\n");
+        return;
+    }
+//    GtkTreeModel* model = gtk_tree_view_get_model( tree );
+
+
+    gtk_tree_store_set( dlg->store_,
+                        &it,
+//                        colid_name(),     name,
+//                        colid_inh(),      inh,
+                        colid_val(),      val,
+//                        colid_data(),     data,
+                        -1 );
 }
 
 
@@ -212,7 +294,6 @@ cur_row_get_fields( GtkTreeView* tree,
         printf( " >> >> cur_row_get_fields(): !sel\n");
         return FALSE;
     }
-
     GtkTreeModel* model = gtk_tree_view_get_model( tree );
 
     gchar* n = NULL;
