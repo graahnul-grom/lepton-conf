@@ -360,6 +360,19 @@ cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
 
 
 
+static void
+cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+//    gtk_tree_store_clear( dlg->store_ );
+//    load_cfg( dlg );
+}
+
+
+
 
 /*
  * *****************************************************************
@@ -542,6 +555,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     GtkWidget* btn_reload = gtk_button_new_with_mnemonic( "_reload" );
     gtk_box_pack_start( GTK_BOX( aa ), btn_reload, FALSE, FALSE, 0 );
 
+    // ext ed btn:
+    //
+    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
+
 
     gtk_widget_show_all( GTK_WIDGET(dlg) );
 
@@ -554,6 +572,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( dlg->btn_apply_ ),
                       "clicked",
                       G_CALLBACK( &cfg_edit_dlg_on_btn_apply ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( btn_exted ),
+                      "clicked",
+                      G_CALLBACK( &cfg_edit_dlg_on_btn_exted ),
                       dlg );
 
     g_signal_connect( G_OBJECT( btn_reload ),
