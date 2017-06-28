@@ -379,6 +379,15 @@ cfg_edit_dlg_on_row_sel( GtkTreeView* tree,
     if ( !ent )
         return;
 
+
+    const row_data* rdata = cur_row_get_field_data( dlg );
+    if ( !rdata || rdata->ro_ )
+    {
+        gtk_entry_set_text( ent, "" );
+        return;
+    }
+
+
     gchar* val = cur_row_get_field_val( dlg );
     gtk_entry_set_text( ent, val );
     g_free( val );
@@ -808,7 +817,7 @@ load_groups( EdaConfig*    ctx,
                                    NULL,  // group
                                    NULL,  // key
                                    NULL,  // val
-                                   FALSE  // ro
+                                   TRUE   // ro
                                  );
 
         GtkTreeIter it = add_row( dlg,
@@ -855,7 +864,7 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                                NULL,  // group
                                NULL,  // key
                                NULL,  // val
-                               FALSE  // ro
+                               TRUE   // ro
                              );
 
     gboolean inh = eda_config_get_parent( ctx ) != NULL;
