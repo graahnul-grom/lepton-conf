@@ -2,6 +2,26 @@
 #include <liblepton/liblepton.h>
 #include <liblepton/libgedaguile.h>
 
+
+// {post}: {ret} owned by geda cfg api
+//
+static const gchar*
+ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
+{
+    const gchar* fname = eda_config_get_filename( ctx );
+
+    if ( !fname )
+        return NULL;
+
+    *exist = access( fname, F_OK ) == 0;
+    *rok =   access( fname, R_OK ) == 0;
+    *wok =   access( fname, W_OK ) == 0;
+
+    return fname;
+}
+
+
+
 //typedef enum
 //{
 //    RT_CTX,
@@ -281,8 +301,6 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     if ( !ent )
         return;
 
-//    if ( !gtk_editable_get_editable( GTK_EDITABLE( ent ) ) )
-//        return;
     row_data* rdata = cur_row_get_field_data( dlg );
     if ( !rdata || rdata->ro_ )
         return;
@@ -327,8 +345,6 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
                                             rdata->group_,
                                             rdata->key_,
                                             &err );
-
-
     if ( new_val == NULL )
     {
         printf( " >> on_btn_apply(): !eda_config_get_string()\n" );
@@ -384,6 +400,16 @@ cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
 
     gtk_tree_store_clear( dlg->store_ );
     load_cfg( dlg );
+
+    // NOTE: select tree widget, tree row:
+    //
+    GtkTreePath* path0 = gtk_tree_path_new_from_string( "0" );
+    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path0, NULL, NULL, FALSE );
+
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+//    gtk_widget_activate( GTK_WIDGET( dlg->tree_v_ ) );
+
+    g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
 }
 
 
@@ -395,8 +421,17 @@ cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-//    gtk_tree_store_clear( dlg->store_ );
-//    load_cfg( dlg );
+    row_data* rdata = cur_row_get_field_data( dlg );
+    if ( !rdata )
+        return;
+
+    gboolean exist = FALSE;
+    gboolean rok   = FALSE;
+    gboolean wok   = FALSE;
+
+    const gchar* fname = ctx_get_fname( rdata->ctx_, &exist, &rok, &wok );
+    if ( !fname )
+        return;
 }
 
 
@@ -674,6 +709,10 @@ load_keys( EdaConfig*    ctx,
         }
         g_clear_error( &err );
 
+
+//        printf( " >> load_keys(): [%s::%s]: inh: [%d]\n", group, name, inh );
+
+
         // NOTE: data:
         //
         row_data* data = mk_data( ctx,
@@ -768,20 +807,20 @@ load_groups( EdaConfig*    ctx,
 static void
 load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
-    const gchar* fname = eda_config_get_filename( ctx );
+    gboolean exist = FALSE;
+    gboolean rok   = FALSE;
+    gboolean wok   = FALSE;
 
-    gboolean wok = FALSE;
+    const gchar* fname = ctx_get_fname( ctx, &exist, &rok, &wok );
+
     gchar str[ PATH_MAX ] = "";
 
     if ( fname != NULL )
     {
-        gboolean exist = access( fname, F_OK ) == 0;
-        gboolean rok = access( fname, R_OK ) == 0;
-        wok = access( fname, W_OK ) == 0;
         sprintf( str, "[%s%s%s] %s",
                  exist ? "f" : "-",
-                 rok ? "r" : "-",
-                 wok ? "w" : "-",
+                 rok   ? "r" : "-",
+                 wok   ? "w" : "-",
                  fname );
     }
 
