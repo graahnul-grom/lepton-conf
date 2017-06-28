@@ -77,11 +77,11 @@ static int cols_cnt()       { return NUM_COLS; }
 // {post}: caller must free [name], [val]
 //
 static gboolean
-cur_row_get_fields( cfg_edit_dlg* dlg, // GtkTreeView* tree,
-                    gchar**      name,
-                    gchar**      val,
-                    gboolean*    editable,
-                    row_data**   data )
+cur_row_get_fields( cfg_edit_dlg* dlg,
+                    gchar**       name,
+                    gchar**       val,
+                    gboolean*     editable,
+                    row_data**    data )
 {
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
     GtkTreeIter it;
@@ -116,7 +116,7 @@ cur_row_get_fields( cfg_edit_dlg* dlg, // GtkTreeView* tree,
 
 // {post}: caller must free {ret}
 //
-static const gchar*
+static gchar*
 cur_row_get_field_val( cfg_edit_dlg* dlg )
 {
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
@@ -155,6 +155,26 @@ cur_row_get_field_data( cfg_edit_dlg* dlg )
     return data;
 
 } // cur_row_get_field_data()
+
+
+
+static gboolean
+cur_row_is_editable( cfg_edit_dlg* dlg )
+{
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    if ( !res )
+    {
+        printf( " >> >> cur_row_is_editable(): !sel\n");
+        return FALSE;
+    }
+
+    row_data* data = cur_row_get_field_data( dlg );
+
+    return data ? !data->ro_ : FALSE;
+
+} // cur_row_is_editable()
 
 
 
@@ -267,18 +287,7 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     const gchar* txt = gtk_entry_get_text( ent );
 
 
-    gchar*    name     = NULL;  // uu
-    gchar*    val      = NULL;  // uu
-    gboolean  editable = FALSE; // uu
-    row_data* rdata    = NULL;
-
-    gboolean res = cur_row_get_fields( dlg, &name, &val, &editable, &rdata );
-//    gboolean res = cur_row_get_fields( dlg->tree_v_, &name, &val, &editable, &rdata );
-    if ( !res )
-        return;
-
-    g_free( name );
-    g_free( val );
+    row_data* rdata = cur_row_get_field_data( dlg );
 
 
     // noop:
@@ -302,7 +311,7 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     // save:
     //
     GError* err = NULL;
-    res = eda_config_save( rdata->ctx_, &err );
+    gboolean res = eda_config_save( rdata->ctx_, &err );
     if ( !res )
     {
         printf( " >> on_btn_apply(): !eda_config_save()\n" );
@@ -354,22 +363,13 @@ cfg_edit_dlg_on_row_sel( GtkTreeView* tree,
     if ( !ent )
         return;
 
-    gchar*    name     = NULL;
-    gchar*    val      = NULL;
-    gboolean  editable = FALSE;
-    row_data* rdata    = NULL;
-
-    gboolean res = cur_row_get_fields( dlg, &name, &val, &editable, &rdata );
-//    gboolean res = cur_row_get_fields( tree, &name, &val, &editable, &rdata );
-    if ( !res )
-        return;
-
+    gchar* val = cur_row_get_field_val( dlg );
     gtk_entry_set_text( ent, val );
+    g_free( val );
+
+    gboolean editable = cur_row_is_editable( dlg );
     gtk_editable_set_editable( GTK_EDITABLE( ent ), editable );
     gtk_widget_set_sensitive( dlg->btn_apply_, editable );
-
-    g_free( name );
-    g_free( val );
 
 } // cfg_edit_dlg_on_row_sel()
 
