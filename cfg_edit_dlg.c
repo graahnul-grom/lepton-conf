@@ -281,14 +281,14 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     if ( !ent )
         return;
 
-    if ( !gtk_editable_get_editable( GTK_EDITABLE( ent ) ) )
+//    if ( !gtk_editable_get_editable( GTK_EDITABLE( ent ) ) )
+//        return;
+    row_data* rdata = cur_row_get_field_data( dlg );
+    if ( !rdata || rdata->ro_ )
         return;
 
+
     const gchar* txt = gtk_entry_get_text( ent );
-
-
-    row_data* rdata = cur_row_get_field_data( dlg );
-
 
     // noop:
     //
