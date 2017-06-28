@@ -440,7 +440,14 @@ cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
                                         G_APP_INFO_CREATE_NONE,
                                         &err );
     if ( ai )
-        g_app_info_launch( ai, NULL, NULL, &err );
+    {
+        GFile* gfile = g_file_new_for_path( fname );
+        GList* args = g_list_append( NULL, gfile );
+
+        g_app_info_launch( ai, args, NULL, &err );
+
+        g_list_free( args );
+    }
 }
 
 
