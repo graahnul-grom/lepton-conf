@@ -277,6 +277,38 @@ static void cell_draw( GtkTreeViewColumn* col,
 
 
 
+static gboolean
+filter (GtkTreeModel* model, GtkTreeIter* it, gpointer data)
+{
+    return FALSE;
+}
+
+
+
+static void
+filter_setup( cfg_edit_dlg* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    dlg->model_f_ = gtk_tree_model_filter_new( dlg->model_, NULL );
+
+    gtk_tree_model_filter_set_visible_func(
+        GTK_TREE_MODEL_FILTER( dlg->model_f_ ),
+        &filter,
+        NULL,
+        NULL);
+
+//    gtk_tree_view_set_model( dlg->tree_v_, dlg->model_f_ );
+
+//    g_signal_connect( entry, "changed", G_CALLBACK (&entry_changed), tree );
+}
+
+
+
+
+
 static void
 add_col( cfg_edit_dlg*    dlg,
          GtkCellRenderer* ren,
@@ -544,7 +576,22 @@ cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
 
         g_list_free( args );
     }
+
+} // cfg_edit_dlg_on_btn_exted()
+
+
+
+static void
+cfg_edit_dlg_on_btn_showinh( GtkToggleButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    printf( " >> cfg_edit_dlg_on_btn_showinh(): %d\n",
+            gtk_toggle_button_get_active( btn ) );
 }
+
 
 
 
@@ -674,6 +721,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     load_cfg( dlg );
 
 
+    filter_setup( dlg );
+
+
 //    gtk_tree_view_collapse_all( dlg->tree_v_ );
 //    GtkTreePath* path0 = gtk_tree_path_new_from_string( "2" );
 //    if ( path0 )
@@ -702,7 +752,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
-                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC );
     gtk_container_add( GTK_CONTAINER( wscroll ), dlg->tree_w_ );
     gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
 
@@ -710,6 +761,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // box:
     //
     GtkWidget* box = gtk_hbox_new( FALSE, 0 );
+
+    // show inh chkeck box:
+    //
+    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w inh" );
+    gtk_box_pack_start( GTK_BOX( box ), btn_showinh, TRUE, TRUE, 10 );
 
     // edit val field:
     //
@@ -747,6 +803,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       "delete-event",
                       G_CALLBACK( &cfg_edit_dlg_on_delete_event ),
                       NULL );
+
+    g_signal_connect( G_OBJECT( btn_showinh ),
+                      "toggled",
+                      G_CALLBACK( &cfg_edit_dlg_on_btn_showinh ),
+                      dlg );
 
     g_signal_connect( G_OBJECT( dlg->btn_apply_ ),
                       "clicked",
