@@ -152,6 +152,19 @@ cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
+// {ret}: iterator of currently selected row
+//
+static gboolean
+cur_row_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itParent )
+{
+    GtkTreePath* path = gtk_tree_model_get_path( dlg->model_, it );
+    gtk_tree_path_up( path );
+    return gtk_tree_model_get_iter( dlg->model_, itParent, path );
+
+} // cur_row_get_parent_iter()
+
+
+
 static row_data*
 row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
@@ -414,6 +427,16 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
     row_set_field_val( dlg, &it, new_val );
 
+    // mark current key as not inherited:
+    //
+    row_set_field_inh( dlg, &it, FALSE );
+
+
+    // mark parent group as not inherited:
+    //
+    GtkTreeIter itParent;
+    if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
+        row_set_field_inh( dlg, &itParent, FALSE );
 
 
 } // cfg_edit_dlg_on_btn_apply()
