@@ -166,6 +166,17 @@ row_get_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
+static void
+row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it, const gchar* val )
+{
+    gtk_tree_store_set( dlg->store_,
+                        it,
+                        colid_val(), val,
+                        -1 );
+} // row_set_field_val()
+
+
+
 static row_data*
 row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
@@ -178,14 +189,33 @@ row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
-static void
-row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it, const gchar* val )
+static gboolean
+row_get_field_inh( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
+    row_data* rdata = row_get_field_data( dlg, it );
+    if ( !rdata )
+        return FALSE;
+
+    return rdata->inh_;
+
+} // row_get_field_inh()
+
+
+
+static void
+row_set_field_inh( cfg_edit_dlg* dlg, GtkTreeIter* it, gboolean val )
+{
+    row_data* rdata = row_get_field_data( dlg, it );
+    if ( !rdata )
+        return;
+
+    rdata->inh_ = val;
+
     gtk_tree_store_set( dlg->store_,
                         it,
-                        colid_val(), val,
+                        colid_inh(), val,
                         -1 );
-} // row_set_field_val()
+} // row_set_field_inh()
 
 
 
@@ -204,7 +234,7 @@ row_is_editable( cfg_edit_dlg* dlg, GtkTreeIter* it )
 static void cell_draw( GtkTreeViewColumn* col,
                        GtkCellRenderer*   ren,
                        GtkTreeModel*      model,
-                       GtkTreeIter*       iter,
+                       GtkTreeIter*       it,
                        gpointer           p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -214,16 +244,9 @@ static void cell_draw( GtkTreeViewColumn* col,
     if ( ren != dlg->ren_txt_ )
         return;
 
-    row_data* rdata = NULL;
-    gtk_tree_model_get( model, iter, colid_data(), &rdata, -1 );
+    gboolean inh = row_get_field_inh( dlg, it );
 
-    if ( !rdata )
-        return;
-
-//        printf( " .. .. [%s]\n", rdata->val_ );
-
-//    if ( rdata->ro_ )
-    if ( rdata->inh_ )
+    if ( inh )
         g_object_set( ren, "foreground", "gray", NULL );
     else
         g_object_set( ren, "foreground", "black", NULL );
@@ -751,6 +774,9 @@ load_keys( EdaConfig*    ctx,
         return;
     }
 
+
+    gboolean inh_all = TRUE;
+
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
         const gchar* name = pp[ ndx ];
@@ -776,6 +802,8 @@ load_keys( EdaConfig*    ctx,
         g_clear_error( &err );
 
 
+        inh_all = inh_all && inh;
+
 //        printf( " >> load_keys(): [%s::%s]: inh: [%d]\n", group, name, inh );
 
 
@@ -798,12 +826,10 @@ load_keys( EdaConfig*    ctx,
 
         g_free( val );
 
-        // if key is inherited, also mark group as inherited:
+
+        // NOTE: mark group as inherited only if all its keys are inherited:
         //
-        if ( inh )
-        {
-            gtk_tree_store_set( dlg->store_, itParent, colid_inh(), TRUE, -1 );
-        }
+        row_set_field_inh( dlg, itParent, inh_all );
 
     } // for keys
 
