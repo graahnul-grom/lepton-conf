@@ -136,20 +136,44 @@ static int cols_cnt()       { return NUM_COLS; }
 //} // cur_row_get_fields()
 
 
+static gboolean
+//cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter** it )
+cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
+{
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+//    GtkTreeIter* it0;
+    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it0 );
+    if ( !res )
+//    if ( res )
+//        *it = it0;
+//    else
+        printf( " >> >> cur_row_get_iter(): !sel\n");
+
+    return res;
+
+} // cur_row_get_iter()
+
+
 
 // {post}: caller must free {ret}
 //
 static gchar*
 cur_row_get_field_val( cfg_edit_dlg* dlg )
 {
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+//    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
     GtkTreeIter it;
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    if ( !res )
-    {
-        printf( " >> >> cur_row_get_field_val(): !sel\n");
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+//    if ( !res )
+//    {
+//        printf( " >> >> cur_row_get_field_val(): !sel\n");
+//        return NULL;
+//    }
+
+
+    if ( !cur_row_get_iter( dlg, &it ) )
         return NULL;
-    }
+
 
     gchar* val = NULL;
     gtk_tree_model_get( dlg->model_, &it, colid_val(), &val, -1 );
@@ -163,14 +187,19 @@ cur_row_get_field_val( cfg_edit_dlg* dlg )
 static row_data*
 cur_row_get_field_data( cfg_edit_dlg* dlg )
 {
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+//    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
     GtkTreeIter it;
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    if ( !res )
-    {
-        printf( " >> >> cur_row_get_field_data(): !sel\n");
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+//    if ( !res )
+//    {
+//        printf( " >> >> cur_row_get_field_data(): !sel\n");
+//        return NULL;
+//    }
+
+
+    if ( !cur_row_get_iter( dlg, &it ) )
         return NULL;
-    }
+
 
     row_data* rdata = NULL;
     gtk_tree_model_get( dlg->model_, &it, colid_data(), &rdata, -1 );
@@ -184,14 +213,19 @@ cur_row_get_field_data( cfg_edit_dlg* dlg )
 static gboolean
 cur_row_is_editable( cfg_edit_dlg* dlg )
 {
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+//    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
     GtkTreeIter it;
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    if ( !res )
-    {
-        printf( " >> >> cur_row_is_editable(): !sel\n");
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+//    if ( !res )
+//    {
+//        printf( " >> >> cur_row_is_editable(): !sel\n");
+//        return FALSE;
+//    }
+
+
+    if ( !cur_row_get_iter( dlg, &it ) )
         return FALSE;
-    }
+
 
     row_data* rdata = cur_row_get_field_data( dlg );
 
@@ -205,14 +239,19 @@ static void
 cur_row_set_field_val( cfg_edit_dlg* dlg,
                         const gchar*  val )
 {
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+//    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
     GtkTreeIter it;
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    if ( !res )
-    {
-        printf( " >> >> cur_row_set_field_val(): !sel\n");
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+//    if ( !res )
+//    {
+//        printf( " >> >> cur_row_set_field_val(): !sel\n");
+//        return;
+//    }
+
+
+    if ( !cur_row_get_iter( dlg, &it ) )
         return;
-    }
+
 
     gtk_tree_store_set( dlg->store_,
                         &it,
