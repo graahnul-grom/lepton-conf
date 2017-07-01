@@ -36,6 +36,7 @@ struct _row_data
     const gchar* key_;
     const gchar* val_;
     gboolean     ro_;  // read-only
+    gboolean     inh_; // inherited
 };
 
 typedef struct _row_data row_data;
@@ -58,7 +59,8 @@ mk_rdata( EdaConfig*   ctx,
          const gchar* group,
          const gchar* key,
          const gchar* val,
-         gboolean     ro )
+         gboolean     ro,
+         gboolean     inh )
 {
     row_data* rdata = g_malloc( sizeof( row_data ) );
 
@@ -67,6 +69,7 @@ mk_rdata( EdaConfig*   ctx,
     rdata->key_   = key   ? g_strdup( key )   : NULL;
     rdata->val_   = val   ? g_strdup( val )   : NULL;
     rdata->ro_    = ro;
+    rdata->inh_   = inh;
 
     return rdata;
 }
@@ -96,41 +99,41 @@ static int cols_cnt()       { return NUM_COLS; }
 
 // {post}: caller must free [name], [val]
 //
-static gboolean
-cur_row_get_fields( cfg_edit_dlg* dlg,
-                    gchar**       name,
-                    gchar**       val,
-                    gboolean*     editable,
-                    row_data**    rdata )
-{
-    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
-    GtkTreeIter it;
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    if ( !res )
-    {
-        printf( " >> >> cur_row_get_fields(): !sel\n");
-        return FALSE;
-    }
-//    GtkTreeModel* model = gtk_tree_view_get_model( tree );
-
-    gchar* n = NULL;
-    gtk_tree_model_get( dlg->model_, &it, colid_name(), &n, -1 );
-    *name = n;
-
-    gchar* v = NULL;
-    gtk_tree_model_get( dlg->model_, &it, colid_val(), &v, -1 );
-    *val = v;
-
-    row_data* ptr = NULL;
-    gtk_tree_model_get( dlg->model_, &it, colid_data(), &ptr, -1 );
-
-    *editable = ptr ? !ptr->ro_ : FALSE;
-
-    *rdata = ptr;
-
-    return TRUE;
-
-} // cur_row_get_fields()
+//static gboolean
+//cur_row_get_fields( cfg_edit_dlg* dlg,
+//                    gchar**       name,
+//                    gchar**       val,
+//                    gboolean*     editable,
+//                    row_data**    rdata )
+//{
+//    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+//    GtkTreeIter it;
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+//    if ( !res )
+//    {
+//        printf( " >> >> cur_row_get_fields(): !sel\n");
+//        return FALSE;
+//    }
+////    GtkTreeModel* model = gtk_tree_view_get_model( tree );
+//
+//    gchar* n = NULL;
+//    gtk_tree_model_get( dlg->model_, &it, colid_name(), &n, -1 );
+//    *name = n;
+//
+//    gchar* v = NULL;
+//    gtk_tree_model_get( dlg->model_, &it, colid_val(), &v, -1 );
+//    *val = v;
+//
+//    row_data* ptr = NULL;
+//    gtk_tree_model_get( dlg->model_, &it, colid_data(), &ptr, -1 );
+//
+//    *editable = ptr ? !ptr->ro_ : FALSE;
+//
+//    *rdata = ptr;
+//
+//    return TRUE;
+//
+//} // cur_row_get_fields()
 
 
 
@@ -221,9 +224,40 @@ cur_row_set_field_val( cfg_edit_dlg* dlg,
 
 
 
+static void cell_draw( GtkTreeViewColumn* col,
+                       GtkCellRenderer*   ren,
+                       GtkTreeModel*      model,
+                       GtkTreeIter*       iter,
+                       gpointer           p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    if ( ren != dlg->ren_txt_ )
+        return;
+
+    row_data* rdata = NULL;
+    gtk_tree_model_get( model, iter, colid_data(), &rdata, -1 );
+
+    if ( !rdata )
+        return;
+
+//        printf( " .. .. [%s]\n", rdata->val_ );
+
+//    if ( rdata->ro_ )
+    if ( rdata->inh_ )
+        g_object_set( ren, "foreground", "gray", NULL );
+    else
+        g_object_set( ren, "foreground", "black", NULL );
+}
+
+
+
+
 
 static void
-add_col( GtkTreeView*     tree,
+add_col( cfg_edit_dlg*    dlg,
          GtkCellRenderer* ren,
          const gchar*     prop,
          gint             col_id,
@@ -233,7 +267,14 @@ add_col( GtkTreeView*     tree,
     gtk_tree_view_column_set_title( col, title );
     gtk_tree_view_column_pack_start( col, ren, TRUE );
     gtk_tree_view_column_add_attribute( col, ren, prop, col_id );
-    gtk_tree_view_append_column( tree, col );
+
+    gtk_tree_view_column_set_cell_data_func( col,
+                                             ren,
+                                             &cell_draw,
+                                             dlg,
+                                             NULL );
+
+    gtk_tree_view_append_column( dlg->tree_v_, col );
 }
 
 
@@ -258,6 +299,7 @@ add_row( cfg_edit_dlg* dlg,
 
     return it;
 }
+
 
 
 
@@ -357,9 +399,9 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
     cur_row_set_field_val( dlg, new_val );
 
-    // NOTE: update rdata
+    // NOTE: update rdata; TODO: update inheritance state
     //
-//    g_free( rdata->val_ );
+    // TODO: free string: g_free( rdata->val_ );
     rdata->val_ = g_strdup( new_val );
 
 
@@ -575,12 +617,15 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // tree view columns:
     //
-    GtkCellRenderer* ren_text = gtk_cell_renderer_text_new();
+//    GtkCellRenderer* ren_text = gtk_cell_renderer_text_new();
+    dlg->ren_txt_ = gtk_cell_renderer_text_new();
     GtkCellRenderer* ren_bool = gtk_cell_renderer_toggle_new();
 
-    add_col( dlg->tree_v_, ren_text, "text",   colid_name(), "name" );
-    add_col( dlg->tree_v_, ren_bool, "active", colid_inh(),  "inherited" );
-    add_col( dlg->tree_v_, ren_text, "text",   colid_val(),  "value" );
+//    g_object_set( dlg->ren_txt_, "foreground", "gray", NULL );
+
+    add_col( dlg, dlg->ren_txt_, "text",   colid_name(), "name" );
+    add_col( dlg, ren_bool,      "active", colid_inh(),  "inherited" );
+    add_col( dlg, dlg->ren_txt_, "text",   colid_val(),  "value" );
 
 
     load_cfg( dlg );
@@ -744,10 +789,11 @@ load_keys( EdaConfig*    ctx,
         // NOTE: rdata:
         //
         row_data* rdata = mk_rdata( ctx,
-                                   group,         // group
-                                   name,          // key
-                                   val,           // val
-                                   !file_writable // ro
+                                   group,          // group
+                                   name,           // key
+                                   val,            // val
+                                   !file_writable, // ro
+                                   inh             // inh
                                  );
 
         add_row( dlg,
@@ -814,18 +860,21 @@ load_groups( EdaConfig*    ctx,
         if ( strstr( name, "dialog-geometry" ) != NULL )
             continue;
 
+        gboolean inh = FALSE;
+
         // NOTE: rdata:
         //
         row_data* rdata = mk_rdata( ctx,
-                                   NULL,  // group
-                                   NULL,  // key
-                                   NULL,  // val
-                                   TRUE   // ro
-                                 );
+                                    NULL,  // group
+                                    NULL,  // key
+                                    NULL,  // val
+                                    TRUE,  // ro
+                                    inh    // inh
+                                  );
 
         GtkTreeIter it = add_row( dlg,
                                   name,    // name
-                                  FALSE,   // inh
+                                  inh,     // inh
                                   "",      // val
                                   rdata,   // rdata
                                   itParent
@@ -861,16 +910,17 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                  fname );
     }
 
+    gboolean inh = eda_config_get_parent( ctx ) != NULL;
+
     // NOTE: rdata:
     //
     row_data* rdata = mk_rdata( ctx,
                                NULL,  // group
                                NULL,  // key
                                NULL,  // val
-                               TRUE   // ro
+                               TRUE,  // ro
+                               inh    // inh
                              );
-
-    gboolean inh = eda_config_get_parent( ctx ) != NULL;
 
     GtkTreeIter it = add_row( dlg,
                               name,  // name

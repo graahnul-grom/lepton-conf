@@ -50,6 +50,7 @@ struct _cfg_edit_dlg
     GtkTreeModel* model_;
     GtkWidget*    tree_w_;
     GtkTreeView*  tree_v_;
+    GtkCellRenderer* ren_txt_;
 
     GtkWidget*    ent_;
     GtkWidget*    btn_apply_;
