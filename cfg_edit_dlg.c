@@ -278,9 +278,19 @@ static void cell_draw( GtkTreeViewColumn* col,
 
 
 static gboolean
-filter (GtkTreeModel* model, GtkTreeIter* it, gpointer data)
+filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
 {
-    return FALSE;
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+    const row_data* rdata = row_get_field_data( dlg, it );
+    if ( !rdata )
+        return FALSE;
+
+    return !rdata->inh_;
+
+//    return FALSE;
 }
 
 
@@ -297,7 +307,7 @@ filter_setup( cfg_edit_dlg* p )
     gtk_tree_model_filter_set_visible_func(
         GTK_TREE_MODEL_FILTER( dlg->model_f_ ),
         &filter,
-        NULL,
+        dlg,
         NULL);
 
 //    gtk_tree_view_set_model( dlg->tree_v_, dlg->model_f_ );
@@ -588,8 +598,21 @@ cfg_edit_dlg_on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    printf( " >> cfg_edit_dlg_on_btn_showinh(): %d\n",
-            gtk_toggle_button_get_active( btn ) );
+    gboolean show = gtk_toggle_button_get_active( btn );
+    printf( " >> cfg_edit_dlg_on_btn_showinh(): %d\n", show );
+
+    if ( !show )
+    {
+        gtk_tree_view_set_model( dlg->tree_v_, dlg->model_f_ );
+//        gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( dlg->model_f_ ) );
+
+    }
+    else
+    {
+        gtk_tree_view_set_model( dlg->tree_v_, dlg->model_ );
+    }
+
+    gtk_tree_view_expand_all( dlg->tree_v_ );
 }
 
 
@@ -765,6 +788,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // show inh chkeck box:
     //
     GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w inh" );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ), TRUE );
     gtk_box_pack_start( GTK_BOX( box ), btn_showinh, TRUE, TRUE, 10 );
 
     // edit val field:
