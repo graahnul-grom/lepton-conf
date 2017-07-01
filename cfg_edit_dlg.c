@@ -152,6 +152,18 @@ cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
+static row_data*
+row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
+{
+    row_data* rdata = NULL;
+    gtk_tree_model_get( dlg->model_, it, colid_data(), &rdata, -1 );
+
+    return rdata;
+
+} // cur_row_get_field_data()
+
+
+
 // {post}: caller must free {ret}
 //
 static gchar*
@@ -169,23 +181,19 @@ row_get_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 static void
 row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it, const gchar* val )
 {
+    row_data* rdata = row_get_field_data( dlg, it );
+    if ( !rdata )
+        return;
+
+    // TODO: free val_
+    //
+    rdata->val_ = g_strdup( val );
+
     gtk_tree_store_set( dlg->store_,
                         it,
                         colid_val(), val,
                         -1 );
 } // row_set_field_val()
-
-
-
-static row_data*
-row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
-{
-    row_data* rdata = NULL;
-    gtk_tree_model_get( dlg->model_, it, colid_data(), &rdata, -1 );
-
-    return rdata;
-
-} // cur_row_get_field_data()
 
 
 
@@ -406,10 +414,6 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
     row_set_field_val( dlg, &it, new_val );
 
-    // NOTE: update rdata; TODO: update inheritance state
-    //
-    // TODO: free string: g_free( rdata->val_ );
-    rdata->val_ = g_strdup( new_val );
 
 
 } // cfg_edit_dlg_on_btn_apply()
