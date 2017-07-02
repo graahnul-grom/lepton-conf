@@ -3,6 +3,21 @@
 #include <liblepton/libgedaguile.h>
 
 
+static GtkTreeModel*
+dlg_model( cfg_edit_dlg* dlg )
+{
+//    return gtk_tree_view_get_model( dlg->tree_v_ );
+    return dlg->model_;
+}
+
+static void
+dlg_model_set( cfg_edit_dlg* dlg, GtkTreeModel* model )
+{
+    dlg->model_ = model;
+}
+
+
+
 // {post}: {ret} owned by geda cfg api
 //
 static const gchar*
@@ -157,9 +172,9 @@ cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 static gboolean
 cur_row_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itParent )
 {
-    GtkTreePath* path = gtk_tree_model_get_path( dlg->model_, it );
+    GtkTreePath* path = gtk_tree_model_get_path( dlg_model( dlg ), it );
     gtk_tree_path_up( path );
-    return gtk_tree_model_get_iter( dlg->model_, itParent, path );
+    return gtk_tree_model_get_iter( dlg_model( dlg ), itParent, path );
 
 } // cur_row_get_parent_iter()
 
@@ -169,7 +184,7 @@ static row_data*
 row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     row_data* rdata = NULL;
-    gtk_tree_model_get( dlg->model_, it, colid_data(), &rdata, -1 );
+    gtk_tree_model_get( dlg_model( dlg ), it, colid_data(), &rdata, -1 );
 
     return rdata;
 
@@ -183,7 +198,7 @@ static gchar*
 row_get_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     gchar* val = NULL;
-    gtk_tree_model_get( dlg->model_, it, colid_val(), &val, -1 );
+    gtk_tree_model_get( dlg_model( dlg ), it, colid_val(), &val, -1 );
 
     return val;
 
@@ -262,6 +277,8 @@ static void cell_draw( GtkTreeViewColumn* col,
     if ( !dlg )
         return;
 
+    dlg_model_set( dlg, model );
+
     if ( ren != dlg->ren_txt_ )
         return;
 
@@ -284,14 +301,21 @@ filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
     if ( !dlg )
         return FALSE;
 
+    dlg_model_set( dlg, model );
+
+//    row_data* rdata = NULL;
+    // OK: gtk_tree_model_get( model, it, colid_data(), &rdata, -1 );
+//    gtk_tree_model_get( dlg_model( dlg ), it, colid_data(), &rdata, -1 );
+
     const row_data* rdata = row_get_field_data( dlg, it );
     if ( !rdata )
         return FALSE;
 
     return !rdata->inh_;
-
 //    return FALSE;
-}
+//    return TRUE;
+
+} // filter()
 
 
 
@@ -302,18 +326,26 @@ filter_setup( cfg_edit_dlg* p )
     if ( !dlg )
         return;
 
-    dlg->model_f_ = gtk_tree_model_filter_new( dlg->model_, NULL );
+    GtkTreeModel* modf = gtk_tree_model_filter_new( dlg_model( dlg ), NULL );
+//    dlg->model_f_ = gtk_tree_model_filter_new( dlg_model( dlg ), NULL );
 
     gtk_tree_model_filter_set_visible_func(
-        GTK_TREE_MODEL_FILTER( dlg->model_f_ ),
+        GTK_TREE_MODEL_FILTER( modf ),
+//        GTK_TREE_MODEL_FILTER( dlg->model_f_ ),
         &filter,
         dlg,
         NULL);
 
+    dlg_model_set( dlg, modf );
+
+    gtk_tree_view_set_model( dlg->tree_v_, modf );
 //    gtk_tree_view_set_model( dlg->tree_v_, dlg->model_f_ );
 
-//    g_signal_connect( entry, "changed", G_CALLBACK (&entry_changed), tree );
-}
+//    dlg_model_set( dlg, modf );
+//    dlg->model_f_ = modf;
+//    dlg->model_ = dlg->model_f_;
+
+} // filter_setup()
 
 
 
@@ -603,14 +635,17 @@ cfg_edit_dlg_on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
     if ( !show )
     {
-        gtk_tree_view_set_model( dlg->tree_v_, dlg->model_f_ );
+//        gtk_tree_view_set_model( dlg->tree_v_, dlg->model_f_ );
 //        gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( dlg->model_f_ ) );
 
     }
     else
     {
-        gtk_tree_view_set_model( dlg->tree_v_, dlg->model_ );
+//        gtk_tree_view_set_model( dlg->tree_v_, dlg_model( dlg ) );
     }
+
+    dlg->showinh_ = show;
+    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( dlg_model( dlg ) ) );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
 }
@@ -712,18 +747,19 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     dlg->store_ = gtk_tree_store_new(
         cols_cnt(),
-        G_TYPE_STRING     // name
+          G_TYPE_STRING     // name
         , G_TYPE_BOOLEAN  // inherited
         , G_TYPE_STRING   // val
         , G_TYPE_POINTER  // rdata
     );
 
-    dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
+    dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
+//    dlg->model_ = GTK_TREE_MODEL( dlg->store_ );
 
 
     // view:
     //
-    dlg->tree_w_ = gtk_tree_view_new_with_model( dlg->model_ );
+    dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
     dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
 
@@ -741,9 +777,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     add_col( dlg, dlg->ren_txt_, "text",   colid_val(),  "value" );
 
 
+//    filter_setup( dlg );
     load_cfg( dlg );
-
-
     filter_setup( dlg );
 
 
@@ -1041,7 +1076,8 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                  fname );
     }
 
-    gboolean inh = eda_config_get_parent( ctx ) != NULL;
+//    gboolean inh = eda_config_get_parent( ctx ) != NULL;
+    gboolean inh = FALSE;
 
     // NOTE: rdata:
     //
