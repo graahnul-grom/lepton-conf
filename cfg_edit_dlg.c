@@ -311,9 +311,10 @@ filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
     if ( !rdata )
         return FALSE;
 
-    return !rdata->inh_;
+    if ( !dlg->showinh_ )
+        return !rdata->inh_;
 //    return FALSE;
-//    return TRUE;
+    return TRUE;
 
 } // filter()
 
@@ -779,6 +780,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 //    filter_setup( dlg );
     load_cfg( dlg );
+
+    dlg->showinh_ = TRUE;
+
     filter_setup( dlg );
 
 
@@ -820,16 +824,20 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* box = gtk_hbox_new( FALSE, 0 );
 
+
     // show inh chkeck box:
     //
     GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w inh" );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ), TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
+                                  dlg->showinh_ );
     gtk_box_pack_start( GTK_BOX( box ), btn_showinh, TRUE, TRUE, 10 );
+
 
     // edit val field:
     //
     dlg->ent_ = gtk_entry_new();
     gtk_box_pack_start( GTK_BOX( box ), dlg->ent_, TRUE, TRUE, 10 );
+
 
     // apply btn:
     //
