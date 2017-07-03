@@ -56,6 +56,7 @@ struct _cfg_edit_dlg
 
     GtkWidget*    ent_;
     GtkWidget*    btn_apply_;
+    GtkWidget*    btn_reload_;
 
     gboolean showinh_;
 };

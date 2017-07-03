@@ -16,6 +16,43 @@ dlg_model_set( cfg_edit_dlg* dlg, GtkTreeModel* model )
     dlg->model_ = model;
 }
 
+static void
+dlg_model_upd( cfg_edit_dlg* dlg )
+{
+    dlg_model_set( dlg, gtk_tree_view_get_model( dlg->tree_v_ ) );
+}
+
+// {ret}: tree store iter corresponding to model's iter [it]
+//
+GtkTreeIter dlg_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
+{
+//    NOTE: manual impl:
+//
+//    GtkTreeIter itModel = it;
+//    GtkTreeModelFilter* filtModel = GTK_TREE_MODEL_FILTER( dlg_model( dlg ) );
+//    GtkTreeModel* childModel = gtk_tree_model_filter_get_model( filtModel );
+//    GtkTreePath* path = gtk_tree_model_get_path( dlg_model( dlg ), &itModel );
+//    GtkTreeIter itStore;
+//    gtk_tree_model_get_iter( childModel, &itStore, path );
+//    return itStore;
+
+    // NOTE: no filter model set:
+    //
+    GtkTreeModel* mod      = dlg_model( dlg );
+    GtkTreeModel* modStore = GTK_TREE_MODEL( dlg->store_ );
+    if ( mod == modStore )
+        return it;
+
+    GtkTreeModelFilter* filtModel =
+        GTK_TREE_MODEL_FILTER( dlg_model( dlg ) );
+    GtkTreeIter itModel = it;
+    GtkTreeIter itStore;
+    gtk_tree_model_filter_convert_iter_to_child_iter( filtModel,
+                                                      &itStore,
+                                                      &itModel );
+    return itStore;
+}
+
 
 
 // {post}: {ret} owned by geda cfg api
@@ -157,7 +194,14 @@ static gboolean
 cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
-    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
+
+
+    GtkTreeModel* model = NULL;
+    gboolean res = gtk_tree_selection_get_selected( sel, &model, it );
+    dlg_model_set( dlg, model );
+
+
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
     if ( !res )
         printf( " >> >> cur_row_get_iter(): !sel\n");
 
@@ -207,9 +251,11 @@ row_get_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 static void
-row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it, const gchar* val )
+row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
 {
-    row_data* rdata = row_get_field_data( dlg, it );
+    GtkTreeIter it = itCPY;
+
+    row_data* rdata = row_get_field_data( dlg, &it );
     if ( !rdata )
         return;
 
@@ -217,10 +263,16 @@ row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it, const gchar* val )
     //
     rdata->val_ = g_strdup( val );
 
+
+    GtkTreeIter itStore = dlg_tstore_iter( dlg, it );
+
     gtk_tree_store_set( dlg->store_,
-                        it,
+                        &itStore,
                         colid_val(), val,
                         -1 );
+
+    dlg_model_upd( dlg );
+
 } // row_set_field_val()
 
 
@@ -239,18 +291,26 @@ row_get_field_inh( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 static void
-row_set_field_inh( cfg_edit_dlg* dlg, GtkTreeIter* it, gboolean val )
+row_set_field_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
 {
-    row_data* rdata = row_get_field_data( dlg, it );
+    GtkTreeIter it = itCPY;
+
+    row_data* rdata = row_get_field_data( dlg, &it );
     if ( !rdata )
         return;
 
     rdata->inh_ = val;
 
+
+    GtkTreeIter itStore = dlg_tstore_iter( dlg, it );
+
     gtk_tree_store_set( dlg->store_,
-                        it,
+                        &itStore,
                         colid_inh(), val,
                         -1 );
+
+    dlg_model_upd( dlg );
+
 } // row_set_field_inh()
 
 
@@ -328,27 +388,33 @@ filter_setup( cfg_edit_dlg* p )
         return;
 
     GtkTreeModel* modf = gtk_tree_model_filter_new( dlg_model( dlg ), NULL );
-//    dlg->model_f_ = gtk_tree_model_filter_new( dlg_model( dlg ), NULL );
 
     gtk_tree_model_filter_set_visible_func(
         GTK_TREE_MODEL_FILTER( modf ),
-//        GTK_TREE_MODEL_FILTER( dlg->model_f_ ),
         &filter,
         dlg,
         NULL);
 
-    dlg_model_set( dlg, modf );
-
     gtk_tree_view_set_model( dlg->tree_v_, modf );
-//    gtk_tree_view_set_model( dlg->tree_v_, dlg->model_f_ );
 
-//    dlg_model_set( dlg, modf );
-//    dlg->model_f_ = modf;
-//    dlg->model_ = dlg->model_f_;
+    dlg_model_upd( dlg );
 
 } // filter_setup()
 
 
+
+static void
+filter_remove( cfg_edit_dlg* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    gtk_tree_view_set_model( dlg->tree_v_, GTK_TREE_MODEL( dlg->store_ ) );
+
+    dlg_model_upd( dlg );
+
+} // filter_remove()
 
 
 
@@ -381,10 +447,10 @@ add_row( cfg_edit_dlg* dlg,
          gboolean      inh,
          const gchar*  val,
          gpointer      rdata,
-         GtkTreeIter*  it_parent )
+         GtkTreeIter*  itParent )
 {
     GtkTreeIter it;
-    gtk_tree_store_append( dlg->store_, &it, it_parent );
+    gtk_tree_store_append( dlg->store_, &it, itParent );
     gtk_tree_store_set( dlg->store_,
                         &it,
                         colid_name(),     name,
@@ -392,6 +458,8 @@ add_row( cfg_edit_dlg* dlg,
                         colid_val(),      val,
                         colid_data(),     rdata,
                         -1 );
+
+    dlg_model_upd( dlg );
 
     return it;
 }
@@ -500,19 +568,26 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     }
 
 
-    row_set_field_val( dlg, &it, new_val );
+
+    row_set_field_val( dlg, it, new_val );
+
 
     // mark current key as not inherited:
     //
-    row_set_field_inh( dlg, &it, FALSE );
+    row_set_field_inh( dlg, it, FALSE );
 
 
     // mark parent group as not inherited:
     //
     GtkTreeIter itParent;
     if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
-        row_set_field_inh( dlg, &itParent, FALSE );
+        row_set_field_inh( dlg, itParent, FALSE );
 
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+    // NOTE: reload all:
+    //
+    g_signal_emit_by_name( dlg->btn_reload_, "clicked", dlg );
 
 } // cfg_edit_dlg_on_btn_apply()
 
@@ -561,20 +636,39 @@ cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
+
+    // remember current tree node:
+    //
+    GtkTreePath* path = NULL;
+    GtkTreeIter it;
+    if ( cur_row_get_iter( dlg, &it ) )
+        path = gtk_tree_model_get_path( dlg_model( dlg ), &it );
+
+
+    filter_remove( dlg );
+
     gtk_tree_store_clear( dlg->store_ );
+
     load_cfg( dlg );
 
-    // NOTE: select tree widget, tree row:
-    //
-    GtkTreePath* path0 = gtk_tree_path_new_from_string( "0" );
-    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path0, NULL, NULL, FALSE );
+    filter_setup( dlg );
+
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 //    gtk_widget_activate( GTK_WIDGET( dlg->tree_v_ ) );
 
-    gtk_tree_view_expand_all( dlg->tree_v_ );
 
-    g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
+    // restore current tree node:
+    //
+    if ( path )
+    {
+        gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+        gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+    }
+
+
+    gtk_tree_view_expand_all( dlg->tree_v_ ); // // //
+
 }
 
 
@@ -778,11 +872,10 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     add_col( dlg, dlg->ren_txt_, "text",   colid_val(),  "value" );
 
 
-//    filter_setup( dlg );
-    load_cfg( dlg );
-
     dlg->showinh_ = TRUE;
 
+//    filter_setup( dlg );
+    load_cfg( dlg );
     filter_setup( dlg );
 
 
@@ -854,8 +947,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // reload btn:
     //
-    GtkWidget* btn_reload = gtk_button_new_with_mnemonic( "_reload" );
-    gtk_box_pack_start( GTK_BOX( aa ), btn_reload, FALSE, FALSE, 0 );
+    dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
+    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_reload_, FALSE, FALSE, 0 );
 
     // ext ed btn:
     //
@@ -886,7 +979,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &cfg_edit_dlg_on_btn_exted ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_reload ),
+    g_signal_connect( G_OBJECT( dlg->btn_reload_ ),
                       "clicked",
                       G_CALLBACK( &cfg_edit_dlg_on_btn_reload ),
                       dlg );
@@ -911,8 +1004,9 @@ static void
 load_keys( EdaConfig*    ctx,
            const gchar*  group,
            cfg_edit_dlg* dlg,
-           GtkTreeIter*  itParent,
-           gboolean      file_writable )
+           GtkTreeIter   itParent,
+           gboolean      file_writable,
+           gboolean*     inh_all )
 {
     gsize len = 0;
     GError* err = NULL;
@@ -929,8 +1023,6 @@ load_keys( EdaConfig*    ctx,
         return;
     }
 
-
-    gboolean inh_all = TRUE;
 
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
@@ -957,10 +1049,7 @@ load_keys( EdaConfig*    ctx,
         g_clear_error( &err );
 
 
-        inh_all = inh_all && inh;
-
-//        printf( " >> load_keys(): [%s::%s]: inh: [%d]\n", group, name, inh );
-
+        *inh_all = *inh_all && inh;
 
         // NOTE: rdata:
         //
@@ -977,14 +1066,9 @@ load_keys( EdaConfig*    ctx,
                  inh,
                  val,
                  rdata,
-                 itParent );
+                 &itParent );
 
         g_free( val );
-
-
-        // NOTE: mark group as inherited only if all its keys are inherited:
-        //
-        row_set_field_inh( dlg, itParent, inh_all );
 
     } // for keys
 
@@ -998,7 +1082,7 @@ static void
 load_groups( EdaConfig*    ctx,
              const gchar*  fname,
              cfg_edit_dlg* dlg,
-             GtkTreeIter*  itParent,
+             GtkTreeIter   itParent,
              gboolean      file_writable )
 {
     if ( fname != NULL )
@@ -1051,10 +1135,13 @@ load_groups( EdaConfig*    ctx,
                                   inh,     // inh
                                   "",      // val
                                   rdata,   // rdata
-                                  itParent
+                                  &itParent
                                 );
 
-        load_keys( ctx, name, dlg, &it, file_writable );
+        gboolean inh_all = TRUE;
+        load_keys( ctx, name, dlg, it, file_writable, &inh_all );
+
+        row_set_field_inh( dlg, it, inh_all );
 
     } // for groups
 
@@ -1105,7 +1192,7 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                               NULL
                             );
 
-    load_groups( ctx, fname, dlg, &it, wok );
+    load_groups( ctx, fname, dlg, it, wok );
 
 } // load_ctx()
 
