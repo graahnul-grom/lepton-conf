@@ -38,16 +38,15 @@ GtkTreeIter dlg_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 
     // NOTE: no filter model set:
     //
-    GtkTreeModel* mod      = dlg_model( dlg );
-    GtkTreeModel* modStore = GTK_TREE_MODEL( dlg->store_ );
-    if ( mod == modStore )
+    GtkTreeModel* model = dlg_model( dlg );
+    GtkTreeModel* modelStore = GTK_TREE_MODEL( dlg->store_ );
+    if ( model == modelStore )
         return it;
 
-    GtkTreeModelFilter* filtModel =
-        GTK_TREE_MODEL_FILTER( dlg_model( dlg ) );
+    GtkTreeModelFilter* modelFilt = GTK_TREE_MODEL_FILTER( model );
     GtkTreeIter itModel = it;
     GtkTreeIter itStore;
-    gtk_tree_model_filter_convert_iter_to_child_iter( filtModel,
+    gtk_tree_model_filter_convert_iter_to_child_iter( modelFilt,
                                                       &itStore,
                                                       &itModel );
     return itStore;
@@ -216,9 +215,10 @@ cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 static gboolean
 cur_row_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itParent )
 {
-    GtkTreePath* path = gtk_tree_model_get_path( dlg_model( dlg ), it );
+    GtkTreeModel* model = dlg_model( dlg );
+    GtkTreePath* path = gtk_tree_model_get_path( model, it );
     gtk_tree_path_up( path );
-    return gtk_tree_model_get_iter( dlg_model( dlg ), itParent, path );
+    return gtk_tree_model_get_iter( model, itParent, path );
 
 } // cur_row_get_parent_iter()
 
@@ -743,6 +743,8 @@ cfg_edit_dlg_on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( dlg_model( dlg ) ) );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
+
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 }
 
 
