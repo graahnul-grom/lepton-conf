@@ -1,13 +1,24 @@
-EXE=chk
-SRC=chk.c cfg_edit_dlg.c
+EXE=gedacfged
+SRC=main.c cfg_edit_dlg.c
 CFLAGS=-Wall -ansi -std=c99 -O0 -ggdb -pthread
-# CPPFLAGS=-DG_DISABLE_CHECKS
 
+
+
+# [CHANGE IT]: gtk and guile package names
+#
 OPT_GTK=`pkg-config --libs --cflags gtk+-2.0`
 OPT_GUILE=`pkg-config --libs --cflags guile-2.0`
 
-gaf_dir=$(lepton)/bin.dmn
+# [CHANGE IT]: path to lepton or gaf
+#
+gaf_dir=$(lepton)/bin.master
+
+# [CHANGE IT]: liblepton or libgeda
+#
 libgeda_name=liblepton
+
+
+
 gaf_pk_dir=$(gaf_dir)/lib/pkgconfig
 OPT_LIBGEDA=`PKG_CONFIG_PATH=$(gaf_pk_dir) pkg-config --libs --cflags $(libgeda_name)`
 
