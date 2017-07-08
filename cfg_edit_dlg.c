@@ -1039,18 +1039,19 @@ load_keys( EdaConfig*    ctx,
         // NOTE: rdata:
         //
         row_data* rdata = mk_rdata( ctx,
-                                   group,          // group
-                                   name,           // key
-                                   val,            // val
-                                   !file_writable, // ro
-                                   inh             // inh
-                                 );
+                                    group,          // group
+                                    name,           // key
+                                    val,            // val
+                                    !file_writable, // ro
+                                    inh             // inh
+                                  );
 
         add_row( dlg,
                  name,
                  val,
                  rdata,
-                 &itParent );
+                 &itParent
+               );
 
         g_free( val );
 
@@ -1149,11 +1150,12 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
     if ( fname != NULL )
     {
-        sprintf( str, "[%s%s%s] %s",
+        sprintf( str, "config file: %s [%s%s%s]",
+                 fname,
                  exist ? "f" : "-",
                  rok   ? "r" : "-",
-                 wok   ? "w" : "-",
-                 fname );
+                 wok   ? "w" : "-"
+               );
     }
 
 //    gboolean inh = eda_config_get_parent( ctx ) != NULL;
@@ -1162,12 +1164,12 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
     // NOTE: rdata:
     //
     row_data* rdata = mk_rdata( ctx,
-                               NULL,  // group
-                               NULL,  // key
-                               NULL,  // val
-                               TRUE,  // ro
-                               inh    // inh
-                             );
+                                NULL,  // group
+                                NULL,  // key
+                                NULL,  // val
+                                TRUE,  // ro
+                                inh    // inh
+                              );
 
     GtkTreeIter it = add_row( dlg,
                               name,  // name
@@ -1185,9 +1187,9 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 static void
 load_cfg( cfg_edit_dlg* dlg )
 {
-    load_ctx( eda_config_get_default_context(),       "DEFAULT",  dlg );
-    load_ctx( eda_config_get_system_context(),        "SYSTEM",   dlg );
-    load_ctx( eda_config_get_user_context(),          "USER",     dlg );
-    load_ctx( eda_config_get_context_for_path( "." ), "PATH [.]", dlg );
+    load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
+    load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
+    load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
+    load_ctx( eda_config_get_context_for_path( "." ), "context: PATH [.]", dlg );
 }
 
