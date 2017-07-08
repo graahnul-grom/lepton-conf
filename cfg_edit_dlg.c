@@ -854,7 +854,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // window title:
     //
-    gtk_window_set_title( GTK_WINDOW( dlg ), g_strdup_printf( "gedacfged - %s", cwd ) );
+    gtk_window_set_title( GTK_WINDOW( dlg ),
+                          g_strdup_printf( "gedacfged - %s", cwd ) );
     g_free( cwd );
 
 
@@ -880,14 +881,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     GtkWidget* box_bot = gtk_hbox_new( FALSE, 0 );
 
 
-    // show inh check box:
-    //
-    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w inherited" );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
-                                  dlg->showinh_ );
-    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, TRUE, TRUE, 10 );
-
-
     // edit val field:
     //
     dlg->ent_ = gtk_entry_new();
@@ -898,6 +891,22 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     dlg->btn_apply_ = gtk_button_new_with_mnemonic( "_apply" );
     gtk_box_pack_start( GTK_BOX( box_bot ), dlg->btn_apply_, FALSE, FALSE, 10 );
+
+
+    // show inh check box:
+    //
+    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w" );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
+                                  dlg->showinh_ );
+
+    GtkWidget* lab_inh = gtk_label_new( " inherited" );
+
+    GdkColor color;
+    gdk_color_parse( "gray", &color );
+    gtk_widget_modify_fg( lab_inh, GTK_STATE_NORMAL, &color );
+
+    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, FALSE, TRUE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_bot ), lab_inh, FALSE, TRUE, 0 );
 
 
     // add box_bot to ca:
