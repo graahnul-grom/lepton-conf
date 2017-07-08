@@ -99,7 +99,7 @@ enum
 // TODO: row_data: free memory
 //
 static row_data*
-mk_rdata( EdaConfig*   ctx,
+mk_rdata( EdaConfig*  ctx,
          const gchar* group,
          const gchar* key,
          const gchar* val,
@@ -849,9 +849,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gchar* cwd = g_get_current_dir();
     gchar str[ PATH_MAX ] = "";
     sprintf( str, "cwd: %s", cwd );
-    GtkWidget* lab_cwd = gtk_label_new( str );
+//    GtkWidget* lab_cwd = gtk_label_new( str );
+//    gtk_box_pack_start( GTK_BOX( ca ), lab_cwd, FALSE, TRUE, 0 );
+
+    // window title:
+    //
+    gtk_window_set_title( GTK_WINDOW( dlg ), g_strdup_printf( "gedacfged - %s", cwd ) );
     g_free( cwd );
-    gtk_box_pack_start( GTK_BOX( ca ), lab_cwd, FALSE, TRUE, 0 );
 
 
     // scrolled win:
@@ -876,9 +880,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     GtkWidget* box_bot = gtk_hbox_new( FALSE, 0 );
 
 
-    // show inh chkeck box:
+    // show inh check box:
     //
-    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w inh" );
+    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w inherited" );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
                                   dlg->showinh_ );
     gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, TRUE, TRUE, 10 );
@@ -917,9 +921,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
 
 
+    // show all:
+    //
     gtk_widget_show_all( GTK_WIDGET(dlg) );
 
 
+    // event handlers:
+    //
     g_signal_connect( G_OBJECT( dlg ),
                       "delete-event",
                       G_CALLBACK( &cfg_edit_dlg_on_delete_event ),
