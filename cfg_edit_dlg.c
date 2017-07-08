@@ -797,8 +797,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     dlg->ren_txt_ = gtk_cell_renderer_text_new();
 
-    add_col( dlg, dlg->ren_txt_, "text",   colid_name(), "name" );
-    add_col( dlg, dlg->ren_txt_, "text",   colid_val(),  "value" );
+    add_col( dlg, dlg->ren_txt_, "text", colid_name(), "name" );
+    add_col( dlg, dlg->ren_txt_, "text", colid_val(),  "value" );
 
 
     dlg->showinh_ = TRUE;
@@ -815,14 +815,44 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG(dlg) );
 
+
+    // box (top):
+    //
+    GtkWidget* box_top = gtk_hbox_new( FALSE, 0 );
+
+
+    // "Find:" label:
+    //
+    GtkWidget* lab_find = gtk_label_new_with_mnemonic( "_Find: " );
+    gtk_box_pack_start( GTK_BOX( box_top ), lab_find, FALSE, FALSE, 0 );
+
+
+    // find edit field:
+    //
+    GtkWidget* ent_find = gtk_entry_new();
+    gtk_box_pack_start( GTK_BOX( box_top ), ent_find, TRUE, TRUE, 0 );
+
+
+    // attach label to edit field:
+    //
+    gtk_label_set_mnemonic_widget( GTK_LABEL( lab_find ), ent_find );
+
+
+    // add box_top to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ),  box_top, FALSE, FALSE, 0 );
+
+
+
     // cwd label:
     //
     gchar* cwd = g_get_current_dir();
     gchar str[ PATH_MAX ] = "";
     sprintf( str, "cwd: %s", cwd );
-    GtkWidget* lab = gtk_label_new( str );
+    GtkWidget* lab_cwd = gtk_label_new( str );
     g_free( cwd );
-    gtk_box_pack_start( GTK_BOX( ca ), lab, FALSE, TRUE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ), lab_cwd, FALSE, TRUE, 0 );
+
 
     // scrolled win:
     //
@@ -830,13 +860,20 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );
+
+    // add tree to wscroll:
+    //
     gtk_container_add( GTK_CONTAINER( wscroll ), dlg->tree_w_ );
+
+
+    // add wscroll to ca:
+    //
     gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
 
 
-    // box:
+    // box (bottom):
     //
-    GtkWidget* box = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* box_bot = gtk_hbox_new( FALSE, 0 );
 
 
     // show inh chkeck box:
@@ -844,21 +881,24 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w inh" );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
                                   dlg->showinh_ );
-    gtk_box_pack_start( GTK_BOX( box ), btn_showinh, TRUE, TRUE, 10 );
+    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, TRUE, TRUE, 10 );
 
 
     // edit val field:
     //
     dlg->ent_ = gtk_entry_new();
-    gtk_box_pack_start( GTK_BOX( box ), dlg->ent_, TRUE, TRUE, 10 );
+    gtk_box_pack_start( GTK_BOX( box_bot ), dlg->ent_, TRUE, TRUE, 10 );
 
 
     // apply btn:
     //
     dlg->btn_apply_ = gtk_button_new_with_mnemonic( "_apply" );
-    gtk_box_pack_start( GTK_BOX( box ), dlg->btn_apply_, FALSE, FALSE, 10 );
+    gtk_box_pack_start( GTK_BOX( box_bot ), dlg->btn_apply_, FALSE, FALSE, 10 );
 
-    gtk_box_pack_start( GTK_BOX( ca ),  box, FALSE, FALSE, 0 );
+
+    // add box_bot to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ),  box_bot, FALSE, FALSE, 0 );
 
 
 
@@ -911,8 +951,15 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &cfg_edit_dlg_on_row_sel ),
                       dlg );
 
-    g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
-}
+
+    // NOTE: dont't do it:
+    //  if tree not focused on startup => SIGSEGV
+    //
+    // g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
+
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+} // cfg_edit_dlg_init()
 
 
 
