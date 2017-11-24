@@ -818,45 +818,54 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // box (top):
     //
-    GtkWidget* box_top = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* hbox_top = gtk_hbox_new( FALSE, 0 );
 
 
     // "Find:" label:
     //
-    GtkWidget* lab_find = gtk_label_new_with_mnemonic( "_Find: " );
-    gtk_box_pack_start( GTK_BOX( box_top ), lab_find, FALSE, FALSE, 0 );
+//    GtkWidget* lab_find = gtk_label_new_with_mnemonic( "_Find: " );
+//    gtk_box_pack_start( GTK_BOX( hbox_top ), lab_find, FALSE, FALSE, 0 );
 
 
     // find edit field:
     //
-    GtkWidget* ent_find = gtk_entry_new();
-    gtk_box_pack_start( GTK_BOX( box_top ), ent_find, TRUE, TRUE, 0 );
+//    GtkWidget* ent_find = gtk_entry_new();
+//    gtk_box_pack_start( GTK_BOX( hbox_top ), ent_find, TRUE, TRUE, 0 );
 
 
     // attach label to edit field:
     //
-    gtk_label_set_mnemonic_widget( GTK_LABEL( lab_find ), ent_find );
+//    gtk_label_set_mnemonic_widget( GTK_LABEL( lab_find ), ent_find );
 
 
-    // add box_top to ca:
+    // add hbox_top to ca:
     //
-    gtk_box_pack_start( GTK_BOX( ca ),  box_top, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ),  hbox_top, FALSE, FALSE, 0 );
 
 
+
+    // box2 (top):
+    //
+    GtkWidget* hbox2_top = gtk_hbox_new( FALSE, 0 );
 
     // cwd label:
     //
     gchar* cwd = g_get_current_dir();
     gchar str[ PATH_MAX ] = "";
     sprintf( str, "cwd: %s", cwd );
-//    GtkWidget* lab_cwd = gtk_label_new( str );
-//    gtk_box_pack_start( GTK_BOX( ca ), lab_cwd, FALSE, TRUE, 0 );
+    GtkWidget* lab_cwd = gtk_label_new( str );
+    gtk_box_pack_start( GTK_BOX( hbox2_top ), lab_cwd, FALSE, TRUE, 0 );
 
     // window title:
     //
     gtk_window_set_title( GTK_WINDOW( dlg ),
                           g_strdup_printf( "gedacfged - %s", cwd ) );
     g_free( cwd );
+
+    // add hbox2_top to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ),  hbox2_top, FALSE, FALSE, 0 );
+
 
 
     // scrolled win:
