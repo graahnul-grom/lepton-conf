@@ -296,9 +296,15 @@ static void cell_draw( GtkTreeViewColumn* col,
 
 
     if ( rdata->inh_ )
+    {
         g_object_set( ren, "foreground", "gray", NULL );
+        g_object_set( ren, "style", PANGO_STYLE_ITALIC, NULL );
+    }
     else
+    {
         g_object_set( ren, "foreground", "black", NULL );
+        g_object_set( ren, "style", PANGO_STYLE_NORMAL, NULL );
+    }
 
 } // cell_draw()
 
@@ -504,7 +510,7 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
     // NOTE: reload all:
     //
-    g_signal_emit_by_name( dlg->btn_reload_, "clicked", dlg );
+//    g_signal_emit_by_name( dlg->btn_reload_, "clicked", dlg );
 
 } // cfg_edit_dlg_on_btn_apply()
 
@@ -892,14 +898,20 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
                                   dlg->showinh_ );
 
-    GtkWidget* lab_inh = gtk_label_new( " inherited" );
+    GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( btn_showinh ) );
+    gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab_showinh ),
+                                        "<i>sho_w inherited</i>" );
 
-    GdkColor color;
-    gdk_color_parse( "gray", &color );
-    gtk_widget_modify_fg( lab_inh, GTK_STATE_NORMAL, &color );
+//    GtkWidget* lab_inh = gtk_label_new_with_mnemonic( "" );
+//    GtkWidget* lab_inh = gtk_label_new( " inherited" );
+//    gtk_label_set_markup( GTK_LABEL( lab_inh ), " _<i>show inherited</i>" );
+//    GdkColor color;
+//    gdk_color_parse( "gray", &color );
+//    gtk_widget_modify_fg( lab_inh, GTK_STATE_NORMAL, &color );
+
 
     gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, FALSE, TRUE, 0 );
-    gtk_box_pack_start( GTK_BOX( box_bot ), lab_inh, FALSE, TRUE, 0 );
+//    gtk_box_pack_start( GTK_BOX( box_bot ), lab_inh, FALSE, TRUE, 0 );
 
 
     // add box_bot to ca:
