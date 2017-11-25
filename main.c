@@ -20,8 +20,9 @@ int main( int argc, char* argv[] )
 //    printf( "gedacfged: cfg_edit_dlg: prop1: [%d]\n", g_value_get_int( &gv ) );
 
 
-//        gtk_window_set_default_size( GTK_WINDOW(w), 600, 400 );
-    gtk_widget_set_size_request( wnd, 900, 800 );
+//    gtk_window_set_default_size( GTK_WINDOW(wnd), 600, 400 );
+//    gtk_widget_set_size_request( wnd, 900, 800 );
+    gtk_widget_set_size_request( wnd, 900, 400 );
 
 
     gtk_dialog_run( GTK_DIALOG( wnd ) );

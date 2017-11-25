@@ -765,6 +765,11 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 
 
 
+static gboolean cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p );
+
+
+
+
 static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
@@ -944,6 +949,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_widget_show_all( GTK_WIDGET(dlg) );
 
 
+
+
+
+
+
+
     // event handlers:
     //
     g_signal_connect( G_OBJECT( dlg ),
@@ -977,6 +988,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &cfg_edit_dlg_on_row_sel ),
                       dlg );
 
+    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
+                      "button-press-event",
+                      G_CALLBACK( &cfg_edit_dlg_on_rmb ),
+                      dlg );
+
 
     // NOTE: dont't do it:
     //  if tree not focused on startup => SIGSEGV
@@ -990,6 +1006,162 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
+///////////////////////////////////////////////////////////
+//
+// popup menu:
+//
+
+static void
+cfg_edit_dlg_on_mitem( GtkMenuItem* mitem, gpointer p )
+{
+    printf( "cfg_edit_on_mitem( %s )\n", gtk_menu_item_get_label( mitem ) );
+
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !cur_row_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_get_field_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    printf( "cfg_edit_on_mitem(): %s\n", rdata->val_ );
+
+//    gtk_menu_item_get_label( mitem );
+
+} // cfg_edit_dlg_on_mitem()
+
+
+
+static GtkMenu*
+mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
+{
+    GtkWidget* menu = gtk_menu_new();
+
+    GtkWidget* mitem1 = gtk_menu_item_new_with_mnemonic( "_edit" );
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem1);
+    g_signal_connect( G_OBJECT( mitem1 ),
+                      "activate",
+                      G_CALLBACK( &cfg_edit_dlg_on_mitem ),
+                      dlg );
+
+    GtkWidget* mitem2 = gtk_menu_item_new_with_mnemonic( "_promote" );
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem2);
+    g_signal_connect( G_OBJECT( mitem2 ),
+                      "activate",
+                      G_CALLBACK( &cfg_edit_dlg_on_mitem ),
+                      dlg );
+
+
+    gtk_widget_show( mitem1 );
+    gtk_widget_show( mitem2 );
+
+    gtk_widget_set_sensitive( mitem1, !rdata->ro_ && !rdata->inh_ );
+    gtk_widget_set_sensitive( mitem2, rdata->inh_ );
+
+    return GTK_MENU( menu );
+
+} // mk_popup_menu()
+
+
+
+static gboolean
+cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
+{
+    GdkEventButton* ebtn = ( GdkEventButton* ) e;
+
+    // not an RMB => do not process event (return FALSE):
+    //
+    if ( ebtn->type != GDK_BUTTON_PRESS || ebtn->button != 3 )
+        return FALSE;
+
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return TRUE;
+
+
+    //
+    // further down only return TRUE to not allow selecting rows with RMB
+    //
+
+
+    if ( ebtn->window != gtk_tree_view_get_bin_window( dlg->tree_v_ ) )
+        return TRUE;
+
+    GtkTreeIter it;
+    if ( !cur_row_get_iter( dlg, &it ) )
+        return TRUE;
+
+
+    GtkTreePath* path_cur = NULL;
+    path_cur = gtk_tree_model_get_path( dlg_model( dlg ), &it );
+
+
+    GtkTreePath* path_rmb = NULL;
+    gboolean onrow =
+        gtk_tree_view_get_path_at_pos( dlg->tree_v_, ebtn->x, ebtn->y, &path_rmb,
+                                       NULL, NULL, NULL );
+
+    if ( onrow )
+    {
+        if ( gtk_tree_path_compare( path_cur, path_rmb ) != 0 )
+            onrow = FALSE;
+    }
+
+    gtk_tree_path_free( path_cur );
+    gtk_tree_path_free( path_rmb );
+
+
+    if ( !onrow )
+        return TRUE;
+
+
+
+
+    row_data* rdata = row_get_field_data( dlg, &it );
+    if ( !rdata )
+        return TRUE;
+
+
+
+    GtkMenu* menu = mk_popup_menu( dlg, rdata );
+//    GtkWidget* menu = gtk_menu_new();
+//
+//    GtkWidget* mitem1 = gtk_menu_item_new_with_mnemonic( "_edit" );
+//    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem1);
+//    g_signal_connect( G_OBJECT( mitem1 ),
+//                      "activate",
+//                      G_CALLBACK( &cfg_edit_dlg_on_mitem ),
+//                      dlg );
+//
+//    GtkWidget* mitem2 = gtk_menu_item_new_with_mnemonic( "_promote" );
+//    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem2);
+//    g_signal_connect( G_OBJECT( mitem2 ),
+//                      "activate",
+//                      G_CALLBACK( &cfg_edit_dlg_on_mitem ),
+//                      dlg );
+//
+//
+//    gtk_widget_show( mitem1 );
+//    gtk_widget_show( mitem2 );
+//
+//    gtk_widget_set_sensitive( mitem1, !rdata->ro_ );
+//    gtk_widget_set_sensitive( mitem2, rdata->inh_ );
+
+    gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
+                    ebtn->button, ebtn->time );
+//                    0, gtk_get_current_event_time() );
+
+    return TRUE;
+
+} // cfg_edit_dlg_on_rmb()
+
+//
+//
+///////////////////////////////////////////////////////////
 
 
 
