@@ -27,6 +27,18 @@ enum
 static gboolean
 cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt );
 
+static void
+load_cfg( cfg_edit_dlg* dlg );
+
+static const gchar*
+ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
+
+
+static int colid_name()  { return COL_NAME; }
+static int colid_val()   { return COL_VAL; }
+static int colid_data()  { return COL_DATA; }
+static int cols_cnt()    { return NUM_COLS; }
+
 
 
 
@@ -82,25 +94,6 @@ dlg_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 
 
 
-// {post}: {ret} owned by geda cfg api
-//
-static const gchar*
-ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
-{
-    const gchar* fname = eda_config_get_filename( ctx );
-
-    if ( !fname )
-        return NULL;
-
-    *exist = access( fname, F_OK ) == 0;
-    *rok =   access( fname, R_OK ) == 0;
-    *wok =   access( fname, W_OK ) == 0;
-
-    return fname;
-}
-
-
-
 // TODO: row_data: free memory
 //
 static row_data*
@@ -124,13 +117,6 @@ mk_rdata( EdaConfig*  ctx,
 }
 
 
-
-static void load_cfg( cfg_edit_dlg* dlg );
-
-static int colid_name()     { return COL_NAME; }
-static int colid_val()      { return COL_VAL; }
-static int colid_data()     { return COL_DATA; }
-static int cols_cnt()       { return NUM_COLS; }
 
 
 
@@ -1411,6 +1397,25 @@ load_cfg( cfg_edit_dlg* dlg )
 
 
 
+// {post}: {ret} owned by geda cfg api
+//
+static const gchar*
+ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
+{
+    const gchar* fname = eda_config_get_filename( ctx );
+
+    if ( !fname )
+        return NULL;
+
+    *exist = access( fname, F_OK ) == 0;
+    *rok =   access( fname, R_OK ) == 0;
+    *wok =   access( fname, W_OK ) == 0;
+
+    return fname;
+}
+
+
+
 
 static gboolean
 cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt )
@@ -1455,3 +1460,4 @@ cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt )
     return TRUE;
 
 } // cfg_edit_dlg_chg_val()
+
