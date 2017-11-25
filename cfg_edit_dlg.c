@@ -1205,6 +1205,12 @@ load_keys( EdaConfig*    ctx,
         return;
     }
 
+    // make sure empty groups will not be marked as inherited:
+    //   see load_groups()
+    //
+    if ( len > 0 )
+        *inh_all = TRUE;
+
 
     for ( gsize ndx = 0; ndx < len; ++ndx )
     {
@@ -1315,14 +1321,18 @@ load_groups( EdaConfig*    ctx,
         const gchar* display_name = g_strdup_printf( "[%s]", name );
 
         GtkTreeIter it = add_row( dlg,
-                                  display_name,    // name
-                                  // name,    // name
+                                  display_name,
+                                  // name, // name
                                   "",      // val
                                   rdata,   // rdata
                                   &itParent
                                 );
 
-        gboolean inh_all = TRUE;
+        // make sure empty groups will not be marked as inherited:
+        //   see load_keys()
+        //
+        gboolean inh_all = FALSE;
+
         load_keys( ctx, name, dlg, it, file_writable, &inh_all );
 
         // mark group itself as inh if all children are inh:
