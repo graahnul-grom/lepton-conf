@@ -3,6 +3,33 @@
 #include <liblepton/libgedaguile.h>
 
 
+struct _row_data
+{
+    EdaConfig*   ctx_;
+    const gchar* group_;
+    const gchar* key_;
+    const gchar* val_;
+    gboolean     ro_;  // read-only
+    gboolean     inh_; // inherited
+};
+
+typedef struct _row_data row_data;
+
+enum
+{
+    COL_NAME,
+    COL_VAL,
+    COL_DATA,     // hidden
+    NUM_COLS
+};
+
+
+static gboolean
+cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt );
+
+
+
+
 static GtkTreeModel*
 dlg_model( cfg_edit_dlg* dlg )
 {
@@ -71,28 +98,6 @@ ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 
     return fname;
 }
-
-
-
-struct _row_data
-{
-    EdaConfig*   ctx_;
-    const gchar* group_;
-    const gchar* key_;
-    const gchar* val_;
-    gboolean     ro_;  // read-only
-    gboolean     inh_; // inherited
-};
-
-typedef struct _row_data row_data;
-
-enum
-{
-    COL_NAME,
-    COL_VAL,
-    COL_DATA,     // hidden
-    NUM_COLS
-};
 
 
 
@@ -458,7 +463,6 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     if ( !cur_row_get_iter( dlg, &it ) )
         return;
 
-
     row_data* rdata = row_get_field_data( dlg, &it );
     if ( !rdata || rdata->ro_ )
         return;
@@ -468,65 +472,33 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
 
     // noop:
     //
-    if ( g_strcmp0( rdata->val_, txt ) == 0 )
-    {
-        printf( " >> on_btn_apply(): NOOP\n" );
-        return;
-    }
+//    if ( g_strcmp0( rdata->val_, txt ) == 0 )
+//    {
+//        printf( " >> on_btn_apply(): empty string => NOOP\n" );
+//        return;
+//    }
 
     printf( " >> on_btn_apply(): [%s::%s]: [%s] => [%s]\n",
             rdata->group_, rdata->key_, rdata->val_, txt );
 
-    // set:
-    //
-    eda_config_set_string( rdata->ctx_,
-                           rdata->group_,
-                           rdata->key_,
-                           txt );
 
-    // save:
-    //
-    GError* err = NULL;
-    gboolean res = eda_config_save( rdata->ctx_, &err );
-    if ( !res )
-    {
-        printf( " >> on_btn_apply(): !eda_config_save()\n" );
-        if ( err != NULL )
-            printf( "    err: %s\n", err->message );
-        g_clear_error( &err );
+    if ( !cfg_edit_dlg_chg_val( rdata, txt ) )
         return;
-    }
-
-    // get:
-    //
-    gchar* new_val = eda_config_get_string( rdata->ctx_,
-                                            rdata->group_,
-                                            rdata->key_,
-                                            &err );
-    if ( new_val == NULL )
-    {
-        printf( " >> on_btn_apply(): !eda_config_get_string()\n" );
-        if ( err != NULL )
-            printf( "    err: %s\n", err->message );
-        g_clear_error( &err );
-        return;
-    }
 
 
-
-    row_set_field_val( dlg, it, new_val );
+    row_set_field_val( dlg, it, txt );
 
 
     // mark current key as not inherited:
     //
     row_set_field_inh( dlg, it, FALSE );
 
-
     // mark parent group as not inherited:
     //
     GtkTreeIter itParent;
     if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
         row_set_field_inh( dlg, itParent, FALSE );
+
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
@@ -1035,7 +1007,7 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
     if ( !rdata )
         return;
 
-    printf( "  cfg_edit_on_mitem(): k: %s, v: %s\n", rdata->key_, rdata->val_ );
+    printf( "  cfg_edit_on_mitem(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
 
 //    if ( gtk_menu_item_get_label( mitem ) ) ;
 
@@ -1067,7 +1039,7 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
         if ( res == GTK_RESPONSE_ACCEPT )
         {
-            printf( "  cfg_edit_on_mitem(): v: %s\n",
+            printf( "  cfg_edit_on_mitem(): new v: [%s]\n",
                     gtk_entry_get_text( GTK_ENTRY( e ) ) );
         }
 
@@ -1120,15 +1092,15 @@ cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
     if ( ebtn->type != GDK_BUTTON_PRESS || ebtn->button != 3 )
         return FALSE;
 
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return TRUE;
-
 
     //
     // further down only return TRUE to not allow selecting rows with RMB
     //
 
+
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return TRUE;
 
     if ( ebtn->window != gtk_tree_view_get_bin_window( dlg->tree_v_ ) )
         return TRUE;
@@ -1140,7 +1112,6 @@ cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 
     GtkTreePath* path_cur = NULL;
     path_cur = gtk_tree_model_get_path( dlg_model( dlg ), &it );
-
 
     GtkTreePath* path_rmb = NULL;
     gboolean onrow =
@@ -1156,18 +1127,13 @@ cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
     gtk_tree_path_free( path_cur );
     gtk_tree_path_free( path_rmb );
 
-
     if ( !onrow )
         return TRUE;
-
-
 
 
     row_data* rdata = row_get_field_data( dlg, &it );
     if ( !rdata )
         return TRUE;
-
-
 
     GtkMenu* menu = mk_popup_menu( dlg, rdata );
     gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
@@ -1393,3 +1359,49 @@ load_cfg( cfg_edit_dlg* dlg )
     load_ctx( eda_config_get_context_for_path( "." ), "context: PATH [.]", dlg );
 }
 
+
+
+
+static gboolean
+cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt )
+{
+    // set:
+    //
+    eda_config_set_string( rdata->ctx_,
+                           rdata->group_,
+                           rdata->key_,
+                           txt );
+
+    // save cfg:
+    //
+    GError* err = NULL;
+    gboolean res = eda_config_save( rdata->ctx_, &err );
+    if ( !res )
+    {
+        printf( " >> cfg_edit_dlg_chg_val( %s ): !eda_config_save()\n",
+                txt );
+        if ( err != NULL )
+            printf( "    err: %s\n", err->message );
+        g_clear_error( &err );
+        return FALSE;
+    }
+
+    // get:
+    //
+    gchar* new_val = eda_config_get_string( rdata->ctx_,
+                                            rdata->group_,
+                                            rdata->key_,
+                                            &err );
+    if ( new_val == NULL )
+    {
+        printf( " >> cfg_edit_dlg_chg_val(): !eda_config_get_string( %s )\n",
+                rdata->key_ );
+        if ( err != NULL )
+            printf( "    err: %s\n", err->message );
+        g_clear_error( &err );
+        return FALSE;
+    }
+
+    return TRUE;
+
+} // cfg_edit_dlg_chg_val()
