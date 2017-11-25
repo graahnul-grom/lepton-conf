@@ -841,9 +841,10 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // cwd label:
     //
     gchar* cwd = g_get_current_dir();
-    gchar str[ PATH_MAX ] = "";
-    sprintf( str, "cwd: %s", cwd );
-    GtkWidget* lab_cwd = gtk_label_new( str );
+    gchar str[ PATH_MAX + 12 ] = "";
+    sprintf( str, "<b>cwd:</b> %s", cwd );
+    GtkWidget* lab_cwd = gtk_label_new( "" );
+    gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
     gtk_box_pack_start( GTK_BOX( hbox2_top ), lab_cwd, FALSE, TRUE, 0 );
 
     // window title:
@@ -1311,8 +1312,11 @@ load_groups( EdaConfig*    ctx,
                                     inh    // inh
                                   );
 
+        const gchar* display_name = g_strdup_printf( "[%s]", name );
+
         GtkTreeIter it = add_row( dlg,
-                                  name,    // name
+                                  display_name,    // name
+                                  // name,    // name
                                   "",      // val
                                   rdata,   // rdata
                                   &itParent
@@ -1346,11 +1350,11 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
     if ( fname != NULL )
     {
-        sprintf( str, "config file: %s [%s%s%s]",
-                 fname,
+        sprintf( str, "config file: (%s%s%s) %s",
                  exist ? "f" : "-",
                  rok   ? "r" : "-",
-                 wok   ? "w" : "-"
+                 wok   ? "w" : "-",
+                 fname
                );
     }
 
@@ -1386,7 +1390,7 @@ load_cfg( cfg_edit_dlg* dlg )
     load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
     load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
     load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
-    load_ctx( eda_config_get_context_for_path( "." ), "context: PATH [.]", dlg );
+    load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 }
 
 
