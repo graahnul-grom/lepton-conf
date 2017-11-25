@@ -3,6 +3,23 @@
 #include <liblepton/libgedaguile.h>
 
 
+
+
+static void
+get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec );
+
+static void
+set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec );
+
+static void
+dispose( GObject* obj );
+
+G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
+// G_DEFINE_TYPE (GschemObjectPropertiesWidget, gschem_object_properties_widget, GSCHEM_TYPE_BIN);
+
+
+
+
 struct _row_data
 {
     EdaConfig*   ctx_;
@@ -411,22 +428,6 @@ add_row( cfg_edit_dlg* dlg,
 
 
 
-
-
-
-static void
-get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec );
-
-static void
-set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec );
-
-static void
-dispose( GObject* obj );
-
-
-
-G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
-// G_DEFINE_TYPE (GschemObjectPropertiesWidget, gschem_object_properties_widget, GSCHEM_TYPE_BIN);
 
 
 
@@ -1276,7 +1277,8 @@ load_groups( EdaConfig*    ctx,
             }
 
             g_clear_error( &err );
-            return;
+
+            // return;
         }
 //    }
 
