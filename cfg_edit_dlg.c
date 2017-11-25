@@ -408,6 +408,9 @@ add_row( cfg_edit_dlg* dlg,
 {
     GtkTreeIter it;
     gtk_tree_store_append( dlg->store_, &it, itParent );
+    //
+    // NOTE: gtk_tree_store_set() makes copies of strings:
+    //
     gtk_tree_store_set( dlg->store_,
                         &it,
                         colid_name(),     name,
@@ -1268,13 +1271,13 @@ load_keys( EdaConfig*    ctx,
 
 static void
 load_groups( EdaConfig*    ctx,
-             const gchar*  fname,
+//             const gchar*  fname,
              cfg_edit_dlg* dlg,
              GtkTreeIter   itParent,
              gboolean      file_writable )
 {
-    if ( fname != NULL )
-    {
+//    if ( fname != NULL )
+//    {
         GError* err = NULL;
         gboolean res = eda_config_load( ctx, &err );
         if ( !res )
@@ -1289,7 +1292,7 @@ load_groups( EdaConfig*    ctx,
             g_clear_error( &err );
             return;
         }
-    }
+//    }
 
     gsize len = 0;
     gchar** pp = eda_config_get_groups( ctx, &len );
@@ -1318,7 +1321,7 @@ load_groups( EdaConfig*    ctx,
                                     inh    // inh
                                   );
 
-        const gchar* display_name = g_strdup_printf( "[%s]", name );
+        gchar* display_name = g_strdup_printf( "[%s]", name );
 
         GtkTreeIter it = add_row( dlg,
                                   display_name,
@@ -1327,6 +1330,8 @@ load_groups( EdaConfig*    ctx,
                                   rdata,   // rdata
                                   &itParent
                                 );
+
+        g_free( display_name );
 
         // make sure empty groups will not be marked as inherited:
         //   see load_keys()
@@ -1388,7 +1393,8 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                               NULL
                             );
 
-    load_groups( ctx, fname, dlg, it, wok );
+    load_groups( ctx, dlg, it, wok );
+//    load_groups( ctx, fname, dlg, it, wok );
 
 } // load_ctx()
 
