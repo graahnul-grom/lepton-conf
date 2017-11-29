@@ -524,6 +524,8 @@ static void
 cfg_edit_dlg_on_row_sel( GtkTreeView* tree,
                          gpointer*    p )
 {
+    printf( "  --- --- --- cfg_edit_dlg_on_row_sel() --- --- ---\n" );
+
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
@@ -1161,19 +1163,84 @@ cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
     if ( !rdata )
         return;
 
-    printf( "cfg_edit_dlg_on_mitem_add(): g: [%s]\n", rdata->group_ );
+//    gchar* key = NULL;
+//    gchar* val = NULL;
+    gchar* key = g_strdup( "ekl" );
+    gchar* val = g_strdup( "opr" );
 
-    gchar* key = NULL;
-    gchar* val = NULL;
-    if ( dlg_add_val_run( dlg, NULL, &key, &val ) )
-    {
-        printf( "cfg_edit_dlg_on_mitem_add(): [%s] =>[%s]\n", key, val );
+//    if ( dlg_add_val_run( dlg, NULL, &key, &val ) )
+//    {
+        // printf( "cfg_edit_dlg_on_mitem_add(): [%s] => [%s]\n", key, val );
 
-        cfg_edit_dlg_add_key_val( rdata, key, val );
+//        if ( cfg_edit_dlg_add_key_val( rdata, key, val ) )
+//        {
+            printf( "cfg_edit_dlg_on_mitem_add(): [%s] => [%s]\n", key, val );
+
+            // NOTE: rdata:
+            //
+            row_data* rdata_new = mk_rdata( rdata->ctx_,
+                                            rdata->group_,  // group
+                                            key,            // key
+                                            val,            // val
+                                            FALSE,          // ro
+                                            FALSE,          // inh
+                                            RT_KEY          // rtype
+                                          );
+
+            GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+            GtkTreeModel* mod = NULL;
+            GtkTreeIter it_grp;
+            gtk_tree_selection_get_selected( sel, &mod, &it_grp );
+            gchar* str = NULL;
+//            gtk_tree_model_get( GTK_TREE_MODEL( dlg->store_ ),
+//                                &it_grp, colid_name(), &str, -1 ); // SIGSEG
+            gtk_tree_model_get( mod, &it_grp, colid_name(), &str, -1 ); // NOTE: INVALID
+                printf( "cfg_edit_dlg_on_mitem_add(): *it_grp: [%s]\n", str );
+
+            gboolean valid = FALSE;
+            valid = gtk_tree_store_iter_is_valid( dlg->store_, &it_grp );
+                printf( "cfg_edit_dlg_on_mitem_add(): it_grp valid: [%d]\n", valid );
+
+
+
+            it_grp = dlg_tstore_iter( dlg, it ); // NOTE: VALID
+
+
+
+            valid = gtk_tree_store_iter_is_valid( dlg->store_, &it_grp );
+                printf( "cfg_edit_dlg_on_mitem_add(): it_grp valid: [%d]\n", valid );
+
+//            GtkTreeIter it_new;
+//            gtk_tree_store_append( dlg->store_, &it_new, &it_grp ); // ERR
+
+//            gtk_tree_store_append( dlg->store_, &it_new, NULL ); // OK
+
+            // gtk_tree_view_
+//            GtkTreeIter itGrp;
+//            gboolean bb = cur_row_get_iter( dlg, &itGrp );
+//            printf( "cfg_edit_dlg_on_mitem_add(): ITER: [%d]\n", bb );
+
+              GtkTreeIter it_new = add_row( dlg, key, val, rdata_new, &it_grp ); // OK
+
+//            GtkTreeIter it_new;
+//            gtk_tree_store_append( dlg->store_, &it_new, &it );
+//            GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+//            gtk_tree_store_append( GTK_TREE_STORE(mod), &it_new, &it );
+
+//            gtk_tree_store_set( dlg->store_,
+//                                &it_new,
+//                                colid_name(),     key,
+//                                colid_val(),      val,
+//                                colid_data(),     rdata_new,
+//                                -1 );
+
+            // dlg_model_upd( dlg );
+//        }
 
         g_free( key );
         g_free( val );
-    }
+
+//    } // if dlg_add_val_run()
 
 } // cfg_edit_dlg_on_mitem_add()
 
