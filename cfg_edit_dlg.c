@@ -1111,15 +1111,19 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
         g_free( txt );
 
+        // TODO: unset [inh]: [R] => extract
+        //
         // mark current key as not inherited:
         //
         row_set_field_inh( dlg, it, FALSE );
-
+        //
         // mark parent group as not inherited:
         //
         GtkTreeIter itParent;
         if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
             row_set_field_inh( dlg, itParent, FALSE );
+        //
+        //
     }
 
 } // cfg_edit_dlg_on_mitem_edit()
@@ -1163,13 +1167,13 @@ cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
                                             RT_KEY          // rtype
                                           );
 
-            GtkTreeIter it_grp = dlg_tstore_iter( dlg, it );
+            GtkTreeIter it_grp_tstrore = dlg_tstore_iter( dlg, it );
 
             GtkTreeIter it_new = add_row( dlg,
                                           key,
                                           val,
                                           rdata_new,
-                                          &it_grp
+                                          &it_grp_tstrore
                                         );
 
             // TODO: dlg_model_upd( dlg ): need it?
@@ -1178,7 +1182,7 @@ cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
 //            GtkTreePath* path = gtk_tree_model_get_path( dlg_model( dlg ), // ERR
             GtkTreePath* path = NULL;
             path = gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ),
-                                                         &it_grp );
+                                                         &it_grp_tstrore );
                 // printf( " >> >> [%s]\n", gtk_tree_path_to_string( path ) );
             gtk_tree_view_expand_row( dlg->tree_v_, path, FALSE );
             gtk_tree_path_free( path );
@@ -1187,6 +1191,23 @@ cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
                                                             &it_new );
             gtk_tree_view_set_cursor( dlg->tree_v_, path, NULL, FALSE );
             gtk_tree_path_free( path );
+
+            // TODO: unset [inh]: [R] => extract
+            //
+            // mark current key as not inherited:
+            //
+            GtkTreeIter it_cur;
+            cur_row_get_iter( dlg, &it_cur );
+
+            row_set_field_inh( dlg, it_cur, FALSE );
+            //
+            // mark parent group as not inherited:
+            //
+            GtkTreeIter it_parent;
+            if ( cur_row_get_parent_iter( dlg, &it_cur, &it_parent ) )
+                row_set_field_inh( dlg, it_parent, FALSE );
+            //
+            //
 
         } // cfg_edit_dlg_add_key_val()
 
