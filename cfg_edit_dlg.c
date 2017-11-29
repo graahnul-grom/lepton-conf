@@ -3,19 +3,80 @@
 #include <liblepton/libgedaguile.h>
 
 
-
-
-static void
-get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec );
-
-static void
-set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec );
-
-static void
-dispose( GObject* obj );
+/*
+*  gobject-specific stuff:
+*/
 
 G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 // G_DEFINE_TYPE (GschemObjectPropertiesWidget, gschem_object_properties_widget, GSCHEM_TYPE_BIN);
+
+
+static void get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
+{
+    cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
+
+    if ( id == CFG_EDIT_DLG_PROPID_PROP1 )
+    {
+        g_value_set_int( val, dlg->prop1_ );
+    }
+    else
+    {
+        G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
+    }
+}
+
+
+static void set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
+{
+    cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
+
+    if ( id == CFG_EDIT_DLG_PROPID_PROP1 )
+    {
+        dlg->prop1_ = g_value_get_int( val );
+    }
+    else
+    {
+        G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
+    }
+}
+
+
+static void dispose( GObject* obj )
+{
+//    printf( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
+//        obj, obj ? obj->ref_count : 0 );
+
+    cfg_edit_dlgClass* cls = CFG_EDIT_DLG_GET_CLASS( obj );
+
+    GObjectClass* parent_cls = g_type_class_peek_parent( cls );
+    parent_cls->dispose( obj );
+
+    printf( "cfg_edit_dlg::dispose(): done.\n" );
+}
+
+
+static void cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
+{
+    printf( "cfg_edit_dlg::cfg_edit_dlg_class_init()\n" );
+
+    GObjectClass* gcls = G_OBJECT_CLASS( cls );
+
+    gcls->dispose      = &dispose;
+    gcls->get_property = &get_property;
+    gcls->set_property = &set_property;
+
+    GParamSpec* spec = g_param_spec_int( "prop1",
+        "",  // nick
+        "",  // blurb
+        0,   // min
+        10,  // max
+        7,   // default
+        G_PARAM_READABLE | G_PARAM_WRITABLE );
+
+    g_object_class_install_property( gcls, CFG_EDIT_DLG_PROPID_PROP1, spec );
+}
+
+/**** ^^ gobject stuff ^^ ****************************************************** */
 
 
 
@@ -48,6 +109,33 @@ enum
     COL_DATA,     // hidden
     NUM_COLS
 };
+
+
+
+// TODO: row_data: free memory
+//
+static row_data*
+mk_rdata( EdaConfig*  ctx,
+         const gchar* group,
+         const gchar* key,
+         const gchar* val,
+         gboolean     ro,
+         gboolean     inh,
+         RowType      rtype )
+{
+    row_data* rdata = g_malloc( sizeof( row_data ) );
+
+    rdata->ctx_   = ctx;
+    rdata->group_ = group ? g_strdup( group ) : NULL;
+    rdata->key_   = key   ? g_strdup( key )   : NULL;
+    rdata->val_   = val   ? g_strdup( val )   : NULL;
+    rdata->ro_    = ro;
+    rdata->inh_   = inh;
+    rdata->rtype_ = rtype;
+
+    return rdata;
+}
+
 
 
 static gboolean
@@ -90,6 +178,8 @@ dlg_model_upd( cfg_edit_dlg* dlg )
     dlg_model_set( dlg, gtk_tree_view_get_model( dlg->tree_v_ ) );
 }
 
+
+
 // {ret}: tree store iter corresponding to model's iter [it]
 //
 static GtkTreeIter
@@ -123,36 +213,6 @@ dlg_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 
 
 
-// TODO: row_data: free memory
-//
-static row_data*
-mk_rdata( EdaConfig*  ctx,
-         const gchar* group,
-         const gchar* key,
-         const gchar* val,
-         gboolean     ro,
-         gboolean     inh,
-         RowType      rtype )
-{
-    row_data* rdata = g_malloc( sizeof( row_data ) );
-
-    rdata->ctx_   = ctx;
-    rdata->group_ = group ? g_strdup( group ) : NULL;
-    rdata->key_   = key   ? g_strdup( key )   : NULL;
-    rdata->val_   = val   ? g_strdup( val )   : NULL;
-    rdata->ro_    = ro;
-    rdata->inh_   = inh;
-    rdata->rtype_ = rtype;
-
-    return rdata;
-}
-
-
-
-
-
-
-
 // {ret}: iterator of currently selected row
 //
 static gboolean
@@ -163,6 +223,7 @@ cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
     GtkTreeModel* model = NULL;
     gboolean res = gtk_tree_selection_get_selected( sel, &model, it );
+
     dlg_model_set( dlg, model );
 
 
@@ -670,89 +731,6 @@ cfg_edit_dlg_on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
 
 
-
-
-/*
- * *****************************************************************
- *  gobject-specific stuff:
- * *****************************************************************
- */
-
-static void
-get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
-{
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
-
-    if ( id == CFG_EDIT_DLG_PROPID_PROP1 )
-    {
-        g_value_set_int( val, dlg->prop1_ );
-    }
-    else
-    {
-        G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
-    }
-}
-
-
-
-static void
-set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
-{
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
-
-    if ( id == CFG_EDIT_DLG_PROPID_PROP1 )
-    {
-        dlg->prop1_ = g_value_get_int( val );
-    }
-    else
-    {
-        G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
-    }
-}
-
-
-
-static void
-dispose( GObject* obj )
-{
-//    printf( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
-//        obj, obj ? obj->ref_count : 0 );
-
-    cfg_edit_dlgClass* cls = CFG_EDIT_DLG_GET_CLASS( obj );
-
-    GObjectClass* parent_cls = g_type_class_peek_parent( cls );
-    parent_cls->dispose( obj );
-
-    printf( "cfg_edit_dlg::dispose(): done.\n" );
-}
-
-
-
-static void
-cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
-{
-    printf( "cfg_edit_dlg::cfg_edit_dlg_class_init()\n" );
-
-    GObjectClass* gcls = G_OBJECT_CLASS( cls );
-
-    gcls->dispose      = &dispose;
-    gcls->get_property = &get_property;
-    gcls->set_property = &set_property;
-
-    GParamSpec* spec = g_param_spec_int( "prop1",
-        "",  // nick
-        "",  // blurb
-        0,   // min
-        10,  // max
-        7,   // default
-        G_PARAM_READABLE | G_PARAM_WRITABLE );
-
-    g_object_class_install_property( gcls, CFG_EDIT_DLG_PROPID_PROP1, spec );
-}
-
-
-
-/* ********************************************************** */
 
 
 
