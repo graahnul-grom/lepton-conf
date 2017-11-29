@@ -20,6 +20,14 @@ G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 
 
 
+typedef enum
+{
+    RT_CTX,
+    RT_GRP,
+    RT_KEY,
+}
+RowType;
+
 struct _row_data
 {
     EdaConfig*   ctx_;
@@ -28,6 +36,7 @@ struct _row_data
     const gchar* val_;
     gboolean     ro_;  // read-only
     gboolean     inh_; // inherited
+    RowType      rtype_;
 };
 
 typedef struct _row_data row_data;
@@ -119,7 +128,8 @@ mk_rdata( EdaConfig*  ctx,
          const gchar* key,
          const gchar* val,
          gboolean     ro,
-         gboolean     inh )
+         gboolean     inh,
+         RowType      rtype )
 {
     row_data* rdata = g_malloc( sizeof( row_data ) );
 
@@ -129,6 +139,7 @@ mk_rdata( EdaConfig*  ctx,
     rdata->val_   = val   ? g_strdup( val )   : NULL;
     rdata->ro_    = ro;
     rdata->inh_   = inh;
+    rdata->rtype_ = rtype;
 
     return rdata;
 }
@@ -1067,34 +1078,54 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
         gtk_widget_destroy( w );
 //    }
 
-} // cfg_edit_dlg_on_mitem()
+} // cfg_edit_dlg_on_mitem_edit()
+
+
+
+static void
+cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
+{
+    printf( "cfg_edit_dlg_on_mitem_add( %s )\n", gtk_menu_item_get_label( mitem ) );
+}
 
 
 
 static GtkMenu*
 mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 {
+    if ( rdata->rtype_ == RT_CTX )
+        return NULL;
+
     GtkWidget* menu = gtk_menu_new();
 
-    GtkWidget* mitem1 = gtk_menu_item_new_with_mnemonic( "_edit" );
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem1);
-    g_signal_connect( G_OBJECT( mitem1 ),
-                      "activate",
-                      G_CALLBACK( &cfg_edit_dlg_on_mitem_edit ),
-                      dlg );
+    GtkWidget* mitem_edit = NULL;
+    GtkWidget* mitem_add  = NULL;
 
-//    GtkWidget* mitem2 = gtk_menu_item_new_with_mnemonic( "_promote" );
-//    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem2);
-//    g_signal_connect( G_OBJECT( mitem2 ),
-//                      "activate",
-//                      G_CALLBACK( &cfg_edit_dlg_on_mitem ),
-//                      dlg );
+    if ( rdata->rtype_ == RT_KEY )
+    {
+        mitem_edit = gtk_menu_item_new_with_mnemonic( "_edit" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_edit);
+        g_signal_connect( G_OBJECT( mitem_edit ),
+                          "activate",
+                          G_CALLBACK( &cfg_edit_dlg_on_mitem_edit ),
+                          dlg );
+        gtk_widget_show( mitem_edit );
+        gtk_widget_set_sensitive( mitem_edit, !rdata->ro_ );
+    }
+
+    if ( rdata->rtype_ == RT_GRP )
+    {
+        mitem_add = gtk_menu_item_new_with_mnemonic( "_add" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_add);
+        g_signal_connect( G_OBJECT( mitem_add ),
+                          "activate",
+                          G_CALLBACK( &cfg_edit_dlg_on_mitem_add ),
+                          dlg );
+        gtk_widget_show( mitem_add );
+        gtk_widget_set_sensitive( mitem_add, !rdata->ro_ );
+    }
 
 
-    gtk_widget_show( mitem1 );
-//    gtk_widget_show( mitem2 );
-
-    gtk_widget_set_sensitive( mitem1, !rdata->ro_ );
 //    gtk_widget_set_sensitive( mitem2, rdata->inh_ );
 
     return GTK_MENU( menu );
@@ -1157,9 +1188,13 @@ cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
 
     GtkMenu* menu = mk_popup_menu( dlg, rdata );
-    gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
-                    ebtn->button, ebtn->time );
-//                  0, gtk_get_current_event_time() );
+
+    if ( menu )
+    {
+        gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
+                        ebtn->button, ebtn->time );
+                        // 0, gtk_get_current_event_time() );
+    }
 
     return TRUE;
 
@@ -1236,7 +1271,8 @@ load_keys( EdaConfig*    ctx,
                                     name,           // key
                                     val,            // val
                                     !file_writable, // ro
-                                    inh             // inh
+                                    inh,            // inh
+                                    RT_KEY          // rtype
                                   );
 
         add_row( dlg,
@@ -1302,11 +1338,13 @@ load_groups( EdaConfig*    ctx,
         // NOTE: rdata:
         //
         row_data* rdata = mk_rdata( ctx,
-                                    NULL,  // group
-                                    NULL,  // key
-                                    NULL,  // val
-                                    TRUE,  // ro
-                                    inh    // inh
+                                    NULL,            // group
+                                    NULL,            // key
+                                    NULL,            // val
+                                    !file_writable,  // ro
+                                    // TRUE,         // ro
+                                    inh,             // inh
+                                    RT_GRP           // rtype
                                   );
 
         gchar* display_name = g_strdup_printf( "[%s]", name );
@@ -1371,7 +1409,8 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                                 NULL,  // key
                                 NULL,  // val
                                 TRUE,  // ro
-                                inh    // inh
+                                inh,   // inh
+                                RT_CTX // rtype
                               );
 
     GtkTreeIter it = add_row( dlg,
@@ -1391,6 +1430,12 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 static void
 load_cfg( cfg_edit_dlg* dlg )
 {
+//    EdaConfig* cfg = eda_config_get_default_context();
+//    GError* err = NULL;
+//    eda_config_load( cfg, &err );
+//    load_ctx( cfg, "context: DEFAULT",  dlg );
+//    g_clear_error( &err );
+
     load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
     load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
     load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );

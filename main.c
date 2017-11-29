@@ -1,3 +1,8 @@
+#include <libguile.h>
+
+#include <liblepton/liblepton.h>
+#include <liblepton/libgedaguile.h>
+
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include "cfg_edit_dlg.h"
@@ -6,6 +11,9 @@
 
 int main( int argc, char* argv[] )
 {
+//    scm_init_guile();
+//    edascm_init();
+
     gtk_init( &argc, &argv );
 
 //    GtkWidget* wnd = g_object_new( CFG_EDIT_DLG_TYPE, NULL );
