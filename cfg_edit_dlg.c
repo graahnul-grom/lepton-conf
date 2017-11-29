@@ -1004,10 +1004,47 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 // popup menu:
 //
 
+static gchar*
+edit_val_dlg( cfg_edit_dlg* dlg, const gchar* txt )
+{
+    GtkWidget* evdlg = gtk_dialog_new_with_buttons(
+        "Edit",
+        GTK_WINDOW( dlg ),
+        GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
+        GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+        NULL );
+
+    GtkWidget* ent = gtk_entry_new();
+    gtk_entry_set_text( GTK_ENTRY( ent ), txt );
+
+    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( evdlg ) );
+    gtk_box_pack_start( GTK_BOX( ca ), ent, TRUE, TRUE, 10 );
+
+    gtk_widget_show_all( evdlg );
+    gint res = gtk_dialog_run( GTK_DIALOG( evdlg ) );
+
+    printf( "  edit_val_dlg(): resp: %d\n", res );
+
+    gchar* ret = NULL;
+
+    if ( res == GTK_RESPONSE_ACCEPT )
+    {
+        ret = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent ) ) );
+    }
+
+    gtk_widget_destroy( evdlg );
+
+    return ret;
+
+} // edit_val_dlg()
+
+
+
 static void
 cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 {
-    printf( "cfg_edit_on_mitem( %s )\n", gtk_menu_item_get_label( mitem ) );
+    printf( "cfg_edit_dlg_on_mitem_edit( %s )\n", gtk_menu_item_get_label( mitem ) );
 
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -1021,62 +1058,28 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
     if ( !rdata )
         return;
 
-    printf( "  cfg_edit_on_mitem(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
+    printf( "  cfg_edit_dlg_on_mitem_edit(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
 
-//    if ( gtk_menu_item_get_label( mitem ) ) ;
+    gchar* txt = edit_val_dlg( dlg, rdata->val_ );
 
-//    if ( !rdata->ro_ && !rdata->inh_ )
-//    {
-        GtkWidget* w = gtk_dialog_new_with_buttons(
-            "Edit",
-            GTK_WINDOW( dlg ),
-            GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
-            GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
-            GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
-            NULL );
+    if ( txt && cfg_edit_dlg_chg_val( rdata, txt ) )
+    {
+        printf( "  cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
 
-        GtkWidget* e = gtk_entry_new();
+        row_set_field_val( dlg, it, txt );
 
-        gtk_entry_set_text( GTK_ENTRY( e ), rdata->val_ );
+        g_free( txt );
 
-        GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( w ) );
-        gtk_box_pack_start( GTK_BOX( ca ), e, TRUE, TRUE, 10 );
+        // mark current key as not inherited:
+        //
+        row_set_field_inh( dlg, it, FALSE );
 
-//        g_signal_connect( G_OBJECT( w ),
-//                          "response",
-//                          G_CALLBACK( &gtk_widget_destroy ),
-//                          NULL );
-
-        gtk_widget_show_all( w );
-        gint res = gtk_dialog_run( GTK_DIALOG( w ) );
-
-        printf( "  cfg_edit_on_mitem(): resp: %d\n", res );
-
-        if ( res == GTK_RESPONSE_ACCEPT )
-        {
-            const gchar* txt = gtk_entry_get_text( GTK_ENTRY( e ) );
-
-            printf( "    cfg_edit_on_mitem(): new v: [%s]\n", txt );
-
-            if ( cfg_edit_dlg_chg_val( rdata, txt ) )
-            {
-                row_set_field_val( dlg, it, txt );
-
-                // mark current key as not inherited:
-                //
-                row_set_field_inh( dlg, it, FALSE );
-
-                // mark parent group as not inherited:
-                //
-                GtkTreeIter itParent;
-                if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
-                    row_set_field_inh( dlg, itParent, FALSE );
-            }
-
-        } // if: response == accept
-
-        gtk_widget_destroy( w );
-//    }
+        // mark parent group as not inherited:
+        //
+        GtkTreeIter itParent;
+        if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
+            row_set_field_inh( dlg, itParent, FALSE );
+    }
 
 } // cfg_edit_dlg_on_mitem_edit()
 
