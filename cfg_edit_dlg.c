@@ -1005,15 +1005,17 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 //
 
 static gchar*
-edit_val_dlg( cfg_edit_dlg* dlg, const gchar* txt )
+edit_val_dlg( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 {
     GtkWidget* evdlg = gtk_dialog_new_with_buttons(
-        "Edit",
+        title ? title : "Edit",
         GTK_WINDOW( dlg ),
         GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
         GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
         GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
         NULL );
+
+    gtk_window_set_title( GTK_WINDOW( evdlg ), title );
 
     GtkWidget* ent = gtk_entry_new();
     gtk_entry_set_text( GTK_ENTRY( ent ), txt );
@@ -1022,6 +1024,7 @@ edit_val_dlg( cfg_edit_dlg* dlg, const gchar* txt )
     gtk_box_pack_start( GTK_BOX( ca ), ent, TRUE, TRUE, 10 );
 
     gtk_widget_show_all( evdlg );
+    gtk_widget_set_size_request( evdlg, 300, -1 );
     gint res = gtk_dialog_run( GTK_DIALOG( evdlg ) );
 
     printf( "  edit_val_dlg(): resp: %d\n", res );
@@ -1044,8 +1047,6 @@ edit_val_dlg( cfg_edit_dlg* dlg, const gchar* txt )
 static void
 cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 {
-    printf( "cfg_edit_dlg_on_mitem_edit( %s )\n", gtk_menu_item_get_label( mitem ) );
-
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
@@ -1058,13 +1059,13 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
     if ( !rdata )
         return;
 
-    printf( "  cfg_edit_dlg_on_mitem_edit(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
+    printf( "cfg_edit_dlg_on_mitem_edit(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
 
-    gchar* txt = edit_val_dlg( dlg, rdata->val_ );
+    gchar* txt = edit_val_dlg( dlg, rdata->val_, "Edit value:" );
 
     if ( txt && cfg_edit_dlg_chg_val( rdata, txt ) )
     {
-        printf( "  cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
+        printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
 
         row_set_field_val( dlg, it, txt );
 
@@ -1088,8 +1089,23 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 static void
 cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
 {
-    printf( "cfg_edit_dlg_on_mitem_add( %s )\n", gtk_menu_item_get_label( mitem ) );
-}
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !cur_row_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_get_field_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    printf( "cfg_edit_dlg_on_mitem_add(): g: [%s]\n", rdata->group_ );
+
+    gchar* txt = edit_val_dlg( dlg, "newval", "Add key/value" );
+
+} // cfg_edit_dlg_on_mitem_add()
 
 
 
@@ -1341,7 +1357,7 @@ load_groups( EdaConfig*    ctx,
         // NOTE: rdata:
         //
         row_data* rdata = mk_rdata( ctx,
-                                    NULL,            // group
+                                    name,           // group
                                     NULL,            // key
                                     NULL,            // val
                                     !file_writable,  // ro
