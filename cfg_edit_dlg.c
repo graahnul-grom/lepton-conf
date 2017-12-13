@@ -545,6 +545,7 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     gchar* val = row_field_get_val( dlg, &it );
 
     gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), val );
 
     printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
@@ -1288,9 +1289,12 @@ conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
     if ( !fname )
         return NULL;
 
-    *exist = access( fname, F_OK ) == 0;
-    *rok =   access( fname, R_OK ) == 0;
-    *wok =   access( fname, W_OK ) == 0;
+    if (exist != NULL)
+        *exist = access( fname, F_OK ) == 0;
+    if (rok != NULL)
+        *rok =   access( fname, R_OK ) == 0;
+    if (wok != NULL)
+        *wok =   access( fname, W_OK ) == 0;
 
     return fname;
 }
@@ -1532,6 +1536,23 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lbox1 ), dlg->lab_name_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox1, FALSE, FALSE, 0 );
+
+
+
+
+    // val labels:
+    //
+    GtkWidget* lbox2 = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* lab_val0 = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( lab_val0 ), "<b>value: </b>" );
+    gtk_box_pack_start( GTK_BOX( lbox2 ), lab_val0, FALSE, FALSE, 0 );
+
+    dlg->lab_val_ = gtk_label_new( NULL );
+    gtk_label_set_selectable( GTK_LABEL( dlg->lab_val_ ), TRUE );
+    gtk_box_pack_start( GTK_BOX( lbox2 ), dlg->lab_val_, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox2, FALSE, FALSE, 0 );
 
 
 

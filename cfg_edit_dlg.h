@@ -55,6 +55,7 @@ struct _cfg_edit_dlg
     GtkCellRenderer* ren_txt_;
 
     GtkWidget* lab_name_;
+    GtkWidget* lab_val_;
 
     GtkWidget* btn_reload_;
 
