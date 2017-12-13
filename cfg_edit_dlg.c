@@ -368,10 +368,10 @@ row_is_editable( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 static void tree_cell_draw( GtkTreeViewColumn* col,
-                       GtkCellRenderer*   ren,
-                       GtkTreeModel*      model,
-                       GtkTreeIter*       it,
-                       gpointer           p )
+                            GtkCellRenderer*   ren,
+                            GtkTreeModel*      model,
+                            GtkTreeIter*       it,
+                            gpointer           p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -471,10 +471,10 @@ tree_filter_remove( cfg_edit_dlg* p )
 
 static void
 tree_add_col( cfg_edit_dlg*    dlg,
-         GtkCellRenderer* ren,
-         const gchar*     prop,
-         gint             col_id,
-         const gchar*     title )
+              GtkCellRenderer* ren,
+              const gchar*     prop,
+              gint             col_id,
+              const gchar*     title )
 {
     GtkTreeViewColumn* col = gtk_tree_view_column_new();
     gtk_tree_view_column_set_title( col, title );
@@ -525,16 +525,16 @@ add_row( cfg_edit_dlg* dlg,
 
 
 static void
-cfg_edit_dlg_on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* p )
+on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* p )
 {
-    printf( "cfg_edit_dlg::cfg_edit_dlg_on_delete_event()\n" );
+    printf( "cfg_edit_dlg::on_delete_event()\n" );
     gtk_widget_destroy( dlg );
 }
 
 
 
 static void
-cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
+on_btn_apply( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -592,15 +592,15 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
     //
 //    g_signal_emit_by_name( dlg->btn_reload_, "clicked", dlg );
 
-} // cfg_edit_dlg_on_btn_apply()
+} // on_btn_apply()
 
 
 
 static void
-cfg_edit_dlg_on_row_sel( GtkTreeView* tree,
+on_row_sel( GtkTreeView* tree,
                          gpointer*    p )
 {
-//    printf( "  --- --- --- cfg_edit_dlg_on_row_sel() --- --- ---\n" );
+//    printf( "  --- --- --- on_row_sel() --- --- ---\n" );
 
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -630,12 +630,12 @@ cfg_edit_dlg_on_row_sel( GtkTreeView* tree,
     gtk_editable_set_editable( GTK_EDITABLE( ent ), editable );
     gtk_widget_set_sensitive( dlg->btn_apply_, editable );
 
-} // cfg_edit_dlg_on_row_sel()
+} // on_row_sel()
 
 
 
 static void
-cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
+on_btn_reload( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -677,12 +677,12 @@ cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
 
     gtk_tree_view_expand_all( dlg->tree_v_ ); // // //
 
-}
+} // on_btn_reload()
 
 
 
 static void
-cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
+on_btn_exted( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -722,12 +722,12 @@ cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
         g_list_free( args );
     }
 
-} // cfg_edit_dlg_on_btn_exted()
+} // on_btn_exted()
 
 
 
 static void
-cfg_edit_dlg_on_btn_showinh( GtkToggleButton* btn, gpointer* p )
+on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -749,7 +749,7 @@ cfg_edit_dlg_on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
 
 
-static gboolean cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p );
+static gboolean on_rmb( GtkWidget* w, GdkEvent* e, gpointer p );
 
 
 
@@ -950,38 +950,38 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     g_signal_connect( G_OBJECT( dlg ),
                       "delete-event",
-                      G_CALLBACK( &cfg_edit_dlg_on_delete_event ),
+                      G_CALLBACK( &on_delete_event ),
                       NULL );
 
     g_signal_connect( G_OBJECT( btn_showinh ),
                       "toggled",
-                      G_CALLBACK( &cfg_edit_dlg_on_btn_showinh ),
+                      G_CALLBACK( &on_btn_showinh ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->btn_apply_ ),
                       "clicked",
-                      G_CALLBACK( &cfg_edit_dlg_on_btn_apply ),
+                      G_CALLBACK( &on_btn_apply ),
                       dlg );
 
     g_signal_connect( G_OBJECT( btn_exted ),
                       "clicked",
-                      G_CALLBACK( &cfg_edit_dlg_on_btn_exted ),
+                      G_CALLBACK( &on_btn_exted ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->btn_reload_ ),
                       "clicked",
-                      G_CALLBACK( &cfg_edit_dlg_on_btn_reload ),
+                      G_CALLBACK( &on_btn_reload ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
                       "cursor-changed",
 //                      "row-activated",
-                      G_CALLBACK( &cfg_edit_dlg_on_row_sel ),
+                      G_CALLBACK( &on_row_sel ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
                       "button-press-event",
-                      G_CALLBACK( &cfg_edit_dlg_on_rmb ),
+                      G_CALLBACK( &on_rmb ),
                       dlg );
 
 
@@ -1121,7 +1121,7 @@ dlg_add_val_run( cfg_edit_dlg* dlg,
 
 
 static void
-cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
+on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -1162,12 +1162,12 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
         //
     }
 
-} // cfg_edit_dlg_on_mitem_edit()
+} // on_mitem_edit()
 
 
 
 static void
-cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
+on_mitem_add( GtkMenuItem* mitem, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -1252,7 +1252,7 @@ cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
     } // if dlg_add_val_run()
 
-} // cfg_edit_dlg_on_mitem_add()
+} // on_mitem_add()
 
 
 
@@ -1273,7 +1273,7 @@ mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_edit);
         g_signal_connect( G_OBJECT( mitem_edit ),
                           "activate",
-                          G_CALLBACK( &cfg_edit_dlg_on_mitem_edit ),
+                          G_CALLBACK( &on_mitem_edit ),
                           dlg );
         gtk_widget_show( mitem_edit );
         gtk_widget_set_sensitive( mitem_edit, !rdata->ro_ );
@@ -1285,7 +1285,7 @@ mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_add);
         g_signal_connect( G_OBJECT( mitem_add ),
                           "activate",
-                          G_CALLBACK( &cfg_edit_dlg_on_mitem_add ),
+                          G_CALLBACK( &on_mitem_add ),
                           dlg );
         gtk_widget_show( mitem_add );
         gtk_widget_set_sensitive( mitem_add, !rdata->ro_ );
@@ -1301,7 +1301,7 @@ mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 
 
 static gboolean
-cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
+on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 {
     GdkEventButton* ebtn = ( GdkEventButton* ) e;
 
@@ -1364,11 +1364,7 @@ cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 
     return TRUE;
 
-} // cfg_edit_dlg_on_rmb()
-
-//
-//
-///////////////////////////////////////////////////////////
+} // on_rmb()
 
 
 
