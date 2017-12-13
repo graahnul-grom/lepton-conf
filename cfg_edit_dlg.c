@@ -163,6 +163,9 @@ static void
 conf_load( cfg_edit_dlg* dlg );
 
 static const gchar*
+conf_ctx_name( EdaConfig* ctx );
+
+static const gchar*
 conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
 
@@ -544,6 +547,7 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     gchar* name = row_field_get_name( dlg, &it );
     gchar* val = row_field_get_val( dlg, &it );
 
+    gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
     gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
     gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), val );
 
@@ -1282,11 +1286,30 @@ conf_load( cfg_edit_dlg* dlg )
 // {post}: {ret} owned by geda cfg api
 //
 static const gchar*
+conf_ctx_name( EdaConfig* ctx )
+{
+    if ( ctx == eda_config_get_default_context() )
+        return "DEFAULT";
+    if ( ctx == eda_config_get_system_context() )
+        return "SYSTEM";
+    if ( ctx == eda_config_get_user_context() )
+        return "USER";
+    if ( ctx == eda_config_get_context_for_path( "." ) )
+        return "PATH (.)";
+
+    return NULL;
+}
+
+
+
+// {post}: {ret} owned by geda cfg api
+//
+static const gchar*
 conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 {
     const gchar* fname = eda_config_get_filename( ctx );
 
-    if ( !fname )
+    if ( fname == NULL )
         return NULL;
 
     if (exist != NULL)
@@ -1507,52 +1530,69 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
+    // ctx labels:
+    //
+    GtkWidget* lbox00 = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* lab_ctx0 = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( lab_ctx0 ), "<b>ctx: </b>" );
+    gtk_box_pack_start( GTK_BOX( lbox00 ), lab_ctx0, FALSE, FALSE, 0 );
+
+    dlg->lab_ctx_ = gtk_label_new( NULL );
+    gtk_label_set_selectable( GTK_LABEL( dlg->lab_ctx_ ), TRUE );
+    gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_ctx_, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox00, FALSE, FALSE, 0 );
+
+
+
+
     // cwd labels:
     //
-    GtkWidget* lbox0 = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* lbox000 = gtk_hbox_new( FALSE, 0 );
 
     GtkWidget* lab_cwd0 = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( lab_cwd0 ), "<b>cwd: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox0 ), lab_cwd0, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd0, FALSE, FALSE, 0 );
 
     GtkWidget* lab_cwd1 = gtk_label_new( cwd );
     gtk_label_set_selectable( GTK_LABEL( lab_cwd1 ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox0 ), lab_cwd1, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd1, FALSE, FALSE, 0 );
 
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox0, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox000, FALSE, FALSE, 0 );
 
 
 
     // name labels:
     //
-    GtkWidget* lbox1 = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* lbox111 = gtk_hbox_new( FALSE, 0 );
 
     GtkWidget* lab_name0 = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( lab_name0 ), "<b>name: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox1 ), lab_name0, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox111 ), lab_name0, FALSE, FALSE, 0 );
 
     dlg->lab_name_ = gtk_label_new( NULL );
     gtk_label_set_selectable( GTK_LABEL( dlg->lab_name_ ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox1 ), dlg->lab_name_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox111 ), dlg->lab_name_, FALSE, FALSE, 0 );
 
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox1, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox111, FALSE, FALSE, 0 );
 
 
 
 
     // val labels:
     //
-    GtkWidget* lbox2 = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* lbox222 = gtk_hbox_new( FALSE, 0 );
 
     GtkWidget* lab_val0 = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( lab_val0 ), "<b>value: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox2 ), lab_val0, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox222 ), lab_val0, FALSE, FALSE, 0 );
 
     dlg->lab_val_ = gtk_label_new( NULL );
     gtk_label_set_selectable( GTK_LABEL( dlg->lab_val_ ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox2 ), dlg->lab_val_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox222 ), dlg->lab_val_, FALSE, FALSE, 0 );
 
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox2, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox222, FALSE, FALSE, 0 );
 
 
 
