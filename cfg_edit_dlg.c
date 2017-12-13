@@ -296,7 +296,6 @@ row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
     gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_val(), &val, -1 );
 
     return val;
-
 }
 
 
@@ -325,6 +324,20 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
     dlg_model_upd( dlg );
 
 } // row_field_set_val()
+
+
+
+// {post}: caller must free {ret}
+//
+static gchar*
+row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
+{
+    gchar* val = NULL;
+    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_name(), &val, -1 );
+
+    return val;
+}
+
 
 
 
@@ -528,10 +541,12 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     if ( !rdata )
         return;
 
+    gchar* name = row_field_get_name( dlg, &it );
     gchar* val = row_field_get_val( dlg, &it );
 
-    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", "TODO", val );
+    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
+    g_free( name );
     g_free( val );
 
 } // on_row_sel()
