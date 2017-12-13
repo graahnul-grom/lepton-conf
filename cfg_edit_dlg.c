@@ -1536,14 +1536,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // -------------------------- box (bottom):
     //
 //    GtkWidget* vbox_bot = gtk_vbutton_box_new();
+//    GtkWidget* vbox_bot = gtk_vbox_new( FALSE, 0 );
     GtkWidget* vbox_bot = gtk_vbox_new( TRUE, 0 );
-
-
-//    GtkWidget* btn_qqq = gtk_button_new_with_mnemonic( "_ext ed" );
-//    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_qqq );
-//    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_qqq, FALSE, FALSE, 0 );
-
-
 
 
 
@@ -1582,6 +1576,10 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
+
+    gtk_box_pack_start( GTK_BOX( vbox_bot ),
+                        gtk_hseparator_new(), FALSE, FALSE, 0 );
+
     // name labels:
     //
     GtkWidget* lbox111 = gtk_hbox_new( FALSE, 0 );
@@ -1595,7 +1593,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lbox111 ), dlg->lab_name_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox111, FALSE, FALSE, 0 );
-
 
 
 
@@ -1615,6 +1612,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
+    gtk_box_pack_start( GTK_BOX( vbox_bot ),
+                        gtk_hseparator_new(), FALSE, FALSE, 0 );
+
 
 
     // show inh check box:
@@ -1626,8 +1626,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ), dlg->showinh_ );
 
-    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_showinh );
-//    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, FALSE, FALSE, 0 );
+//    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_showinh );
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, FALSE, FALSE, 0 );
 //    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, TRUE, FALSE, 0 );
 
 
