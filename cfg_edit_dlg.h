@@ -55,7 +55,6 @@ struct _cfg_edit_dlg
     GtkCellRenderer* ren_txt_;
 
     GtkWidget*    ent_;
-    GtkWidget*    btn_apply_;
     GtkWidget*    btn_reload_;
 
     gboolean showinh_;

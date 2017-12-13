@@ -514,69 +514,6 @@ on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* p )
 
 
 static void
-on_btn_apply( GtkButton* btn, gpointer* p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return;
-
-    GtkEntry* ent = GTK_ENTRY( dlg->ent_ );
-    if ( !ent )
-        return;
-
-
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
-
-    row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata || rdata->ro_ )
-        return;
-
-
-    const gchar* txt = gtk_entry_get_text( ent );
-
-    // noop:
-    //
-//    if ( g_strcmp0( rdata->val_, txt ) == 0 )
-//    {
-//        printf( " >> on_btn_apply(): empty string => NOOP\n" );
-//        return;
-//    }
-
-    printf( " >> on_btn_apply(): [%s::%s]: [%s] => [%s]\n",
-            rdata->group_, rdata->key_, rdata->val_, txt );
-
-
-    if ( !conf_chg_val( rdata, txt ) )
-        return;
-
-
-    row_field_set_val( dlg, it, txt );
-
-
-    // mark current key as not inherited:
-    //
-    row_set_inh( dlg, it, FALSE );
-
-    // mark parent group as not inherited:
-    //
-    GtkTreeIter itParent;
-    if ( row_cur_get_parent_iter( dlg, &it, &itParent ) )
-        row_set_inh( dlg, itParent, FALSE );
-
-
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-
-    // NOTE: reload all:
-    //
-//    g_signal_emit_by_name( dlg->btn_reload_, "clicked", dlg );
-
-} // on_btn_apply()
-
-
-
-static void
 on_row_sel( GtkTreeView* tree,
                          gpointer*    p )
 {
@@ -607,7 +544,6 @@ on_row_sel( GtkTreeView* tree,
     g_free( val );
 
     gtk_editable_set_editable( GTK_EDITABLE( ent ), !rdata->ro_ );
-    gtk_widget_set_sensitive( dlg->btn_apply_, !rdata->ro_ );
 
 } // on_row_sel()
 
@@ -864,13 +800,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->ent_ = gtk_entry_new();
     gtk_box_pack_start( GTK_BOX( box_bot ), dlg->ent_, TRUE, TRUE, 10 );
 
-
-    // apply btn:
-    //
-    dlg->btn_apply_ = gtk_button_new_with_mnemonic( "_apply" );
-    gtk_box_pack_start( GTK_BOX( box_bot ), dlg->btn_apply_, FALSE, FALSE, 10 );
-
-
     // show inh check box:
     //
     GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w" );
@@ -935,11 +864,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( btn_showinh ),
                       "toggled",
                       G_CALLBACK( &on_btn_showinh ),
-                      dlg );
-
-    g_signal_connect( G_OBJECT( dlg->btn_apply_ ),
-                      "clicked",
-                      G_CALLBACK( &on_btn_apply ),
                       dlg );
 
     g_signal_connect( G_OBJECT( btn_exted ),
