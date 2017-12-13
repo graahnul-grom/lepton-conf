@@ -100,6 +100,9 @@ int main( int argc, char* argv[] )
 
     gtk_init( &argc, &argv );
 
+    if ( argc >= 2 )
+        chdir( argv[ 1 ] );
+
     GtkWidget* wnd = cfg_edit_dlg_new();
 //    GtkWidget* wnd = g_object_new( CFG_EDIT_DLG_TYPE, NULL );
 //    GtkWidget* wnd = g_object_new( CFG_EDIT_DLG_TYPE, "prop1", 9, NULL );
