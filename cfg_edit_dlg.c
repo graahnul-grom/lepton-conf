@@ -548,10 +548,11 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     gchar* val = row_field_get_val( dlg, &it );
 
     gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_fname_ ), conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL ) );
     gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
     gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), val );
 
-    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
+//    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
     g_free( name );
     g_free( val );
@@ -1532,18 +1533,34 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // ctx labels:
     //
-    GtkWidget* lbox00 = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* lbox0 = gtk_hbox_new( FALSE, 0 );
 
     GtkWidget* lab_ctx0 = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( lab_ctx0 ), "<b>ctx: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox00 ), lab_ctx0, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox0 ), lab_ctx0, FALSE, FALSE, 0 );
 
     dlg->lab_ctx_ = gtk_label_new( NULL );
     gtk_label_set_selectable( GTK_LABEL( dlg->lab_ctx_ ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_ctx_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( lbox0 ), dlg->lab_ctx_, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox0, FALSE, FALSE, 0 );
+
+
+
+
+    // ctx fname labels:
+    //
+    GtkWidget* lbox00 = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* lab_fname0 = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( lab_fname0 ), "<b>fname: </b>" );
+    gtk_box_pack_start( GTK_BOX( lbox00 ), lab_fname0, FALSE, FALSE, 0 );
+
+    dlg->lab_fname_ = gtk_label_new( NULL );
+    gtk_label_set_selectable( GTK_LABEL( dlg->lab_fname_ ), TRUE );
+    gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_fname_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox00, FALSE, FALSE, 0 );
-
 
 
 
