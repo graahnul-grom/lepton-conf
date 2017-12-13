@@ -548,9 +548,12 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     gchar* val = row_field_get_val( dlg, &it );
 
     gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
-    gtk_label_set_text( GTK_LABEL( dlg->lab_fname_ ), conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL ) );
     gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
     gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), val );
+
+    const gchar* fname = conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_fname_ ), fname );
+    gtk_widget_set_sensitive( dlg->btn_exted_, fname != NULL );
 
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
@@ -1560,7 +1563,27 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_label_set_selectable( GTK_LABEL( dlg->lab_fname_ ), TRUE );
     gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_fname_, FALSE, FALSE, 0 );
 
+    // ext ed btn:
+    //
+//    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
+//    gtk_box_pack_start( GTK_BOX( lbox00 ), btn_exted, FALSE, FALSE, 10 );
+
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox00, FALSE, FALSE, 0 );
+
+
+
+
+
+    // buttons:
+    //
+    GtkWidget* lboxBB = gtk_hbox_new( FALSE, 0 );
+
+    // ext ed btn:
+    //
+    dlg->btn_exted_ = gtk_button_new_with_mnemonic( "_ext ed" );
+    gtk_box_pack_start( GTK_BOX( lboxBB ), dlg->btn_exted_, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lboxBB, FALSE, FALSE, 0 );
 
 
 
@@ -1651,8 +1674,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // ext ed btn:
     //
-    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
-    gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
+//    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
+//    gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
 
 
 
@@ -1677,7 +1700,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_showinh ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_exted ),
+    g_signal_connect( G_OBJECT( dlg->btn_exted_ ),
                       "clicked",
                       G_CALLBACK( &on_btn_exted ),
                       dlg );

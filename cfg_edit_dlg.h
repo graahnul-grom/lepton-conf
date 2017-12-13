@@ -59,6 +59,7 @@ struct _cfg_edit_dlg
     GtkWidget* lab_name_;
     GtkWidget* lab_val_;
 
+    GtkWidget* btn_exted_;
     GtkWidget* btn_reload_;
 
     gboolean showinh_;
