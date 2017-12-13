@@ -121,7 +121,7 @@ enum
 {
     COL_NAME,
     COL_VAL,
-    COL_DATA,     // hidden
+    COL_DATA,     // rdata: hidden
     NUM_COLS
 };
 
@@ -166,10 +166,10 @@ static const gchar*
 cfg_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
 
-static int colid_name()  { return COL_NAME; }
-static int colid_val()   { return COL_VAL; }
-static int colid_data()  { return COL_DATA; }
-static int cols_cnt()    { return NUM_COLS; }
+static int tree_colid_name()  { return COL_NAME; }
+static int tree_colid_val()   { return COL_VAL; }
+static int tree_colid_data()  { return COL_DATA; }
+static int tree_cols_cnt()    { return NUM_COLS; }
 
 
 
@@ -276,7 +276,7 @@ static row_data*
 row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     row_data* rdata = NULL;
-    gtk_tree_model_get( dlg_model( dlg ), it, colid_data(), &rdata, -1 );
+    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_data(), &rdata, -1 );
 
     return rdata;
 
@@ -290,7 +290,7 @@ static gchar*
 row_get_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     gchar* val = NULL;
-    gtk_tree_model_get( dlg_model( dlg ), it, colid_val(), &val, -1 );
+    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_val(), &val, -1 );
 
     return val;
 
@@ -316,7 +316,7 @@ row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
 
     gtk_tree_store_set( dlg->store_,
                         &itStore,
-                        colid_val(), val,
+                        tree_colid_val(), val,
                         -1 );
 
     dlg_model_upd( dlg );
@@ -367,7 +367,7 @@ row_is_editable( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
-static void cell_draw( GtkTreeViewColumn* col,
+static void tree_cell_draw( GtkTreeViewColumn* col,
                        GtkCellRenderer*   ren,
                        GtkTreeModel*      model,
                        GtkTreeIter*       it,
@@ -399,14 +399,14 @@ static void cell_draw( GtkTreeViewColumn* col,
         g_object_set( ren, "style", PANGO_STYLE_NORMAL, NULL );
     }
 
-} // cell_draw()
+} // tree_cell_draw()
 
 
 
 
 
 static gboolean
-filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
+tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -427,12 +427,12 @@ filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
 //    return FALSE;
     return TRUE;
 
-} // filter()
+} // tree_filter()
 
 
 
 static void
-filter_setup( cfg_edit_dlg* p )
+tree_filter_setup( cfg_edit_dlg* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -442,7 +442,7 @@ filter_setup( cfg_edit_dlg* p )
 
     gtk_tree_model_filter_set_visible_func(
         GTK_TREE_MODEL_FILTER( modf ),
-        &filter,
+        &tree_filter,
         dlg,
         NULL);
 
@@ -450,12 +450,12 @@ filter_setup( cfg_edit_dlg* p )
 
     dlg_model_upd( dlg );
 
-} // filter_setup()
+} // tree_filter_setup()
 
 
 
 static void
-filter_remove( cfg_edit_dlg* p )
+tree_filter_remove( cfg_edit_dlg* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -465,12 +465,12 @@ filter_remove( cfg_edit_dlg* p )
 
     dlg_model_upd( dlg );
 
-} // filter_remove()
+}
 
 
 
 static void
-add_col( cfg_edit_dlg*    dlg,
+tree_add_col( cfg_edit_dlg*    dlg,
          GtkCellRenderer* ren,
          const gchar*     prop,
          gint             col_id,
@@ -483,7 +483,7 @@ add_col( cfg_edit_dlg*    dlg,
 
     gtk_tree_view_column_set_cell_data_func( col,
                                              ren,
-                                             &cell_draw,
+                                             &tree_cell_draw,
                                              dlg,
                                              NULL );
 
@@ -506,9 +506,9 @@ add_row( cfg_edit_dlg* dlg,
     //
     gtk_tree_store_set( dlg->store_,
                         &it,
-                        colid_name(),     name,
-                        colid_val(),      val,
-                        colid_data(),     rdata,
+                        tree_colid_name(),     name,
+                        tree_colid_val(),      val,
+                        tree_colid_data(),     rdata,
                         -1 );
 
     dlg_model_upd( dlg );
@@ -653,13 +653,13 @@ cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
         path = gtk_tree_model_get_path( dlg_model( dlg ), &it );
 
 
-    filter_remove( dlg );
+    tree_filter_remove( dlg );
 
     gtk_tree_store_clear( dlg->store_ );
 
     cfg_load( dlg );
 
-    filter_setup( dlg );
+    tree_filter_setup( dlg );
 
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
@@ -766,7 +766,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // store:
     //
     dlg->store_ = gtk_tree_store_new(
-        cols_cnt(),
+        tree_cols_cnt(),
           G_TYPE_STRING     // name
         , G_TYPE_STRING   // val
         , G_TYPE_POINTER  // rdata
@@ -786,15 +786,15 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     dlg->ren_txt_ = gtk_cell_renderer_text_new();
 
-    add_col( dlg, dlg->ren_txt_, "text", colid_name(), "name" );
-    add_col( dlg, dlg->ren_txt_, "text", colid_val(),  "value" );
+    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_name(), "name" );
+    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
 
 
     dlg->showinh_ = TRUE;
 
 
     cfg_load( dlg );
-    filter_setup( dlg );
+    tree_filter_setup( dlg );
 
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
