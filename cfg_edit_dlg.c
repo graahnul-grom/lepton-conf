@@ -666,244 +666,6 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
 
 
-
-
-static gboolean on_rmb( GtkWidget* w, GdkEvent* e, gpointer p );
-
-
-
-
-static void
-cfg_edit_dlg_init( cfg_edit_dlg* dlg )
-{
-    printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
-
-    dlg->prop1_ = 5;
-
-
-
-    // store:
-    //
-    dlg->store_ = gtk_tree_store_new(
-        tree_cols_cnt(),
-          G_TYPE_STRING     // name
-        , G_TYPE_STRING   // val
-        , G_TYPE_POINTER  // rdata
-    );
-
-    dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
-
-
-    // view:
-    //
-    dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
-    dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
-    gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
-
-
-    // tree view columns:
-    //
-    dlg->ren_txt_ = gtk_cell_renderer_text_new();
-
-    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_name(), "name" );
-    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
-
-
-    dlg->showinh_ = TRUE;
-
-
-    conf_load( dlg );
-    tree_filter_setup( dlg );
-
-
-    gtk_tree_view_expand_all( dlg->tree_v_ );
-
-
-    // content area:
-    //
-    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG(dlg) );
-
-
-    // box (top):
-    //
-    GtkWidget* hbox_top = gtk_hbox_new( FALSE, 0 );
-
-
-    // "Find:" label:
-    //
-//    GtkWidget* lab_find = gtk_label_new_with_mnemonic( "_Find: " );
-//    gtk_box_pack_start( GTK_BOX( hbox_top ), lab_find, FALSE, FALSE, 0 );
-
-
-    // find edit field:
-    //
-//    GtkWidget* ent_find = gtk_entry_new();
-//    gtk_box_pack_start( GTK_BOX( hbox_top ), ent_find, TRUE, TRUE, 0 );
-
-
-    // attach label to edit field:
-    //
-//    gtk_label_set_mnemonic_widget( GTK_LABEL( lab_find ), ent_find );
-
-
-    // add hbox_top to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ),  hbox_top, FALSE, FALSE, 0 );
-
-
-
-    // box2 (top):
-    //
-    GtkWidget* hbox2_top = gtk_hbox_new( FALSE, 0 );
-
-    // cwd label:
-    //
-    gchar* cwd = g_get_current_dir();
-    gchar str[ PATH_MAX + 12 ] = "";
-    sprintf( str, "<b>cwd:</b> %s", cwd );
-    GtkWidget* lab_cwd = gtk_label_new( "" );
-    gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
-    gtk_box_pack_start( GTK_BOX( hbox2_top ), lab_cwd, FALSE, TRUE, 0 );
-
-    // window title:
-    //
-    gtk_window_set_title( GTK_WINDOW( dlg ),
-                          g_strdup_printf( "gedacfged - %s", cwd ) );
-    g_free( cwd );
-
-    // add hbox2_top to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ),  hbox2_top, FALSE, FALSE, 0 );
-
-
-
-    // scrolled win:
-    //
-    GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
-    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
-                                    GTK_POLICY_AUTOMATIC,
-                                    GTK_POLICY_AUTOMATIC );
-
-    // add tree to wscroll:
-    //
-    gtk_container_add( GTK_CONTAINER( wscroll ), dlg->tree_w_ );
-
-
-    // add wscroll to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
-
-
-    // box (bottom):
-    //
-    GtkWidget* box_bot = gtk_hbox_new( FALSE, 0 );
-
-
-    // show inh check box:
-    //
-    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w" );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
-                                  dlg->showinh_ );
-
-    GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( btn_showinh ) );
-    gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab_showinh ),
-                                        "<i>sho_w inherited</i>" );
-
-//    GtkWidget* lab_inh = gtk_label_new_with_mnemonic( "" );
-//    GtkWidget* lab_inh = gtk_label_new( " inherited" );
-//    gtk_label_set_markup( GTK_LABEL( lab_inh ), " _<i>show inherited</i>" );
-//    GdkColor color;
-//    gdk_color_parse( "gray", &color );
-//    gtk_widget_modify_fg( lab_inh, GTK_STATE_NORMAL, &color );
-
-
-    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, FALSE, TRUE, 0 );
-//    gtk_box_pack_start( GTK_BOX( box_bot ), lab_inh, FALSE, TRUE, 0 );
-
-
-    // add box_bot to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ),  box_bot, FALSE, FALSE, 0 );
-
-
-
-    // action area:
-    //
-    GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
-
-    // reload btn:
-    //
-    dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
-    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_reload_, FALSE, FALSE, 0 );
-
-    // ext ed btn:
-    //
-    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
-    gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
-
-
-    // show all:
-    //
-    gtk_widget_show_all( GTK_WIDGET(dlg) );
-
-
-
-
-
-
-
-
-    // event handlers:
-    //
-    g_signal_connect( G_OBJECT( dlg ),
-                      "delete-event",
-                      G_CALLBACK( &on_delete_event ),
-                      NULL );
-
-    g_signal_connect( G_OBJECT( btn_showinh ),
-                      "toggled",
-                      G_CALLBACK( &on_btn_showinh ),
-                      dlg );
-
-    g_signal_connect( G_OBJECT( btn_exted ),
-                      "clicked",
-                      G_CALLBACK( &on_btn_exted ),
-                      dlg );
-
-    g_signal_connect( G_OBJECT( dlg->btn_reload_ ),
-                      "clicked",
-                      G_CALLBACK( &on_btn_reload ),
-                      dlg );
-
-    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
-                      "cursor-changed",
-//                      "row-activated",
-                      G_CALLBACK( &on_row_sel ),
-                      dlg );
-
-    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
-                      "button-press-event",
-                      G_CALLBACK( &on_rmb ),
-                      dlg );
-
-
-    // NOTE: dont't do it:
-    //  if tree not focused on startup => SIGSEGV
-    //
-    // g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
-
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-
-} // cfg_edit_dlg_init()
-
-
-
-
-///////////////////////////////////////////////////////////
-//
-// popup menu:
-//
-
 static gchar*
 run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 {
@@ -1592,4 +1354,225 @@ conf_chg_val( row_data* rdata, const gchar* txt )
     return TRUE;
 
 } // conf_chg_val()
+
+
+
+
+static void
+cfg_edit_dlg_init( cfg_edit_dlg* dlg )
+{
+    printf( "cfg_edit_dlg_init()\n" );
+
+    dlg->prop1_ = 5;
+
+
+    // store:
+    //
+    dlg->store_ = gtk_tree_store_new(
+        tree_cols_cnt(),
+          G_TYPE_STRING     // name
+        , G_TYPE_STRING   // val
+        , G_TYPE_POINTER  // rdata
+    );
+
+    dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
+
+
+    // view:
+    //
+    dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
+    dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
+    gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
+
+
+    // tree view columns:
+    //
+    dlg->ren_txt_ = gtk_cell_renderer_text_new();
+
+    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_name(), "name" );
+    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
+
+
+    dlg->showinh_ = TRUE;
+
+
+    conf_load( dlg );
+    tree_filter_setup( dlg );
+
+
+    gtk_tree_view_expand_all( dlg->tree_v_ );
+
+
+    // content area:
+    //
+    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG(dlg) );
+
+
+    // box (top):
+    //
+    GtkWidget* hbox_top = gtk_hbox_new( FALSE, 0 );
+
+
+    // "Find:" label:
+    //
+//    GtkWidget* lab_find = gtk_label_new_with_mnemonic( "_Find: " );
+//    gtk_box_pack_start( GTK_BOX( hbox_top ), lab_find, FALSE, FALSE, 0 );
+
+
+    // find edit field:
+    //
+//    GtkWidget* ent_find = gtk_entry_new();
+//    gtk_box_pack_start( GTK_BOX( hbox_top ), ent_find, TRUE, TRUE, 0 );
+
+
+    // attach label to edit field:
+    //
+//    gtk_label_set_mnemonic_widget( GTK_LABEL( lab_find ), ent_find );
+
+
+    // add hbox_top to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ),  hbox_top, FALSE, FALSE, 0 );
+
+
+
+    // box2 (top):
+    //
+    GtkWidget* hbox2_top = gtk_hbox_new( FALSE, 0 );
+
+    // cwd label:
+    //
+    gchar* cwd = g_get_current_dir();
+    gchar str[ PATH_MAX + 12 ] = "";
+    sprintf( str, "<b>cwd:</b> %s", cwd );
+    GtkWidget* lab_cwd = gtk_label_new( "" );
+    gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
+    gtk_box_pack_start( GTK_BOX( hbox2_top ), lab_cwd, FALSE, TRUE, 0 );
+
+    // window title:
+    //
+    gtk_window_set_title( GTK_WINDOW( dlg ),
+                          g_strdup_printf( "gedacfged - %s", cwd ) );
+    g_free( cwd );
+
+    // add hbox2_top to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ),  hbox2_top, FALSE, FALSE, 0 );
+
+
+
+    // scrolled win:
+    //
+    GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC );
+
+    // add tree to wscroll:
+    //
+    gtk_container_add( GTK_CONTAINER( wscroll ), dlg->tree_w_ );
+
+
+    // add wscroll to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
+
+
+    // box (bottom):
+    //
+    GtkWidget* box_bot = gtk_hbox_new( FALSE, 0 );
+
+
+    // show inh check box:
+    //
+    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w" );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
+                                  dlg->showinh_ );
+
+    GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( btn_showinh ) );
+    gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab_showinh ),
+                                        "<i>sho_w inherited</i>" );
+
+//    GtkWidget* lab_inh = gtk_label_new_with_mnemonic( "" );
+//    GtkWidget* lab_inh = gtk_label_new( " inherited" );
+//    gtk_label_set_markup( GTK_LABEL( lab_inh ), " _<i>show inherited</i>" );
+//    GdkColor color;
+//    gdk_color_parse( "gray", &color );
+//    gtk_widget_modify_fg( lab_inh, GTK_STATE_NORMAL, &color );
+
+
+    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, FALSE, TRUE, 0 );
+//    gtk_box_pack_start( GTK_BOX( box_bot ), lab_inh, FALSE, TRUE, 0 );
+
+
+    // add box_bot to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ),  box_bot, FALSE, FALSE, 0 );
+
+
+
+    // action area:
+    //
+    GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
+
+    // reload btn:
+    //
+    dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
+    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_reload_, FALSE, FALSE, 0 );
+
+    // ext ed btn:
+    //
+    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
+
+
+    // show all:
+    //
+    gtk_widget_show_all( GTK_WIDGET(dlg) );
+
+
+
+
+    // event handlers:
+    //
+    g_signal_connect( G_OBJECT( dlg ),
+                      "delete-event",
+                      G_CALLBACK( &on_delete_event ),
+                      NULL );
+
+    g_signal_connect( G_OBJECT( btn_showinh ),
+                      "toggled",
+                      G_CALLBACK( &on_btn_showinh ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( btn_exted ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_exted ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( dlg->btn_reload_ ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_reload ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
+                      "cursor-changed",
+//                      "row-activated",
+                      G_CALLBACK( &on_row_sel ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
+                      "button-press-event",
+                      G_CALLBACK( &on_rmb ),
+                      dlg );
+
+
+    // NOTE: dont't do it:
+    //  if tree not focused on startup => SIGSEGV
+    //
+    // g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
+
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+} // cfg_edit_dlg_init()
 
