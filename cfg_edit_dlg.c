@@ -1408,7 +1408,10 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG(dlg) );
 
 
-    // box (top):
+
+
+
+    // -------------------------- box (top):
     //
     GtkWidget* hbox_top = gtk_hbox_new( FALSE, 0 );
 
@@ -1436,7 +1439,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-    // box2 (top):
+
+
+
+
+    // -------------------------- box2 (top):
     //
     GtkWidget* hbox2_top = gtk_hbox_new( FALSE, 0 );
 
@@ -1449,11 +1456,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
     gtk_box_pack_start( GTK_BOX( hbox2_top ), lab_cwd, FALSE, TRUE, 0 );
 
-    // window title:
-    //
-    gtk_window_set_title( GTK_WINDOW( dlg ),
-                          g_strdup_printf( "gedacfged - %s", cwd ) );
-    g_free( cwd );
+
+        // TODO: set window title elsewhere:
+        //
+        gtk_window_set_title( GTK_WINDOW( dlg ),
+                              g_strdup_printf( "gedacfged - %s", cwd ) );
+        g_free( cwd );
+
 
     // add hbox2_top to ca:
     //
@@ -1478,40 +1487,39 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
 
 
-    // box (bottom):
+
+
+
+
+
+    // -------------------------- box (bottom):
     //
-    GtkWidget* box_bot = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* hbox_bot = gtk_hbox_new( FALSE, 0 );
 
 
     // show inh check box:
     //
-    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "sho_w" );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ),
-                                  dlg->showinh_ );
-
+    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "" );
     GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( btn_showinh ) );
     gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab_showinh ),
                                         "<i>sho_w inherited</i>" );
 
-//    GtkWidget* lab_inh = gtk_label_new_with_mnemonic( "" );
-//    GtkWidget* lab_inh = gtk_label_new( " inherited" );
-//    gtk_label_set_markup( GTK_LABEL( lab_inh ), " _<i>show inherited</i>" );
-//    GdkColor color;
-//    gdk_color_parse( "gray", &color );
-//    gtk_widget_modify_fg( lab_inh, GTK_STATE_NORMAL, &color );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ), dlg->showinh_ );
 
-
-    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, FALSE, TRUE, 0 );
-//    gtk_box_pack_start( GTK_BOX( box_bot ), lab_inh, FALSE, TRUE, 0 );
+    gtk_box_pack_start( GTK_BOX( hbox_bot ), btn_showinh, FALSE, TRUE, 0 );
 
 
     // add box_bot to ca:
     //
-    gtk_box_pack_start( GTK_BOX( ca ),  box_bot, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ),  hbox_bot, FALSE, FALSE, 0 );
 
 
 
-    // action area:
+
+
+
+
+    // -------------------------- action area:
     //
     GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
 
@@ -1524,6 +1532,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
     gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
+
+
+
 
 
     // show all:
