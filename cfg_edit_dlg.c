@@ -1003,7 +1003,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 //
 
 static gchar*
-dlg_edit_val_run( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
+run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
         title ? title : "Edit value:",
@@ -1063,12 +1063,12 @@ dlg_edit_val_run( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 
     return ret;
 
-} // dlg_edit_val_run()
+} // run_dlg_edit_val()
 
 
 
 static gboolean
-dlg_add_val_run( cfg_edit_dlg* dlg,
+run_dlg_add_val( cfg_edit_dlg* dlg,
                  const gchar* title,
                  gchar** key,
                  gchar** val )
@@ -1137,7 +1137,7 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
     printf( "cfg_edit_dlg_on_mitem_edit(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
 
-    gchar* txt = dlg_edit_val_run( dlg, rdata->val_, NULL );
+    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
 
     if ( txt && cfg_chg_val( rdata, txt ) )
     {
@@ -1184,7 +1184,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     gchar* key = NULL;
     gchar* val = NULL;
 
-    if ( dlg_add_val_run( dlg, NULL, &key, &val ) )
+    if ( run_dlg_add_val( dlg, NULL, &key, &val ) )
     {
         // printf( "cfg_edit_dlg_on_mitem_add(): [%s] => [%s]\n", key, val );
 
