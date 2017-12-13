@@ -1447,21 +1447,15 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* hbox2_top = gtk_hbox_new( FALSE, 0 );
 
-    // cwd label:
-    //
+
     gchar* cwd = g_get_current_dir();
-    gchar str[ PATH_MAX + 12 ] = "";
-    sprintf( str, "<b>cwd:</b> %s", cwd );
-    GtkWidget* lab_cwd = gtk_label_new( "" );
-    gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
-    gtk_box_pack_start( GTK_BOX( hbox2_top ), lab_cwd, FALSE, TRUE, 0 );
 
 
         // TODO: set window title elsewhere:
         //
         gtk_window_set_title( GTK_WINDOW( dlg ),
                               g_strdup_printf( "gedacfged - %s", cwd ) );
-        g_free( cwd );
+        // g_free( cwd );
 
 
     // add hbox2_top to ca:
@@ -1494,7 +1488,33 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // -------------------------- box (bottom):
     //
-    GtkWidget* hbox_bot = gtk_hbox_new( FALSE, 0 );
+//    GtkWidget* vbox_bot = gtk_vbutton_box_new();
+    GtkWidget* vbox_bot = gtk_vbox_new( TRUE, 0 );
+
+
+//    GtkWidget* btn_qqq = gtk_button_new_with_mnemonic( "_ext ed" );
+//    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_qqq );
+//    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_qqq, FALSE, FALSE, 0 );
+
+    // cwd label:
+    //
+//    gchar str[] = "<u>eklmn!</u>";
+    gchar str[ PATH_MAX + 12 ] = "";
+    sprintf( str, "<b>cwd:</b> %s", cwd );
+
+    GtkWidget* lab_cwd = gtk_label_new( "" );
+    gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
+//    gtk_label_set_justify( GTK_LABEL( lab_cwd ), GTK_JUSTIFY_LEFT );
+//    GtkWidget* ali = gtk_alignment_new( 0, 0, 0, 0 );
+    gtk_misc_set_alignment( GTK_MISC( lab_cwd ), 0, 0 );
+//    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), lab_cwd );
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lab_cwd, FALSE, FALSE, 0 );
+
+
+//    GtkWidget* lab_cwd2 = gtk_label_new( "" );
+//    gtk_label_set_markup( GTK_LABEL( lab_cwd2 ), str );
+//    gtk_box_pack_start( GTK_BOX( vbox_bot ), lab_cwd2, FALSE, FALSE, 0 );
+
 
 
     // show inh check box:
@@ -1506,12 +1526,15 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ), dlg->showinh_ );
 
-    gtk_box_pack_start( GTK_BOX( hbox_bot ), btn_showinh, FALSE, TRUE, 0 );
+    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_showinh );
+//    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, FALSE, FALSE, 0 );
+//    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, TRUE, FALSE, 0 );
+
 
 
     // add box_bot to ca:
     //
-    gtk_box_pack_start( GTK_BOX( ca ),  hbox_bot, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ),  vbox_bot, FALSE, FALSE, 0 );
 
 
 
@@ -1584,6 +1607,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+
+    g_free( cwd );
 
 } // cfg_edit_dlg_init()
 
