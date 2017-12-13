@@ -566,7 +566,6 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     gchar* str = g_strdup_printf( "<a href=''>%s</a>", fname ? fname : "" );
     gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str );
     g_free( str );
-    gtk_widget_set_sensitive( dlg->btn_exted_, fname != NULL );
 
 //    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
@@ -650,51 +649,6 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
         g_list_free( args );
     }
 }
-
-
-
-static void
-on_btn_exted( GtkButton* btn, gpointer* p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return;
-
-
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
-
-
-    row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return;
-
-    gboolean exist = FALSE;
-    gboolean rok   = FALSE;
-    gboolean wok   = FALSE;
-
-    const gchar* fname = conf_ctx_fname( rdata->ctx_, &exist, &rok, &wok );
-    if ( !fname )
-        return;
-
-    GError* err = NULL;
-    GAppInfo* ai =
-    g_app_info_create_from_commandline( "gvim",
-                                        NULL,
-                                        G_APP_INFO_CREATE_NONE,
-                                        &err );
-    if ( ai )
-    {
-        GFile* gfile = g_file_new_for_path( fname );
-        GList* args = g_list_append( NULL, gfile );
-
-        g_app_info_launch( ai, args, NULL, &err );
-
-        g_list_free( args );
-    }
-
-} // on_btn_exted()
 
 
 
@@ -1628,21 +1582,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-
-
-    // buttons:
-    //
-    GtkWidget* lboxBB = gtk_hbox_new( FALSE, 0 );
-
-    // ext ed btn:
-    //
-    dlg->btn_exted_ = gtk_button_new_with_mnemonic( "_ext ed" );
-    gtk_box_pack_start( GTK_BOX( lboxBB ), dlg->btn_exted_, FALSE, FALSE, 0 );
-
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lboxBB, FALSE, FALSE, 0 );
-
-
-
     // name labels:
     //
     GtkWidget* lbox111 = gtk_hbox_new( FALSE, 0 );
@@ -1752,11 +1691,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       dlg );
 
 
-
-    g_signal_connect( G_OBJECT( dlg->btn_exted_ ),
-                      "clicked",
-                      G_CALLBACK( &on_btn_exted ),
-                      dlg );
 
     g_signal_connect( G_OBJECT( dlg->btn_reload_ ),
                       "clicked",
