@@ -16,8 +16,10 @@ GtkWidget* cfg_edit_dlg_new()
 
 
 
-/*
+/* ******************************************************************&
+*
 *  gobject-specific stuff:
+*
 */
 
 G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
@@ -152,16 +154,16 @@ mk_rdata( EdaConfig*  ctx,
 
 
 static gboolean
-cfg_edit_dlg_add_key_val( row_data* rdata, const gchar* key, const gchar* val );
+cfg_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
 static gboolean
-cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt );
+cfg_chg_val( row_data* rdata, const gchar* txt );
 
 static void
-load_cfg( cfg_edit_dlg* dlg );
+cfg_load( cfg_edit_dlg* dlg );
 
 static const gchar*
-ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
+cfg_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
 
 static int colid_name()  { return COL_NAME; }
@@ -566,7 +568,7 @@ cfg_edit_dlg_on_btn_apply( GtkButton* btn, gpointer* p )
             rdata->group_, rdata->key_, rdata->val_, txt );
 
 
-    if ( !cfg_edit_dlg_chg_val( rdata, txt ) )
+    if ( !cfg_chg_val( rdata, txt ) )
         return;
 
 
@@ -655,7 +657,7 @@ cfg_edit_dlg_on_btn_reload( GtkButton* btn, gpointer* p )
 
     gtk_tree_store_clear( dlg->store_ );
 
-    load_cfg( dlg );
+    cfg_load( dlg );
 
     filter_setup( dlg );
 
@@ -700,7 +702,7 @@ cfg_edit_dlg_on_btn_exted( GtkButton* btn, gpointer* p )
     gboolean rok   = FALSE;
     gboolean wok   = FALSE;
 
-    const gchar* fname = ctx_get_fname( rdata->ctx_, &exist, &rok, &wok );
+    const gchar* fname = cfg_ctx_fname( rdata->ctx_, &exist, &rok, &wok );
     if ( !fname )
         return;
 
@@ -791,7 +793,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->showinh_ = TRUE;
 
 
-    load_cfg( dlg );
+    cfg_load( dlg );
     filter_setup( dlg );
 
 
@@ -1137,7 +1139,7 @@ cfg_edit_dlg_on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
     gchar* txt = dlg_edit_val_run( dlg, rdata->val_, NULL );
 
-    if ( txt && cfg_edit_dlg_chg_val( rdata, txt ) )
+    if ( txt && cfg_chg_val( rdata, txt ) )
     {
         printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
 
@@ -1186,7 +1188,7 @@ cfg_edit_dlg_on_mitem_add( GtkMenuItem* mitem, gpointer p )
     {
         // printf( "cfg_edit_dlg_on_mitem_add(): [%s] => [%s]\n", key, val );
 
-        if ( cfg_edit_dlg_add_key_val( rdata, key, val ) )
+        if ( cfg_add_val( rdata, key, val ) )
         {
             printf( "cfg_edit_dlg_on_mitem_add(): [%s] = [%s]\n", key, val );
 
@@ -1371,13 +1373,19 @@ cfg_edit_dlg_on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 
 
 
+/* ******************************************************************&
+*
+*  config manipulation routines:
+*
+*/
+
 static void
-load_keys( EdaConfig*    ctx,
-           const gchar*  group,
-           cfg_edit_dlg* dlg,
-           GtkTreeIter   itParent,
-           gboolean      file_writable,
-           gboolean*     inh_all )
+cfg_load_keys( EdaConfig*    ctx,
+               const gchar*  group,
+               cfg_edit_dlg* dlg,
+               GtkTreeIter   itParent,
+               gboolean      file_writable,
+               gboolean*     inh_all )
 {
     gsize len = 0;
     GError* err = NULL;
@@ -1452,16 +1460,16 @@ load_keys( EdaConfig*    ctx,
 
     g_strfreev( pp );
 
-} // load_keys()
+} // cfg_load_keys()
 
 
 
 static void
-load_groups( EdaConfig*    ctx,
-             const gchar*  fname,
-             cfg_edit_dlg* dlg,
-             GtkTreeIter   itParent,
-             gboolean      file_writable )
+cfg_load_groups( EdaConfig*    ctx,
+                 const gchar*  fname,
+                 cfg_edit_dlg* dlg,
+                 GtkTreeIter   itParent,
+                 gboolean      file_writable )
 {
     if ( fname != NULL )
     {
@@ -1528,7 +1536,7 @@ load_groups( EdaConfig*    ctx,
         //
         gboolean inh_all = FALSE;
 
-        load_keys( ctx, name, dlg, it, file_writable, &inh_all );
+        cfg_load_keys( ctx, name, dlg, it, file_writable, &inh_all );
 
         // mark group itself as inh if all children are inh:
         //
@@ -1538,18 +1546,18 @@ load_groups( EdaConfig*    ctx,
 
     g_strfreev( pp );
 
-} // load_groups()
+} // cfg_load_groups()
 
 
 
 static void
-load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
+cfg_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
     gboolean exist = FALSE;
     gboolean rok   = FALSE;
     gboolean wok   = FALSE;
 
-    const gchar* fname = ctx_get_fname( ctx, &exist, &rok, &wok );
+    const gchar* fname = cfg_ctx_fname( ctx, &exist, &rok, &wok );
 
     gchar str[ PATH_MAX ] = "";
 
@@ -1585,14 +1593,14 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                             );
 
 //    load_groups( ctx, dlg, it, wok );
-    load_groups( ctx, fname, dlg, it, wok );
+    cfg_load_groups( ctx, fname, dlg, it, wok );
 
-} // load_ctx()
+} // cfg_load_ctx()
 
 
 
 static void
-load_cfg( cfg_edit_dlg* dlg )
+cfg_load( cfg_edit_dlg* dlg )
 {
 //    EdaConfig* cfg = eda_config_get_default_context();
 //    GError* err = NULL;
@@ -1600,10 +1608,10 @@ load_cfg( cfg_edit_dlg* dlg )
 //    load_ctx( cfg, "context: DEFAULT",  dlg );
 //    g_clear_error( &err );
 
-    load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
-    load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
-    load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
-    load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
+    cfg_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
+    cfg_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
+    cfg_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
+    cfg_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 }
 
 
@@ -1611,7 +1619,7 @@ load_cfg( cfg_edit_dlg* dlg )
 // {post}: {ret} owned by geda cfg api
 //
 static const gchar*
-ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
+cfg_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 {
     const gchar* fname = eda_config_get_filename( ctx );
 
@@ -1627,9 +1635,8 @@ ctx_get_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 
 
 
-
 static gboolean
-cfg_edit_dlg_add_key_val( row_data* rdata, const gchar* key, const gchar* val )
+cfg_add_val( row_data* rdata, const gchar* key, const gchar* val )
 {
     eda_config_set_string( rdata->ctx_,
                            rdata->group_,
@@ -1645,7 +1652,7 @@ cfg_edit_dlg_add_key_val( row_data* rdata, const gchar* key, const gchar* val )
 
 
 static gboolean
-cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt )
+cfg_chg_val( row_data* rdata, const gchar* txt )
 {
     // set:
     //
@@ -1686,5 +1693,5 @@ cfg_edit_dlg_chg_val( row_data* rdata, const gchar* txt )
 
     return TRUE;
 
-} // cfg_edit_dlg_chg_val()
+} // cfg_chg_val()
 
