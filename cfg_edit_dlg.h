@@ -48,16 +48,18 @@ struct _cfg_edit_dlg
 
     GtkTreeStore* store_;
     GtkTreeModel* model_;   // active model
-//    GtkTreeModel* model_f_; // filtered model
-//    GtkTreeModel* model_a_; // unfiltered model (i.e. all items)
-    GtkWidget*    tree_w_;
-    GtkTreeView*  tree_v_;
+
+    GtkWidget*   tree_w_;
+    GtkTreeView* tree_v_;
+
     GtkCellRenderer* ren_txt_;
 
-    GtkWidget*    ent_;
-    GtkWidget*    btn_reload_;
+    GtkWidget* btn_reload_;
 
     gboolean showinh_;
+
+    //    GtkTreeModel* model_f_; // filtered model
+    //    GtkTreeModel* model_a_; // unfiltered model (i.e. all items)
 };
 
 typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;

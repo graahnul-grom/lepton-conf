@@ -514,36 +514,25 @@ on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* p )
 
 
 static void
-on_row_sel( GtkTreeView* tree,
-                         gpointer*    p )
+on_row_sel( GtkTreeView* tree, gpointer* p )
 {
-//    printf( "  --- --- --- on_row_sel() --- --- ---\n" );
-
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
 
-    GtkEntry* ent = GTK_ENTRY( dlg->ent_ );
-    if ( !ent )
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
-
-    GtkTreeIter it;
-    row_cur_get_iter( dlg, &it );
-
-
     const row_data* rdata = row_field_get_data( dlg, &it );
-//    if ( !rdata || rdata->ro_ )
-//    {
-//        gtk_entry_set_text( ent, "" );
-//        return;
-//    }
+    if ( !rdata )
+        return;
 
     gchar* val = row_field_get_val( dlg, &it );
-    gtk_entry_set_text( ent, val );
-    g_free( val );
 
-    gtk_editable_set_editable( GTK_EDITABLE( ent ), !rdata->ro_ );
+    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", "TODO", val );
+
+    g_free( val );
 
 } // on_row_sel()
 
@@ -794,11 +783,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     //
     GtkWidget* box_bot = gtk_hbox_new( FALSE, 0 );
 
-
-    // edit val field:
-    //
-    dlg->ent_ = gtk_entry_new();
-    gtk_box_pack_start( GTK_BOX( box_bot ), dlg->ent_, TRUE, TRUE, 10 );
 
     // show inh check box:
     //
