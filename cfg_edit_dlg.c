@@ -200,7 +200,7 @@ dlg_model_upd( cfg_edit_dlg* dlg )
 // {ret}: tree store iter corresponding to model's iter [it]
 //
 static GtkTreeIter
-dlg_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
+row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 {
 //    NOTE: manual impl:
 //
@@ -226,7 +226,8 @@ dlg_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
                                                       &itStore,
                                                       &itModel );
     return itStore;
-}
+
+} // row_get_tstore_iter()
 
 
 
@@ -275,37 +276,37 @@ row_cur_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itPare
 
 
 static row_data*
-row_get_field_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
+row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     row_data* rdata = NULL;
     gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_data(), &rdata, -1 );
 
     return rdata;
 
-} // cur_row_get_field_data()
+}
 
 
 
 // {post}: caller must free {ret}
 //
 static gchar*
-row_get_field_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
+row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     gchar* val = NULL;
     gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_val(), &val, -1 );
 
     return val;
 
-} // cur_row_get_field_val()
+}
 
 
 
 static void
-row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
+row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
 {
     GtkTreeIter it = itCPY;
 
-    row_data* rdata = row_get_field_data( dlg, &it );
+    row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
@@ -314,7 +315,7 @@ row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
     rdata->val_ = g_strdup( val );
 
 
-    GtkTreeIter itStore = dlg_tstore_iter( dlg, it );
+    GtkTreeIter itStore = row_get_tstore_iter( dlg, it );
 
     gtk_tree_store_set( dlg->store_,
                         &itStore,
@@ -323,20 +324,8 @@ row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
 
     dlg_model_upd( dlg );
 
-} // row_set_field_val()
+} // row_field_set_val()
 
-
-
-//static gboolean
-//row_get_field_inh( cfg_edit_dlg* dlg, GtkTreeIter* it )
-//{
-//    row_data* rdata = row_get_field_data( dlg, it );
-//    if ( !rdata )
-//        return FALSE;
-//
-//    return rdata->inh_;
-//
-//} // row_get_field_inh()
 
 
 
@@ -345,7 +334,7 @@ row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
 {
     GtkTreeIter it = itCPY;
 
-    row_data* rdata = row_get_field_data( dlg, &it );
+    row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
@@ -353,18 +342,18 @@ row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
 
     dlg_model_upd( dlg );
 
-} // row_set_field_inh()
+} // row_set_inh()
 
 
 
 static gboolean
 row_is_editable( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
-    row_data* rdata = row_get_field_data( dlg, it );
+    row_data* rdata = row_field_get_data( dlg, it );
 
     return rdata ? !rdata->ro_ : FALSE;
 
-} // cur_row_is_editable()
+}
 
 
 
@@ -385,7 +374,7 @@ static void tree_cell_draw( GtkTreeViewColumn* col,
         return;
 
 
-    const row_data* rdata = row_get_field_data( dlg, it );
+    const row_data* rdata = row_field_get_data( dlg, it );
     if ( !rdata )
         return;
 
@@ -420,7 +409,7 @@ tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
     // OK: gtk_tree_model_get( model, it, colid_data(), &rdata, -1 );
 //    gtk_tree_model_get( dlg_model( dlg ), it, colid_data(), &rdata, -1 );
 
-    const row_data* rdata = row_get_field_data( dlg, it );
+    const row_data* rdata = row_field_get_data( dlg, it );
     if ( !rdata )
         return FALSE;
 
@@ -551,7 +540,7 @@ on_btn_apply( GtkButton* btn, gpointer* p )
     if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
-    row_data* rdata = row_get_field_data( dlg, &it );
+    row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata || rdata->ro_ )
         return;
 
@@ -574,7 +563,7 @@ on_btn_apply( GtkButton* btn, gpointer* p )
         return;
 
 
-    row_set_field_val( dlg, it, txt );
+    row_field_set_val( dlg, it, txt );
 
 
     // mark current key as not inherited:
@@ -617,14 +606,14 @@ on_row_sel( GtkTreeView* tree,
     row_cur_get_iter( dlg, &it );
 
 
-    const row_data* rdata = row_get_field_data( dlg, &it );
+    const row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata || rdata->ro_ )
     {
         gtk_entry_set_text( ent, "" );
         return;
     }
 
-    gchar* val = row_get_field_val( dlg, &it );
+    gchar* val = row_field_get_val( dlg, &it );
     gtk_entry_set_text( ent, val );
     g_free( val );
 
@@ -696,7 +685,7 @@ on_btn_exted( GtkButton* btn, gpointer* p )
         return;
 
 
-    row_data* rdata = row_get_field_data( dlg, &it );
+    row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
@@ -1133,7 +1122,7 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
     if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
-    row_data* rdata = row_get_field_data( dlg, &it );
+    row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
@@ -1145,7 +1134,7 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
     {
         printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
 
-        row_set_field_val( dlg, it, txt );
+        row_field_set_val( dlg, it, txt );
 
         g_free( txt );
 
@@ -1179,7 +1168,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
-    row_data* rdata = row_get_field_data( dlg, &it );
+    row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
@@ -1205,7 +1194,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
                                             RT_KEY          // rtype
                                           );
 
-            GtkTreeIter it_grp_tstrore = dlg_tstore_iter( dlg, it );
+            GtkTreeIter it_grp_tstrore = row_get_tstore_iter( dlg, it );
 
             GtkTreeIter it_new = row_add( dlg,
                                           key,
@@ -1351,7 +1340,7 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
 
 
-    row_data* rdata = row_get_field_data( dlg, &it );
+    row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return TRUE;
 
