@@ -154,16 +154,16 @@ mk_rdata( EdaConfig*  ctx,
 
 
 static gboolean
-cfg_add_val( row_data* rdata, const gchar* key, const gchar* val );
+conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
 static gboolean
-cfg_chg_val( row_data* rdata, const gchar* txt );
+conf_chg_val( row_data* rdata, const gchar* txt );
 
 static void
-cfg_load( cfg_edit_dlg* dlg );
+conf_load( cfg_edit_dlg* dlg );
 
 static const gchar*
-cfg_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
+conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
 
 
@@ -548,7 +548,7 @@ on_btn_apply( GtkButton* btn, gpointer* p )
             rdata->group_, rdata->key_, rdata->val_, txt );
 
 
-    if ( !cfg_chg_val( rdata, txt ) )
+    if ( !conf_chg_val( rdata, txt ) )
         return;
 
 
@@ -636,7 +636,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
     gtk_tree_store_clear( dlg->store_ );
 
-    cfg_load( dlg );
+    conf_load( dlg );
 
     tree_filter_setup( dlg );
 
@@ -681,7 +681,7 @@ on_btn_exted( GtkButton* btn, gpointer* p )
     gboolean rok   = FALSE;
     gboolean wok   = FALSE;
 
-    const gchar* fname = cfg_ctx_fname( rdata->ctx_, &exist, &rok, &wok );
+    const gchar* fname = conf_ctx_fname( rdata->ctx_, &exist, &rok, &wok );
     if ( !fname )
         return;
 
@@ -772,7 +772,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->showinh_ = TRUE;
 
 
-    cfg_load( dlg );
+    conf_load( dlg );
     tree_filter_setup( dlg );
 
 
@@ -1118,7 +1118,7 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
     gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
 
-    if ( txt && cfg_chg_val( rdata, txt ) )
+    if ( txt && conf_chg_val( rdata, txt ) )
     {
         printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
 
@@ -1167,7 +1167,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     {
         // printf( "cfg_edit_dlg_on_mitem_add(): [%s] => [%s]\n", key, val );
 
-        if ( cfg_add_val( rdata, key, val ) )
+        if ( conf_add_val( rdata, key, val ) )
         {
             printf( "cfg_edit_dlg_on_mitem_add(): [%s] = [%s]\n", key, val );
 
@@ -1355,12 +1355,12 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 */
 
 static void
-cfg_load_keys( EdaConfig*    ctx,
-               const gchar*  group,
-               cfg_edit_dlg* dlg,
-               GtkTreeIter   itParent,
-               gboolean      file_writable,
-               gboolean*     inh_all )
+conf_load_keys( EdaConfig*    ctx,
+                const gchar*  group,
+                cfg_edit_dlg* dlg,
+                GtkTreeIter   itParent,
+                gboolean      file_writable,
+                gboolean*     inh_all )
 {
     gsize len = 0;
     GError* err = NULL;
@@ -1368,7 +1368,7 @@ cfg_load_keys( EdaConfig*    ctx,
     gchar** pp = eda_config_get_keys( ctx, group, &len, &err );
     if ( pp == NULL )
     {
-        printf( " >> load_keys(): !eda_config_get_keys()\n" );
+        printf( " >> conf_load_keys(): !eda_config_get_keys()\n" );
         if ( err != NULL )
         {
             printf( "    err: %s\n", err->message );
@@ -1391,7 +1391,7 @@ cfg_load_keys( EdaConfig*    ctx,
         gchar* val = eda_config_get_string( ctx, group, name, &err );
         if ( val == NULL )
         {
-            printf( " >> load_keys( %s ): !eda_config_get_string( %s )\n", group, name );
+            printf( " >> conf_load_keys( %s ): !eda_config_get_string( %s )\n", group, name );
             if ( err != NULL )
             {
                 printf( "    err: %s\n", err->message );
@@ -1403,7 +1403,7 @@ cfg_load_keys( EdaConfig*    ctx,
         gboolean inh = eda_config_is_inherited( ctx, group, name, &err );
         if ( err != NULL )
         {
-            printf( " >> load_keys(): !eda_config_is_inherited()\n" );
+            printf( " >> conf_load_keys(): !eda_config_is_inherited()\n" );
             printf( "    err: %s\n", err->message );
         }
         g_clear_error( &err );
@@ -1435,16 +1435,16 @@ cfg_load_keys( EdaConfig*    ctx,
 
     g_strfreev( pp );
 
-} // cfg_load_keys()
+} // conf_load_keys()
 
 
 
 static void
-cfg_load_groups( EdaConfig*    ctx,
-                 const gchar*  fname,
-                 cfg_edit_dlg* dlg,
-                 GtkTreeIter   itParent,
-                 gboolean      file_writable )
+conf_load_groups( EdaConfig*    ctx,
+                  const gchar*  fname,
+                  cfg_edit_dlg* dlg,
+                  GtkTreeIter   itParent,
+                  gboolean      file_writable )
 {
     if ( fname != NULL )
     {
@@ -1452,7 +1452,7 @@ cfg_load_groups( EdaConfig*    ctx,
         gboolean res = eda_config_load( ctx, &err );
         if ( !res )
         {
-            printf( " >> load_groups(): !eda_config_load( \"%s\" )\n", fname );
+            printf( " >> conf_load_groups(): !eda_config_load( \"%s\" )\n", fname );
 
             if ( err != NULL )
             {
@@ -1469,7 +1469,7 @@ cfg_load_groups( EdaConfig*    ctx,
     gchar** pp = eda_config_get_groups( ctx, &len );
     if ( pp == NULL )
     {
-        printf( " >> load_groups(): !eda_config_get_groups()\n" );
+        printf( " >> conf_load_groups(): !eda_config_get_groups()\n" );
         return;
     }
 
@@ -1511,7 +1511,7 @@ cfg_load_groups( EdaConfig*    ctx,
         //
         gboolean inh_all = FALSE;
 
-        cfg_load_keys( ctx, name, dlg, it, file_writable, &inh_all );
+        conf_load_keys( ctx, name, dlg, it, file_writable, &inh_all );
 
         // mark group itself as inh if all children are inh:
         //
@@ -1521,18 +1521,18 @@ cfg_load_groups( EdaConfig*    ctx,
 
     g_strfreev( pp );
 
-} // cfg_load_groups()
+} // conf_load_groups()
 
 
 
 static void
-cfg_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
+conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
     gboolean exist = FALSE;
     gboolean rok   = FALSE;
     gboolean wok   = FALSE;
 
-    const gchar* fname = cfg_ctx_fname( ctx, &exist, &rok, &wok );
+    const gchar* fname = conf_ctx_fname( ctx, &exist, &rok, &wok );
 
     gchar str[ PATH_MAX ] = "";
 
@@ -1568,14 +1568,14 @@ cfg_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                             );
 
 //    load_groups( ctx, dlg, it, wok );
-    cfg_load_groups( ctx, fname, dlg, it, wok );
+    conf_load_groups( ctx, fname, dlg, it, wok );
 
-} // cfg_load_ctx()
+} // conf_load_ctx()
 
 
 
 static void
-cfg_load( cfg_edit_dlg* dlg )
+conf_load( cfg_edit_dlg* dlg )
 {
 //    EdaConfig* cfg = eda_config_get_default_context();
 //    GError* err = NULL;
@@ -1583,10 +1583,10 @@ cfg_load( cfg_edit_dlg* dlg )
 //    load_ctx( cfg, "context: DEFAULT",  dlg );
 //    g_clear_error( &err );
 
-    cfg_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
-    cfg_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
-    cfg_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
-    cfg_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
+    conf_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
+    conf_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
+    conf_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
+    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 }
 
 
@@ -1594,7 +1594,7 @@ cfg_load( cfg_edit_dlg* dlg )
 // {post}: {ret} owned by geda cfg api
 //
 static const gchar*
-cfg_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
+conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 {
     const gchar* fname = eda_config_get_filename( ctx );
 
@@ -1611,7 +1611,7 @@ cfg_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 
 
 static gboolean
-cfg_add_val( row_data* rdata, const gchar* key, const gchar* val )
+conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 {
     eda_config_set_string( rdata->ctx_,
                            rdata->group_,
@@ -1627,7 +1627,7 @@ cfg_add_val( row_data* rdata, const gchar* key, const gchar* val )
 
 
 static gboolean
-cfg_chg_val( row_data* rdata, const gchar* txt )
+conf_chg_val( row_data* rdata, const gchar* txt )
 {
     // set:
     //
@@ -1668,5 +1668,5 @@ cfg_chg_val( row_data* rdata, const gchar* txt )
 
     return TRUE;
 
-} // cfg_chg_val()
+} // conf_chg_val()
 
