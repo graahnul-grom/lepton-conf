@@ -27,13 +27,13 @@ void test_dlg()
 //        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
 //        NULL );
 
-    GtkWidget* cabtn = gtk_dialog_add_button( GTK_DIALOG( vdlg ),
-                                              GTK_STOCK_CANCEL,
-                                              GTK_RESPONSE_REJECT );
+//    GtkWidget* cabtn = gtk_dialog_add_button( GTK_DIALOG( vdlg ),
+//                                              GTK_STOCK_CANCEL,
+//                                              GTK_RESPONSE_REJECT );
 
-    GtkWidget* okbtn = gtk_dialog_add_button( GTK_DIALOG( vdlg ),
-                                              GTK_STOCK_OK,
-                                              GTK_RESPONSE_ACCEPT );
+//    GtkWidget* okbtn = gtk_dialog_add_button( GTK_DIALOG( vdlg ),
+//                                              GTK_STOCK_OK,
+//                                              GTK_RESPONSE_ACCEPT );
 
 
 
@@ -100,7 +100,8 @@ int main( int argc, char* argv[] )
 
     gtk_init( &argc, &argv );
 
-    GtkWidget* wnd = g_object_new( CFG_EDIT_DLG_TYPE, NULL );
+    GtkWidget* wnd = cfg_edit_dlg_new();
+//    GtkWidget* wnd = g_object_new( CFG_EDIT_DLG_TYPE, NULL );
 //    GtkWidget* wnd = g_object_new( CFG_EDIT_DLG_TYPE, "prop1", 9, NULL );
 //    if ( !wnd )
 //        return 1;

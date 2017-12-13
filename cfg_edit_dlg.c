@@ -3,6 +3,19 @@
 #include <liblepton/libgedaguile.h>
 
 
+/*! \brief Create a new cfg edit dlg
+*
+*  \param [in] w_current The GschemToplevel structure
+*/
+GtkWidget* cfg_edit_dlg_new()
+//cfg_edit_dlg_new (GschemToplevel *w_current)
+{
+  gpointer obj = g_object_new (CFG_EDIT_DLG_TYPE, NULL);
+  return GTK_WIDGET (obj);
+}
+
+
+
 /*
 *  gobject-specific stuff:
 */

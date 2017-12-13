@@ -68,6 +68,7 @@ typedef struct _cfg_edit_dlg      cfg_edit_dlg;
 
 GType cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
 
+GtkWidget* cfg_edit_dlg_new();
 
 #endif
 
