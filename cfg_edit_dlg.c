@@ -563,9 +563,12 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     }
 
     const gchar* fname = conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL );
-    gtk_label_set_text( GTK_LABEL( dlg->lab_fname_ ), fname );
+    gchar* str = g_strdup_printf( "<a href=''>%s</a>", fname ? fname : "" );
+    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str );
+    g_free( str );
     gtk_widget_set_sensitive( dlg->btn_exted_, fname != NULL );
 
+//    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
 } // on_row_sel()
@@ -616,6 +619,37 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     gtk_tree_view_expand_all( dlg->tree_v_ ); // // //
 
 } // on_btn_reload()
+
+
+
+static void
+on_lab_fname( GtkLabel* lab, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    const gchar* fname = gtk_label_get_text( lab );
+
+    printf( " >> on_lab_fname(): [%s]\n", fname);
+
+    const gchar exted[] = "gvim";
+    GError* err = NULL;
+    GAppInfo* ai =
+    g_app_info_create_from_commandline( exted,
+                                        NULL,
+                                        G_APP_INFO_CREATE_NONE,
+                                        &err );
+    if ( ai )
+    {
+        GFile* gfile = g_file_new_for_path( fname );
+        GList* args = g_list_append( NULL, gfile );
+
+        g_app_info_launch( ai, args, NULL, &err );
+
+        g_list_free( args );
+    }
+}
 
 
 
@@ -1587,6 +1621,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     dlg->lab_fname_ = gtk_label_new( NULL );
     gtk_label_set_selectable( GTK_LABEL( dlg->lab_fname_ ), TRUE );
+    gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
     gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_fname_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox00, FALSE, FALSE, 0 );
@@ -1704,6 +1739,19 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       "toggled",
                       G_CALLBACK( &on_btn_showinh ),
                       dlg );
+
+
+
+    g_signal_connect( G_OBJECT( dlg->lab_fname_ ),
+                      "activate-link",             // mouse click
+                      G_CALLBACK( &on_lab_fname ),
+                      dlg );
+    g_signal_connect( G_OBJECT( dlg->lab_fname_ ),
+                      "activate-current-link",     // press Enter key
+                      G_CALLBACK( &on_lab_fname ),
+                      dlg );
+
+
 
     g_signal_connect( G_OBJECT( dlg->btn_exted_ ),
                       "clicked",
