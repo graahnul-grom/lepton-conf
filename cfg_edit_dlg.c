@@ -247,7 +247,7 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 //    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
     if ( !res )
-        printf( " >> >> cur_row_get_iter(): !sel\n");
+        printf( " >> >> row_cur_get_iter(): !sel\n");
 
     return res;
 
@@ -343,17 +343,6 @@ row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
     dlg_model_upd( dlg );
 
 } // row_set_inh()
-
-
-
-static gboolean
-row_is_editable( cfg_edit_dlg* dlg, GtkTreeIter* it )
-{
-    row_data* rdata = row_field_get_data( dlg, it );
-
-    return rdata ? !rdata->ro_ : FALSE;
-
-}
 
 
 
@@ -607,19 +596,18 @@ on_row_sel( GtkTreeView* tree,
 
 
     const row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata || rdata->ro_ )
-    {
-        gtk_entry_set_text( ent, "" );
-        return;
-    }
+//    if ( !rdata || rdata->ro_ )
+//    {
+//        gtk_entry_set_text( ent, "" );
+//        return;
+//    }
 
     gchar* val = row_field_get_val( dlg, &it );
     gtk_entry_set_text( ent, val );
     g_free( val );
 
-    gboolean editable = row_is_editable( dlg, &it );
-    gtk_editable_set_editable( GTK_EDITABLE( ent ), editable );
-    gtk_widget_set_sensitive( dlg->btn_apply_, editable );
+    gtk_editable_set_editable( GTK_EDITABLE( ent ), !rdata->ro_ );
+    gtk_widget_set_sensitive( dlg->btn_apply_, !rdata->ro_ );
 
 } // on_row_sel()
 
