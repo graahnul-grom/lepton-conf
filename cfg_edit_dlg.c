@@ -1496,24 +1496,35 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 //    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_qqq );
 //    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_qqq, FALSE, FALSE, 0 );
 
+
+
+
+
+    GtkWidget* box_row_0 = gtk_hbox_new( FALSE, 0 );
     // cwd label:
     //
-//    gchar str[] = "<u>eklmn!</u>";
-    gchar str[ PATH_MAX + 12 ] = "";
-    sprintf( str, "<b>cwd:</b> %s", cwd );
+    gchar str[] = "<b>cwd: </b>";
+//    gchar str_cwd[ PATH_MAX + 12 ] = "";
+//    sprintf( str_cwd, "<b>cwd:</b> %s", cwd );
 
     GtkWidget* lab_cwd = gtk_label_new( "" );
     gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
 //    gtk_label_set_justify( GTK_LABEL( lab_cwd ), GTK_JUSTIFY_LEFT );
 //    GtkWidget* ali = gtk_alignment_new( 0, 0, 0, 0 );
     gtk_misc_set_alignment( GTK_MISC( lab_cwd ), 0, 0 );
-//    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), lab_cwd );
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lab_cwd, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_row_0 ), lab_cwd, FALSE, FALSE, 0 );
+//    gtk_box_pack_start( GTK_BOX( vbox_bot ), lab_cwd, FALSE, FALSE, 0 );
 
 
-//    GtkWidget* lab_cwd2 = gtk_label_new( "" );
-//    gtk_label_set_markup( GTK_LABEL( lab_cwd2 ), str );
-//    gtk_box_pack_start( GTK_BOX( vbox_bot ), lab_cwd2, FALSE, FALSE, 0 );
+    GtkWidget* lab_cwd2 = gtk_label_new( "" );
+    gtk_label_set_markup( GTK_LABEL( lab_cwd2 ), cwd );
+    gtk_label_set_selectable( GTK_LABEL( lab_cwd2 ), TRUE );
+    gtk_box_pack_start( GTK_BOX( box_row_0 ), lab_cwd2, FALSE, FALSE, 0 );
+
+
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), box_row_0, FALSE, FALSE, 0 );
+
+
 
 
 
