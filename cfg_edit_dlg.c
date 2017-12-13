@@ -544,21 +544,29 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     if ( !rdata )
         return;
 
-    gchar* name = row_field_get_name( dlg, &it );
-    gchar* val = row_field_get_val( dlg, &it );
 
     gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
-    gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
-    gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), val );
+
+    if ( rdata->rtype_ == RT_KEY )
+    {
+        gchar* name = row_field_get_name( dlg, &it );
+        gchar* val = row_field_get_val( dlg, &it );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), val );
+        g_free( name );
+        g_free( val );
+    }
+    else
+    {
+        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), NULL );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), NULL );
+    }
 
     const gchar* fname = conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL );
     gtk_label_set_text( GTK_LABEL( dlg->lab_fname_ ), fname );
     gtk_widget_set_sensitive( dlg->btn_exted_, fname != NULL );
 
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
-
-    g_free( name );
-    g_free( val );
 
 } // on_row_sel()
 
@@ -1580,11 +1588,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->lab_fname_ = gtk_label_new( NULL );
     gtk_label_set_selectable( GTK_LABEL( dlg->lab_fname_ ), TRUE );
     gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_fname_, FALSE, FALSE, 0 );
-
-    // ext ed btn:
-    //
-//    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
-//    gtk_box_pack_start( GTK_BOX( lbox00 ), btn_exted, FALSE, FALSE, 10 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox00, FALSE, FALSE, 0 );
 
