@@ -1443,10 +1443,29 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
+    gchar* cwd = g_get_current_dir();
+
+
+
 
     // -------------------------- box (top):
     //
     GtkWidget* hbox_top = gtk_hbox_new( FALSE, 0 );
+
+
+    // cwd labels:
+    //
+    GtkWidget* lbox000 = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* lab_cwd0 = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( lab_cwd0 ), "<b>cwd: </b>" );
+    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd0, FALSE, FALSE, 0 );
+
+    GtkWidget* lab_cwd1 = gtk_label_new( cwd );
+    gtk_label_set_selectable( GTK_LABEL( lab_cwd1 ), TRUE );
+    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd1, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( hbox_top ), lbox000, FALSE, FALSE, 0 );
 
 
     // "Find:" label:
@@ -1481,14 +1500,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     GtkWidget* hbox2_top = gtk_hbox_new( FALSE, 0 );
 
 
-    gchar* cwd = g_get_current_dir();
-
 
         // TODO: set window title elsewhere:
         //
         gtk_window_set_title( GTK_WINDOW( dlg ),
                               g_strdup_printf( "gedacfged - %s", cwd ) );
         // g_free( cwd );
+
 
 
     // add hbox2_top to ca:
@@ -1584,22 +1602,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lboxBB ), dlg->btn_exted_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lboxBB, FALSE, FALSE, 0 );
-
-
-
-    // cwd labels:
-    //
-    GtkWidget* lbox000 = gtk_hbox_new( FALSE, 0 );
-
-    GtkWidget* lab_cwd0 = gtk_label_new( NULL );
-    gtk_label_set_markup( GTK_LABEL( lab_cwd0 ), "<b>cwd: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd0, FALSE, FALSE, 0 );
-
-    GtkWidget* lab_cwd1 = gtk_label_new( cwd );
-    gtk_label_set_selectable( GTK_LABEL( lab_cwd1 ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd1, FALSE, FALSE, 0 );
-
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox000, FALSE, FALSE, 0 );
 
 
 
