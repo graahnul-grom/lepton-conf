@@ -26,7 +26,7 @@ G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 // G_DEFINE_TYPE (GschemObjectPropertiesWidget, gschem_object_properties_widget, GSCHEM_TYPE_BIN);
 
 
-static void get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
+static void cfg_edit_dlg_get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
 {
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
 
@@ -41,7 +41,7 @@ static void get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec 
 }
 
 
-static void set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
+static void cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
 {
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
 
@@ -56,7 +56,7 @@ static void set_property( GObject* obj, guint id, const GValue* val, GParamSpec*
 }
 
 
-static void dispose( GObject* obj )
+static void cfg_edit_dlg_dispose( GObject* obj )
 {
 //    printf( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
 //        obj, obj ? obj->ref_count : 0 );
@@ -72,13 +72,13 @@ static void dispose( GObject* obj )
 
 static void cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 {
-    printf( "cfg_edit_dlg::cfg_edit_dlg_class_init()\n" );
+    printf( "cfg_edit_dlg::class_init()\n" );
 
     GObjectClass* gcls = G_OBJECT_CLASS( cls );
 
-    gcls->dispose      = &dispose;
-    gcls->get_property = &get_property;
-    gcls->set_property = &set_property;
+    gcls->dispose      = &cfg_edit_dlg_dispose;
+    gcls->get_property = &cfg_edit_dlg_get_property;
+    gcls->set_property = &cfg_edit_dlg_set_property;
 
     GParamSpec* spec = g_param_spec_int( "prop1",
         "",  // nick
@@ -110,8 +110,8 @@ struct _row_data
     const gchar* group_;
     const gchar* key_;
     const gchar* val_;
-    gboolean     ro_;  // read-only
-    gboolean     inh_; // inherited
+    gboolean     ro_;   // read-only
+    gboolean     inh_;  // inherited
     RowType      rtype_;
 };
 
@@ -121,7 +121,7 @@ enum
 {
     COL_NAME,
     COL_VAL,
-    COL_DATA,     // rdata: hidden
+    COL_DATA, // rdata: hidden
     NUM_COLS
 };
 
@@ -131,12 +131,12 @@ enum
 //
 static row_data*
 mk_rdata( EdaConfig*  ctx,
-         const gchar* group,
-         const gchar* key,
-         const gchar* val,
-         gboolean     ro,
-         gboolean     inh,
-         RowType      rtype )
+          const gchar* group,
+          const gchar* key,
+          const gchar* val,
+          gboolean     ro,
+          gboolean     inh,
+          RowType      rtype )
 {
     row_data* rdata = g_malloc( sizeof( row_data ) );
 
@@ -166,8 +166,10 @@ static const gchar*
 cfg_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
 
+
+
 static int tree_colid_name()  { return COL_NAME; }
-static int tree_colid_val()   { return COL_VAL; }
+static int tree_colid_val()   { return COL_VAL;  }
 static int tree_colid_data()  { return COL_DATA; }
 static int tree_cols_cnt()    { return NUM_COLS; }
 
@@ -231,7 +233,7 @@ dlg_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 // {ret}: iterator of currently selected row
 //
 static gboolean
-cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
+row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
 
@@ -248,14 +250,14 @@ cur_row_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
     return res;
 
-} // cur_row_get_iter()
+} // row_cur_get_iter()
 
 
 
-// {ret}: iterator of currently selected row
+// {ret}: parent iterator of currently selected row
 //
 static gboolean
-cur_row_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itParent )
+row_cur_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itParent )
 {
     GtkTreeModel* model = dlg_model( dlg );
 
@@ -266,7 +268,7 @@ cur_row_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itPare
     gtk_tree_path_up( path );
     return gtk_tree_model_get_iter( model, itParent, path );
 
-} // cur_row_get_parent_iter()
+} // row_cur_get_parent_iter()
 
 
 
@@ -339,7 +341,7 @@ row_set_field_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
 
 
 static void
-row_set_field_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
+row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
 {
     GtkTreeIter it = itCPY;
 
@@ -493,7 +495,7 @@ tree_add_col( cfg_edit_dlg*    dlg,
 
 
 static GtkTreeIter
-add_row( cfg_edit_dlg* dlg,
+row_add( cfg_edit_dlg* dlg,
          const gchar*  name,
          const gchar*  val,
          gpointer      rdata,
@@ -546,7 +548,7 @@ on_btn_apply( GtkButton* btn, gpointer* p )
 
 
     GtkTreeIter it;
-    if ( !cur_row_get_iter( dlg, &it ) )
+    if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
     row_data* rdata = row_get_field_data( dlg, &it );
@@ -577,13 +579,13 @@ on_btn_apply( GtkButton* btn, gpointer* p )
 
     // mark current key as not inherited:
     //
-    row_set_field_inh( dlg, it, FALSE );
+    row_set_inh( dlg, it, FALSE );
 
     // mark parent group as not inherited:
     //
     GtkTreeIter itParent;
-    if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
-        row_set_field_inh( dlg, itParent, FALSE );
+    if ( row_cur_get_parent_iter( dlg, &it, &itParent ) )
+        row_set_inh( dlg, itParent, FALSE );
 
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
@@ -612,7 +614,7 @@ on_row_sel( GtkTreeView* tree,
 
 
     GtkTreeIter it;
-    cur_row_get_iter( dlg, &it );
+    row_cur_get_iter( dlg, &it );
 
 
     const row_data* rdata = row_get_field_data( dlg, &it );
@@ -646,7 +648,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     //
     GtkTreePath* path = NULL;
     GtkTreeIter it;
-    if ( cur_row_get_iter( dlg, &it ) )
+    if ( row_cur_get_iter( dlg, &it ) )
         //
         // TODO: free path:
         //
@@ -690,7 +692,7 @@ on_btn_exted( GtkButton* btn, gpointer* p )
 
 
     GtkTreeIter it;
-    if ( !cur_row_get_iter( dlg, &it ) )
+    if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
 
@@ -1128,7 +1130,7 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
         return;
 
     GtkTreeIter it;
-    if ( !cur_row_get_iter( dlg, &it ) )
+    if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
     row_data* rdata = row_get_field_data( dlg, &it );
@@ -1151,13 +1153,13 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
         //
         // mark current key as not inherited:
         //
-        row_set_field_inh( dlg, it, FALSE );
+        row_set_inh( dlg, it, FALSE );
         //
         // mark parent group as not inherited:
         //
         GtkTreeIter itParent;
-        if ( cur_row_get_parent_iter( dlg, &it, &itParent ) )
-            row_set_field_inh( dlg, itParent, FALSE );
+        if ( row_cur_get_parent_iter( dlg, &it, &itParent ) )
+            row_set_inh( dlg, itParent, FALSE );
         //
         //
     }
@@ -1174,7 +1176,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
         return;
 
     GtkTreeIter it;
-    if ( !cur_row_get_iter( dlg, &it ) )
+    if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
     row_data* rdata = row_get_field_data( dlg, &it );
@@ -1205,7 +1207,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
             GtkTreeIter it_grp_tstrore = dlg_tstore_iter( dlg, it );
 
-            GtkTreeIter it_new = add_row( dlg,
+            GtkTreeIter it_new = row_add( dlg,
                                           key,
                                           val,
                                           rdata_new,
@@ -1233,15 +1235,15 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
             // mark current key as not inherited:
             //
             GtkTreeIter it_cur;
-            cur_row_get_iter( dlg, &it_cur );
+            row_cur_get_iter( dlg, &it_cur );
 
-            row_set_field_inh( dlg, it_cur, FALSE );
+            row_set_inh( dlg, it_cur, FALSE );
             //
             // mark parent group as not inherited:
             //
             GtkTreeIter it_parent;
-            if ( cur_row_get_parent_iter( dlg, &it_cur, &it_parent ) )
-                row_set_field_inh( dlg, it_parent, FALSE );
+            if ( row_cur_get_parent_iter( dlg, &it_cur, &it_parent ) )
+                row_set_inh( dlg, it_parent, FALSE );
             //
             //
 
@@ -1324,7 +1326,7 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
 
     GtkTreeIter it;
-    if ( !cur_row_get_iter( dlg, &it ) )
+    if ( !row_cur_get_iter( dlg, &it ) )
         return TRUE;
 
 
@@ -1443,7 +1445,7 @@ cfg_load_keys( EdaConfig*    ctx,
                                     RT_KEY          // rtype
                                   );
 
-        add_row( dlg,
+        row_add( dlg,
                  name,
                  val,
                  rdata,
@@ -1517,7 +1519,7 @@ cfg_load_groups( EdaConfig*    ctx,
 
         gchar* display_name = g_strdup_printf( "[%s]", name );
 
-        GtkTreeIter it = add_row( dlg,
+        GtkTreeIter it = row_add( dlg,
                                   display_name,
                                   // name, // name
                                   "",      // val
@@ -1536,7 +1538,7 @@ cfg_load_groups( EdaConfig*    ctx,
 
         // mark group itself as inh if all children are inh:
         //
-        row_set_field_inh( dlg, it, inh_all );
+        row_set_inh( dlg, it, inh_all );
 
     } // for groups
 
@@ -1581,7 +1583,7 @@ cfg_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                                 RT_CTX // rtype
                               );
 
-    GtkTreeIter it = add_row( dlg,
+    GtkTreeIter it = row_add( dlg,
                               name,  // name
                               str,   // val
                               rdata, // rdata
