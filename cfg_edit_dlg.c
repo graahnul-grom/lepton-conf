@@ -544,6 +544,8 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     gchar* name = row_field_get_name( dlg, &it );
     gchar* val = row_field_get_val( dlg, &it );
 
+    gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
+
     printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
     g_free( name );
@@ -1361,7 +1363,7 @@ conf_chg_val( row_data* rdata, const gchar* txt )
 static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
-    printf( "cfg_edit_dlg_init()\n" );
+    printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
 
     dlg->prop1_ = 5;
 
@@ -1500,29 +1502,36 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-    GtkWidget* box_row_0 = gtk_hbox_new( FALSE, 0 );
-    // cwd label:
+
+    // cwd labels:
     //
-    gchar str[] = "<b>cwd: </b>";
-//    gchar str_cwd[ PATH_MAX + 12 ] = "";
-//    sprintf( str_cwd, "<b>cwd:</b> %s", cwd );
+    GtkWidget* lbox0 = gtk_hbox_new( FALSE, 0 );
 
-    GtkWidget* lab_cwd = gtk_label_new( "" );
-    gtk_label_set_markup( GTK_LABEL( lab_cwd ), str );
-//    gtk_label_set_justify( GTK_LABEL( lab_cwd ), GTK_JUSTIFY_LEFT );
-//    GtkWidget* ali = gtk_alignment_new( 0, 0, 0, 0 );
-    gtk_misc_set_alignment( GTK_MISC( lab_cwd ), 0, 0 );
-    gtk_box_pack_start( GTK_BOX( box_row_0 ), lab_cwd, FALSE, FALSE, 0 );
-//    gtk_box_pack_start( GTK_BOX( vbox_bot ), lab_cwd, FALSE, FALSE, 0 );
+    GtkWidget* lab_cwd0 = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( lab_cwd0 ), "<b>cwd: </b>" );
+    gtk_box_pack_start( GTK_BOX( lbox0 ), lab_cwd0, FALSE, FALSE, 0 );
 
+    GtkWidget* lab_cwd1 = gtk_label_new( cwd );
+    gtk_label_set_selectable( GTK_LABEL( lab_cwd1 ), TRUE );
+    gtk_box_pack_start( GTK_BOX( lbox0 ), lab_cwd1, FALSE, FALSE, 0 );
 
-    GtkWidget* lab_cwd2 = gtk_label_new( "" );
-    gtk_label_set_markup( GTK_LABEL( lab_cwd2 ), cwd );
-    gtk_label_set_selectable( GTK_LABEL( lab_cwd2 ), TRUE );
-    gtk_box_pack_start( GTK_BOX( box_row_0 ), lab_cwd2, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox0, FALSE, FALSE, 0 );
 
 
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), box_row_0, FALSE, FALSE, 0 );
+
+    // name labels:
+    //
+    GtkWidget* lbox1 = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* lab_name0 = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( lab_name0 ), "<b>name: </b>" );
+    gtk_box_pack_start( GTK_BOX( lbox1 ), lab_name0, FALSE, FALSE, 0 );
+
+    dlg->lab_name_ = gtk_label_new( NULL );
+    gtk_label_set_selectable( GTK_LABEL( dlg->lab_name_ ), TRUE );
+    gtk_box_pack_start( GTK_BOX( lbox1 ), dlg->lab_name_, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox1, FALSE, FALSE, 0 );
 
 
 
@@ -1618,6 +1627,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+
+    // select row:
+    //
+    GtkTreePath* path = gtk_tree_path_new_from_string( "0" );
+    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+    gtk_tree_path_free( path );
 
 
     g_free( cwd );
