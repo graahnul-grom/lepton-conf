@@ -994,6 +994,7 @@ dlg_edit_val_run( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
         title ? title : "Edit value:",
         GTK_WINDOW( dlg ),
         GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
+//        GTK_DIALOG_DESTROY_WITH_PARENT,
         GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
         GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
         NULL );
@@ -1010,8 +1011,28 @@ dlg_edit_val_run( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
     gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
 
+
+
+    gtk_dialog_set_alternative_button_order(GTK_DIALOG(vdlg),
+                                            GTK_RESPONSE_ACCEPT,
+                                            GTK_RESPONSE_REJECT,
+                                            -1);
+    gtk_dialog_set_default_response (GTK_DIALOG (vdlg),
+                                     GTK_RESPONSE_ACCEPT);
+
+//    g_signal_connect_swapped (vdlg,
+//                                "response",
+//                                G_CALLBACK (gtk_widget_destroy),
+//                                vdlg);
+
+
     gtk_widget_show_all( vdlg );
     gtk_widget_set_size_request( vdlg, 300, -1 );
+
+
+
+
+
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
     printf( "  edit_val_dlg(): resp: %d\n", res );
@@ -1424,18 +1445,18 @@ load_keys( EdaConfig*    ctx,
 
 static void
 load_groups( EdaConfig*    ctx,
-//             const gchar*  fname,
+             const gchar*  fname,
              cfg_edit_dlg* dlg,
              GtkTreeIter   itParent,
              gboolean      file_writable )
 {
-//    if ( fname != NULL )
-//    {
+    if ( fname != NULL )
+    {
         GError* err = NULL;
         gboolean res = eda_config_load( ctx, &err );
         if ( !res )
         {
-            printf( " >> load_groups(): !eda_config_load()\n" );
+            printf( " >> load_groups(): !eda_config_load( \"%s\" )\n", fname );
 
             if ( err != NULL )
             {
@@ -1444,9 +1465,9 @@ load_groups( EdaConfig*    ctx,
 
             g_clear_error( &err );
 
-            // return;
+            return;
         }
-//    }
+    }
 
     gsize len = 0;
     gchar** pp = eda_config_get_groups( ctx, &len );
@@ -1550,8 +1571,8 @@ load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                               NULL
                             );
 
-    load_groups( ctx, dlg, it, wok );
-//    load_groups( ctx, fname, dlg, it, wok );
+//    load_groups( ctx, dlg, it, wok );
+    load_groups( ctx, fname, dlg, it, wok );
 
 } // load_ctx()
 
