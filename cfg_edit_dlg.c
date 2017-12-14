@@ -563,8 +563,10 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     }
 
     const gchar* fname = conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL );
-    gchar* str = g_strdup_printf( "<a href=''>%s</a>", fname ? fname : "" );
-    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str );
+    gchar* str = NULL;
+    if ( fname != NULL )
+        str = g_strdup_printf( "<a href='%s'>%s</a>", fname, fname );
+    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str ? str : "" );
     g_free( str );
 
 //    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
@@ -1568,7 +1570,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lbox00 ), lab_fname0, FALSE, FALSE, 0 );
 
     dlg->lab_fname_ = gtk_label_new( NULL );
-    gtk_label_set_selectable( GTK_LABEL( dlg->lab_fname_ ), TRUE );
+//    gtk_label_set_selectable( GTK_LABEL( dlg->lab_fname_ ), TRUE );
     gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
     gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_fname_, FALSE, FALSE, 0 );
 
