@@ -345,6 +345,61 @@ row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
+
+
+// [it_result]: will be set to found row
+// {ret}: TRUE if cur row is grp and it has child row with [key]
+//
+static gboolean
+row_cur_grp_has_child_key( cfg_edit_dlg* dlg,
+                           const gchar* key,
+                           GtkTreeIter* it_result )
+{
+    GtkTreeIter it_parent;
+    if ( !row_cur_get_iter( dlg, &it_parent ) )
+        return FALSE;
+
+    row_data* rdata = row_field_get_data( dlg, &it_parent );
+    if ( !rdata )
+        return FALSE;
+
+    if ( rdata->rtype_ != RT_GRP )
+        return FALSE;
+
+    if ( !gtk_tree_model_iter_has_child( dlg->model_, &it_parent ) ) // // //
+        return FALSE;
+
+    GtkTreeIter it_child;
+    gboolean res = gtk_tree_model_iter_children( dlg->model_,
+                                                 &it_child,
+                                                 &it_parent );
+    const gchar* name = NULL;
+    gboolean has = FALSE;
+
+    while ( res )
+    {
+        name = row_field_get_name( dlg, &it_child );
+        printf( " >> row_cur_grp_has_child_key(): next: [%s]\n", name );
+
+        if ( g_strcmp0( name, key ) == 0 )
+        {
+            has = TRUE;
+            break;
+        }
+
+        res = gtk_tree_model_iter_next( dlg->model_, &it_child );
+    }
+
+    return has;
+
+} // row_cur_grp_has_child_key()
+
+
+
+
+
+
+
 static void
 row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
 {
@@ -820,19 +875,14 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
         g_free( txt );
 
-        // TODO: unset [inh]: [R] => extract
-        //
-        // mark current key as not inherited:
+
+        // unset inherited:
         //
         row_set_inh( dlg, it, FALSE );
-        //
-        // mark parent group as not inherited:
-        //
-        GtkTreeIter itParent;
-        if ( row_cur_get_parent_iter( dlg, &it, &itParent ) )
-            row_set_inh( dlg, itParent, FALSE );
-        //
-        //
+        GtkTreeIter it_parent;
+        if ( row_cur_get_parent_iter( dlg, &it, &it_parent ) )
+            row_set_inh( dlg, it_parent, FALSE );
+
     }
 
 } // on_mitem_edit()
@@ -860,6 +910,20 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     if ( run_dlg_add_val( dlg, NULL, &key, &val ) )
     {
         // printf( "on_mitem_add(): [%s] => [%s]\n", key, val );
+
+        GtkTreeIter it_existing;
+        if ( row_cur_grp_has_child_key( dlg, key, &it_existing ) )
+        {
+            printf( "on_mitem_add(): [%s] EXISTS\n", key );
+            return;
+        }
+
+//        if ( conf_has_key( rdata->ctx_, rdata->group_, key ) )
+//        {
+//            conf_chg_val( rdata, val );
+//            return;
+//        }
+
 
         if ( conf_add_val( rdata, key, val ) )
         {
@@ -910,8 +974,8 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
             // unset inherited:
             //
             GtkTreeIter it_cur;
-            row_cur_get_iter( dlg, &it_cur );
-            row_set_inh( dlg, it_cur, FALSE );
+            if ( row_cur_get_iter( dlg, &it_cur ) )
+                row_set_inh( dlg, it_cur, FALSE );
             GtkTreeIter it_parent;
             if ( row_cur_get_parent_iter( dlg, &it_cur, &it_parent ) )
                 row_set_inh( dlg, it_parent, FALSE );
@@ -1324,6 +1388,24 @@ conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 
 
 
+/*
+static gboolean
+conf_has_key( EdaConfig* ctx, const gchar* grp, const gchar* key )
+{
+    GError* err = NULL;
+    gchar* val = eda_config_get_string( ctx, grp, key, &err );
+
+    if ( err != NULL )
+        printf( " >> conf_has_key(): err: %s\n", err->message );
+
+    g_clear_error( &err );
+    g_free( val );
+
+    return val != NULL;
+}
+*/
+
+
 static gboolean
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 {
@@ -1356,7 +1438,7 @@ conf_chg_val( row_data* rdata, const gchar* txt )
     gboolean res = eda_config_save( rdata->ctx_, &err );
     if ( !res )
     {
-        printf( " >> cfg_edit_dlg_chg_val( %s ): !eda_config_save()\n",
+        printf( " >> conf_chg_val( %s ): !eda_config_save()\n",
                 txt );
         if ( err != NULL )
             printf( "    err: %s\n", err->message );
@@ -1372,13 +1454,15 @@ conf_chg_val( row_data* rdata, const gchar* txt )
                                             &err );
     if ( new_val == NULL )
     {
-        printf( " >> cfg_edit_dlg_chg_val(): !eda_config_get_string( %s )\n",
+        printf( " >> conf_chg_val(): !eda_config_get_string( %s )\n",
                 rdata->key_ );
         if ( err != NULL )
             printf( "    err: %s\n", err->message );
         g_clear_error( &err );
         return FALSE;
     }
+
+    g_free( new_val );
 
     return TRUE;
 
@@ -1395,11 +1479,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->prop1_ = 5;
 
 
-    // store:
+    // tree store:
     //
     dlg->store_ = gtk_tree_store_new(
         tree_cols_cnt(),
-          G_TYPE_STRING     // name
+          G_TYPE_STRING   // name
         , G_TYPE_STRING   // val
         , G_TYPE_POINTER  // rdata
     );
@@ -1407,7 +1491,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
 
 
-    // view:
+    // tree view:
     //
     dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
     dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
