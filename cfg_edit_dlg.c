@@ -1512,12 +1512,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
         , G_TYPE_POINTER  // rdata
     );
 
-    dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
+    // dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
 
 
     // tree view:
     //
-    dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
+    // dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
+    dlg->tree_w_ = gtk_tree_view_new_with_model( GTK_TREE_MODEL(dlg->store_) );
     dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
 
@@ -1534,7 +1535,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
     conf_load( dlg );
-    tree_filter_setup( dlg );
+    // tree_filter_setup( dlg );
 
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
