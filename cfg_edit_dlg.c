@@ -188,13 +188,6 @@ dlg_model( cfg_edit_dlg* dlg )
 
 
 
-static void
-dlg_model_upd( cfg_edit_dlg* dlg )
-{
-//    dlg_model_set( dlg, gtk_tree_view_get_model( dlg->tree_v_ ) );
-}
-
-
 
 // {ret}: tree store iter corresponding to model's iter [it]
 //
@@ -323,8 +316,6 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
                         tree_colid_val(), val,
                         -1 );
 
-    dlg_model_upd( dlg );
-
 } // row_field_set_val()
 
 
@@ -413,8 +404,6 @@ row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
         return;
 
     rdata->inh_ = val;
-
-    dlg_model_upd( dlg );
 
 } // row_set_inh()
 
@@ -505,8 +494,6 @@ tree_filter_setup( cfg_edit_dlg* p )
 
     gtk_tree_view_set_model( dlg->tree_v_, modf );
 
-    dlg_model_upd( dlg );
-
 } // tree_filter_setup()
 
 
@@ -519,9 +506,6 @@ tree_filter_remove( cfg_edit_dlg* p )
         return;
 
     gtk_tree_view_set_model( dlg->tree_v_, GTK_TREE_MODEL( dlg->store_ ) );
-
-    dlg_model_upd( dlg );
-
 }
 
 
@@ -567,8 +551,6 @@ row_add( cfg_edit_dlg* dlg,
                         tree_colid_val(),      val,
                         tree_colid_data(),     rdata,
                         -1 );
-
-    dlg_model_upd( dlg );
 
     return it;
 }
