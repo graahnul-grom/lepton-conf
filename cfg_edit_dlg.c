@@ -920,9 +920,25 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
             gtk_tree_view_expand_to_path( dlg->tree_v_, path );
             gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-            gtk_tree_path_free( path );
 
-            return; // TODO: change val
+            GtkTreeIter it_child;
+            GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+            gtk_tree_model_get_iter( mod, &it_child, path );
+
+            row_data* rdata_child = row_field_get_data( dlg, &it_child );
+
+            if ( conf_chg_val( rdata_child, val ) )
+            {
+                row_field_set_val( dlg, it_child, val );
+
+                // unset inherited:
+                //
+                row_set_inh( dlg, it_child, FALSE );
+                row_set_inh( dlg, it, FALSE );
+            }
+
+            gtk_tree_path_free( path );
+            return;
         }
 
 
