@@ -179,27 +179,6 @@ static int tree_cols_cnt()    { return NUM_COLS; }
 
 
 
-static GtkTreeModel*
-dlg_model( cfg_edit_dlg* dlg )
-{
-//    return gtk_tree_view_get_model( dlg->tree_v_ );
-    return dlg->model_;
-}
-
-static void
-dlg_model_set( cfg_edit_dlg* dlg, GtkTreeModel* model )
-{
-    dlg->model_ = model;
-}
-
-static void
-dlg_model_upd( cfg_edit_dlg* dlg )
-{
-    dlg_model_set( dlg, gtk_tree_view_get_model( dlg->tree_v_ ) );
-}
-
-
-
 // {ret}: tree store iter corresponding to model's iter [it]
 //
 static GtkTreeIter
@@ -217,7 +196,7 @@ row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 
     // NOTE: no filter model set:
     //
-    GtkTreeModel* model = dlg_model( dlg );
+    GtkTreeModel* model = gtk_tree_view_get_model( dlg->tree_v_ );
     GtkTreeModel* modelStore = GTK_TREE_MODEL( dlg->store_ );
     if ( model == modelStore )
         return it;
@@ -244,9 +223,6 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
     GtkTreeModel* model = NULL;
     gboolean res = gtk_tree_selection_get_selected( sel, &model, it );
-
-    dlg_model_set( dlg, model );
-
 
 //    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
     if ( !res )
@@ -283,9 +259,8 @@ row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     row_data* rdata = NULL;
 
-//    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-//    gtk_tree_model_get( mod, it, tree_colid_data(), &rdata, -1 );
-    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_data(), &rdata, -1 );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_get( mod, it, tree_colid_data(), &rdata, -1 );
 
     return rdata;
 
@@ -302,7 +277,6 @@ row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     gtk_tree_model_get( mod, it, tree_colid_val(), &val, -1 );
-//    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_val(), &val, -1 );
 
     return val;
 }
@@ -330,8 +304,6 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
                         tree_colid_val(), val,
                         -1 );
 
-    dlg_model_upd( dlg );
-
 } // row_field_set_val()
 
 
@@ -344,7 +316,6 @@ row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
     gchar* val = NULL;
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     gtk_tree_model_get( mod, it, tree_colid_name(), &val, -1 );
-//    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_name(), &val, -1 );
 
     return val;
 }
@@ -421,8 +392,6 @@ row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
 
     rdata->inh_ = val;
 
-    dlg_model_upd( dlg );
-
 } // row_set_inh()
 
 
@@ -437,8 +406,6 @@ static void tree_cell_draw( GtkTreeViewColumn* col,
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
-
-    dlg_model_set( dlg, model );
 
     if ( ren != dlg->ren_txt_ )
         return;
@@ -473,19 +440,24 @@ tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
     if ( !dlg )
         return FALSE;
 
-    dlg_model_set( dlg, model );
+    // NOTE: models are different:
+    //
+    // printf( " >> tree_filter( model ):              model: %p\n",
+    //         model );
+    // printf( " >> tree_filter(): gtk_tree_view_get_model(): %p\n",
+    //         gtk_tree_view_get_model( dlg->tree_v_ ) );
 
-//    row_data* rdata = NULL;
-    // OK: gtk_tree_model_get( model, it, colid_data(), &rdata, -1 );
-//    gtk_tree_model_get( dlg_model( dlg ), it, colid_data(), &rdata, -1 );
+    row_data* rdata = NULL;
+    gtk_tree_model_get( model, it, tree_colid_data(), &rdata, -1 );
 
-    const row_data* rdata = row_field_get_data( dlg, it );
+    // FAIL: const row_data* rdata = row_field_get_data( dlg, it );
+
     if ( !rdata )
         return FALSE;
 
     if ( !dlg->showinh_ )
         return !rdata->inh_;
-//    return FALSE;
+
     return TRUE;
 
 } // tree_filter()
@@ -499,7 +471,8 @@ tree_filter_setup( cfg_edit_dlg* p )
     if ( !dlg )
         return;
 
-    GtkTreeModel* modf = gtk_tree_model_filter_new( dlg_model( dlg ), NULL );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModel* modf = gtk_tree_model_filter_new( mod, NULL );
 
     gtk_tree_model_filter_set_visible_func(
         GTK_TREE_MODEL_FILTER( modf ),
@@ -508,8 +481,6 @@ tree_filter_setup( cfg_edit_dlg* p )
         NULL);
 
     gtk_tree_view_set_model( dlg->tree_v_, modf );
-
-    dlg_model_upd( dlg );
 
 } // tree_filter_setup()
 
@@ -523,9 +494,6 @@ tree_filter_remove( cfg_edit_dlg* p )
         return;
 
     gtk_tree_view_set_model( dlg->tree_v_, GTK_TREE_MODEL( dlg->store_ ) );
-
-    dlg_model_upd( dlg );
-
 }
 
 
@@ -571,8 +539,6 @@ row_add( cfg_edit_dlg* dlg,
                         tree_colid_val(),      val,
                         tree_colid_data(),     rdata,
                         -1 );
-
-    dlg_model_upd( dlg );
 
     return it;
 }
@@ -654,10 +620,13 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     GtkTreePath* path = NULL;
     GtkTreeIter it;
     if ( row_cur_get_iter( dlg, &it ) )
+    {
         //
         // TODO: free path:
         //
-        path = gtk_tree_model_get_path( dlg_model( dlg ), &it );
+        GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+        path = gtk_tree_model_get_path( mod, &it );
+    }
 
 
     tree_filter_remove( dlg );
@@ -730,7 +699,8 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 //    printf( " >> cfg_edit_dlg_on_btn_showinh(): %d\n", show );
 
     dlg->showinh_ = show;
-    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( dlg_model( dlg ) ) );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
 
@@ -1088,7 +1058,7 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 
 
     GtkTreePath* path_cur = NULL;
-    path_cur = gtk_tree_model_get_path( dlg_model( dlg ), &it );
+    path_cur = gtk_tree_model_get_path( gtk_tree_view_get_model( dlg->tree_v_ ), &it );
 
     GtkTreePath* path_rmb = NULL;
     gboolean onrow =
@@ -1512,12 +1482,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
         , G_TYPE_POINTER  // rdata
     );
 
-    dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
+    // dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
 
 
     // tree view:
     //
-    dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
+    // dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
+    dlg->tree_w_ = gtk_tree_view_new_with_model( GTK_TREE_MODEL(dlg->store_) );
     dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
 
