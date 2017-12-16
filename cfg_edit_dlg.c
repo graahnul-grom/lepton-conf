@@ -370,17 +370,25 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
 
 
 static void
-row_set_inh( cfg_edit_dlg* dlg, GtkTreeIter itCPY, gboolean val )
+row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
 {
-    GtkTreeIter it = itCPY;
-
     row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
-    rdata->inh_ = val;
+    g_assert( rdata->rtype_ == RT_KEY && " >> row_key_unset_inh(): !key" );
 
-} // row_set_inh()
+    rdata->inh_ = FALSE;
+
+    GtkTreeIter it_parent;
+    if ( row_cur_get_parent_iter( dlg, &it, &it_parent ) )
+    {
+        rdata = row_field_get_data( dlg, &it_parent );
+        if ( rdata )
+            rdata->inh_ = FALSE;
+    }
+
+} // row_unset_inh()
 
 
 
@@ -843,14 +851,9 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
         g_free( txt );
 
-
         // unset inherited:
         //
-        row_set_inh( dlg, it, FALSE );
-        GtkTreeIter it_parent;
-        if ( row_cur_get_parent_iter( dlg, &it, &it_parent ) )
-            row_set_inh( dlg, it_parent, FALSE );
-
+        row_key_unset_inh( dlg, it );
     }
 
 } // on_mitem_edit()
@@ -898,8 +901,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
                 // unset inherited:
                 //
-                row_set_inh( dlg, it_child, FALSE );
-                row_set_inh( dlg, it, FALSE );
+                row_key_unset_inh( dlg, it_child );
             }
 
             gtk_tree_path_free( path );
@@ -957,10 +959,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
             //
             GtkTreeIter it_cur;
             if ( row_cur_get_iter( dlg, &it_cur ) )
-                row_set_inh( dlg, it_cur, FALSE );
-            GtkTreeIter it_parent;
-            if ( row_cur_get_parent_iter( dlg, &it_cur, &it_parent ) )
-                row_set_inh( dlg, it_parent, FALSE );
+                row_key_unset_inh( dlg, it_cur );
 
         } // if conf_add_val()
 
