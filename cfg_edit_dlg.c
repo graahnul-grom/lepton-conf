@@ -284,16 +284,13 @@ row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 static void
-row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter itCPY, const gchar* val )
+row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
 {
-    GtkTreeIter it = itCPY;
-
     row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
-    // TODO: free val_
-    //
+    g_free( rdata->val_ );
     rdata->val_ = g_strdup( val );
 
 
