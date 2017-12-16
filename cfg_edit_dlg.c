@@ -350,10 +350,10 @@ row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
 // [it_result]: will be set to found row
 // {ret}: TRUE if cur row is grp and it has child row with [key]
 //
-static gboolean
+//static gboolean
+static GtkTreePath*
 row_cur_grp_has_child_key( cfg_edit_dlg* dlg,
-                           const gchar* key,
-                           GtkTreeIter* it_result )
+                           const gchar* key )
 {
     GtkTreeIter it_parent;
     if ( !row_cur_get_iter( dlg, &it_parent ) )
@@ -373,24 +373,23 @@ row_cur_grp_has_child_key( cfg_edit_dlg* dlg,
     gboolean res = gtk_tree_model_iter_children( dlg->model_,
                                                  &it_child,
                                                  &it_parent );
-    const gchar* name = NULL;
-    gboolean has = FALSE;
+    const gchar* kname = NULL;
 
     while ( res )
     {
-        name = row_field_get_name( dlg, &it_child );
-        printf( " >> row_cur_grp_has_child_key(): next: [%s]\n", name );
+        kname = row_field_get_name( dlg, &it_child );
+        // printf( " >> row_cur_grp_has_child_key(): next: [%s]\n", kname );
 
-        if ( g_strcmp0( name, key ) == 0 )
+        if ( g_strcmp0( kname, key ) == 0 )
         {
-            has = TRUE;
-            break;
+            gchar* str = gtk_tree_model_get_string_from_iter( dlg->model_, &it_child );
+            return gtk_tree_path_new_from_string( str );
         }
 
         res = gtk_tree_model_iter_next( dlg->model_, &it_child );
     }
 
-    return has;
+    return NULL;
 
 } // row_cur_grp_has_child_key()
 
@@ -863,13 +862,13 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
     if ( !rdata )
         return;
 
-    printf( "cfg_edit_dlg_on_mitem_edit(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
+//    printf( "cfg_edit_dlg_on_mitem_edit(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
 
     gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
 
     if ( txt && conf_chg_val( rdata, txt ) )
     {
-        printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
+//        printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
 
         row_field_set_val( dlg, it, txt );
 
@@ -911,10 +910,33 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     {
         // printf( "on_mitem_add(): [%s] => [%s]\n", key, val );
 
-        GtkTreeIter it_existing;
-        if ( row_cur_grp_has_child_key( dlg, key, &it_existing ) )
+//        GtkTreeIter it_existing;
+//        gchar* str;
+        GtkTreePath* path = row_cur_grp_has_child_key( dlg, key );
+
+        if ( path != NULL )
         {
-            printf( "on_mitem_add(): [%s] EXISTS\n", key );
+            printf( "on_mitem_add(): [%s] EXISTS; path: %s\n", key,
+                gtk_tree_path_to_string( path ) );
+
+//            GtkTreePath* path = gtk_tree_path_new_from_string( str );
+//            GtkTreeIter tsi = row_get_tstore_iter( dlg, it_existing );
+//            GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+//            GtkTreeModel* fmod = gtk_tree_model_filter_get_model( mod );
+//            GtkTreeModelFilter* fmod = GTK_TREE_MODEL_FILTER( mod );
+//            GtkTreePath* path = gtk_tree_model_get_path( GTK_TREE_MODEL( fmod ),
+//            GtkTreePath* path = gtk_tree_model_get_path( mod,
+//                                                         &tsi );
+//                                                         &it_existing );
+//            if ( path )
+//            {
+                gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+                gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+                gtk_tree_path_free( path );
+//            }
+
+            // row_field_set_val( dlg, it_existing, val );
+
             return;
         }
 
