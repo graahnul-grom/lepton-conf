@@ -1253,7 +1253,7 @@ conf_load_groups( EdaConfig*    ctx,
 
         // mark group itself as inh if all children are inh:
         //
-        row_set_inh( dlg, it, inh_all );
+        rdata->inh_ = inh_all;
 
     } // for groups
 
