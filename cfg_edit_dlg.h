@@ -47,7 +47,7 @@ struct _cfg_edit_dlg
     int prop1_;
 
     GtkTreeStore* store_;
-    GtkTreeModel* model_;   // active model
+    // GtkTreeModel* model_;   // active model
 
     GtkWidget*   tree_w_;
     GtkTreeView* tree_v_;
