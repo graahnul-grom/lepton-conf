@@ -186,11 +186,7 @@ dlg_model( cfg_edit_dlg* dlg )
 //    return dlg->model_;
 }
 
-static void
-dlg_model_set( cfg_edit_dlg* dlg, GtkTreeModel* model )
-{
-//    dlg->model_ = model;
-}
+
 
 static void
 dlg_model_upd( cfg_edit_dlg* dlg )
@@ -244,9 +240,6 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
     GtkTreeModel* model = NULL;
     gboolean res = gtk_tree_selection_get_selected( sel, &model, it );
-
-    dlg_model_set( dlg, model );
-
 
 //    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
     if ( !res )
@@ -438,8 +431,6 @@ static void tree_cell_draw( GtkTreeViewColumn* col,
     if ( !dlg )
         return;
 
-    dlg_model_set( dlg, model );
-
     if ( ren != dlg->ren_txt_ )
         return;
 
@@ -472,8 +463,6 @@ tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return FALSE;
-
-    dlg_model_set( dlg, model );
 
     // NOTE: models are different:
     //
