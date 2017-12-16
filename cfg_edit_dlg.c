@@ -282,6 +282,9 @@ static row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     row_data* rdata = NULL;
+
+//    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+//    gtk_tree_model_get( mod, it, tree_colid_data(), &rdata, -1 );
     gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_data(), &rdata, -1 );
 
     return rdata;
@@ -336,7 +339,9 @@ static gchar*
 row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     gchar* val = NULL;
-    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_name(), &val, -1 );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_get( mod, it, tree_colid_name(), &val, -1 );
+//    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_name(), &val, -1 );
 
     return val;
 }
