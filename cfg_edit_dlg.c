@@ -299,7 +299,10 @@ static gchar*
 row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     gchar* val = NULL;
-    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_val(), &val, -1 );
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_get( mod, it, tree_colid_val(), &val, -1 );
+//    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_val(), &val, -1 );
 
     return val;
 }
