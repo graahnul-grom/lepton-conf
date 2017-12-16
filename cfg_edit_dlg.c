@@ -234,25 +234,6 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
-// {ret}: parent iterator of currently selected row
-//
-static gboolean
-row_cur_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itParent )
-{
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-
-    // TODO: free path:
-    //
-    GtkTreePath* path = gtk_tree_model_get_path( mod, it );
-
-    gtk_tree_path_up( path );
-    return gtk_tree_model_get_iter( mod, itParent, path );
-
-} // row_cur_get_parent_iter()
-
-
-
-
 // {post}: caller must free {ret}
 //
 static gchar*
@@ -380,8 +361,13 @@ row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
 
     rdata->inh_ = FALSE;
 
+
     GtkTreeIter it_parent;
-    if ( row_cur_get_parent_iter( dlg, &it, &it_parent ) )
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+    gtk_tree_path_up( path );
+    if ( gtk_tree_model_get_iter( mod, &it_parent, path ) )
+//    if ( row_cur_get_parent_iter( dlg, &it, &it_parent ) )
     {
         rdata = row_field_get_data( dlg, &it_parent );
         if ( rdata )
