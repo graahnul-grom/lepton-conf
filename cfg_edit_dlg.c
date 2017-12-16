@@ -179,16 +179,6 @@ static int tree_cols_cnt()    { return NUM_COLS; }
 
 
 
-static GtkTreeModel*
-dlg_model( cfg_edit_dlg* dlg )
-{
-    return gtk_tree_view_get_model( dlg->tree_v_ );
-//    return dlg->model_;
-}
-
-
-
-
 // {ret}: tree store iter corresponding to model's iter [it]
 //
 static GtkTreeIter
@@ -206,7 +196,7 @@ row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 
     // NOTE: no filter model set:
     //
-    GtkTreeModel* model = dlg_model( dlg );
+    GtkTreeModel* model = gtk_tree_view_get_model( dlg->tree_v_ );
     GtkTreeModel* modelStore = GTK_TREE_MODEL( dlg->store_ );
     if ( model == modelStore )
         return it;
@@ -269,9 +259,8 @@ row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
     row_data* rdata = NULL;
 
-//    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-//    gtk_tree_model_get( mod, it, tree_colid_data(), &rdata, -1 );
-    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_data(), &rdata, -1 );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_get( mod, it, tree_colid_data(), &rdata, -1 );
 
     return rdata;
 
@@ -288,7 +277,6 @@ row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     gtk_tree_model_get( mod, it, tree_colid_val(), &val, -1 );
-//    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_val(), &val, -1 );
 
     return val;
 }
@@ -328,7 +316,6 @@ row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
     gchar* val = NULL;
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     gtk_tree_model_get( mod, it, tree_colid_name(), &val, -1 );
-//    gtk_tree_model_get( dlg_model( dlg ), it, tree_colid_name(), &val, -1 );
 
     return val;
 }
@@ -484,7 +471,8 @@ tree_filter_setup( cfg_edit_dlg* p )
     if ( !dlg )
         return;
 
-    GtkTreeModel* modf = gtk_tree_model_filter_new( dlg_model( dlg ), NULL );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModel* modf = gtk_tree_model_filter_new( mod, NULL );
 
     gtk_tree_model_filter_set_visible_func(
         GTK_TREE_MODEL_FILTER( modf ),
@@ -632,10 +620,13 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     GtkTreePath* path = NULL;
     GtkTreeIter it;
     if ( row_cur_get_iter( dlg, &it ) )
+    {
         //
         // TODO: free path:
         //
-        path = gtk_tree_model_get_path( dlg_model( dlg ), &it );
+        GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+        path = gtk_tree_model_get_path( mod, &it );
+    }
 
 
     tree_filter_remove( dlg );
@@ -708,7 +699,8 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 //    printf( " >> cfg_edit_dlg_on_btn_showinh(): %d\n", show );
 
     dlg->showinh_ = show;
-    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( dlg_model( dlg ) ) );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
 
@@ -1066,7 +1058,7 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 
 
     GtkTreePath* path_cur = NULL;
-    path_cur = gtk_tree_model_get_path( dlg_model( dlg ), &it );
+    path_cur = gtk_tree_model_get_path( gtk_tree_view_get_model( dlg->tree_v_ ), &it );
 
     GtkTreePath* path_rmb = NULL;
     gboolean onrow =
