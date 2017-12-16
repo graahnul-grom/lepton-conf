@@ -475,18 +475,24 @@ tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
 
     dlg_model_set( dlg, model );
 
-//    row_data* rdata = NULL;
-    // OK: gtk_tree_model_get( model, it, colid_data(), &rdata, -1 );
-//    gtk_tree_model_get( dlg_model( dlg ), it, colid_data(), &rdata, -1 );
+    // NOTE: models are different:
+    //
+    printf( " >> tree_filter( model ):              model: %p\n",
+            model );
+    printf( " >> tree_filter(): gtk_tree_view_get_model(): %p\n",
+            gtk_tree_view_get_model( dlg->tree_v_ ) );
 
-    /*
-    const row_data* rdata = row_field_get_data( dlg, it );
+    row_data* rdata = NULL;
+    gtk_tree_model_get( model, it, tree_colid_data(), &rdata, -1 );
+
+    // FAIL: const row_data* rdata = row_field_get_data( dlg, it );
+
     if ( !rdata )
         return FALSE;
 
     if ( !dlg->showinh_ )
         return !rdata->inh_;
-    */
+
 
     return TRUE;
 
