@@ -182,20 +182,20 @@ static int tree_cols_cnt()    { return NUM_COLS; }
 static GtkTreeModel*
 dlg_model( cfg_edit_dlg* dlg )
 {
-//    return gtk_tree_view_get_model( dlg->tree_v_ );
-    return dlg->model_;
+    return gtk_tree_view_get_model( dlg->tree_v_ );
+//    return dlg->model_;
 }
 
 static void
 dlg_model_set( cfg_edit_dlg* dlg, GtkTreeModel* model )
 {
-    dlg->model_ = model;
+//    dlg->model_ = model;
 }
 
 static void
 dlg_model_upd( cfg_edit_dlg* dlg )
 {
-    dlg_model_set( dlg, gtk_tree_view_get_model( dlg->tree_v_ ) );
+//    dlg_model_set( dlg, gtk_tree_view_get_model( dlg->tree_v_ ) );
 }
 
 
