@@ -479,13 +479,15 @@ tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
     // OK: gtk_tree_model_get( model, it, colid_data(), &rdata, -1 );
 //    gtk_tree_model_get( dlg_model( dlg ), it, colid_data(), &rdata, -1 );
 
+    /*
     const row_data* rdata = row_field_get_data( dlg, it );
     if ( !rdata )
         return FALSE;
 
     if ( !dlg->showinh_ )
         return !rdata->inh_;
-//    return FALSE;
+    */
+
     return TRUE;
 
 } // tree_filter()
@@ -1535,7 +1537,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
     conf_load( dlg );
-    // tree_filter_setup( dlg );
+    tree_filter_setup( dlg );
 
 
     gtk_tree_view_expand_all( dlg->tree_v_ );
