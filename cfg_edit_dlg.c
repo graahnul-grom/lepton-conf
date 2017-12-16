@@ -253,17 +253,17 @@ row_cur_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itPare
 
 
 
-
-static row_data*
-row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
+// {post}: caller must free {ret}
+//
+static gchar*
+row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
-    row_data* rdata = NULL;
+    gchar* val = NULL;
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_get( mod, it, tree_colid_data(), &rdata, -1 );
+    gtk_tree_model_get( mod, it, tree_colid_name(), &val, -1 );
 
-    return rdata;
-
+    return val;
 }
 
 
@@ -279,6 +279,19 @@ row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
     gtk_tree_model_get( mod, it, tree_colid_val(), &val, -1 );
 
     return val;
+}
+
+
+
+static row_data*
+row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
+{
+    row_data* rdata = NULL;
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_get( mod, it, tree_colid_data(), &rdata, -1 );
+
+    return rdata;
 }
 
 
@@ -300,23 +313,6 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
                         -1 );
 
 } // row_field_set_val()
-
-
-
-// {post}: caller must free {ret}
-//
-static gchar*
-row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
-{
-    gchar* val = NULL;
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_get( mod, it, tree_colid_name(), &val, -1 );
-
-    return val;
-}
-
-
-
 
 
 
@@ -369,9 +365,6 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
     return NULL;
 
 } // row_cur_find_child_key()
-
-
-
 
 
 
