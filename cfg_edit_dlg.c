@@ -366,11 +366,13 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
     if ( rdata->rtype_ != RT_GRP )
         return FALSE;
 
-    if ( !gtk_tree_model_iter_has_child( dlg->model_, &it_parent ) ) // // //
+    GtkTreeModel* mod = dlg->model_;
+
+    if ( !gtk_tree_model_iter_has_child( mod, &it_parent ) ) // // //
         return FALSE;
 
     GtkTreeIter it_child;
-    gboolean res = gtk_tree_model_iter_children( dlg->model_,
+    gboolean res = gtk_tree_model_iter_children( mod,
                                                  &it_child,
                                                  &it_parent );
     const gchar* kname = NULL;
@@ -386,7 +388,7 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
             return gtk_tree_path_new_from_string( str );
         }
 
-        res = gtk_tree_model_iter_next( dlg->model_, &it_child );
+        res = gtk_tree_model_iter_next( mod, &it_child );
     }
 
     return NULL;
@@ -908,43 +910,20 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
     if ( run_dlg_add_val( dlg, NULL, &key, &val ) )
     {
-        // printf( "on_mitem_add(): [%s] => [%s]\n", key, val );
-
-//        GtkTreeIter it_existing;
-//        gchar* str;
         GtkTreePath* path = row_cur_find_child_key( dlg, key );
 
         if ( path != NULL )
         {
-            printf( "on_mitem_add(): [%s] EXISTS; path: %s\n", key,
-                gtk_tree_path_to_string( path ) );
+            printf( "on_mitem_add(): [%s] EXISTS; path: %s\n",
+                    key,
+                    gtk_tree_path_to_string( path ) );
 
-//            GtkTreePath* path = gtk_tree_path_new_from_string( str );
-//            GtkTreeIter tsi = row_get_tstore_iter( dlg, it_existing );
-//            GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-//            GtkTreeModel* fmod = gtk_tree_model_filter_get_model( mod );
-//            GtkTreeModelFilter* fmod = GTK_TREE_MODEL_FILTER( mod );
-//            GtkTreePath* path = gtk_tree_model_get_path( GTK_TREE_MODEL( fmod ),
-//            GtkTreePath* path = gtk_tree_model_get_path( mod,
-//                                                         &tsi );
-//                                                         &it_existing );
-//            if ( path )
-//            {
-                gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-                gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-                gtk_tree_path_free( path );
-//            }
+            gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+            gtk_tree_path_free( path );
 
-            // row_field_set_val( dlg, it_existing, val );
-
-            return;
+            return; // TODO: change val
         }
-
-//        if ( conf_has_key( rdata->ctx_, rdata->group_, key ) )
-//        {
-//            conf_chg_val( rdata, val );
-//            return;
-//        }
 
 
         if ( conf_add_val( rdata, key, val ) )
