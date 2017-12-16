@@ -263,14 +263,14 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 static gboolean
 row_cur_get_parent_iter( cfg_edit_dlg* dlg, GtkTreeIter* it, GtkTreeIter* itParent )
 {
-    GtkTreeModel* model = dlg_model( dlg );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
     // TODO: free path:
     //
-    GtkTreePath* path = gtk_tree_model_get_path( model, it );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, it );
 
     gtk_tree_path_up( path );
-    return gtk_tree_model_get_iter( model, itParent, path );
+    return gtk_tree_model_get_iter( mod, itParent, path );
 
 } // row_cur_get_parent_iter()
 
@@ -915,7 +915,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
         if ( path != NULL )
         {
-            printf( "on_mitem_add(): [%s] EXISTS; path: %s\n", key );
+            printf( "on_mitem_add(): [%s] EXISTS\n", key );
 
             gtk_tree_view_expand_to_path( dlg->tree_v_, path );
             gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
