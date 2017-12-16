@@ -106,13 +106,13 @@ RowType;
 
 struct _row_data
 {
-    EdaConfig*   ctx_;
-    const gchar* group_;
-    const gchar* key_;
-    const gchar* val_;
-    gboolean     ro_;   // read-only
-    gboolean     inh_;  // inherited
-    RowType      rtype_;
+    EdaConfig* ctx_;
+    gchar*     group_;
+    gchar*     key_;
+    gchar*     val_;
+    gboolean   ro_;   // read-only
+    gboolean   inh_;  // inherited
+    RowType    rtype_;
 };
 
 typedef struct _row_data row_data;
@@ -293,9 +293,7 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
     g_free( rdata->val_ );
     rdata->val_ = g_strdup( val );
 
-
     GtkTreeIter itStore = row_get_tstore_iter( dlg, it );
-
     gtk_tree_store_set( dlg->store_,
                         &itStore,
                         tree_colid_val(), val,
