@@ -352,7 +352,7 @@ row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
 //
 //static gboolean
 static GtkTreePath*
-row_cur_grp_has_child_key( cfg_edit_dlg* dlg,
+row_cur_find_child_key( cfg_edit_dlg* dlg,
                            const gchar* key )
 {
     GtkTreeIter it_parent;
@@ -378,11 +378,11 @@ row_cur_grp_has_child_key( cfg_edit_dlg* dlg,
     while ( res )
     {
         kname = row_field_get_name( dlg, &it_child );
-        // printf( " >> row_cur_grp_has_child_key(): next: [%s]\n", kname );
 
         if ( g_strcmp0( kname, key ) == 0 )
         {
-            gchar* str = gtk_tree_model_get_string_from_iter( dlg->model_, &it_child );
+            GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+            gchar* str = gtk_tree_model_get_string_from_iter( mod, &it_child );
             return gtk_tree_path_new_from_string( str );
         }
 
@@ -391,7 +391,7 @@ row_cur_grp_has_child_key( cfg_edit_dlg* dlg,
 
     return NULL;
 
-} // row_cur_grp_has_child_key()
+} // row_cur_find_child_key()
 
 
 
@@ -912,7 +912,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
 //        GtkTreeIter it_existing;
 //        gchar* str;
-        GtkTreePath* path = row_cur_grp_has_child_key( dlg, key );
+        GtkTreePath* path = row_cur_find_child_key( dlg, key );
 
         if ( path != NULL )
         {
