@@ -1,3 +1,11 @@
+// how to display g_debug() messages:
+// usage:
+// > export G_MESSAGES_DEBUG="gedacfged"
+// > /path/to/gedacfged
+//
+#define G_LOG_DOMAIN "gedacfged"
+
+
 #include <libguile.h>
 
 #include <liblepton/liblepton.h>
@@ -5,6 +13,7 @@
 
 #include <gtk/gtk.h>
 #include <stdio.h>
+
 #include "cfg_edit_dlg.h"
 
 
@@ -116,7 +125,7 @@ int main( int argc, char* argv[] )
 //    printf( "gedacfged: cfg_edit_dlg: prop1: [%d]\n", g_value_get_int( &gv ) );
 
 
-    gtk_widget_set_size_request( wnd, 780, 650 );
+    gtk_widget_set_size_request( wnd, 800, 650 );
 //    gtk_window_set_default_size( GTK_WINDOW(wnd), 750, 450 );
 //    gtk_window_set_default_size( GTK_WINDOW(wnd), 600, 400 );
 //    gtk_widget_set_size_request( wnd, 900, 800 );

@@ -1,13 +1,9 @@
+#define G_LOG_DOMAIN "gedacfged"
+
 #include "cfg_edit_dlg.h"
+
 #include <liblepton/liblepton.h>
 #include <liblepton/libgedaguile.h>
-
-// how to display g_debug() messages:
-// usage:
-// > export G_MESSAGES_DEBUG="gedacfged"
-// > /path/to/gedacfged
-//
-#define G_LOG_DOMAIN "gedacfged"
 
 
 
