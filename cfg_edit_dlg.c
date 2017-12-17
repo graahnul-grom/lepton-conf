@@ -2,6 +2,14 @@
 #include <liblepton/liblepton.h>
 #include <liblepton/libgedaguile.h>
 
+// how to display g_debug() messages:
+// usage:
+// > export G_MESSAGES_DEBUG="gedacfged"
+// > /path/to/gedacfged
+//
+#define G_LOG_DOMAIN "gedacfged"
+
+
 
 /*! \brief Create a new cfg edit dlg
 *
@@ -72,7 +80,9 @@ static void cfg_edit_dlg_dispose( GObject* obj )
 
 static void cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 {
-    printf( "cfg_edit_dlg::class_init()\n" );
+    // NOTE: glib debug messages:
+    //
+    g_debug( "cfg_edit_dlg::class_init() eklmn: [%s]", "oprst" );
 
     GObjectClass* gcls = G_OBJECT_CLASS( cls );
 
