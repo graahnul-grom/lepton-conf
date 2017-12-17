@@ -365,9 +365,10 @@ row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
     GtkTreeIter it_parent;
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+
     gtk_tree_path_up( path );
+
     if ( gtk_tree_model_get_iter( mod, &it_parent, path ) )
-//    if ( row_cur_get_parent_iter( dlg, &it, &it_parent ) )
     {
         rdata = row_field_get_data( dlg, &it_parent );
         if ( rdata )
@@ -666,7 +667,8 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
         g_list_free( args );
     }
-}
+
+} // on_lab_fname()
 
 
 
@@ -677,17 +679,48 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    gboolean show = gtk_toggle_button_get_active( btn );
+    dlg->showinh_ = gtk_toggle_button_get_active( btn );
 //    printf( " >> cfg_edit_dlg_on_btn_showinh(): %d\n", show );
 
-    dlg->showinh_ = show;
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = NULL;
+    GtkTreeIter it;
+
+    // if cur node is inh and we about to hide inh,
+    //   => select parent after refilter
+    //
+    if ( row_cur_get_iter( dlg, &it ) )
+    {
+        path = gtk_tree_model_get_path( mod, &it );
+
+        row_data* rdata = row_field_get_data( dlg, &it );
+        if ( rdata != NULL )
+        {
+            if ( rdata->inh_ && !dlg->showinh_ )
+                gtk_tree_path_up( path );
+        }
+    }
+
+
     gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
-
-    gtk_tree_view_expand_all( dlg->tree_v_ );
-
+//    gtk_tree_view_expand_all( dlg->tree_v_ );
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-}
+
+
+    if ( path )
+    {
+        // restore current tree node:
+        //
+        if ( gtk_tree_model_get_iter( mod, &it, path ) )
+        {
+            gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+        }
+
+        gtk_tree_path_free( path );
+    }
+
+} // on_btn_showinh()
 
 
 
