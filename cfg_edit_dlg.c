@@ -582,12 +582,33 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), NULL );
     }
 
-    const gchar* fname = conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL );
-    gchar* str = NULL;
+
+
+    gboolean exist = FALSE;
+    gboolean rok   = FALSE;
+    gboolean wok   = FALSE;
+
+    const gchar* fname = conf_ctx_fname( rdata->ctx_, &exist, &rok, &wok );
+
+    gchar* str_access = NULL;
+    gchar* str_fname = NULL;
+
     if ( fname != NULL )
-        str = g_strdup_printf( "<a href='%s'>%s</a>", fname, fname );
-    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str ? str : "" );
-    g_free( str );
+    {
+        // TODO: how to show file access info
+        //
+        str_access = g_strdup_printf( "[%s%s%s]",
+                                      exist ? "f" : "-",
+                                      rok   ? "r" : "-",
+                                      wok   ? "w" : "-" );
+
+        str_fname = g_strdup_printf( "<a href='%s'>%s</a>", fname, fname );
+    }
+
+    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str_fname ? str_fname : "" );
+
+    g_free( str_access );
+    g_free( str_fname );
 
 //    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
@@ -1298,6 +1319,7 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
     gchar str[ PATH_MAX ] = "";
 
+    /*
     if ( fname != NULL )
     {
         sprintf( str, "config file: (%s%s%s) %s",
@@ -1307,9 +1329,11 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                  fname
                );
     }
+    */
 
-//    gboolean inh = eda_config_get_parent( ctx ) != NULL;
-    gboolean inh = FALSE;
+//  gboolean inh = eda_config_get_parent( ctx ) != NULL;
+    const gboolean inh = FALSE;
+    const gboolean ro = FALSE;
 
     // NOTE: rdata:
     //
@@ -1317,7 +1341,7 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                                 NULL,  // group
                                 NULL,  // key
                                 NULL,  // val
-                                TRUE,  // ro
+                                ro,    // ro
                                 inh,   // inh
                                 RT_CTX // rtype
                               );
@@ -1551,7 +1575,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     tree_filter_setup( dlg );
 
 
-    gtk_tree_view_expand_all( dlg->tree_v_ );
+//    gtk_tree_view_expand_all( dlg->tree_v_ );
 
 
     // content area:
@@ -1663,6 +1687,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     mk_labels_line( "<b>ctx: </b>", dlg->lab_ctx_, vbox_bot );
 
     dlg->lab_fname_ = gtk_label_new( NULL );
+    gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
     mk_labels_line( "<b>fname: </b>", dlg->lab_fname_, vbox_bot );
 
     mk_labels_line_separ( vbox_bot );
