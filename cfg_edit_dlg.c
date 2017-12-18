@@ -631,9 +631,6 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     GtkTreeIter it;
     if ( row_cur_get_iter( dlg, &it ) )
     {
-        //
-        // TODO: free path:
-        //
         GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
         path = gtk_tree_model_get_path( mod, &it );
     }
@@ -658,10 +655,11 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     {
         gtk_tree_view_expand_to_path( dlg->tree_v_, path );
         gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+        gtk_tree_path_free( path );
     }
 
 
-    gtk_tree_view_expand_all( dlg->tree_v_ ); // // //
+    // gtk_tree_view_expand_all( dlg->tree_v_ ); // // //
 
 } // on_btn_reload()
 
