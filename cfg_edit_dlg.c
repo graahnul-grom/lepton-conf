@@ -166,6 +166,12 @@ static gboolean
 conf_chg_val( row_data* rdata, const gchar* txt );
 
 static void
+conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
+
+static void
+conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg );
+
+static void
 conf_load( cfg_edit_dlg* dlg );
 
 static const gchar*
@@ -666,6 +672,26 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
 
 static void
+on_btn_tst( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+
+    GtkTreeIter it;
+    gtk_tree_model_get_iter_from_string( mod, &it, "3" );
+    GtkTreeIter it_store = row_get_tstore_iter( dlg, it );
+
+    gtk_tree_store_remove( dlg->store_, &it_store );
+
+    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
+}
+
+
+
+static void
 on_lab_fname( GtkLabel* lab, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -798,7 +824,7 @@ run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
-    printf( "  edit_val_dlg(): resp: %d\n", res );
+//    printf( "  run_dlg_edit_val(): resp: %d\n", res );
 
     gchar* ret = NULL;
 
@@ -1358,6 +1384,73 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
 
 
+// reloads [ctx] and its child contexts
+//
+static void
+conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg )
+{
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+
+    GtkTreeIter it;
+    gtk_tree_model_get_iter_from_string( mod, &it, "3" );
+    GtkTreeIter it_store = row_get_tstore_iter( dlg, it );
+
+    gtk_tree_store_remove( dlg->store_, &it_store );
+
+    conf_load_ctx( eda_config_get_context_for_path( "." ),
+                   "context: PATH (.)",
+                   dlg );
+
+    // select row:
+    //
+    GtkTreePath* path = gtk_tree_path_new_from_string( "0" );
+    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+    gtk_tree_path_free( path );
+
+}
+
+
+
+////////////////////////////////////////////////////////////
+//
+// "config-changed" sinal handlers:
+//
+
+static void
+on_conf_chg_ctx_dflt( EdaConfig* ctx, const gchar* g, const gchar* k )
+{
+    printf( " >> >> on_conf_chg_ctx_dflt(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_default_context(), g, k );
+}
+
+static void
+on_conf_chg_ctx_sys( EdaConfig* ctx, const gchar* g, const gchar* k )
+{
+    printf( " >> >> on_conf_chg_ctx_sys(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_system_context(), g, k );
+}
+
+static void
+on_conf_chg_ctx_user( EdaConfig* ctx, const gchar* g, const gchar* k )
+{
+    printf( " >> >> on_conf_chg_ctx_user(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_user_context(), g, k );
+}
+
+static void
+on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k )
+{
+    printf( " >> >> on_conf_chg_ctx_path(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_context_for_path( "." ), g, k );
+}
+
+//
+////////////////////////////////////////////////////////////
+
+
+
+
 static void
 conf_load( cfg_edit_dlg* dlg )
 {
@@ -1367,11 +1460,40 @@ conf_load( cfg_edit_dlg* dlg )
 //    load_ctx( cfg, "context: DEFAULT",  dlg );
 //    g_clear_error( &err );
 
-    conf_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
-    conf_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
-    conf_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
-    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
-}
+//    conf_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
+//    conf_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
+//    conf_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
+//    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
+
+    EdaConfig* ctx_dflt = eda_config_get_default_context();
+    conf_load_ctx( ctx_dflt, "context: DEFAULT", dlg );
+    g_signal_connect( G_OBJECT( ctx_dflt ),
+                      "config-changed",
+                      G_CALLBACK( &on_conf_chg_ctx_dflt ),
+                      NULL );
+
+    EdaConfig* ctx_sys = eda_config_get_system_context();
+    conf_load_ctx( ctx_sys, "context: SYSTEM", dlg );
+    g_signal_connect( G_OBJECT( ctx_sys ),
+                      "config-changed",
+                      G_CALLBACK( &on_conf_chg_ctx_sys ),
+                      NULL );
+
+    EdaConfig* ctx_user = eda_config_get_user_context();
+    conf_load_ctx( ctx_user, "context: USER", dlg );
+    g_signal_connect( G_OBJECT( ctx_user ),
+                      "config-changed",
+                      G_CALLBACK( &on_conf_chg_ctx_user ),
+                      NULL );
+
+    EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
+    conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
+    g_signal_connect( G_OBJECT( ctx_path ),
+                      "config-changed",
+                      G_CALLBACK( &on_conf_chg_ctx_path ),
+                      NULL );
+
+} // conf_load()
 
 
 
@@ -1733,6 +1855,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
     gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_reload_, FALSE, FALSE, 0 );
 
+    // tst btn:
+    //
+    GtkWidget* btn_tst = gtk_button_new_with_mnemonic( "_tst" );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_tst, FALSE, FALSE, 0 );
+
 
 
 
@@ -1769,6 +1896,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( dlg->btn_reload_ ),
                       "clicked",
                       G_CALLBACK( &on_btn_reload ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( btn_tst ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_tst ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
