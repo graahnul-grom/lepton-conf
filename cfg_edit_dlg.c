@@ -1657,100 +1657,23 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // -------------------------- box (bottom):
     //
-//    GtkWidget* vbox_bot = gtk_vbutton_box_new();
-//    GtkWidget* vbox_bot = gtk_vbox_new( FALSE, 0 );
     GtkWidget* vbox_bot = gtk_vbox_new( TRUE, 0 );
 
-
-
-/*
-    // ctx labels:
-    //
-    GtkWidget* lbox0 = gtk_hbox_new( FALSE, 0 );
-
-    GtkWidget* lab_ctx0 = gtk_label_new( NULL );
-    gtk_label_set_markup( GTK_LABEL( lab_ctx0 ), "<b>ctx: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox0 ), lab_ctx0, FALSE, FALSE, 0 );
-
-    dlg->lab_ctx_ = gtk_label_new( NULL );
-    gtk_label_set_selectable( GTK_LABEL( dlg->lab_ctx_ ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox0 ), dlg->lab_ctx_, FALSE, FALSE, 0 );
-
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox0, FALSE, FALSE, 0 );
-*/
     dlg->lab_ctx_ = gtk_label_new( NULL );
     mk_labels_line( "<b>ctx: </b>", dlg->lab_ctx_, vbox_bot );
 
-/*
-    // fname labels:
-    //
-    GtkWidget* lbox00 = gtk_hbox_new( FALSE, 0 );
-
-    GtkWidget* lab_fname0 = gtk_label_new( NULL );
-    gtk_label_set_markup( GTK_LABEL( lab_fname0 ), "<b>fname: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox00 ), lab_fname0, FALSE, FALSE, 0 );
-
-    dlg->lab_fname_ = gtk_label_new( NULL );
-//    gtk_label_set_selectable( GTK_LABEL( dlg->lab_fname_ ), TRUE );
-    gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
-    gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_fname_, FALSE, FALSE, 0 );
-
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox00, FALSE, FALSE, 0 );
-*/
     dlg->lab_fname_ = gtk_label_new( NULL );
     mk_labels_line( "<b>fname: </b>", dlg->lab_fname_, vbox_bot );
 
-
     mk_labels_line_separ( vbox_bot );
-//    gtk_box_pack_start( GTK_BOX( vbox_bot ),
-//                        gtk_hseparator_new(), FALSE, FALSE, 0 );
-
-
-
-    // name labels:
-    //
-/*
-    GtkWidget* lbox111 = gtk_hbox_new( FALSE, 0 );
-
-    GtkWidget* lab_name0 = gtk_label_new( NULL );
-    gtk_label_set_markup( GTK_LABEL( lab_name0 ), "<b>name: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox111 ), lab_name0, FALSE, FALSE, 0 );
-
-    dlg->lab_name_ = gtk_label_new( NULL );
-    gtk_label_set_selectable( GTK_LABEL( dlg->lab_name_ ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox111 ), dlg->lab_name_, FALSE, FALSE, 0 );
-
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox111, FALSE, FALSE, 0 );
-*/
 
     dlg->lab_name_ = gtk_label_new( NULL );
     mk_labels_line( "<b>name: </b>", dlg->lab_name_, vbox_bot );
 
-
-/*
-    // val labels:
-    //
-    GtkWidget* lbox222 = gtk_hbox_new( FALSE, 0 );
-
-    GtkWidget* lab_val0 = gtk_label_new( NULL );
-    gtk_label_set_markup( GTK_LABEL( lab_val0 ), "<b>value: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox222 ), lab_val0, FALSE, FALSE, 0 );
-
-    dlg->lab_val_ = gtk_label_new( NULL );
-    gtk_label_set_selectable( GTK_LABEL( dlg->lab_val_ ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox222 ), dlg->lab_val_, FALSE, FALSE, 0 );
-
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox222, FALSE, FALSE, 0 );
-*/
-
     dlg->lab_val_ = gtk_label_new( NULL );
     mk_labels_line( "<b>value: </b>", dlg->lab_val_, vbox_bot );
 
-
     mk_labels_line_separ( vbox_bot );
-//    gtk_box_pack_start( GTK_BOX( vbox_bot ),
-//                        gtk_hseparator_new(), FALSE, FALSE, 0 );
-
 
 
     // show inh check box:
@@ -1769,13 +1692,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-
-
     // add box_bot to ca:
     //
     gtk_box_pack_start( GTK_BOX( ca ),  vbox_bot, FALSE, FALSE, 0 );
-
-
 
 
 
@@ -1790,11 +1709,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
     gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_reload_, FALSE, FALSE, 0 );
 
-    // ext ed btn:
-    //
-//    GtkWidget* btn_exted = gtk_button_new_with_mnemonic( "_ext ed" );
-//    gtk_box_pack_start( GTK_BOX( aa ), btn_exted, FALSE, FALSE, 0 );
-
 
 
 
@@ -1802,6 +1716,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     // show all:
     //
     gtk_widget_show_all( GTK_WIDGET(dlg) );
+
 
 
 
@@ -1818,8 +1733,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_showinh ),
                       dlg );
 
-
-
     g_signal_connect( G_OBJECT( dlg->lab_fname_ ),
                       "activate-link",             // mouse click
                       G_CALLBACK( &on_lab_fname ),
@@ -1828,8 +1741,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       "activate-current-link",     // press Enter key
                       G_CALLBACK( &on_lab_fname ),
                       dlg );
-
-
 
     g_signal_connect( G_OBJECT( dlg->btn_reload_ ),
                       "clicked",
@@ -1846,6 +1757,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
                       "button-press-event",
                       G_CALLBACK( &on_rmb ),
                       dlg );
+
+
+
 
 
     // NOTE: dont't do it:
