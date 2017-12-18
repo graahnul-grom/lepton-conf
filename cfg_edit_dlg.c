@@ -1477,6 +1477,37 @@ conf_chg_val( row_data* rdata, const gchar* txt )
 
 
 
+
+
+
+
+
+static void
+mk_labels_line( const gchar* left_txt, GtkWidget* right_label, GtkWidget* parent_box )
+{
+    GtkWidget* hbox = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* left_label = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( left_label ), left_txt );
+    gtk_label_set_selectable( GTK_LABEL( right_label ), TRUE );
+
+    gtk_box_pack_start( GTK_BOX( hbox ), left_label, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( hbox ), right_label, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( parent_box ), hbox, FALSE, FALSE, 0 );
+}
+
+
+
+static void
+mk_labels_line_separ( GtkWidget* parent_box )
+{
+    gtk_box_pack_start( GTK_BOX( parent_box ),
+                        gtk_hseparator_new(), FALSE, FALSE, 0 );
+}
+
+
+
 static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
@@ -1632,7 +1663,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-
+/*
     // ctx labels:
     //
     GtkWidget* lbox0 = gtk_hbox_new( FALSE, 0 );
@@ -1646,11 +1677,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lbox0 ), dlg->lab_ctx_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox0, FALSE, FALSE, 0 );
+*/
+    dlg->lab_ctx_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>ctx: </b>", dlg->lab_ctx_, vbox_bot );
 
-
-
-
-    // ctx fname labels:
+/*
+    // fname labels:
     //
     GtkWidget* lbox00 = gtk_hbox_new( FALSE, 0 );
 
@@ -1664,15 +1696,20 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lbox00 ), dlg->lab_fname_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox00, FALSE, FALSE, 0 );
+*/
+    dlg->lab_fname_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>fname: </b>", dlg->lab_fname_, vbox_bot );
 
 
+    mk_labels_line_separ( vbox_bot );
+//    gtk_box_pack_start( GTK_BOX( vbox_bot ),
+//                        gtk_hseparator_new(), FALSE, FALSE, 0 );
 
 
-    gtk_box_pack_start( GTK_BOX( vbox_bot ),
-                        gtk_hseparator_new(), FALSE, FALSE, 0 );
 
     // name labels:
     //
+/*
     GtkWidget* lbox111 = gtk_hbox_new( FALSE, 0 );
 
     GtkWidget* lab_name0 = gtk_label_new( NULL );
@@ -1684,9 +1721,13 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lbox111 ), dlg->lab_name_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox111, FALSE, FALSE, 0 );
+*/
+
+    dlg->lab_name_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>name: </b>", dlg->lab_name_, vbox_bot );
 
 
-
+/*
     // val labels:
     //
     GtkWidget* lbox222 = gtk_hbox_new( FALSE, 0 );
@@ -1700,11 +1741,15 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( lbox222 ), dlg->lab_val_, FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( vbox_bot ), lbox222, FALSE, FALSE, 0 );
+*/
+
+    dlg->lab_val_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>value: </b>", dlg->lab_val_, vbox_bot );
 
 
-
-    gtk_box_pack_start( GTK_BOX( vbox_bot ),
-                        gtk_hseparator_new(), FALSE, FALSE, 0 );
+    mk_labels_line_separ( vbox_bot );
+//    gtk_box_pack_start( GTK_BOX( vbox_bot ),
+//                        gtk_hseparator_new(), FALSE, FALSE, 0 );
 
 
 
@@ -1720,6 +1765,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 //    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_showinh );
     gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, FALSE, FALSE, 0 );
 //    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, TRUE, FALSE, 0 );
+
+
+
 
 
 
