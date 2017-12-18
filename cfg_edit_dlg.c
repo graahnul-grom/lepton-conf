@@ -1573,6 +1573,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     tree_filter_setup( dlg );
 
 
+
 //    gtk_tree_view_expand_all( dlg->tree_v_ );
 
 
@@ -1795,7 +1796,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // select row:
     //
-    GtkTreePath* path = gtk_tree_path_new_from_string( "0" );
+    GtkTreePath* path = gtk_tree_path_new_from_string( "3" ); // 3: path ctx
+    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
     gtk_tree_path_free( path );
 
