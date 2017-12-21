@@ -165,7 +165,8 @@ conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 static gboolean
 conf_chg_val( row_data* rdata, const gchar* txt );
 
-static void
+static GtkTreeIter
+//static void
 conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
 
 static void
@@ -1330,11 +1331,12 @@ conf_load_groups( EdaConfig*    ctx,
 
 
 
-static void
+static GtkTreeIter
+//static void
 conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
-    gboolean wok = FALSE;
-    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
+//    gboolean wok = FALSE;
+//    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
 
     // NOTE: rdata:
     //
@@ -1354,7 +1356,9 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                               NULL
                             );
 
-    conf_load_groups( ctx, fname, dlg, it, wok );
+//    conf_load_groups( ctx, fname, dlg, it, wok );
+
+    return it;
 
 } // conf_load_ctx()
 
@@ -1451,12 +1455,28 @@ conf_load( cfg_edit_dlg* dlg )
     EdaConfig* ctx_user = eda_config_get_user_context();
     EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
 
+
     // load:
     //
-    conf_load_ctx( ctx_dflt, "context: DEFAULT",  dlg );
-    conf_load_ctx( ctx_sys,  "context: SYSTEM",   dlg );
-    conf_load_ctx( ctx_user, "context: USER",     dlg );
-    conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
+    gboolean wok = FALSE;
+    const gchar* fname = NULL;
+    GtkTreeIter it;
+
+    it = conf_load_ctx( ctx_dflt, "context: DEFAULT",  dlg );
+    fname = conf_ctx_fname( ctx_dflt, NULL, NULL, &wok );
+    conf_load_groups( ctx_dflt, fname, dlg, it, wok );
+
+    it = conf_load_ctx( ctx_sys,  "context: SYSTEM",   dlg );
+    fname = conf_ctx_fname( ctx_sys, NULL, NULL, &wok );
+    conf_load_groups( ctx_sys, fname, dlg, it, wok );
+
+    it = conf_load_ctx( ctx_user, "context: USER",     dlg );
+    fname = conf_ctx_fname( ctx_user, NULL, NULL, &wok );
+    conf_load_groups( ctx_user, fname, dlg, it, wok );
+
+    it = conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
+    fname = conf_ctx_fname( ctx_path, NULL, NULL, &wok );
+    conf_load_groups( ctx_path, fname, dlg, it, wok );
 
 
     // setup "config-changed" handlers:
