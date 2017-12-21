@@ -1249,11 +1249,13 @@ conf_load_keys( EdaConfig*    ctx,
 
 static void
 conf_load_groups( EdaConfig*    ctx,
-                  const gchar*  fname,
                   cfg_edit_dlg* dlg,
                   GtkTreeIter   itParent,
                   gboolean      file_writable )
 {
+    gboolean wok = FALSE;
+    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
+
     if ( fname != NULL )
     {
         GError* err = NULL;
@@ -1464,19 +1466,19 @@ conf_load( cfg_edit_dlg* dlg )
 
     it = conf_load_ctx( ctx_dflt, "context: DEFAULT",  dlg );
     fname = conf_ctx_fname( ctx_dflt, NULL, NULL, &wok );
-    conf_load_groups( ctx_dflt, fname, dlg, it, wok );
+    conf_load_groups( ctx_dflt, dlg, it, wok );
 
     it = conf_load_ctx( ctx_sys,  "context: SYSTEM",   dlg );
     fname = conf_ctx_fname( ctx_sys, NULL, NULL, &wok );
-    conf_load_groups( ctx_sys, fname, dlg, it, wok );
+    conf_load_groups( ctx_sys, dlg, it, wok );
 
     it = conf_load_ctx( ctx_user, "context: USER",     dlg );
     fname = conf_ctx_fname( ctx_user, NULL, NULL, &wok );
-    conf_load_groups( ctx_user, fname, dlg, it, wok );
+    conf_load_groups( ctx_user, dlg, it, wok );
 
     it = conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
     fname = conf_ctx_fname( ctx_path, NULL, NULL, &wok );
-    conf_load_groups( ctx_path, fname, dlg, it, wok );
+    conf_load_groups( ctx_path, dlg, it, wok );
 
 
     // setup "config-changed" handlers:
