@@ -1250,8 +1250,7 @@ conf_load_keys( EdaConfig*    ctx,
 static void
 conf_load_groups( EdaConfig*    ctx,
                   cfg_edit_dlg* dlg,
-                  GtkTreeIter   itParent,
-                  gboolean      file_writable )
+                  GtkTreeIter   itParent )
 {
     gboolean wok = FALSE;
     const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
@@ -1295,12 +1294,12 @@ conf_load_groups( EdaConfig*    ctx,
         // NOTE: rdata:
         //
         row_data* rdata = mk_rdata( ctx,
-                                    name,            // group
-                                    NULL,            // key
-                                    NULL,            // val
-                                    !file_writable,  // ro
-                                    inh,             // inh
-                                    RT_GRP           // rtype
+                                    name,   // group
+                                    NULL,   // key
+                                    NULL,   // val
+                                    !wok,   // ro
+                                    inh,    // inh
+                                    RT_GRP  // rtype
                                   );
 
         gchar* display_name = g_strdup_printf( "[%s]", name );
@@ -1319,7 +1318,7 @@ conf_load_groups( EdaConfig*    ctx,
         //
         gboolean inh_all = FALSE;
 
-        conf_load_keys( ctx, name, dlg, it, file_writable, &inh_all );
+        conf_load_keys( ctx, name, dlg, it, wok, &inh_all );
 
         // mark group itself as inh if all children are inh:
         //
@@ -1337,9 +1336,6 @@ static GtkTreeIter
 //static void
 conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
-//    gboolean wok = FALSE;
-//    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
-
     // NOTE: rdata:
     //
     row_data* rdata = mk_rdata( ctx,
@@ -1357,8 +1353,6 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                               rdata, // rdata
                               NULL
                             );
-
-//    conf_load_groups( ctx, fname, dlg, it, wok );
 
     return it;
 
@@ -1460,25 +1454,19 @@ conf_load( cfg_edit_dlg* dlg )
 
     // load:
     //
-    gboolean wok = FALSE;
-    const gchar* fname = NULL;
     GtkTreeIter it;
 
     it = conf_load_ctx( ctx_dflt, "context: DEFAULT",  dlg );
-    fname = conf_ctx_fname( ctx_dflt, NULL, NULL, &wok );
-    conf_load_groups( ctx_dflt, dlg, it, wok );
+    conf_load_groups( ctx_dflt, dlg, it );
 
     it = conf_load_ctx( ctx_sys,  "context: SYSTEM",   dlg );
-    fname = conf_ctx_fname( ctx_sys, NULL, NULL, &wok );
-    conf_load_groups( ctx_sys, dlg, it, wok );
+    conf_load_groups( ctx_sys, dlg, it );
 
     it = conf_load_ctx( ctx_user, "context: USER",     dlg );
-    fname = conf_ctx_fname( ctx_user, NULL, NULL, &wok );
-    conf_load_groups( ctx_user, dlg, it, wok );
+    conf_load_groups( ctx_user, dlg, it );
 
     it = conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
-    fname = conf_ctx_fname( ctx_path, NULL, NULL, &wok );
-    conf_load_groups( ctx_path, dlg, it, wok );
+    conf_load_groups( ctx_path, dlg, it );
 
 
     // setup "config-changed" handlers:
