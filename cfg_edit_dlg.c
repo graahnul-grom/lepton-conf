@@ -167,13 +167,12 @@ conf_chg_val( row_data* rdata, const gchar* txt );
 
 static gboolean
 conf_load_ctx( EdaConfig* ctx );
-//conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg, GtkTreeIter* it );
 
 static GtkTreeIter
 conf_mk_ctx_node( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
 
 static void
-conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg );
+conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg );
 
 static void
 conf_load( cfg_edit_dlg* dlg );
@@ -682,15 +681,13 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    conf_reload_ctx( eda_config_get_user_context(), "2", dlg );
 
-    GtkTreeIter it;
-    gtk_tree_model_get_iter_from_string( mod, &it, "3" );
-    GtkTreeIter it_store = row_get_tstore_iter( dlg, it );
+    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
+    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+    gtk_tree_path_free( path );
 
-    gtk_tree_store_remove( dlg->store_, &it_store );
-
-//    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 }
 
 
@@ -1341,26 +1338,6 @@ conf_load_ctx( EdaConfig* ctx )
         g_clear_error( &err );
     }
 
-/*
-    // NOTE: rdata:
-    //
-    row_data* rdata = mk_rdata( ctx,
-                                NULL,  // group
-                                NULL,  // key
-                                NULL,  // val
-                                TRUE,  // ro
-                                FALSE, // inh
-                                RT_CTX // rtype
-                              );
-
-    *it = row_add( dlg,
-                   name,  // name
-                   "",    // val
-                   rdata, // rdata
-                   NULL   // itParent
-                 );
-*/
-
     return res;
 
 } // conf_load_ctx()
@@ -1397,33 +1374,58 @@ conf_mk_ctx_node( EdaConfig*    ctx,
 
 
 
-// reloads [ctx] and its child contexts
+// reload groups and keys in [ctx]
 //
-/*
+// [path]: string:
+//   "0" - ctx: default
+//   "1" - ctx: system
+//   "2" - ctx: user
+//   "3" - ctx: path(.)
+//
 static void
-conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg )
+conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg )
 {
+    tree_filter_remove( dlg ); // NOTE: !!!
+
+
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
-    GtkTreeIter it;
-    gtk_tree_model_get_iter_from_string( mod, &it, "3" );
-    GtkTreeIter it_store = row_get_tstore_iter( dlg, it );
+    GtkTreeIter it_ctx;
+    gtk_tree_model_get_iter_from_string( mod, &it_ctx, path );
 
-    gtk_tree_store_remove( dlg->store_, &it_store );
 
-    conf_load_ctx( eda_config_get_context_for_path( "." ),
-                   "context: PATH (.)",
-                   dlg );
+    GtkTreeIter it_child;
+    gboolean res = gtk_tree_model_iter_children( mod,
+                                                 &it_child,
+                                                 &it_ctx );
 
-    // select row:
-    //
-    GtkTreePath* path = gtk_tree_path_new_from_string( "0" );
-    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-    gtk_tree_path_free( path );
+    if ( res )
+    {
+        GtkTreeIter it_store = row_get_tstore_iter( dlg, it_child );
 
-}
-*/
+        // NOTE: gtk_tree_store_remove():
+        //
+        // 1) removes node pointed to by iter
+        // 2) sets iter to the next node at the same level
+        // 3) returns FALSE if there's no more nodes left
+        //
+        while ( gtk_tree_store_remove( dlg->store_, &it_store ) )
+            ;
+    }
+
+
+
+    conf_load_groups( ctx, dlg, it_ctx );
+
+
+
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+
+    tree_filter_setup( dlg ); // NOTE: !!!
+
+} // conf_reload_ctx()
+
 
 
 
