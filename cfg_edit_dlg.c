@@ -1292,11 +1292,10 @@ conf_load_groups( EdaConfig*    ctx,
         // NOTE: rdata:
         //
         row_data* rdata = mk_rdata( ctx,
-                                    name,           // group
+                                    name,            // group
                                     NULL,            // key
                                     NULL,            // val
                                     !file_writable,  // ro
-                                    // TRUE,         // ro
                                     inh,             // inh
                                     RT_GRP           // rtype
                                   );
@@ -1304,10 +1303,9 @@ conf_load_groups( EdaConfig*    ctx,
         gchar* display_name = g_strdup_printf( "[%s]", name );
 
         GtkTreeIter it = row_add( dlg,
-                                  display_name,
-                                  // name, // name
-                                  "",      // val
-                                  rdata,   // rdata
+                                  display_name, // name
+                                  "",           // val
+                                  rdata,        // rdata
                                   &itParent
                                 );
 
@@ -1335,29 +1333,8 @@ conf_load_groups( EdaConfig*    ctx,
 static void
 conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 {
-    gboolean exist = FALSE;
-    gboolean rok   = FALSE;
-    gboolean wok   = FALSE;
-
-    const gchar* fname = conf_ctx_fname( ctx, &exist, &rok, &wok );
-
-    gchar str[ PATH_MAX ] = "";
-
-    /*
-    if ( fname != NULL )
-    {
-        sprintf( str, "config file: (%s%s%s) %s",
-                 exist ? "f" : "-",
-                 rok   ? "r" : "-",
-                 wok   ? "w" : "-",
-                 fname
-               );
-    }
-    */
-
-//  gboolean inh = eda_config_get_parent( ctx ) != NULL;
-    const gboolean inh = FALSE;
-    const gboolean ro = FALSE;
+    gboolean wok = FALSE;
+    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
 
     // NOTE: rdata:
     //
@@ -1365,19 +1342,18 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                                 NULL,  // group
                                 NULL,  // key
                                 NULL,  // val
-                                ro,    // ro
-                                inh,   // inh
+                                TRUE,  // ro
+                                FALSE, // inh
                                 RT_CTX // rtype
                               );
 
     GtkTreeIter it = row_add( dlg,
                               name,  // name
-                              str,   // val
+                              "",    // val
                               rdata, // rdata
                               NULL
                             );
 
-//    load_groups( ctx, dlg, it, wok );
     conf_load_groups( ctx, fname, dlg, it, wok );
 
 } // conf_load_ctx()
@@ -1386,6 +1362,7 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
 
 // reloads [ctx] and its child contexts
 //
+/*
 static void
 conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg )
 {
@@ -1409,6 +1386,7 @@ conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg )
     gtk_tree_path_free( path );
 
 }
+*/
 
 
 
@@ -1928,7 +1906,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // select row:
     //
-    GtkTreePath* path = gtk_tree_path_new_from_string( "3" ); // 3: path ctx
+    GtkTreePath* path = gtk_tree_path_new_from_string( "1" ); // 3: path ctx
     gtk_tree_view_expand_to_path( dlg->tree_v_, path );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
     gtk_tree_path_free( path );
