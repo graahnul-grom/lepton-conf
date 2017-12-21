@@ -1438,34 +1438,44 @@ conf_load( cfg_edit_dlg* dlg )
 //    load_ctx( cfg, "context: DEFAULT",  dlg );
 //    g_clear_error( &err );
 
-//    conf_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
-//    conf_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
-//    conf_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
-//    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
+    // create root nodes:
+    //
+
+    // conf_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
+    // conf_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
+    // conf_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
+    // conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 
     EdaConfig* ctx_dflt = eda_config_get_default_context();
-    conf_load_ctx( ctx_dflt, "context: DEFAULT", dlg );
+    EdaConfig* ctx_sys  = eda_config_get_system_context();
+    EdaConfig* ctx_user = eda_config_get_user_context();
+    EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
+
+    // load:
+    //
+    conf_load_ctx( ctx_dflt, "context: DEFAULT",  dlg );
+    conf_load_ctx( ctx_sys,  "context: SYSTEM",   dlg );
+    conf_load_ctx( ctx_user, "context: USER",     dlg );
+    conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
+
+
+    // setup "config-changed" handlers:
+    //
     g_signal_connect( G_OBJECT( ctx_dflt ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_dflt ),
                       NULL );
 
-    EdaConfig* ctx_sys = eda_config_get_system_context();
-    conf_load_ctx( ctx_sys, "context: SYSTEM", dlg );
     g_signal_connect( G_OBJECT( ctx_sys ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_sys ),
                       NULL );
 
-    EdaConfig* ctx_user = eda_config_get_user_context();
-    conf_load_ctx( ctx_user, "context: USER", dlg );
     g_signal_connect( G_OBJECT( ctx_user ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_user ),
                       NULL );
 
-    EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
-    conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
     g_signal_connect( G_OBJECT( ctx_path ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_path ),
