@@ -1451,27 +1451,39 @@ conf_load( cfg_edit_dlg* dlg )
     // conf_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
     // conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 
+
     EdaConfig* ctx_dflt = eda_config_get_default_context();
     EdaConfig* ctx_sys  = eda_config_get_system_context();
     EdaConfig* ctx_user = eda_config_get_user_context();
     EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
+
+    gchar* name_dflt = g_strdup_printf( "context: %s", conf_ctx_name( ctx_dflt ) );
+    gchar* name_sys  = g_strdup_printf( "context: %s", conf_ctx_name( ctx_sys  ) );
+    gchar* name_user = g_strdup_printf( "context: %s", conf_ctx_name( ctx_user ) );
+    gchar* name_path = g_strdup_printf( "context: %s", conf_ctx_name( ctx_path ) );
 
 
     // load:
     //
     GtkTreeIter it;
 
-    if ( conf_load_ctx( ctx_dflt, "context: DEFAULT", dlg, &it ) )
+    if ( conf_load_ctx( ctx_dflt, name_dflt, dlg, &it ) )
         conf_load_groups( ctx_dflt, dlg, it );
 
-    if ( conf_load_ctx( ctx_sys, "context: SYSTEM", dlg, &it ) )
+    if ( conf_load_ctx( ctx_sys, name_sys, dlg, &it ) )
         conf_load_groups( ctx_sys, dlg, it );
 
-    if ( conf_load_ctx( ctx_user, "context: USER", dlg, &it ) )
+    if ( conf_load_ctx( ctx_user, name_user, dlg, &it ) )
         conf_load_groups( ctx_user, dlg, it );
 
-    if ( conf_load_ctx( ctx_path, "context: PATH (.)", dlg, &it ) )
+    if ( conf_load_ctx( ctx_path, name_path, dlg, &it ) )
         conf_load_groups( ctx_path, dlg, it );
+
+
+    g_free( name_dflt );
+    g_free( name_sys );
+    g_free( name_user );
+    g_free( name_path );
 
 
     // setup "config-changed" handlers:
@@ -1500,21 +1512,19 @@ conf_load( cfg_edit_dlg* dlg )
 
 
 
-// {post}: {ret} owned by geda cfg api
-//
 static const gchar*
 conf_ctx_name( EdaConfig* ctx )
 {
     if ( ctx == eda_config_get_default_context() )
-        return "DEFAULT";
+        return g_strdup( "DEFAULT" );
     if ( ctx == eda_config_get_system_context() )
-        return "SYSTEM";
+        return g_strdup( "SYSTEM" );
     if ( ctx == eda_config_get_user_context() )
-        return "USER";
+        return g_strdup( "USER" );
     if ( ctx == eda_config_get_context_for_path( "." ) )
-        return "PATH (.)";
+        return g_strdup( "PATH (.)" );
 
-    return NULL;
+    return g_strdup( "unknown" );
 }
 
 
