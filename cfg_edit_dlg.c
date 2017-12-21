@@ -1461,17 +1461,17 @@ conf_load( cfg_edit_dlg* dlg )
     //
     GtkTreeIter it;
 
-    conf_load_ctx( ctx_dflt, "context: DEFAULT", dlg, &it );
-    conf_load_groups( ctx_dflt, dlg, it );
+    if ( conf_load_ctx( ctx_dflt, "context: DEFAULT", dlg, &it ) )
+        conf_load_groups( ctx_dflt, dlg, it );
 
-    conf_load_ctx( ctx_sys,  "context: SYSTEM", dlg, &it );
-    conf_load_groups( ctx_sys, dlg, it );
+    if ( conf_load_ctx( ctx_sys, "context: SYSTEM", dlg, &it ) )
+        conf_load_groups( ctx_sys, dlg, it );
 
-    conf_load_ctx( ctx_user, "context: USER", dlg, &it );
-    conf_load_groups( ctx_user, dlg, it );
+    if ( conf_load_ctx( ctx_user, "context: USER", dlg, &it ) )
+        conf_load_groups( ctx_user, dlg, it );
 
-    conf_load_ctx( ctx_path, "context: PATH (.)", dlg, &it );
-    conf_load_groups( ctx_path, dlg, it );
+    if ( conf_load_ctx( ctx_path, "context: PATH (.)", dlg, &it ) )
+        conf_load_groups( ctx_path, dlg, it );
 
 
     // setup "config-changed" handlers:
