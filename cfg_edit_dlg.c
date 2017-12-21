@@ -166,7 +166,11 @@ static gboolean
 conf_chg_val( row_data* rdata, const gchar* txt );
 
 static gboolean
-conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg, GtkTreeIter* it );
+conf_load_ctx( EdaConfig* ctx );
+//conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+static GtkTreeIter
+conf_mk_ctx_node( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
 
 static void
 conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg );
@@ -1251,9 +1255,6 @@ conf_load_groups( EdaConfig*    ctx,
                   cfg_edit_dlg* dlg,
                   GtkTreeIter   itParent )
 {
-    gboolean wok = FALSE;
-    conf_ctx_fname( ctx, NULL, NULL, &wok );
-
     gsize len = 0;
     gchar** pp = eda_config_get_groups( ctx, &len );
     if ( pp == NULL )
@@ -1269,7 +1270,9 @@ conf_load_groups( EdaConfig*    ctx,
         if ( strstr( name, "dialog-geometry" ) != NULL )
             continue;
 
-        gboolean inh = FALSE;
+        gboolean wok = FALSE;
+        conf_ctx_fname( ctx, NULL, NULL, &wok );
+
 
         // NOTE: rdata:
         //
@@ -1278,7 +1281,7 @@ conf_load_groups( EdaConfig*    ctx,
                                     NULL,   // key
                                     NULL,   // val
                                     !wok,   // ro
-                                    inh,    // inh
+                                    FALSE,  // inh
                                     RT_GRP  // rtype
                                   );
 
@@ -1313,10 +1316,7 @@ conf_load_groups( EdaConfig*    ctx,
 
 
 static gboolean
-conf_load_ctx( EdaConfig* ctx,
-               const gchar* name,
-               cfg_edit_dlg* dlg,
-               GtkTreeIter* it )
+conf_load_ctx( EdaConfig* ctx )
 {
     gboolean res = TRUE;
 
@@ -1341,6 +1341,7 @@ conf_load_ctx( EdaConfig* ctx,
         g_clear_error( &err );
     }
 
+/*
     // NOTE: rdata:
     //
     row_data* rdata = mk_rdata( ctx,
@@ -1356,12 +1357,43 @@ conf_load_ctx( EdaConfig* ctx,
                    name,  // name
                    "",    // val
                    rdata, // rdata
-                   NULL
+                   NULL   // itParent
                  );
+*/
 
     return res;
 
 } // conf_load_ctx()
+
+
+
+static GtkTreeIter
+conf_mk_ctx_node( EdaConfig*    ctx,
+                  const gchar*  name,
+                  cfg_edit_dlg* dlg )
+{
+    // NOTE: rdata:
+    //
+    row_data* rdata = mk_rdata( ctx,
+                                NULL,  // group
+                                NULL,  // key
+                                NULL,  // val
+                                TRUE,  // ro
+                                FALSE, // inh
+                                RT_CTX // rtype
+                              );
+
+    GtkTreeIter
+    it = row_add( dlg,
+                   name,  // name
+                   "",    // val
+                   rdata, // rdata
+                   NULL   // itParent
+                 );
+
+    return it;
+
+} // conf_mk_ctx_node()
 
 
 
@@ -1467,17 +1499,33 @@ conf_load( cfg_edit_dlg* dlg )
     //
     GtkTreeIter it;
 
-    if ( conf_load_ctx( ctx_dflt, name_dflt, dlg, &it ) )
+//    if ( conf_load_ctx( ctx_dflt, name_dflt, dlg, &it ) )
+    if ( conf_load_ctx( ctx_dflt ) )
+    {
+        it = conf_mk_ctx_node( ctx_dflt, name_dflt, dlg );
         conf_load_groups( ctx_dflt, dlg, it );
+    }
 
-    if ( conf_load_ctx( ctx_sys, name_sys, dlg, &it ) )
+//    if ( conf_load_ctx( ctx_sys, name_sys, dlg, &it ) )
+    if ( conf_load_ctx( ctx_sys ) )
+    {
+        it = conf_mk_ctx_node( ctx_sys, name_sys, dlg );
         conf_load_groups( ctx_sys, dlg, it );
+    }
 
-    if ( conf_load_ctx( ctx_user, name_user, dlg, &it ) )
+//    if ( conf_load_ctx( ctx_user, name_user, dlg, &it ) )
+    if ( conf_load_ctx( ctx_user ) )
+    {
+        it = conf_mk_ctx_node( ctx_user, name_user, dlg );
         conf_load_groups( ctx_user, dlg, it );
+    }
 
-    if ( conf_load_ctx( ctx_path, name_path, dlg, &it ) )
+//    if ( conf_load_ctx( ctx_path, name_path, dlg, &it ) )
+    if ( conf_load_ctx( ctx_path ) )
+    {
+        it = conf_mk_ctx_node( ctx_path, name_path, dlg );
         conf_load_groups( ctx_path, dlg, it );
+    }
 
 
     g_free( name_dflt );
