@@ -1447,6 +1447,11 @@ conf_load( cfg_edit_dlg* dlg )
     // conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 
     EdaConfig* ctx_dflt = eda_config_get_default_context();
+    GError* e = NULL;
+    gboolean res = eda_config_load( ctx_dflt, &e );
+    printf( " >> res: [%d] [%s]\n", res, e->message );
+    // => "Undefined configuration filename"
+
     EdaConfig* ctx_sys  = eda_config_get_system_context();
     EdaConfig* ctx_user = eda_config_get_user_context();
     EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
