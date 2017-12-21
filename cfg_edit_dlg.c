@@ -166,8 +166,6 @@ static gboolean
 conf_chg_val( row_data* rdata, const gchar* txt );
 
 static gboolean
-//static GtkTreeIter
-//static void
 conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg, GtkTreeIter* it );
 
 static void
@@ -1255,28 +1253,6 @@ conf_load_groups( EdaConfig*    ctx,
 {
     gboolean wok = FALSE;
     conf_ctx_fname( ctx, NULL, NULL, &wok );
-//    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
-
-    /*
-    if ( fname != NULL )
-    {
-        GError* err = NULL;
-        gboolean res = eda_config_load( ctx, &err );
-        if ( !res )
-        {
-            printf( " >> conf_load_groups(): !eda_config_load( \"%s\" )\n", fname );
-
-            if ( err != NULL )
-            {
-                printf( "    err: %s\n", err->message );
-            }
-
-            g_clear_error( &err );
-
-            return;
-        }
-    }
-    */
 
     gsize len = 0;
     gchar** pp = eda_config_get_groups( ctx, &len );
@@ -1337,8 +1313,6 @@ conf_load_groups( EdaConfig*    ctx,
 
 
 static gboolean
-//static GtkTreeIter
-//static void
 conf_load_ctx( EdaConfig* ctx,
                const gchar* name,
                cfg_edit_dlg* dlg,
@@ -1362,9 +1336,9 @@ conf_load_ctx( EdaConfig* ctx,
             {
                 printf( "    err msg: [%s]\n", err->message );
             }
-
-            g_clear_error( &err );
         }
+
+        g_clear_error( &err );
     }
 
     // NOTE: rdata:
@@ -1378,15 +1352,13 @@ conf_load_ctx( EdaConfig* ctx,
                                 RT_CTX // rtype
                               );
 
-//    GtkTreeIter it = row_add( dlg,
     *it = row_add( dlg,
-                              name,  // name
-                              "",    // val
-                              rdata, // rdata
-                              NULL
-                            );
+                   name,  // name
+                   "",    // val
+                   rdata, // rdata
+                   NULL
+                 );
 
-//    return it;
     return res;
 
 } // conf_load_ctx()
