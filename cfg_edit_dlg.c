@@ -165,9 +165,10 @@ conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 static gboolean
 conf_chg_val( row_data* rdata, const gchar* txt );
 
-static GtkTreeIter
+static gboolean
+//static GtkTreeIter
 //static void
-conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
+conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg, GtkTreeIter* it );
 
 static void
 conf_reload_ctx( EdaConfig* ctx, cfg_edit_dlg* dlg );
@@ -687,7 +688,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
     gtk_tree_store_remove( dlg->store_, &it_store );
 
-    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
+//    conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 }
 
 
@@ -1253,8 +1254,10 @@ conf_load_groups( EdaConfig*    ctx,
                   GtkTreeIter   itParent )
 {
     gboolean wok = FALSE;
-    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
+    conf_ctx_fname( ctx, NULL, NULL, &wok );
+//    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, &wok );
 
+    /*
     if ( fname != NULL )
     {
         GError* err = NULL;
@@ -1273,6 +1276,7 @@ conf_load_groups( EdaConfig*    ctx,
             return;
         }
     }
+    */
 
     gsize len = 0;
     gchar** pp = eda_config_get_groups( ctx, &len );
@@ -1332,10 +1336,37 @@ conf_load_groups( EdaConfig*    ctx,
 
 
 
-static GtkTreeIter
+static gboolean
+//static GtkTreeIter
 //static void
-conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
+conf_load_ctx( EdaConfig* ctx,
+               const gchar* name,
+               cfg_edit_dlg* dlg,
+               GtkTreeIter* it )
 {
+    gboolean res = TRUE;
+
+    const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, NULL );
+
+    if ( fname != NULL )
+    {
+        GError* err = NULL;
+
+        res = eda_config_load( ctx, &err );
+
+        if ( !res )
+        {
+            printf( " >> conf_load_ctx(): !eda_config_load( \"%s\" )\n", fname );
+
+            if ( err != NULL )
+            {
+                printf( "    err msg: [%s]\n", err->message );
+            }
+
+            g_clear_error( &err );
+        }
+    }
+
     // NOTE: rdata:
     //
     row_data* rdata = mk_rdata( ctx,
@@ -1347,14 +1378,16 @@ conf_load_ctx( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg )
                                 RT_CTX // rtype
                               );
 
-    GtkTreeIter it = row_add( dlg,
+//    GtkTreeIter it = row_add( dlg,
+    *it = row_add( dlg,
                               name,  // name
                               "",    // val
                               rdata, // rdata
                               NULL
                             );
 
-    return it;
+//    return it;
+    return res;
 
 } // conf_load_ctx()
 
@@ -1447,11 +1480,6 @@ conf_load( cfg_edit_dlg* dlg )
     // conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
 
     EdaConfig* ctx_dflt = eda_config_get_default_context();
-    GError* e = NULL;
-    gboolean res = eda_config_load( ctx_dflt, &e );
-    printf( " >> res: [%d] [%s]\n", res, e->message );
-    // => "Undefined configuration filename"
-
     EdaConfig* ctx_sys  = eda_config_get_system_context();
     EdaConfig* ctx_user = eda_config_get_user_context();
     EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
@@ -1461,16 +1489,16 @@ conf_load( cfg_edit_dlg* dlg )
     //
     GtkTreeIter it;
 
-    it = conf_load_ctx( ctx_dflt, "context: DEFAULT",  dlg );
+    conf_load_ctx( ctx_dflt, "context: DEFAULT", dlg, &it );
     conf_load_groups( ctx_dflt, dlg, it );
 
-    it = conf_load_ctx( ctx_sys,  "context: SYSTEM",   dlg );
+    conf_load_ctx( ctx_sys,  "context: SYSTEM", dlg, &it );
     conf_load_groups( ctx_sys, dlg, it );
 
-    it = conf_load_ctx( ctx_user, "context: USER",     dlg );
+    conf_load_ctx( ctx_user, "context: USER", dlg, &it );
     conf_load_groups( ctx_user, dlg, it );
 
-    it = conf_load_ctx( ctx_path, "context: PATH (.)", dlg );
+    conf_load_ctx( ctx_path, "context: PATH (.)", dlg, &it );
     conf_load_groups( ctx_path, dlg, it );
 
 
