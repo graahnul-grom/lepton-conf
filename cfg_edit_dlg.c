@@ -166,6 +166,9 @@ static gboolean
 conf_chg_val( row_data* rdata, const gchar* txt );
 
 static gboolean
+conf_save( EdaConfig* ctx );
+
+static gboolean
 conf_load_ctx( EdaConfig* ctx );
 
 static GtkTreeIter
@@ -1672,9 +1675,7 @@ conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
                            key,
                            val );
 
-    GError* err = NULL;
-    gboolean res = eda_config_save( rdata->ctx_, &err );
-    g_clear_error( &err );
+    gboolean res = conf_save( rdata->ctx_ );
 
     return res;
 }
@@ -1689,11 +1690,24 @@ conf_chg_val( row_data* rdata, const gchar* txt )
                            rdata->key_,
                            txt );
 
+    gboolean res = conf_save( rdata->ctx_ );
+
+    return res;
+
+} // conf_chg_val()
+
+
+
+static gboolean
+conf_save( EdaConfig* ctx )
+{
     GError* err = NULL;
-    gboolean res = eda_config_save( rdata->ctx_, &err );
+
+    gboolean res = eda_config_save( ctx, &err );
+
     if ( !res )
     {
-        printf( " >> conf_chg_val( %s ): !eda_config_save()\n", txt );
+        printf( " >> conf_save(): !eda_config_save()\n" );
 
         if ( err != NULL )
             printf( "    err: %s\n", err->message );
@@ -1701,9 +1715,9 @@ conf_chg_val( row_data* rdata, const gchar* txt )
         g_clear_error( &err );
     }
 
-    return TRUE;
+    return res;
 
-} // conf_chg_val()
+} // conf_save()
 
 
 
