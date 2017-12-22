@@ -1495,6 +1495,8 @@ on_conf_chg_ctx_user( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
         ctx == eda_config_get_user_context(), g, k, dlg->showinh_ );
 
     // TODO: fail: conf_reload_ctx_path( dlg );
+
+//    conf_reload_ctx_path( dlg );
 }
 
 
@@ -1672,6 +1674,7 @@ conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 
     GError* err = NULL;
     gboolean res = eda_config_save( rdata->ctx_, &err );
+    g_clear_error( &err );
 
     return res;
 }
@@ -1681,44 +1684,22 @@ conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 static gboolean
 conf_chg_val( row_data* rdata, const gchar* txt )
 {
-    // set:
-    //
     eda_config_set_string( rdata->ctx_,
                            rdata->group_,
                            rdata->key_,
                            txt );
 
-    // save cfg:
-    //
     GError* err = NULL;
     gboolean res = eda_config_save( rdata->ctx_, &err );
     if ( !res )
     {
-        printf( " >> conf_chg_val( %s ): !eda_config_save()\n",
-                txt );
+        printf( " >> conf_chg_val( %s ): !eda_config_save()\n", txt );
+
         if ( err != NULL )
             printf( "    err: %s\n", err->message );
-        g_clear_error( &err );
-        return FALSE;
-    }
 
-    // get:
-    //
-    gchar* new_val = eda_config_get_string( rdata->ctx_,
-                                            rdata->group_,
-                                            rdata->key_,
-                                            &err );
-    if ( new_val == NULL )
-    {
-        printf( " >> conf_chg_val(): !eda_config_get_string( %s )\n",
-                rdata->key_ );
-        if ( err != NULL )
-            printf( "    err: %s\n", err->message );
         g_clear_error( &err );
-        return FALSE;
     }
-
-    g_free( new_val );
 
     return TRUE;
 
@@ -1733,7 +1714,9 @@ conf_chg_val( row_data* rdata, const gchar* txt )
 
 
 static void
-mk_labels_line( const gchar* left_txt, GtkWidget* right_label, GtkWidget* parent_box )
+mk_labels_line( const gchar* left_txt,
+                GtkWidget* right_label,
+                GtkWidget* parent_box )
 {
     GtkWidget* hbox = gtk_hbox_new( FALSE, 0 );
 
