@@ -1471,28 +1471,35 @@ conf_reload_ctx_path( cfg_edit_dlg* dlg )
 //
 
 static void
-on_conf_chg_ctx_dflt( EdaConfig* ctx, const gchar* g, const gchar* k )
+on_conf_chg_ctx_dflt( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 {
     printf( " >> >> on_conf_chg_ctx_dflt(): [%d], [%s] [%s]\n",
         ctx == eda_config_get_default_context(), g, k );
 }
 
+
 static void
-on_conf_chg_ctx_sys( EdaConfig* ctx, const gchar* g, const gchar* k )
+on_conf_chg_ctx_sys( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 {
     printf( " >> >> on_conf_chg_ctx_sys(): [%d], [%s] [%s]\n",
         ctx == eda_config_get_system_context(), g, k );
 }
 
-static void
-on_conf_chg_ctx_user( EdaConfig* ctx, const gchar* g, const gchar* k )
-{
-    printf( " >> >> on_conf_chg_ctx_user(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_user_context(), g, k );
-}
 
 static void
-on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k )
+on_conf_chg_ctx_user( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+
+    printf( " >> >> on_conf_chg_ctx_user(): [%d], [%s] [%s], [%d]\n",
+        ctx == eda_config_get_user_context(), g, k, dlg->showinh_ );
+
+    // TODO: fail: conf_reload_ctx_path( dlg );
+}
+
+
+static void
+on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 {
     printf( " >> >> on_conf_chg_ctx_path(): [%d], [%s] [%s]\n",
         ctx == eda_config_get_context_for_path( "." ), g, k );
@@ -1577,22 +1584,22 @@ conf_load( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( ctx_dflt ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_dflt ),
-                      NULL );
+                      dlg );
 
     g_signal_connect( G_OBJECT( ctx_sys ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_sys ),
-                      NULL );
+                      dlg );
 
     g_signal_connect( G_OBJECT( ctx_user ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_user ),
-                      NULL );
+                      dlg );
 
     g_signal_connect( G_OBJECT( ctx_path ),
                       "config-changed",
                       G_CALLBACK( &on_conf_chg_ctx_path ),
-                      NULL );
+                      dlg );
 
 } // conf_load()
 
