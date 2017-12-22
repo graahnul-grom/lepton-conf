@@ -716,13 +716,17 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
+    char* path_str = row_cur_pos_save( dlg );
+
+
     conf_reload_ctx( eda_config_get_user_context(), "2", dlg );
 
-    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
-    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-    gtk_tree_path_free( path );
+//    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
+//    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+//    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+//    gtk_tree_path_free( path );
 
+    row_cur_pos_restore( dlg, path_str );
 }
 
 
