@@ -278,6 +278,15 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 
     GtkTreePath* path = gtk_tree_path_new_from_string( path_str );
 
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeIter it;
+    if ( !gtk_tree_model_get_iter( mod, &it, path ) )
+        gtk_tree_path_up( path );
+    // gtk_tree_model_sort_iter_is_valid()
+
+
+
     gtk_tree_view_expand_to_path( dlg->tree_v_, path );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
 
@@ -758,45 +767,18 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
         return;
 
     dlg->showinh_ = gtk_toggle_button_get_active( btn );
-//    printf( " >> cfg_edit_dlg_on_btn_showinh(): %d\n", show );
+
+    char* path_str = row_cur_pos_save( dlg );
+
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    GtkTreePath* path = NULL;
-    GtkTreeIter it;
-
-    // if cur node is inh and we about to hide inh,
-    //   => select parent after refilter
-    //
-    if ( row_cur_get_iter( dlg, &it ) )
-    {
-        path = gtk_tree_model_get_path( mod, &it );
-
-        row_data* rdata = row_field_get_data( dlg, &it );
-        if ( rdata != NULL )
-        {
-            if ( rdata->inh_ && !dlg->showinh_ )
-                gtk_tree_path_up( path );
-        }
-    }
-
 
     gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
 //    gtk_tree_view_expand_all( dlg->tree_v_ );
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 
-    if ( path )
-    {
-        // restore current tree node:
-        //
-        if ( gtk_tree_model_get_iter( mod, &it, path ) )
-        {
-            gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-        }
-
-        gtk_tree_path_free( path );
-    }
+    row_cur_pos_restore( dlg, path_str );
 
 } // on_btn_showinh()
 
