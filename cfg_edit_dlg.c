@@ -175,6 +175,12 @@ static void
 conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg );
 
 static void
+conf_reload_ctx_user( cfg_edit_dlg* dlg );
+
+static void
+conf_reload_ctx_path( cfg_edit_dlg* dlg );
+
+static void
 conf_load( cfg_edit_dlg* dlg );
 
 static const gchar*
@@ -719,7 +725,9 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     char* path_str = row_cur_pos_save( dlg );
 
 
-    conf_reload_ctx( eda_config_get_user_context(), "2", dlg );
+    // conf_reload_ctx( eda_config_get_user_context(), "2", dlg );
+    // conf_reload_ctx_user( dlg );
+    conf_reload_ctx_path( dlg );
 
 //    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
 //    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
@@ -1437,6 +1445,22 @@ conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg )
     tree_filter_setup( dlg ); // NOTE: !!!
 
 } // conf_reload_ctx()
+
+
+
+static void
+conf_reload_ctx_user( cfg_edit_dlg* dlg )
+{
+    conf_reload_ctx( eda_config_get_user_context(), "2", dlg );
+}
+
+
+
+static void
+conf_reload_ctx_path( cfg_edit_dlg* dlg )
+{
+    conf_reload_ctx( eda_config_get_context_for_path( "." ), "3", dlg );
+}
 
 
 
