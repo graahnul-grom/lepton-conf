@@ -249,6 +249,44 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
+static gchar*
+row_cur_pos_save( cfg_edit_dlg* dlg )
+{
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+    {
+        printf( " >> >> row_cur_pos_save(): !it\n");
+        return NULL;
+    }
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gchar* path_str = gtk_tree_model_get_string_from_iter( mod, &it );
+
+    return path_str;
+}
+
+
+
+static void
+row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
+{
+    if ( !path_str )
+    {
+        printf( " >> >> row_cur_pos_restore(): !path_str\n");
+        return;
+    }
+
+    GtkTreePath* path = gtk_tree_path_new_from_string( path_str );
+
+    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+
+    gtk_tree_path_free( path );
+    g_free( path_str );
+}
+
+
+
 // {post}: caller must free {ret}
 //
 static gchar*
@@ -636,13 +674,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
     // remember current tree node:
     //
-    GtkTreePath* path = NULL;
-    GtkTreeIter it;
-    if ( row_cur_get_iter( dlg, &it ) )
-    {
-        GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-        path = gtk_tree_model_get_path( mod, &it );
-    }
+    char* path_str = row_cur_pos_save( dlg );
 
 
     tree_filter_remove( dlg );
@@ -660,13 +692,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
     // restore current tree node:
     //
-    if ( path )
-    {
-        gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-        gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-        gtk_tree_path_free( path );
-    }
-
+    row_cur_pos_restore( dlg, path_str );
 
     // gtk_tree_view_expand_all( dlg->tree_v_ ); // // //
 
