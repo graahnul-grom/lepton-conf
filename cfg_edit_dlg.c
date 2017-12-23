@@ -930,20 +930,20 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
     if ( txt )
     {
-        // TODO: conf_add_val() / conf_save()
+        // NOTE: conf_chg_val() / conf_save()
         //
         conf_chg_val( rdata, txt );
-        conf_save( rdata->ctx_, dlg );
 
-//        printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
+        if ( conf_save( rdata->ctx_, dlg ) )
+        {
+            row_field_set_val( dlg, it, txt );
 
-        row_field_set_val( dlg, it, txt );
+            // unset inherited:
+            //
+            row_key_unset_inh( dlg, it );
+        }
 
         g_free( txt );
-
-        // unset inherited:
-        //
-        row_key_unset_inh( dlg, it );
     }
 
 } // on_mitem_edit()
@@ -987,17 +987,18 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
         row_data* rdata_child = row_field_get_data( dlg, &it_child );
 
 
-        // TODO: conf_add_val() / conf_save()
+        // NOTE: conf_chg_val() / conf_save()
         //
         conf_chg_val( rdata_child, val );
-        conf_save( rdata->ctx_, dlg );
 
-        row_field_set_val( dlg, it_child, val );
+        if ( conf_save( rdata->ctx_, dlg ) )
+        {
+            row_field_set_val( dlg, it_child, val );
 
-        // unset inherited:
-        //
-        row_key_unset_inh( dlg, it_child );
-
+            // unset inherited:
+            //
+            row_key_unset_inh( dlg, it_child );
+        }
 
         gtk_tree_path_free( path1 );
         g_free( key );
@@ -1008,11 +1009,13 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     } // if key already exists
 
 
-
-    // TODO: conf_add_val() / conf_save()
+    // NOTE: conf_add_val() / conf_save()
     //
     conf_add_val( rdata, key, val );
-    conf_save( rdata->ctx_, dlg );
+
+    if ( !conf_save( rdata->ctx_, dlg ) )
+        return;
+
 
     printf( "on_mitem_add(): [%s] = [%s]\n", key, val );
 
