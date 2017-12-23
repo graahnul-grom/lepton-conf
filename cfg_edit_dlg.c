@@ -1494,6 +1494,8 @@ conf_reload_ctx_path( cfg_edit_dlg* dlg )
 static void
 conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
 {
+    gchar* path = row_cur_pos_save( dlg );
+
     if ( parent_ctx == eda_config_get_system_context() )
     {
         conf_reload_ctx_user( dlg );
@@ -1504,6 +1506,8 @@ conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
     {
         conf_reload_ctx_path( dlg );
     }
+
+    row_cur_pos_restore( dlg, path );
 }
 
 
