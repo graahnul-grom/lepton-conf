@@ -1005,6 +1005,10 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
             // unset inherited:
             //
             row_key_unset_inh( dlg, it_child );
+
+            // NOTE: conf_reload_child_ctxs()
+            //
+            conf_reload_child_ctxs( rdata->ctx_, dlg );
         }
 
         gtk_tree_path_free( path1 );
@@ -1068,6 +1072,11 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     GtkTreeIter it_cur;
     if ( row_cur_get_iter( dlg, &it_cur ) )
         row_key_unset_inh( dlg, it_cur );
+
+
+    // NOTE: conf_reload_child_ctxs()
+    //
+    conf_reload_child_ctxs( rdata->ctx_, dlg );
 
 
     g_free( key );
