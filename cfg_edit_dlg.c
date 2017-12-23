@@ -184,6 +184,9 @@ static void
 conf_reload_ctx_path( cfg_edit_dlg* dlg );
 
 static void
+conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg );
+
+static void
 conf_load( cfg_edit_dlg* dlg );
 
 static const gchar*
@@ -941,6 +944,10 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
             // unset inherited:
             //
             row_key_unset_inh( dlg, it );
+
+            // NOTE: conf_reload_child_ctxs()
+            //
+            conf_reload_child_ctxs( rdata->ctx_, dlg );
         }
 
         g_free( txt );
@@ -1458,6 +1465,7 @@ conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg )
 static void
 conf_reload_ctx_user( cfg_edit_dlg* dlg )
 {
+    printf( "-- -- RELOAD CTX: [user] -- --\n" );
     conf_reload_ctx( eda_config_get_user_context(), "2", dlg );
 }
 
@@ -1466,7 +1474,27 @@ conf_reload_ctx_user( cfg_edit_dlg* dlg )
 static void
 conf_reload_ctx_path( cfg_edit_dlg* dlg )
 {
+    printf( "-- -- RELOAD CTX: [path] -- --\n" );
     conf_reload_ctx( eda_config_get_context_for_path( "." ), "3", dlg );
+}
+
+
+
+// reload all child contexts of [parent_ctx]
+//
+static void
+conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
+{
+    if ( parent_ctx == eda_config_get_system_context() )
+    {
+        conf_reload_ctx_user( dlg );
+        conf_reload_ctx_path( dlg );
+    }
+    else
+    if ( parent_ctx == eda_config_get_user_context() )
+    {
+        conf_reload_ctx_path( dlg );
+    }
 }
 
 
