@@ -159,14 +159,14 @@ mk_rdata( EdaConfig*  ctx,
 
 
 
-static gboolean
+static void
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
-static gboolean
+static void
 conf_chg_val( row_data* rdata, const gchar* txt );
 
 static gboolean
-conf_save( EdaConfig* ctx );
+conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 
 static gboolean
 conf_load_ctx( EdaConfig* ctx );
@@ -725,19 +725,10 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    char* path_str = row_cur_pos_save( dlg );
 
-
-    // conf_reload_ctx( eda_config_get_user_context(), "2", dlg );
-    // conf_reload_ctx_user( dlg );
-    conf_reload_ctx_path( dlg );
-
-//    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
-//    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-//    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-//    gtk_tree_path_free( path );
-
-    row_cur_pos_restore( dlg, path_str );
+    // char* path_str = row_cur_pos_save( dlg );
+    // conf_reload_ctx_path( dlg );
+    // row_cur_pos_restore( dlg, path_str );
 }
 
 
@@ -942,7 +933,7 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
         // TODO: conf_add_val() / conf_save()
         //
         conf_chg_val( rdata, txt );
-        conf_save( rdata->ctx_ );
+        conf_save( rdata->ctx_, dlg );
 
 //        printf( "cfg_edit_dlg_on_mitem_edit(): [%s] => [%s]\n", rdata->val_, txt );
 
@@ -999,7 +990,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
         // TODO: conf_add_val() / conf_save()
         //
         conf_chg_val( rdata_child, val );
-        conf_save( rdata->ctx_ );
+        conf_save( rdata->ctx_, dlg );
 
         row_field_set_val( dlg, it_child, val );
 
@@ -1021,7 +1012,7 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     // TODO: conf_add_val() / conf_save()
     //
     conf_add_val( rdata, key, val );
-    conf_save( rdata->ctx_ );
+    conf_save( rdata->ctx_, dlg );
 
     printf( "on_mitem_add(): [%s] = [%s]\n", key, val );
 
@@ -1677,39 +1668,30 @@ conf_has_key( EdaConfig* ctx, const gchar* grp, const gchar* key )
 */
 
 
-static gboolean
+static void
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 {
     eda_config_set_string( rdata->ctx_,
                            rdata->group_,
                            key,
                            val );
-
-//    gboolean res = conf_save( rdata->ctx_ );
-//    return res;
-    return TRUE;
 }
 
 
 
-static gboolean
+static void
 conf_chg_val( row_data* rdata, const gchar* txt )
 {
     eda_config_set_string( rdata->ctx_,
                            rdata->group_,
                            rdata->key_,
                            txt );
-
-//    gboolean res = conf_save( rdata->ctx_ );
-//    return res;
-    return TRUE;
-
-} // conf_chg_val()
+}
 
 
 
 static gboolean
-conf_save( EdaConfig* ctx )
+conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg )
 {
     GError* err = NULL;
 
@@ -1717,10 +1699,19 @@ conf_save( EdaConfig* ctx )
 
     if ( !res )
     {
-        printf( " >> conf_save(): !eda_config_save()\n" );
+        printf( " >> conf_save(): !eda_config_save(): [%s]\n",
+                err ? err->message : "" );
 
-        if ( err != NULL )
-            printf( "    err: %s\n", err->message );
+        GtkWidget* msgdlg =
+        gtk_message_dialog_new( GTK_WINDOW( dlg ),
+                                GTK_DIALOG_MODAL,
+                                GTK_MESSAGE_ERROR,
+                                GTK_BUTTONS_OK,
+                                "!eda_config_save()\nerrmsg: [%s]",
+                                err ? err->message : "" );
+
+        gtk_dialog_run( GTK_DIALOG( msgdlg ) );
+        gtk_widget_destroy( msgdlg );
 
         g_clear_error( &err );
     }
