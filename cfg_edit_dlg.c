@@ -136,7 +136,7 @@ enum
 // TODO: row_data: free memory
 //
 static row_data*
-mk_rdata( EdaConfig*  ctx,
+mk_rdata( EdaConfig*   ctx,
           const gchar* group,
           const gchar* key,
           const gchar* val,
@@ -155,6 +155,21 @@ mk_rdata( EdaConfig*  ctx,
     rdata->rtype_ = rtype;
 
     return rdata;
+}
+
+
+
+static void
+rm_rdata( row_data* rdata )
+{
+    if ( rdata == NULL )
+        return;
+
+    g_free( rdata->group_ );
+    g_free( rdata->key_ );
+    g_free( rdata->val_ );
+
+    g_free( rdata );
 }
 
 
@@ -1458,8 +1473,16 @@ conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg )
         // 2) sets iter to the next node at the same level
         // 3) returns FALSE if there's no more nodes left
         //
-        while ( gtk_tree_store_remove( dlg->store_, &it_store ) )
-            ;
+
+        row_data* rdata = NULL;
+
+        do
+        {
+            rdata = row_field_get_data( dlg, &it_store );
+            rm_rdata( rdata );
+        }
+        while ( gtk_tree_store_remove( dlg->store_, &it_store ) );
+
     }
 
 
