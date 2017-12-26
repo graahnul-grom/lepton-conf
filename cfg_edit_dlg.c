@@ -1564,21 +1564,6 @@ on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 static void
 conf_load( cfg_edit_dlg* dlg )
 {
-//    EdaConfig* cfg = eda_config_get_default_context();
-//    GError* err = NULL;
-//    eda_config_load( cfg, &err );
-//    load_ctx( cfg, "context: DEFAULT",  dlg );
-//    g_clear_error( &err );
-
-    // create root nodes:
-    //
-
-    // conf_load_ctx( eda_config_get_default_context(),       "context: DEFAULT",  dlg );
-    // conf_load_ctx( eda_config_get_system_context(),        "context: SYSTEM",   dlg );
-    // conf_load_ctx( eda_config_get_user_context(),          "context: USER",     dlg );
-    // conf_load_ctx( eda_config_get_context_for_path( "." ), "context: PATH (.)", dlg );
-
-
     EdaConfig* ctx_dflt = eda_config_get_default_context();
     EdaConfig* ctx_sys  = eda_config_get_system_context();
     EdaConfig* ctx_user = eda_config_get_user_context();
@@ -1594,33 +1579,22 @@ conf_load( cfg_edit_dlg* dlg )
     //
     GtkTreeIter it;
 
-//    if ( conf_load_ctx( ctx_dflt, name_dflt, dlg, &it ) )
-    if ( conf_load_ctx( ctx_dflt ) )
-    {
-        it = conf_mk_ctx_node( ctx_dflt, name_dflt, dlg );
-        conf_load_groups( ctx_dflt, dlg, it );
-    }
+    it = conf_mk_ctx_node( ctx_dflt, name_dflt, dlg );
+    conf_load_ctx( ctx_dflt );
+    conf_load_groups( ctx_dflt, dlg, it );
 
-//    if ( conf_load_ctx( ctx_sys, name_sys, dlg, &it ) )
-    if ( conf_load_ctx( ctx_sys ) )
-    {
-        it = conf_mk_ctx_node( ctx_sys, name_sys, dlg );
-        conf_load_groups( ctx_sys, dlg, it );
-    }
+    it = conf_mk_ctx_node( ctx_sys, name_sys, dlg );
+    conf_load_ctx( ctx_sys );
+    conf_load_groups( ctx_sys, dlg, it );
 
-//    if ( conf_load_ctx( ctx_user, name_user, dlg, &it ) )
-    if ( conf_load_ctx( ctx_user ) )
-    {
-        it = conf_mk_ctx_node( ctx_user, name_user, dlg );
-        conf_load_groups( ctx_user, dlg, it );
-    }
 
-//    if ( conf_load_ctx( ctx_path, name_path, dlg, &it ) )
-    if ( conf_load_ctx( ctx_path ) )
-    {
-        it = conf_mk_ctx_node( ctx_path, name_path, dlg );
-        conf_load_groups( ctx_path, dlg, it );
-    }
+    it = conf_mk_ctx_node( ctx_user, name_user, dlg );
+    conf_load_ctx( ctx_user );
+    conf_load_groups( ctx_user, dlg, it );
+
+    it = conf_mk_ctx_node( ctx_path, name_path, dlg );
+    conf_load_ctx( ctx_path );
+    conf_load_groups( ctx_path, dlg, it );
 
 
     g_free( name_dflt );
