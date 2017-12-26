@@ -1841,44 +1841,17 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     // -------------------------- box (top):
     //
-    GtkWidget* hbox_top = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* vbox_top = gtk_vbox_new( FALSE, 0 );
 
 
-    // cwd labels:
+    // cwd label:
     //
-    GtkWidget* lbox000 = gtk_hbox_new( FALSE, 0 );
-
-    GtkWidget* lab_cwd0 = gtk_label_new( NULL );
-    gtk_label_set_markup( GTK_LABEL( lab_cwd0 ), "<b>cwd: </b>" );
-    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd0, FALSE, FALSE, 0 );
-
-    GtkWidget* lab_cwd1 = gtk_label_new( cwd );
-    gtk_label_set_selectable( GTK_LABEL( lab_cwd1 ), TRUE );
-    gtk_box_pack_start( GTK_BOX( lbox000 ), lab_cwd1, FALSE, FALSE, 0 );
-
-    gtk_box_pack_start( GTK_BOX( hbox_top ), lbox000, FALSE, FALSE, 0 );
+    mk_labels_line( "<b>cwd: </b>", gtk_label_new( cwd ), vbox_top );
 
 
-    // "Find:" label:
+    // add vbox_top to ca:
     //
-//    GtkWidget* lab_find = gtk_label_new_with_mnemonic( "_Find: " );
-//    gtk_box_pack_start( GTK_BOX( hbox_top ), lab_find, FALSE, FALSE, 0 );
-
-
-    // find edit field:
-    //
-//    GtkWidget* ent_find = gtk_entry_new();
-//    gtk_box_pack_start( GTK_BOX( hbox_top ), ent_find, TRUE, TRUE, 0 );
-
-
-    // attach label to edit field:
-    //
-//    gtk_label_set_mnemonic_widget( GTK_LABEL( lab_find ), ent_find );
-
-
-    // add hbox_top to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ),  hbox_top, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ),  vbox_top, FALSE, FALSE, 0 );
 
 
 
