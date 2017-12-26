@@ -659,24 +659,30 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     const gchar* fname = conf_ctx_fname( rdata->ctx_, &exist, &rok, &wok );
 
     gchar* str_access = NULL;
-    gchar* str_fname = NULL;
+    gchar* str_markup = NULL;
 
     if ( fname != NULL )
     {
-        // TODO: how to show file access info
-        //
-        str_access = g_strdup_printf( "[%s%s%s]",
-                                      exist ? "f" : "-",
-                                      rok   ? "r" : "-",
-                                      wok   ? "w" : "-" );
+        if ( !exist )
+            str_access = g_strdup( " <b>[doesn't exist]</b>" );
+        else
+        if ( !wok )
+            str_access = g_strdup( " <b>[read only]</b>" );
 
-        str_fname = g_strdup_printf( "<a href='%s'>%s</a>", fname, fname );
+//        str_access = g_strdup_printf( "[%s%s%s]",
+//                                      exist ? "f" : "-",
+//                                      rok   ? "r" : "-",
+//                                      wok   ? "w" : "-" );
+
+        str_markup = g_strdup_printf( "<a href='%s'>%s</a>%s",
+                                     fname, fname,
+                                     str_access ? str_access : "" );
     }
 
-    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str_fname ? str_fname : "" );
+    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str_markup ? str_markup : "" );
 
     g_free( str_access );
-    g_free( str_fname );
+    g_free( str_markup );
 
 //    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
@@ -743,7 +749,7 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
     if ( !dlg )
         return;
 
-    const gchar* fname = gtk_label_get_text( lab );
+    const gchar* fname = gtk_label_get_current_uri( lab );
 
     printf( " >> on_lab_fname(): [%s]\n", fname);
 
