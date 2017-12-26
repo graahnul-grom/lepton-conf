@@ -1797,16 +1797,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
         , G_TYPE_POINTER  // rdata
     );
 
-    // dlg_model_set( dlg, GTK_TREE_MODEL(dlg->store_) );
-
-
     // tree view:
     //
-    // dlg->tree_w_ = gtk_tree_view_new_with_model( dlg_model( dlg ) );
     dlg->tree_w_ = gtk_tree_view_new_with_model( GTK_TREE_MODEL(dlg->store_) );
     dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
-
 
     // tree view columns:
     //
@@ -1816,15 +1811,20 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
 
 
+
     dlg->showinh_ = TRUE;
 
 
+
+    // load conf:
+    //
     conf_load( dlg );
+
+    // setup filter:
+    //
     tree_filter_setup( dlg );
 
 
-
-//    gtk_tree_view_expand_all( dlg->tree_v_ );
 
 
     // content area:
@@ -1833,53 +1833,33 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-
     gchar* cwd = g_get_current_dir();
 
+    // TODO: set window's title elsewhere:
+    //
+    gtk_window_set_title( GTK_WINDOW( dlg ),
+                          g_strdup_printf( "gedacfged - %s", cwd ) );
 
 
 
     // -------------------------- box (top):
     //
-    GtkWidget* vbox_top = gtk_vbox_new( FALSE, 0 );
+    GtkWidget* box_top = gtk_vbox_new( FALSE, 0 );
 
 
     // cwd label:
     //
-    mk_labels_line( "<b>cwd: </b>", gtk_label_new( cwd ), vbox_top );
+    mk_labels_line( "<b>cwd: </b>", gtk_label_new( cwd ), box_top );
 
 
-    // add vbox_top to ca:
+    // add box_top to ca:
     //
-    gtk_box_pack_start( GTK_BOX( ca ),  vbox_top, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ),  box_top, FALSE, FALSE, 0 );
 
 
 
 
-
-
-
-    // -------------------------- box2 (top):
-    //
-    GtkWidget* hbox2_top = gtk_hbox_new( FALSE, 0 );
-
-
-
-        // TODO: set window title elsewhere:
-        //
-        gtk_window_set_title( GTK_WINDOW( dlg ),
-                              g_strdup_printf( "gedacfged - %s", cwd ) );
-        // g_free( cwd );
-
-
-
-    // add hbox2_top to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ),  hbox2_top, FALSE, FALSE, 0 );
-
-
-
-    // scrolled win:
+    //  -------------------------- scrolled win:
     //
     GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
@@ -1898,29 +1878,27 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-
-
-
     // -------------------------- box (bottom):
     //
-    GtkWidget* vbox_bot = gtk_vbox_new( TRUE, 0 );
+    GtkWidget* box_bot = gtk_vbox_new( TRUE, 0 );
+
 
     dlg->lab_ctx_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>ctx: </b>", dlg->lab_ctx_, vbox_bot );
+    mk_labels_line( "<b>ctx: </b>", dlg->lab_ctx_, box_bot );
 
     dlg->lab_fname_ = gtk_label_new( NULL );
     gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
-    mk_labels_line( "<b>fname: </b>", dlg->lab_fname_, vbox_bot );
+    mk_labels_line( "<b>fname: </b>", dlg->lab_fname_, box_bot );
 
-    mk_labels_line_separ( vbox_bot );
+    mk_labels_line_separ( box_bot );
 
     dlg->lab_name_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>name: </b>", dlg->lab_name_, vbox_bot );
+    mk_labels_line( "<b>name: </b>", dlg->lab_name_, box_bot );
 
     dlg->lab_val_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>value: </b>", dlg->lab_val_, vbox_bot );
+    mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
 
-    mk_labels_line_separ( vbox_bot );
+    mk_labels_line_separ( box_bot );
 
 
     // show inh check box:
@@ -1932,17 +1910,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ), dlg->showinh_ );
 
-//    gtk_box_pack_start_defaults( GTK_BOX( vbox_bot ), btn_showinh );
-    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, FALSE, FALSE, 0 );
-//    gtk_box_pack_start( GTK_BOX( vbox_bot ), btn_showinh, TRUE, FALSE, 0 );
-
-
+    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, FALSE, FALSE, 0 );
 
 
     // add box_bot to ca:
     //
-    gtk_box_pack_start( GTK_BOX( ca ),  vbox_bot, FALSE, FALSE, 0 );
-
+    gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
 
 
 
@@ -1964,11 +1937,9 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-
     // show all:
     //
     gtk_widget_show_all( GTK_WIDGET(dlg) );
-
 
 
 
@@ -2018,7 +1989,6 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-
     // NOTE: dont't do it:
     //  if tree not focused on startup => SIGSEGV
     //
@@ -2027,9 +1997,11 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 
+
+
     // select row:
     //
-    GtkTreePath* path = gtk_tree_path_new_from_string( "1" ); // 3: path ctx
+    GtkTreePath* path = gtk_tree_path_new_from_string( "1" );
     gtk_tree_view_expand_to_path( dlg->tree_v_, path );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
     gtk_tree_path_free( path );
