@@ -647,10 +647,16 @@ row_add( cfg_edit_dlg* dlg,
 
 
 static void
-on_delete_event( GtkWidget* dlg, GdkEvent* e, gpointer* p )
+on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
 {
     printf( "cfg_edit_dlg::on_delete_event()\n" );
-    gtk_widget_destroy( dlg );
+
+    // NOTE: free rdata
+    //
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
+
+    gtk_widget_destroy( GTK_WIDGET( dlg ) );
 }
 
 
