@@ -174,6 +174,29 @@ rm_rdata( row_data* rdata )
 
 
 
+static row_data*
+row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+
+
+static gboolean
+rm_rdata_func( GtkTreeModel* mod,
+               GtkTreePath*  path,
+               GtkTreeIter*  it,
+               gpointer      p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+    row_data* rdata = row_field_get_data( dlg, it );
+    rm_rdata( rdata );
+
+    return FALSE; // FALSE => continue gtk_tree_model_foreach()
+}
+
+
+
 static void
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
@@ -714,12 +737,17 @@ on_btn_reload( GtkButton* btn, gpointer* p )
         return;
 
 
-    // remember current tree node:
-    //
-    char* path_str = row_cur_pos_save( dlg );
+    char* path = row_cur_pos_save( dlg );
 
 
     tree_filter_remove( dlg );
+
+
+    // NOTE: free rdata
+    //
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
+
 
     gtk_tree_store_clear( dlg->store_ );
 
@@ -729,14 +757,9 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-//    gtk_widget_activate( GTK_WIDGET( dlg->tree_v_ ) );
 
 
-    // restore current tree node:
-    //
-    row_cur_pos_restore( dlg, path_str );
-
-    // gtk_tree_view_expand_all( dlg->tree_v_ ); // // //
+    row_cur_pos_restore( dlg, path );
 
 } // on_btn_reload()
 
@@ -1478,6 +1501,8 @@ conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg )
 
         do
         {
+            // NOTE: free rdata
+            //
             rdata = row_field_get_data( dlg, &it_store );
             rm_rdata( rdata );
         }
