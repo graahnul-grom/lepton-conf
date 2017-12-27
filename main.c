@@ -133,16 +133,17 @@ int main( int argc, char* argv[] )
 
 
 //    test_dlg();
-    gtk_dialog_run( GTK_DIALOG( wnd ) );
+//    gtk_dialog_run( GTK_DIALOG( wnd ) );
 
 
-//        g_signal_connect( G_OBJECT( wnd ),
-//                          "destroy",
-//                          G_CALLBACK( &gtk_main_quit ),
-//                          NULL );
-//        gtk_widget_show_all( wnd );
-//        gtk_main();
+        g_signal_connect( G_OBJECT( wnd ),
+                          "destroy",
+                          G_CALLBACK( &gtk_main_quit ),
+                          NULL );
+        gtk_widget_show_all( wnd );
+        gtk_main();
 
+    printf( " -- -- -- main(): done\n\n");
     return 0;
 }
 
