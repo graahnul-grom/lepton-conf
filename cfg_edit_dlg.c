@@ -15,6 +15,39 @@ GtkWidget* cfg_edit_dlg_new()
 
 
 
+
+typedef enum
+{
+    RT_CTX,
+    RT_GRP,
+    RT_KEY,
+}
+RowType;
+
+struct _row_data
+{
+    EdaConfig* ctx_;
+    gchar*     group_;
+    gchar*     key_;
+    gchar*     val_;
+    gboolean   ro_;   // read-only
+    gboolean   inh_;  // inherited
+    RowType    rtype_;
+};
+
+typedef struct _row_data row_data;
+
+enum
+{
+    COL_NAME,
+    COL_VAL,
+    COL_DATA, // rdata: hidden
+    NUM_COLS
+};
+
+
+
+
 /* ******************************************************************
 *
 *  gobject stuff:
@@ -123,34 +156,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
 
 
-typedef enum
-{
-    RT_CTX,
-    RT_GRP,
-    RT_KEY,
-}
-RowType;
 
-struct _row_data
-{
-    EdaConfig* ctx_;
-    gchar*     group_;
-    gchar*     key_;
-    gchar*     val_;
-    gboolean   ro_;   // read-only
-    gboolean   inh_;  // inherited
-    RowType    rtype_;
-};
-
-typedef struct _row_data row_data;
-
-enum
-{
-    COL_NAME,
-    COL_VAL,
-    COL_DATA, // rdata: hidden
-    NUM_COLS
-};
 
 
 
