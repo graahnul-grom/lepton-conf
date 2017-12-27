@@ -23,6 +23,20 @@ static conf_key_data g_conf_key_data[] =
         "eklmn oprst"
     },
     {
+        "use-docks",
+//        "The type of GUI is controlled by \"use-docks\" boolean"
+//        " configuration key in \"gschem.gui\" group."
+//        " If widgets will be shown"
+//        " in docks (true) or as"
+//        " a dialog boxes (false)"
+
+        "The type of GUI: how to display widgets.\n"
+        " If true, widgets will be shown in docks.\n"
+        " If false, widgets will be shown as a dialog boxes."
+
+//        "The type of GUI is controlled by \"use-docks\" boolean configuration key in \"gschem.gui\" group. If widgets will be shown in docks (true) or as a dialog boxes (false)"
+    },
+    {
         NULL,
         NULL
     }
@@ -784,7 +798,7 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
 
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  val );
-        gtk_label_set_text( GTK_LABEL( dlg->lab_desc_ ), desc );
+        gtk_text_buffer_set_text( dlg->txtbuf_desc_, desc ? desc : "", -1 );
 
         g_free( name );
         g_free( val );
@@ -793,7 +807,7 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     {
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), NULL );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
-        gtk_label_set_text( GTK_LABEL( dlg->lab_desc_ ), NULL );
+        gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
     }
 
 
@@ -2000,28 +2014,24 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 
-    // scrolled window:
+    // scrolled window for the tree:
     //
-    GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
-    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
+    GtkWidget* wscroll_tree = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_tree ),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );
 
-    // add tree to wscroll:
-    //
-    gtk_container_add( GTK_CONTAINER( wscroll ), dlg->tree_w_ );
+    gtk_container_add( GTK_CONTAINER( wscroll_tree ), dlg->tree_w_ );
 
-
-    // add wscroll to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
 
 
 
 
     // box (bottom):
     //
-    GtkWidget* box_bot = gtk_vbox_new( TRUE, 0 );
+    GtkWidget* box_bot = gtk_vbox_new( FALSE, 5 );
+//    GtkWidget* box_bot = gtk_vbox_new( TRUE, 0 );
 
 
     dlg->lab_ctx_ = gtk_label_new( NULL );
@@ -2039,8 +2049,28 @@ mk_gui( cfg_edit_dlg* dlg )
     dlg->lab_val_ = gtk_label_new( NULL );
     mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
 
-    dlg->lab_desc_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>desc: </b>", dlg->lab_desc_, box_bot );
+    mk_labels_line_separ( box_bot );
+
+
+    // description text view:
+    //
+    GtkWidget* tv = gtk_text_view_new();
+
+    gtk_text_view_set_editable( GTK_TEXT_VIEW( tv ), FALSE );
+    gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( tv ), GTK_WRAP_WORD );
+
+    dlg->txtbuf_desc_ = gtk_text_view_get_buffer( GTK_TEXT_VIEW( tv ) );
+    gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
+
+    GtkWidget* wscroll_desc = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_desc ),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC );
+
+    gtk_container_add( GTK_CONTAINER( wscroll_desc ), tv );
+    gtk_box_pack_start( GTK_BOX( box_bot ), wscroll_desc, FALSE, FALSE, 0 );
+
+
 
     mk_labels_line_separ( box_bot );
 

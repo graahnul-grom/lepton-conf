@@ -126,7 +126,7 @@ int main( int argc, char* argv[] )
 
 
     gtk_widget_set_size_request( wnd, 800, 650 );
-//    gtk_window_set_default_size( GTK_WINDOW(wnd), 750, 450 );
+//    gtk_window_set_default_size( GTK_WINDOW(wnd), 800, 650 );
 //    gtk_window_set_default_size( GTK_WINDOW(wnd), 600, 400 );
 //    gtk_widget_set_size_request( wnd, 900, 800 );
 //    gtk_widget_set_size_request( wnd, 900, 400 );
