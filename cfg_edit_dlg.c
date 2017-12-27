@@ -7,12 +7,7 @@
 
 
 
-/*! \brief Create a new cfg edit dlg
-*
-*  \param [in] w_current The GschemToplevel structure
-*/
 GtkWidget* cfg_edit_dlg_new()
-//cfg_edit_dlg_new (GschemToplevel *w_current)
 {
   gpointer obj = g_object_new (CFG_EDIT_DLG_TYPE, NULL);
   return GTK_WIDGET (obj);
@@ -20,9 +15,9 @@ GtkWidget* cfg_edit_dlg_new()
 
 
 
-/* ******************************************************************&
+/* ******************************************************************
 *
-*  gobject-specific stuff:
+*  gobject stuff:
 *
 */
 
@@ -30,7 +25,9 @@ G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 // G_DEFINE_TYPE (GschemObjectPropertiesWidget, gschem_object_properties_widget, GSCHEM_TYPE_BIN);
 
 
-static void cfg_edit_dlg_get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
+
+static void
+cfg_edit_dlg_get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
 {
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
 
@@ -45,7 +42,9 @@ static void cfg_edit_dlg_get_property( GObject* obj, guint id, GValue* val, GPar
 }
 
 
-static void cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
+
+static void
+cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
 {
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
 
@@ -60,7 +59,9 @@ static void cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val
 }
 
 
-static void cfg_edit_dlg_dispose( GObject* obj )
+
+static void
+cfg_edit_dlg_dispose( GObject* obj )
 {
 //    printf( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
 //        obj, obj ? obj->ref_count : 0 );
@@ -74,7 +75,9 @@ static void cfg_edit_dlg_dispose( GObject* obj )
 }
 
 
-static void cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
+
+static void
+cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 {
     // NOTE: glib debug messages:
     //
@@ -97,7 +100,25 @@ static void cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
     g_object_class_install_property( gcls, CFG_EDIT_DLG_PROPID_PROP1, spec );
 }
 
-/**** ^^ gobject stuff ^^ ****************************************************** */
+
+
+static void
+mk_gui( cfg_edit_dlg* dlg );
+
+
+
+static void
+cfg_edit_dlg_init( cfg_edit_dlg* dlg )
+{
+    dlg->prop1_ = 5;
+    printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
+    mk_gui( dlg );
+}
+
+/*
+*
+*
+********************************************************************************/
 
 
 
@@ -612,7 +633,8 @@ tree_add_col( cfg_edit_dlg*    dlg,
                                              NULL );
 
     gtk_tree_view_append_column( dlg->tree_v_, col );
-}
+
+} // tree_add_col()
 
 
 
@@ -625,7 +647,7 @@ row_add( cfg_edit_dlg* dlg,
 {
     GtkTreeIter it;
     gtk_tree_store_append( dlg->store_, &it, itParent );
-    //
+
     // NOTE: gtk_tree_store_set() makes copies of strings:
     //
     gtk_tree_store_set( dlg->store_,
@@ -636,7 +658,8 @@ row_add( cfg_edit_dlg* dlg,
                         -1 );
 
     return it;
-}
+
+} // row_add()
 
 
 
@@ -1835,13 +1858,8 @@ mk_labels_line_separ( GtkWidget* parent_box )
 
 
 static void
-cfg_edit_dlg_init( cfg_edit_dlg* dlg )
+mk_gui( cfg_edit_dlg* dlg )
 {
-    printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
-
-    dlg->prop1_ = 5;
-
-
     // tree store:
     //
     dlg->store_ = gtk_tree_store_new(
@@ -2063,5 +2081,5 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     g_free( cwd );
 
-} // cfg_edit_dlg_init()
+} // mk_gui()
 
