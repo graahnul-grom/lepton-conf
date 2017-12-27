@@ -102,6 +102,17 @@ conf_ctx_name( EdaConfig* ctx );
 static const gchar*
 conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
+static GtkMenu*
+mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
+
+static gchar*
+run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title );
+
+static gboolean
+run_dlg_add_val( cfg_edit_dlg* dlg,
+                 const gchar* title,
+                 gchar** key,
+                 gchar** val );
 
 
 
@@ -878,125 +889,6 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
 
 
-
-static gchar*
-run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
-{
-    GtkWidget* vdlg = gtk_dialog_new_with_buttons(
-        title ? title : "Edit value:",
-        GTK_WINDOW( dlg ),
-        GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
-//        GTK_DIALOG_DESTROY_WITH_PARENT,
-        GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
-        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
-        NULL );
-
-    if ( title )
-        gtk_window_set_title( GTK_WINDOW( vdlg ), title );
-
-    GtkWidget* ent = gtk_entry_new();
-    gtk_entry_set_text( GTK_ENTRY( ent ), txt );
-
-    GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
-    gtk_box_pack_start( GTK_BOX( vbox ), ent, TRUE, TRUE, 5 );
-
-    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
-    gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
-
-
-
-    gtk_dialog_set_alternative_button_order(GTK_DIALOG(vdlg),
-                                            GTK_RESPONSE_ACCEPT,
-                                            GTK_RESPONSE_REJECT,
-                                            -1);
-    gtk_dialog_set_default_response (GTK_DIALOG (vdlg),
-                                     GTK_RESPONSE_ACCEPT);
-
-//    g_signal_connect_swapped (vdlg,
-//                                "response",
-//                                G_CALLBACK (gtk_widget_destroy),
-//                                vdlg);
-
-
-    gtk_widget_show_all( vdlg );
-    gtk_widget_set_size_request( vdlg, 300, -1 );
-
-
-
-
-
-    gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
-
-//    printf( "  run_dlg_edit_val(): resp: %d\n", res );
-
-    gchar* ret = NULL;
-
-    if ( res == GTK_RESPONSE_ACCEPT )
-    {
-        ret = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent ) ) );
-    }
-
-    gtk_widget_destroy( vdlg );
-
-    return ret;
-
-} // run_dlg_edit_val()
-
-
-
-static gboolean
-run_dlg_add_val( cfg_edit_dlg* dlg,
-                 const gchar* title,
-                 gchar** key,
-                 gchar** val )
-{
-    GtkWidget* vdlg = gtk_dialog_new_with_buttons(
-        title ? title : "Add key/value:",
-        GTK_WINDOW( dlg ),
-        GTK_DIALOG_MODAL,
-        GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
-        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
-        NULL );
-
-    if ( title )
-        gtk_window_set_title( GTK_WINDOW( vdlg ), title );
-
-    GtkWidget* ent_key = gtk_entry_new();
-    gtk_entry_set_text( GTK_ENTRY( ent_key ), "newKey" );
-
-    GtkWidget* ent_val = gtk_entry_new();
-    gtk_entry_set_text( GTK_ENTRY( ent_val ), "newVal" );
-
-    GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
-    gtk_box_pack_start( GTK_BOX( vbox ), ent_key, TRUE, TRUE, 5 );
-    gtk_box_pack_start( GTK_BOX( vbox ), ent_val, TRUE, TRUE, 5 );
-
-    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
-    gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
-
-    gtk_widget_show_all( vdlg );
-    gtk_widget_set_size_request( vdlg, 300, -1 );
-    gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
-
-    printf( "  edit_val_dlg(): resp: %d\n", res );
-
-    gboolean ret = FALSE;
-
-    if ( res == GTK_RESPONSE_ACCEPT )
-    {
-        *key = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent_key ) ) );
-        *val = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent_val ) ) );
-        ret = TRUE;
-    }
-
-    gtk_widget_destroy( vdlg );
-
-    return ret;
-
-} // dlg_add_val_run()
-
-
-
 static void
 on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 {
@@ -1171,50 +1063,6 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
 
 
 
-static GtkMenu*
-mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
-{
-    if ( rdata->rtype_ == RT_CTX )
-        return NULL;
-
-    GtkWidget* menu = gtk_menu_new();
-
-    GtkWidget* mitem_edit = NULL;
-    GtkWidget* mitem_add  = NULL;
-
-    if ( rdata->rtype_ == RT_KEY )
-    {
-        mitem_edit = gtk_menu_item_new_with_mnemonic( "_edit" );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_edit);
-        g_signal_connect( G_OBJECT( mitem_edit ),
-                          "activate",
-                          G_CALLBACK( &on_mitem_edit ),
-                          dlg );
-        gtk_widget_show( mitem_edit );
-        gtk_widget_set_sensitive( mitem_edit, !rdata->ro_ );
-    }
-
-    if ( rdata->rtype_ == RT_GRP )
-    {
-        mitem_add = gtk_menu_item_new_with_mnemonic( "_add" );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_add);
-        g_signal_connect( G_OBJECT( mitem_add ),
-                          "activate",
-                          G_CALLBACK( &on_mitem_add ),
-                          dlg );
-        gtk_widget_show( mitem_add );
-        gtk_widget_set_sensitive( mitem_add, !rdata->ro_ );
-    }
-
-
-//    gtk_widget_set_sensitive( mitem2, rdata->inh_ );
-
-    return GTK_MENU( menu );
-
-} // mk_popup_menu()
-
-
-
 static gboolean
 on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 {
@@ -1284,9 +1132,226 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 
 
 
+/* ******************************************************************
+*
+*  popup menu:
+*
+*/
+
+static GtkMenu*
+mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
+{
+    if ( rdata->rtype_ == RT_CTX )
+        return NULL;
+
+    GtkWidget* menu = gtk_menu_new();
+
+    GtkWidget* mitem_edit = NULL;
+    GtkWidget* mitem_add  = NULL;
+
+    if ( rdata->rtype_ == RT_KEY )
+    {
+        mitem_edit = gtk_menu_item_new_with_mnemonic( "_edit" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_edit);
+        g_signal_connect( G_OBJECT( mitem_edit ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_edit ),
+                          dlg );
+        gtk_widget_show( mitem_edit );
+        gtk_widget_set_sensitive( mitem_edit, !rdata->ro_ );
+    }
+
+    if ( rdata->rtype_ == RT_GRP )
+    {
+        mitem_add = gtk_menu_item_new_with_mnemonic( "_add" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_add);
+        g_signal_connect( G_OBJECT( mitem_add ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_add ),
+                          dlg );
+        gtk_widget_show( mitem_add );
+        gtk_widget_set_sensitive( mitem_add, !rdata->ro_ );
+    }
+
+
+//    gtk_widget_set_sensitive( mitem2, rdata->inh_ );
+
+    return GTK_MENU( menu );
+
+} // mk_popup_menu()
+
+
+
+
+/* ******************************************************************
+*
+*  aux dialogs:
+*
+*/
+
+static gchar*
+run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
+{
+    GtkWidget* vdlg = gtk_dialog_new_with_buttons(
+        title ? title : "Edit value:",
+        GTK_WINDOW( dlg ),
+        GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
+//        GTK_DIALOG_DESTROY_WITH_PARENT,
+        GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+        NULL );
+
+    if ( title )
+        gtk_window_set_title( GTK_WINDOW( vdlg ), title );
+
+    GtkWidget* ent = gtk_entry_new();
+    gtk_entry_set_text( GTK_ENTRY( ent ), txt );
+
+    GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
+    gtk_box_pack_start( GTK_BOX( vbox ), ent, TRUE, TRUE, 5 );
+
+    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
+    gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
+
+
+
+    gtk_dialog_set_alternative_button_order(GTK_DIALOG(vdlg),
+                                            GTK_RESPONSE_ACCEPT,
+                                            GTK_RESPONSE_REJECT,
+                                            -1);
+    gtk_dialog_set_default_response (GTK_DIALOG (vdlg),
+                                     GTK_RESPONSE_ACCEPT);
+
+//    g_signal_connect_swapped (vdlg,
+//                                "response",
+//                                G_CALLBACK (gtk_widget_destroy),
+//                                vdlg);
+
+
+    gtk_widget_show_all( vdlg );
+    gtk_widget_set_size_request( vdlg, 300, -1 );
+
+
+
+
+
+    gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
+
+//    printf( "  run_dlg_edit_val(): resp: %d\n", res );
+
+    gchar* ret = NULL;
+
+    if ( res == GTK_RESPONSE_ACCEPT )
+    {
+        ret = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent ) ) );
+    }
+
+    gtk_widget_destroy( vdlg );
+
+    return ret;
+
+} // run_dlg_edit_val()
+
+
+
+static gboolean
+run_dlg_add_val( cfg_edit_dlg* dlg,
+                 const gchar* title,
+                 gchar** key,
+                 gchar** val )
+{
+    GtkWidget* vdlg = gtk_dialog_new_with_buttons(
+        title ? title : "Add key/value:",
+        GTK_WINDOW( dlg ),
+        GTK_DIALOG_MODAL,
+        GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+        NULL );
+
+    if ( title )
+        gtk_window_set_title( GTK_WINDOW( vdlg ), title );
+
+    GtkWidget* ent_key = gtk_entry_new();
+    gtk_entry_set_text( GTK_ENTRY( ent_key ), "newKey" );
+
+    GtkWidget* ent_val = gtk_entry_new();
+    gtk_entry_set_text( GTK_ENTRY( ent_val ), "newVal" );
+
+    GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
+    gtk_box_pack_start( GTK_BOX( vbox ), ent_key, TRUE, TRUE, 5 );
+    gtk_box_pack_start( GTK_BOX( vbox ), ent_val, TRUE, TRUE, 5 );
+
+    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
+    gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
+
+    gtk_widget_show_all( vdlg );
+    gtk_widget_set_size_request( vdlg, 300, -1 );
+    gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
+
+    printf( "  edit_val_dlg(): resp: %d\n", res );
+
+    gboolean ret = FALSE;
+
+    if ( res == GTK_RESPONSE_ACCEPT )
+    {
+        *key = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent_key ) ) );
+        *val = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent_val ) ) );
+        ret = TRUE;
+    }
+
+    gtk_widget_destroy( vdlg );
+
+    return ret;
+
+} // run_dlg_add_val()
+
+
+
+
+/* ******************************************************************
+*
+*  "config-changed" event handlers:
+*  NOTE: not used
+*
+*/
+
+static void
+on_conf_chg_ctx_dflt( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
+{
+    printf( " >> >> on_conf_chg_ctx_dflt(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_default_context(), g, k );
+}
+
+
+static void
+on_conf_chg_ctx_sys( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
+{
+    printf( " >> >> on_conf_chg_ctx_sys(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_system_context(), g, k );
+}
+
+
+static void
+on_conf_chg_ctx_user( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
+{
+    printf( " >> >> on_conf_chg_ctx_user(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_user_context(), g, k );
+}
+
+
+static void
+on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
+{
+    printf( " >> >> on_conf_chg_ctx_path(): [%d], [%s] [%s]\n",
+        ctx == eda_config_get_context_for_path( "." ), g, k );
+}
+
+
+
+
 /* ******************************************************************&
 *
-*  config manipulation routines:
+*  config:
 *
 */
 
@@ -1603,56 +1668,8 @@ conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
     }
 
     row_cur_pos_restore( dlg, path );
-}
 
-
-
-
-////////////////////////////////////////////////////////////
-//
-// "config-changed" sinal handlers:
-//
-
-static void
-on_conf_chg_ctx_dflt( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
-{
-    printf( " >> >> on_conf_chg_ctx_dflt(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_default_context(), g, k );
-}
-
-
-static void
-on_conf_chg_ctx_sys( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
-{
-    printf( " >> >> on_conf_chg_ctx_sys(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_system_context(), g, k );
-}
-
-
-static void
-on_conf_chg_ctx_user( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-
-    printf( " >> >> on_conf_chg_ctx_user(): [%d], [%s] [%s], [%d]\n",
-        ctx == eda_config_get_user_context(), g, k, dlg->showinh_ );
-
-    // TODO: fail: conf_reload_ctx_path( dlg );
-
-//    conf_reload_ctx_path( dlg );
-}
-
-
-static void
-on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
-{
-    printf( " >> >> on_conf_chg_ctx_path(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_context_for_path( "." ), g, k );
-}
-
-//
-////////////////////////////////////////////////////////////
-
+} // conf_reload_child_ctxs()
 
 
 
@@ -1699,6 +1716,7 @@ conf_load( cfg_edit_dlg* dlg )
 
 
     // setup "config-changed" handlers:
+    // NOTE: not used
     //
     g_signal_connect( G_OBJECT( ctx_dflt ),
                       "config-changed",
@@ -1763,24 +1781,6 @@ conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 
 
 
-/*
-static gboolean
-conf_has_key( EdaConfig* ctx, const gchar* grp, const gchar* key )
-{
-    GError* err = NULL;
-    gchar* val = eda_config_get_string( ctx, grp, key, &err );
-
-    if ( err != NULL )
-        printf( " >> conf_has_key(): err: %s\n", err->message );
-
-    g_clear_error( &err );
-    g_free( val );
-
-    return val != NULL;
-}
-*/
-
-
 static void
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 {
@@ -1836,10 +1836,11 @@ conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg )
 
 
 
-
-
-
-
+/* ******************************************************************
+*
+*  gui:
+*
+*/
 
 static void
 mk_labels_line( const gchar* left_txt,
