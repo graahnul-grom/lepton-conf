@@ -1,4 +1,4 @@
-#define G_LOG_DOMAIN "gedacfged"
+//#define G_LOG_DOMAIN "gedacfged"
 
 #include "cfg_edit_dlg.h"
 
@@ -247,7 +247,7 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 {
     // NOTE: glib debug messages:
     //
-    g_debug( "cfg_edit_dlg::class_init() eklmn: [%s]", "oprst" );
+    g_debug( " >> g_debug(): cfg_edit_dlg::class_init() eklmn: [%s]", "oprst" );
 
     GObjectClass* gcls = G_OBJECT_CLASS( cls );
 

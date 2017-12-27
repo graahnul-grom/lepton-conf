@@ -3,7 +3,7 @@
 // > export G_MESSAGES_DEBUG="gedacfged"
 // > /path/to/gedacfged
 //
-#define G_LOG_DOMAIN "gedacfged"
+//#define G_LOG_DOMAIN "gedacfged"
 
 
 #include <libguile.h>
