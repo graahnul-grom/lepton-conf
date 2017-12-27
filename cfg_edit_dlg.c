@@ -1284,24 +1284,22 @@ run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
     gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
 
 
-
     gtk_dialog_set_alternative_button_order(GTK_DIALOG(vdlg),
                                             GTK_RESPONSE_ACCEPT,
                                             GTK_RESPONSE_REJECT,
                                             -1);
+
     gtk_dialog_set_default_response (GTK_DIALOG (vdlg),
                                      GTK_RESPONSE_ACCEPT);
 
-//    g_signal_connect_swapped (vdlg,
-//                                "response",
-//                                G_CALLBACK (gtk_widget_destroy),
-//                                vdlg);
+    gtk_entry_set_activates_default( GTK_ENTRY( ent ), TRUE );
 
 
     gtk_widget_show_all( vdlg );
+
+//    g_signal_connect( vdlg, "response", G_CALLBACK( &resp ), dlg );
+
     gtk_widget_set_size_request( vdlg, 300, -1 );
-
-
 
 
 
@@ -1350,6 +1348,19 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
     GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
     gtk_box_pack_start( GTK_BOX( vbox ), ent_key, TRUE, TRUE, 5 );
     gtk_box_pack_start( GTK_BOX( vbox ), ent_val, TRUE, TRUE, 5 );
+
+
+    gtk_dialog_set_alternative_button_order(GTK_DIALOG(vdlg),
+                                            GTK_RESPONSE_ACCEPT,
+                                            GTK_RESPONSE_REJECT,
+                                            -1);
+
+    gtk_dialog_set_default_response (GTK_DIALOG (vdlg),
+                                     GTK_RESPONSE_ACCEPT);
+
+    gtk_entry_set_activates_default( GTK_ENTRY( ent_key ), TRUE );
+    gtk_entry_set_activates_default( GTK_ENTRY( ent_val ), TRUE );
+
 
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
     gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
