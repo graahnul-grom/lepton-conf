@@ -978,27 +978,35 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
     gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
 
-    if ( txt )
+    if ( txt == NULL )
+        return;
+
+    if ( !rdata->inh_ && g_strcmp0( rdata->val_, txt ) == 0 )
     {
-        // NOTE: conf_chg_val() / conf_save()
-        //
-        conf_chg_val( rdata, txt );
-
-        if ( conf_save( rdata->ctx_, dlg ) )
-        {
-            row_field_set_val( dlg, it, txt );
-
-            // unset inherited:
-            //
-            row_key_unset_inh( dlg, it );
-
-            // NOTE: conf_reload_child_ctxs()
-            //
-            conf_reload_child_ctxs( rdata->ctx_, dlg );
-        }
-
         g_free( txt );
+        return;
     }
+
+
+    // NOTE: conf_chg_val() / conf_save()
+    //
+    conf_chg_val( rdata, txt );
+
+    if ( conf_save( rdata->ctx_, dlg ) )
+    {
+        row_field_set_val( dlg, it, txt );
+
+        // unset inherited:
+        //
+        row_key_unset_inh( dlg, it );
+
+        // NOTE: conf_reload_child_ctxs()
+        //
+        conf_reload_child_ctxs( rdata->ctx_, dlg );
+    }
+
+
+    g_free( txt );
 
 } // on_mitem_edit()
 
@@ -1041,22 +1049,26 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
         row_data* rdata_child = row_field_get_data( dlg, &it_child );
 
 
-        // NOTE: conf_chg_val() / conf_save()
-        //
-        conf_chg_val( rdata_child, val );
-
-        if ( conf_save( rdata->ctx_, dlg ) )
+        if ( rdata_child->inh_ || g_strcmp0( val, rdata_child->val_ ) != 0 )
         {
-            row_field_set_val( dlg, it_child, val );
-
-            // unset inherited:
+            // NOTE: conf_chg_val() / conf_save()
             //
-            row_key_unset_inh( dlg, it_child );
+            conf_chg_val( rdata_child, val );
 
-            // NOTE: conf_reload_child_ctxs()
-            //
-            conf_reload_child_ctxs( rdata->ctx_, dlg );
+            if ( conf_save( rdata->ctx_, dlg ) )
+            {
+                row_field_set_val( dlg, it_child, val );
+
+                // unset inherited:
+                //
+                row_key_unset_inh( dlg, it_child );
+
+                // NOTE: conf_reload_child_ctxs()
+                //
+                conf_reload_child_ctxs( rdata->ctx_, dlg );
+            }
         }
+
 
         gtk_tree_path_free( path1 );
         g_free( key );
@@ -1259,6 +1271,8 @@ mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 *
 */
 
+// {post}: caller must g_free() {ret}
+//
 static gchar*
 run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 {
@@ -1322,6 +1336,8 @@ run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 
 
 
+// {post}: caller must g_free() [key], [val]
+//
 static gboolean
 run_dlg_add_val( cfg_edit_dlg* dlg,
                  const gchar* title,
