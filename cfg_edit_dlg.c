@@ -943,7 +943,7 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
     dlg->showinh_ = gtk_toggle_button_get_active( btn );
 
-    char* path_str = row_cur_pos_save( dlg );
+//    char* path = row_cur_pos_save( dlg );
 
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
@@ -953,7 +953,7 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 
-    row_cur_pos_restore( dlg, path_str );
+//    row_cur_pos_restore( dlg, path );
 
 } // on_btn_showinh()
 
