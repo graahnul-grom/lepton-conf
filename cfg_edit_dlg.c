@@ -37,6 +37,7 @@ struct _row_data
 
 typedef struct _row_data row_data;
 
+
 enum
 {
     COL_NAME,
@@ -44,6 +45,62 @@ enum
     COL_DATA, // rdata: hidden
     NUM_COLS
 };
+
+static int tree_colid_name()  { return COL_NAME; }
+static int tree_colid_val()   { return COL_VAL;  }
+static int tree_colid_data()  { return COL_DATA; }
+static int tree_cols_cnt()    { return NUM_COLS; }
+
+
+
+
+/* ******************************************************************
+*
+*  forward declarations:
+*
+*/
+
+static void
+mk_gui( cfg_edit_dlg* dlg );
+
+static row_data*
+row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+static void
+conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
+
+static void
+conf_chg_val( row_data* rdata, const gchar* txt );
+
+static gboolean
+conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
+
+static gboolean
+conf_load_ctx( EdaConfig* ctx );
+
+static GtkTreeIter
+conf_mk_ctx_node( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
+
+static void
+conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg );
+
+static void
+conf_reload_ctx_user( cfg_edit_dlg* dlg );
+
+static void
+conf_reload_ctx_path( cfg_edit_dlg* dlg );
+
+static void
+conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg );
+
+static void
+conf_load( cfg_edit_dlg* dlg );
+
+static const gchar*
+conf_ctx_name( EdaConfig* ctx );
+
+static const gchar*
+conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
 
 
@@ -136,11 +193,6 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 
 
 static void
-mk_gui( cfg_edit_dlg* dlg );
-
-
-
-static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
     dlg->prop1_ = 5;
@@ -148,20 +200,15 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     mk_gui( dlg );
 }
 
-/*
+
+
+
+/* ******************************************************************
 *
+*  rdata:
 *
-********************************************************************************/
+*/
 
-
-
-
-
-
-
-
-// TODO: row_data: free memory
-//
 static row_data*
 mk_rdata( EdaConfig*   ctx,
           const gchar* group,
@@ -201,11 +248,6 @@ rm_rdata( row_data* rdata )
 
 
 
-static row_data*
-row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
-
-
-
 static gboolean
 rm_rdata_func( GtkTreeModel* mod,
                GtkTreePath*  path,
@@ -224,52 +266,12 @@ rm_rdata_func( GtkTreeModel* mod,
 
 
 
-static void
-conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
-static void
-conf_chg_val( row_data* rdata, const gchar* txt );
-
-static gboolean
-conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
-
-static gboolean
-conf_load_ctx( EdaConfig* ctx );
-
-static GtkTreeIter
-conf_mk_ctx_node( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
-
-static void
-conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg );
-
-static void
-conf_reload_ctx_user( cfg_edit_dlg* dlg );
-
-static void
-conf_reload_ctx_path( cfg_edit_dlg* dlg );
-
-static void
-conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg );
-
-static void
-conf_load( cfg_edit_dlg* dlg );
-
-static const gchar*
-conf_ctx_name( EdaConfig* ctx );
-
-static const gchar*
-conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
-
-
-
-
-static int tree_colid_name()  { return COL_NAME; }
-static int tree_colid_val()   { return COL_VAL;  }
-static int tree_colid_data()  { return COL_DATA; }
-static int tree_cols_cnt()    { return NUM_COLS; }
-
-
-
+/* ******************************************************************
+*
+*  row:
+*
+*/
 
 // {ret}: tree store iter corresponding to model's iter [it]
 //
@@ -436,7 +438,6 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
 
 
 
-
 // [it_result]: will be set to found row
 // {ret}: TRUE if cur row is grp and it has child row with [key]
 //
@@ -488,7 +489,6 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
 
 
 
-
 static void
 row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
 {
@@ -518,6 +518,37 @@ row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
 
 
 
+static GtkTreeIter
+row_add( cfg_edit_dlg* dlg,
+         const gchar*  name,
+         const gchar*  val,
+         gpointer      rdata,
+         GtkTreeIter*  itParent )
+{
+    GtkTreeIter it;
+    gtk_tree_store_append( dlg->store_, &it, itParent );
+
+    // NOTE: gtk_tree_store_set() makes copies of strings:
+    //
+    gtk_tree_store_set( dlg->store_,
+                        &it,
+                        tree_colid_name(),     name,
+                        tree_colid_val(),      val,
+                        tree_colid_data(),     rdata,
+                        -1 );
+
+    return it;
+
+} // row_add()
+
+
+
+
+/* ******************************************************************
+*
+*  tree:
+*
+*/
 
 static void tree_cell_draw( GtkTreeViewColumn* col,
                             GtkCellRenderer*   ren,
@@ -550,8 +581,6 @@ static void tree_cell_draw( GtkTreeViewColumn* col,
     }
 
 } // tree_cell_draw()
-
-
 
 
 
@@ -644,36 +673,13 @@ tree_add_col( cfg_edit_dlg*    dlg,
 
 
 
-static GtkTreeIter
-row_add( cfg_edit_dlg* dlg,
-         const gchar*  name,
-         const gchar*  val,
-         gpointer      rdata,
-         GtkTreeIter*  itParent )
-{
-    GtkTreeIter it;
-    gtk_tree_store_append( dlg->store_, &it, itParent );
-
-    // NOTE: gtk_tree_store_set() makes copies of strings:
-    //
-    gtk_tree_store_set( dlg->store_,
-                        &it,
-                        tree_colid_name(),     name,
-                        tree_colid_val(),      val,
-                        tree_colid_data(),     rdata,
-                        -1 );
-
-    return it;
-
-} // row_add()
 
 
-
-
-
-
-
-
+/* ******************************************************************
+*
+*  event handlers:
+*
+*/
 
 static void
 on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
