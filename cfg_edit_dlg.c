@@ -7,6 +7,57 @@
 
 
 
+struct _conf_key_data
+{
+    const gchar* key;
+    const gchar* desc;
+};
+
+typedef struct _conf_key_data conf_key_data;
+
+
+static conf_key_data g_conf_key_data[] =
+{
+    {
+        "newKey",
+        "eklmn oprst"
+    },
+    {
+        NULL,
+        NULL
+    }
+};
+
+
+const conf_key_data*
+conf_key_data_lookup( const gchar* key )
+{
+    const conf_key_data* data = g_conf_key_data;
+
+    for ( ; data->key != NULL; ++data )
+    {
+        if ( g_strcmp0( data->key, key ) == 0 )
+            return data;
+    }
+
+    return NULL;
+}
+
+
+static const gchar*
+conf_key_data_lookup_desc( const gchar* key )
+{
+    const conf_key_data* data = conf_key_data_lookup( key );
+
+    if ( data != NULL)
+        return data->desc;
+
+    return NULL;
+}
+
+
+
+
 GtkWidget* cfg_edit_dlg_new()
 {
   gpointer obj = g_object_new (CFG_EDIT_DLG_TYPE, NULL);
@@ -729,15 +780,20 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     {
         gchar* name = row_field_get_name( dlg, &it );
         gchar* val = row_field_get_val( dlg, &it );
+        const gchar* desc = conf_key_data_lookup_desc( name );
+
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
-        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), val );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  val );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_desc_ ), desc );
+
         g_free( name );
         g_free( val );
     }
     else
     {
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), NULL );
-        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ), NULL );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_desc_ ), NULL );
     }
 
 
@@ -1897,9 +1953,9 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 
+    // set show inherited:
+    //
     dlg->showinh_ = TRUE;
-
-
 
     // load conf:
     //
@@ -1927,7 +1983,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 
-    // -------------------------- box (top):
+    // box (top):
     //
     GtkWidget* box_top = gtk_vbox_new( FALSE, 0 );
 
@@ -1944,7 +2000,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 
-    //  -------------------------- scrolled win:
+    // scrolled window:
     //
     GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
@@ -1963,7 +2019,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 
-    // -------------------------- box (bottom):
+    // box (bottom):
     //
     GtkWidget* box_bot = gtk_vbox_new( TRUE, 0 );
 
@@ -1983,10 +2039,13 @@ mk_gui( cfg_edit_dlg* dlg )
     dlg->lab_val_ = gtk_label_new( NULL );
     mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
 
+    dlg->lab_desc_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>desc: </b>", dlg->lab_desc_, box_bot );
+
     mk_labels_line_separ( box_bot );
 
 
-    // show inh check box:
+    // 'show inh' check box:
     //
     GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "" );
     GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( btn_showinh ) );
@@ -2005,7 +2064,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 
-    // -------------------------- action area:
+    // action area:
     //
     GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
 

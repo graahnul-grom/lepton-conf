@@ -58,6 +58,7 @@ struct _cfg_edit_dlg
     GtkWidget* lab_fname_;
     GtkWidget* lab_name_;
     GtkWidget* lab_val_;
+    GtkWidget* lab_desc_;
 
     GtkWidget* btn_reload_;
 
