@@ -27,11 +27,11 @@
 
 
 
-enum CFG_EDIT_DLG_PROP_IDS
-{
-    CFG_EDIT_DLG_PROPID_STUB, // prop ids must be > 0
-    CFG_EDIT_DLG_PROPID_PROP1
-};
+//enum CFG_EDIT_DLG_PROP_IDS
+//{
+//    CFG_EDIT_DLG_PROPID_STUB, // prop ids must be > 0
+//    CFG_EDIT_DLG_PROPID_EXTED
+//};
 
 
 
@@ -43,8 +43,6 @@ struct _cfg_edit_dlgClass
 struct _cfg_edit_dlg
 {
     GtkDialog parent;
-
-    int prop1_;
 
     GtkTreeStore* store_;
     // GtkTreeModel* model_;   // active model

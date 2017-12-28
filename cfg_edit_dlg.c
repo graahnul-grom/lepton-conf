@@ -195,16 +195,8 @@ G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 static void
 cfg_edit_dlg_get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
 {
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
-
-    if ( id == CFG_EDIT_DLG_PROPID_PROP1 )
-    {
-        g_value_set_int( val, dlg->prop1_ );
-    }
-    else
-    {
-        G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
-    }
+    // cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
+    G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
 }
 
 
@@ -212,16 +204,8 @@ cfg_edit_dlg_get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec
 static void
 cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
 {
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
-
-    if ( id == CFG_EDIT_DLG_PROPID_PROP1 )
-    {
-        dlg->prop1_ = g_value_get_int( val );
-    }
-    else
-    {
-        G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
-    }
+    // cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
+    G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
 }
 
 
@@ -246,8 +230,9 @@ static void
 cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 {
     // NOTE: glib debug messages:
+    // NOTE: g_debug() adds newline:
     //
-    g_debug( " >> g_debug(): cfg_edit_dlg::class_init() eklmn: [%s]", "oprst" );
+    g_debug( " >> g_debug(): cfg_edit_dlg::class_init()" );
 
     GObjectClass* gcls = G_OBJECT_CLASS( cls );
 
@@ -255,15 +240,21 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
     gcls->get_property = &cfg_edit_dlg_get_property;
     gcls->set_property = &cfg_edit_dlg_set_property;
 
-    GParamSpec* spec = g_param_spec_int( "prop1",
-        "",  // nick
-        "",  // blurb
-        0,   // min
-        10,  // max
-        7,   // default
-        G_PARAM_READABLE | G_PARAM_WRITABLE );
+//    GParamSpec* spec = g_param_spec_string( "exted",
+//        "",                 // nick
+//        "external editor",  // blurb
+//        "gvim",             // default
+//        G_PARAM_READWRITE | G_PARAM_CONSTRUCT );
+//
+//    GParamSpec* spec = g_param_spec_int( "prop1",
+//        "",  // nick
+//        "",  // blurb
+//        0,   // min
+//        10,  // max
+//        7,   // default
+//        G_PARAM_READABLE | G_PARAM_WRITABLE );
 
-    g_object_class_install_property( gcls, CFG_EDIT_DLG_PROPID_PROP1, spec );
+//    g_object_class_install_property( gcls, CFG_EDIT_DLG_PROPID_EXTED, spec );
 }
 
 
@@ -271,7 +262,6 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
-    dlg->prop1_ = 5;
     printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
     mk_gui( dlg );
 }
@@ -911,22 +901,33 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
     const gchar* fname = gtk_label_get_current_uri( lab );
 
-    printf( " >> on_lab_fname(): [%s]\n", fname);
-
     const gchar exted[] = "gvim";
+//    const gchar exted[] = "leaf pad";
+
     GError* err = NULL;
     GAppInfo* ai =
     g_app_info_create_from_commandline( exted,
                                         NULL,
                                         G_APP_INFO_CREATE_NONE,
                                         &err );
+    if ( err )
+    {
+        printf( " >> on_lab_fname(): err: [%s]\n", err->message );
+        g_clear_error( &err );
+    }
+
     if ( ai )
     {
         GFile* gfile = g_file_new_for_path( fname );
         GList* args = g_list_append( NULL, gfile );
 
-        g_app_info_launch( ai, args, NULL, &err );
+        if ( !g_app_info_launch( ai, args, NULL, &err ) )
+        {
+            printf( " >> on_lab_fname(): !g_app_info_launch():\n" );
+            printf( "    err: [%d], msg: [%s]\n", err->code, err->message );
+        }
 
+        g_clear_error( &err );
         g_list_free( args );
     }
 
