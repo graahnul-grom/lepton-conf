@@ -25,6 +25,13 @@ static conf_key_data g_conf_key_data[] =
         "eklmn oprst"
     },
     {
+        "gschem",
+        "default-filename",
+        "gschem__default-filename",
+        "Define the default file name for any new schematic files created in gschem.\n"
+        "It is used to create filenames of the form “untitled_N.sch” where N is a number."
+    },
+    {
         "schematic.gui",
         "use-docks",
         "schematic.gui__use-docks",
