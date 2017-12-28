@@ -42,7 +42,7 @@ static conf_key_data g_conf_key_data[] =
 
 
 const conf_key_data*
-conf_key_data_lookup( const gchar* key )
+conf_key_data_lookup( const gchar* grp, const gchar* key )
 {
     const conf_key_data* data = g_conf_key_data;
 
@@ -57,9 +57,9 @@ conf_key_data_lookup( const gchar* key )
 
 
 static const gchar*
-conf_key_data_lookup_desc( const gchar* key )
+conf_key_data_lookup_desc( const gchar* grp, const gchar* key )
 {
-    const conf_key_data* data = conf_key_data_lookup( key );
+    const conf_key_data* data = conf_key_data_lookup( grp, key );
 
     if ( data != NULL)
         return data->desc;
@@ -764,21 +764,17 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
 
     if ( rdata->rtype_ == RT_KEY )
     {
-        gchar* name = row_field_get_name( dlg, &it );
-        gchar* val = row_field_get_val( dlg, &it );
-        const gchar* desc = conf_key_data_lookup_desc( name );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), rdata->key_ );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  rdata->val_ );
 
-        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), name );
-        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  val );
+        const gchar* desc = conf_key_data_lookup_desc( rdata->group_, rdata->key_ );
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, desc ? desc : "", -1 );
-
-        g_free( name );
-        g_free( val );
     }
     else
     {
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), NULL );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
+
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
     }
 
