@@ -213,8 +213,8 @@ cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val, GParamSpec
 static void
 cfg_edit_dlg_dispose( GObject* obj )
 {
-//    printf( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
-//        obj, obj ? obj->ref_count : 0 );
+    printf( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
+        obj, obj ? obj->ref_count : 0 );
 
     cfg_edit_dlgClass* cls = CFG_EDIT_DLG_GET_CLASS( obj );
 
@@ -239,22 +239,6 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
     gcls->dispose      = &cfg_edit_dlg_dispose;
     gcls->get_property = &cfg_edit_dlg_get_property;
     gcls->set_property = &cfg_edit_dlg_set_property;
-
-//    GParamSpec* spec = g_param_spec_string( "exted",
-//        "",                 // nick
-//        "external editor",  // blurb
-//        "gvim",             // default
-//        G_PARAM_READWRITE | G_PARAM_CONSTRUCT );
-//
-//    GParamSpec* spec = g_param_spec_int( "prop1",
-//        "",  // nick
-//        "",  // blurb
-//        0,   // min
-//        10,  // max
-//        7,   // default
-//        G_PARAM_READABLE | G_PARAM_WRITABLE );
-
-//    g_object_class_install_property( gcls, CFG_EDIT_DLG_PROPID_EXTED, spec );
 }
 
 

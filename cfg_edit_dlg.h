@@ -27,25 +27,18 @@
 
 
 
-//enum CFG_EDIT_DLG_PROP_IDS
-//{
-//    CFG_EDIT_DLG_PROPID_STUB, // prop ids must be > 0
-//    CFG_EDIT_DLG_PROPID_EXTED
-//};
-
-
 
 struct _cfg_edit_dlgClass
 {
     GtkDialogClass parent_class;
 };
 
+
 struct _cfg_edit_dlg
 {
     GtkDialog parent;
 
     GtkTreeStore* store_;
-    // GtkTreeModel* model_;   // active model
 
     GtkWidget*   tree_w_;
     GtkTreeView* tree_v_;
@@ -56,15 +49,15 @@ struct _cfg_edit_dlg
     GtkWidget* lab_fname_;
     GtkWidget* lab_name_;
     GtkWidget* lab_val_;
+
     GtkTextBuffer* txtbuf_desc_;
 
     GtkWidget* btn_reload_;
 
     gboolean showinh_;
 
-    //    GtkTreeModel* model_f_; // filtered model
-    //    GtkTreeModel* model_a_; // unfiltered model (i.e. all items)
 };
+
 
 typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;
 typedef struct _cfg_edit_dlg      cfg_edit_dlg;
