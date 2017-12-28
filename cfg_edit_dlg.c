@@ -54,13 +54,21 @@ conf_key_data_lookup( const gchar* grp, const gchar* key )
 {
     const conf_key_data* data = g_conf_key_data;
 
-    for ( ; data->key_ != NULL; ++data )
+    char* seed = g_strdup_printf( "%s__%s", grp, key );
+    const conf_key_data* ret = NULL;
+
+    for ( ; data->seed_ != NULL; ++data )
     {
-        if ( g_strcmp0( data->key_, key ) == 0 )
-            return data;
+        if ( g_strcmp0( data->seed_, seed ) == 0 )
+        {
+            ret = data;
+            break;
+        }
     }
 
-    return NULL;
+    g_free( seed );
+
+    return ret;
 }
 
 
