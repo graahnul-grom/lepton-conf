@@ -962,7 +962,7 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
 
 static void
-on_mitem_edit( GtkMenuItem* mitem, gpointer p )
+on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -1010,12 +1010,12 @@ on_mitem_edit( GtkMenuItem* mitem, gpointer p )
 
     g_free( txt );
 
-} // on_mitem_edit()
+} // on_mitem_key_edit()
 
 
 
 static void
-on_mitem_add( GtkMenuItem* mitem, gpointer p )
+on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -1143,7 +1143,25 @@ on_mitem_add( GtkMenuItem* mitem, gpointer p )
     g_free( key );
     g_free( val );
 
-} // on_mitem_add()
+} // on_mitem_grp_add()
+
+
+
+static void
+on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+}
 
 
 
@@ -1225,40 +1243,51 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 static GtkMenu*
 mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 {
-    if ( rdata->rtype_ == RT_CTX )
-        return NULL;
+//    if ( rdata->rtype_ == RT_CTX )
+//        return NULL;
 
     GtkWidget* menu = gtk_menu_new();
 
-    GtkWidget* mitem_edit = NULL;
-    GtkWidget* mitem_add  = NULL;
 
+    if ( rdata->rtype_ == RT_CTX )
+    {
+        GtkWidget* mitem_ctx_add = NULL;
+        mitem_ctx_add = gtk_menu_item_new_with_mnemonic( "_add" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_ctx_add);
+        g_signal_connect( G_OBJECT( mitem_ctx_add ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_ctx_add ),
+                          dlg );
+        gtk_widget_show( mitem_ctx_add );
+        gtk_widget_set_sensitive( mitem_ctx_add, !rdata->ro_ );
+    }
+    else
     if ( rdata->rtype_ == RT_KEY )
     {
-        mitem_edit = gtk_menu_item_new_with_mnemonic( "_edit" );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_edit);
-        g_signal_connect( G_OBJECT( mitem_edit ),
+        GtkWidget* mitem_key_edit = NULL;
+        mitem_key_edit = gtk_menu_item_new_with_mnemonic( "_edit" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_key_edit);
+        g_signal_connect( G_OBJECT( mitem_key_edit ),
                           "activate",
-                          G_CALLBACK( &on_mitem_edit ),
+                          G_CALLBACK( &on_mitem_key_edit ),
                           dlg );
-        gtk_widget_show( mitem_edit );
-        gtk_widget_set_sensitive( mitem_edit, !rdata->ro_ );
+        gtk_widget_show( mitem_key_edit );
+        gtk_widget_set_sensitive( mitem_key_edit, !rdata->ro_ );
     }
-
+    else
     if ( rdata->rtype_ == RT_GRP )
     {
-        mitem_add = gtk_menu_item_new_with_mnemonic( "_add" );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_add);
-        g_signal_connect( G_OBJECT( mitem_add ),
+        GtkWidget* mitem_grp_add = NULL;
+        mitem_grp_add = gtk_menu_item_new_with_mnemonic( "_add" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_grp_add);
+        g_signal_connect( G_OBJECT( mitem_grp_add ),
                           "activate",
-                          G_CALLBACK( &on_mitem_add ),
+                          G_CALLBACK( &on_mitem_grp_add ),
                           dlg );
-        gtk_widget_show( mitem_add );
-        gtk_widget_set_sensitive( mitem_add, !rdata->ro_ );
+        gtk_widget_show( mitem_grp_add );
+        gtk_widget_set_sensitive( mitem_grp_add, !rdata->ro_ );
     }
 
-
-//    gtk_widget_set_sensitive( mitem2, rdata->inh_ );
 
     return GTK_MENU( menu );
 
