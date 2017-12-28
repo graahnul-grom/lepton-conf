@@ -8,10 +8,8 @@
 
 #include <libguile.h>
 
-#include <liblepton/liblepton.h>
-#include <liblepton/libgedaguile.h>
-
 #include <gtk/gtk.h>
+
 #include <stdio.h>
 
 #include "cfg_edit_dlg.h"

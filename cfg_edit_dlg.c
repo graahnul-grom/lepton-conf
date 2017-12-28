@@ -1,9 +1,7 @@
-//#define G_LOG_DOMAIN "gedacfged"
-
 #include "cfg_edit_dlg.h"
 
 #include <liblepton/liblepton.h>
-#include <liblepton/libgedaguile.h>
+
 
 
 
