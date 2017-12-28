@@ -7,8 +7,10 @@
 
 struct _conf_key_data
 {
-    const gchar* key;
-    const gchar* desc;
+    const gchar* grp_;
+    const gchar* key_;
+    const gchar* seed_;
+    const gchar* desc_;
 };
 
 typedef struct _conf_key_data conf_key_data;
@@ -17,11 +19,15 @@ typedef struct _conf_key_data conf_key_data;
 static conf_key_data g_conf_key_data[] =
 {
     {
+        "sys",
         "newKey",
+        "sys__newKey",
         "eklmn oprst"
     },
     {
+        "schematic.gui",
         "use-docks",
+        "schematic.gui__use-docks",
 //        "The type of GUI is controlled by \"use-docks\" boolean"
 //        " configuration key in \"gschem.gui\" group."
 //        " If widgets will be shown"
@@ -36,6 +42,8 @@ static conf_key_data g_conf_key_data[] =
     },
     {
         NULL,
+        NULL,
+        NULL,
         NULL
     }
 };
@@ -46,9 +54,9 @@ conf_key_data_lookup( const gchar* grp, const gchar* key )
 {
     const conf_key_data* data = g_conf_key_data;
 
-    for ( ; data->key != NULL; ++data )
+    for ( ; data->key_ != NULL; ++data )
     {
-        if ( g_strcmp0( data->key, key ) == 0 )
+        if ( g_strcmp0( data->key_, key ) == 0 )
             return data;
     }
 
@@ -62,7 +70,7 @@ conf_key_data_lookup_desc( const gchar* grp, const gchar* key )
     const conf_key_data* data = conf_key_data_lookup( grp, key );
 
     if ( data != NULL)
-        return data->desc;
+        return data->desc_;
 
     return NULL;
 }
