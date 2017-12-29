@@ -188,6 +188,9 @@ conf_ctx_name( EdaConfig* ctx );
 static const gchar*
 conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
 
+static const gboolean
+conf_ctx_file_writable( EdaConfig* ctx );
+
 static GtkMenu*
 mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
 
@@ -961,6 +964,8 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
 
 
+// key node: "edit" mitem
+//
 static void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 {
@@ -1014,6 +1019,8 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 
 
 
+// group node: "add" mitem
+//
 static void
 on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
 {
@@ -1147,6 +1154,8 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
 
 
 
+// context node: "add" mitem
+//
 static void
 on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 {
@@ -1588,8 +1597,10 @@ conf_load_groups( EdaConfig*    ctx,
         if ( strstr( name, "dialog-geometry" ) != NULL )
             continue;
 
-        gboolean wok = FALSE;
-        conf_ctx_fname( ctx, NULL, NULL, &wok );
+
+        gboolean wok = conf_ctx_file_writable( ctx );
+//        gboolean wok = FALSE;
+//        conf_ctx_fname( ctx, NULL, NULL, &wok );
 
 
         // NOTE: rdata:
@@ -1670,13 +1681,19 @@ conf_mk_ctx_node( EdaConfig*    ctx,
                   const gchar*  name,
                   cfg_edit_dlg* dlg )
 {
+    gboolean wok = conf_ctx_file_writable( ctx );
+
+    printf( "conf_mk_ctx_node( %s ): wok: [%d]\n",
+            conf_ctx_name( ctx ),
+            wok );
+
     // NOTE: rdata:
     //
     row_data* rdata = mk_rdata( ctx,
                                 NULL,  // group
                                 NULL,  // key
                                 NULL,  // val
-                                TRUE,  // ro
+                                !wok,  // ro
                                 FALSE, // inh
                                 RT_CTX // rtype
                               );
@@ -1906,6 +1923,47 @@ conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok )
 
     return fname;
 }
+
+
+
+static const gboolean
+conf_ctx_file_writable( EdaConfig* ctx )
+{
+    gboolean exist = FALSE;
+    gboolean rok   = FALSE;
+    gboolean wok   = FALSE;
+
+    const gchar* fname = conf_ctx_fname( ctx, &exist, &rok, &wok );
+
+    gboolean ret = FALSE;
+
+    if ( fname == NULL )
+    {
+        ret = FALSE;
+    }
+    else
+    if ( exist && wok )
+    {
+        ret = TRUE;
+    }
+    else
+    if ( !exist )
+    {
+        gchar* dir = g_path_get_dirname( fname );
+        ret = access( dir, W_OK ) == 0;
+
+        printf( " .. conf_ctx_file_writable( %s ): fname: [%s], dir: [%s]: wok: [%d]\n",
+                    conf_ctx_name( ctx ),
+                    fname,
+                    dir,
+                    ret );
+
+        g_free( dir );
+    }
+
+    return ret;
+
+} // conf_ctx_file_writable()
 
 
 
