@@ -165,7 +165,7 @@ static gboolean
 conf_load_ctx( EdaConfig* ctx );
 
 static GtkTreeIter
-conf_mk_ctx_node( EdaConfig* ctx, const gchar* name, cfg_edit_dlg* dlg );
+conf_mk_ctx_node( EdaConfig* ctx, gboolean wok, const gchar* name, cfg_edit_dlg* dlg );
 
 static void
 conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg );
@@ -1497,7 +1497,7 @@ conf_load_keys( EdaConfig*    ctx,
                 const gchar*  group,
                 cfg_edit_dlg* dlg,
                 GtkTreeIter   itParent,
-                gboolean      file_writable,
+                gboolean      wok,
                 gboolean*     inh_all )
 {
     gsize len = 0;
@@ -1555,7 +1555,7 @@ conf_load_keys( EdaConfig*    ctx,
                                     group,          // group
                                     name,           // key
                                     val,            // val
-                                    !file_writable, // ro
+                                    !wok, // ro
                                     inh,            // inh
                                     RT_KEY          // rtype
                                   );
@@ -1579,6 +1579,7 @@ conf_load_keys( EdaConfig*    ctx,
 
 static void
 conf_load_groups( EdaConfig*    ctx,
+                  gboolean      wok,
                   cfg_edit_dlg* dlg,
                   GtkTreeIter   itParent )
 {
@@ -1598,7 +1599,7 @@ conf_load_groups( EdaConfig*    ctx,
             continue;
 
 
-        gboolean wok = conf_ctx_file_writable( ctx );
+//        gboolean wok = conf_ctx_file_writable( ctx );
 //        gboolean wok = FALSE;
 //        conf_ctx_fname( ctx, NULL, NULL, &wok );
 
@@ -1678,14 +1679,15 @@ conf_load_ctx( EdaConfig* ctx )
 
 static GtkTreeIter
 conf_mk_ctx_node( EdaConfig*    ctx,
+                  gboolean      wok,
                   const gchar*  name,
                   cfg_edit_dlg* dlg )
 {
-    gboolean wok = conf_ctx_file_writable( ctx );
+//    gboolean wok = conf_ctx_file_writable( ctx );
 
-    printf( "conf_mk_ctx_node( %s ): wok: [%d]\n",
-            conf_ctx_name( ctx ),
-            wok );
+//    printf( "conf_mk_ctx_node( %s ): wok: [%d]\n",
+//            conf_ctx_name( ctx ),
+//            wok );
 
     // NOTE: rdata:
     //
@@ -1762,8 +1764,9 @@ conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg )
     }
 
 
+    gboolean wok = conf_ctx_file_writable( ctx );
 
-    conf_load_groups( ctx, dlg, it_ctx );
+    conf_load_groups( ctx, wok, dlg, it_ctx );
 
 
 
@@ -1835,23 +1838,27 @@ conf_load( cfg_edit_dlg* dlg )
     // load:
     //
     GtkTreeIter it;
+    gboolean wok = FALSE;
 
-    it = conf_mk_ctx_node( ctx_dflt, name_dflt, dlg );
+    wok = conf_ctx_file_writable( ctx_dflt );
+    it = conf_mk_ctx_node( ctx_dflt, wok, name_dflt, dlg );
     conf_load_ctx( ctx_dflt );
-    conf_load_groups( ctx_dflt, dlg, it );
+    conf_load_groups( ctx_dflt, wok, dlg, it );
 
-    it = conf_mk_ctx_node( ctx_sys, name_sys, dlg );
+    wok = conf_ctx_file_writable( ctx_sys );
+    it = conf_mk_ctx_node( ctx_sys, wok, name_sys, dlg );
     conf_load_ctx( ctx_sys );
-    conf_load_groups( ctx_sys, dlg, it );
+    conf_load_groups( ctx_sys, wok, dlg, it );
 
-
-    it = conf_mk_ctx_node( ctx_user, name_user, dlg );
+    wok = conf_ctx_file_writable( ctx_user );
+    it = conf_mk_ctx_node( ctx_user, wok, name_user, dlg );
     conf_load_ctx( ctx_user );
-    conf_load_groups( ctx_user, dlg, it );
+    conf_load_groups( ctx_user, wok, dlg, it );
 
-    it = conf_mk_ctx_node( ctx_path, name_path, dlg );
+    wok = conf_ctx_file_writable( ctx_path );
+    it = conf_mk_ctx_node( ctx_path, wok, name_path, dlg );
     conf_load_ctx( ctx_path );
-    conf_load_groups( ctx_path, dlg, it );
+    conf_load_groups( ctx_path, wok, dlg, it );
 
 
     g_free( name_dflt );
