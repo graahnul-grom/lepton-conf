@@ -203,6 +203,13 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
                  gchar** key,
                  gchar** val );
 
+static gboolean
+run_dlg_add_val_2( cfg_edit_dlg* dlg,
+                 const gchar* title,
+                 gchar** grp,
+                 gchar** key,
+                 gchar** val );
+
 
 
 /* ******************************************************************
@@ -1170,7 +1177,23 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
-}
+
+
+    gchar* grp = NULL;
+    gchar* key = NULL;
+    gchar* val = NULL;
+
+    if ( !run_dlg_add_val_2( dlg, NULL, &grp, &key, &val ) )
+        return;
+
+    printf( "on_mitem_ctx_add( %s ): [%s] [%s] [%s]\n",
+            conf_ctx_name( rdata->ctx_ ), grp, key, val );
+
+    g_free( grp );
+    g_free( key );
+    g_free( val );
+
+} // on_mitem_ctx_add()
 
 
 
@@ -1359,7 +1382,7 @@ run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
-//    printf( "  run_dlg_edit_val(): resp: %d\n", res );
+    printf( "  run_dlg_edit_val(): resp: %d\n", res );
 
     gchar* ret = NULL;
 
@@ -1425,7 +1448,7 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
     gtk_widget_set_size_request( vdlg, 300, -1 );
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
-    printf( "  edit_val_dlg(): resp: %d\n", res );
+    printf( "  run_dlg_add_val(): resp: %d\n", res );
 
     gboolean ret = FALSE;
 
@@ -1441,6 +1464,81 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
     return ret;
 
 } // run_dlg_add_val()
+
+
+
+// {post}: caller must g_free() [grp], [key], [val]
+//
+static gboolean
+run_dlg_add_val_2( cfg_edit_dlg* dlg,
+                 const gchar* title,
+                 gchar** grp,
+                 gchar** key,
+                 gchar** val )
+{
+    GtkWidget* vdlg = gtk_dialog_new_with_buttons(
+        title ? title : "Add key/value:",
+        GTK_WINDOW( dlg ),
+        GTK_DIALOG_MODAL,
+        GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+        NULL );
+
+//    if ( title )
+//        gtk_window_set_title( GTK_WINDOW( vdlg ), title );
+
+    GtkWidget* ent_grp = gtk_entry_new();
+    gtk_entry_set_text( GTK_ENTRY( ent_grp ), "newGrp" );
+
+    GtkWidget* ent_key = gtk_entry_new();
+    gtk_entry_set_text( GTK_ENTRY( ent_key ), "newKey" );
+
+    GtkWidget* ent_val = gtk_entry_new();
+    gtk_entry_set_text( GTK_ENTRY( ent_val ), "newVal" );
+
+    GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
+    gtk_box_pack_start( GTK_BOX( vbox ), ent_grp, TRUE, TRUE, 5 );
+    gtk_box_pack_start( GTK_BOX( vbox ), ent_key, TRUE, TRUE, 5 );
+    gtk_box_pack_start( GTK_BOX( vbox ), ent_val, TRUE, TRUE, 5 );
+
+
+    gtk_dialog_set_alternative_button_order(GTK_DIALOG(vdlg),
+                                            GTK_RESPONSE_ACCEPT,
+                                            GTK_RESPONSE_REJECT,
+                                            -1);
+
+    gtk_dialog_set_default_response (GTK_DIALOG (vdlg),
+                                     GTK_RESPONSE_ACCEPT);
+
+    gtk_entry_set_activates_default( GTK_ENTRY( ent_grp ), TRUE );
+    gtk_entry_set_activates_default( GTK_ENTRY( ent_key ), TRUE );
+    gtk_entry_set_activates_default( GTK_ENTRY( ent_val ), TRUE );
+
+
+    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
+    gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
+
+    gtk_widget_show_all( vdlg );
+    gtk_widget_set_size_request( vdlg, 300, -1 );
+    gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
+
+    printf( "  run_dlg_add_val_2(): resp: %d\n", res );
+
+    gboolean ret = FALSE;
+
+    if ( res == GTK_RESPONSE_ACCEPT )
+    {
+        *grp = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent_grp ) ) );
+        *key = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent_key ) ) );
+        *val = g_strdup( gtk_entry_get_text( GTK_ENTRY( ent_val ) ) );
+        ret = TRUE;
+    }
+
+    gtk_widget_destroy( vdlg );
+
+    return ret;
+
+} // run_dlg_add_val_2()
 
 
 
