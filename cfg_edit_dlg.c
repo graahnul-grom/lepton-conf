@@ -1477,17 +1477,15 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
                  gchar** val )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
-        title ? title : "Add key/value:",
+        title ? title : "Add group/key/value:",
         GTK_WINDOW( dlg ),
         GTK_DIALOG_MODAL,
         GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
         GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
         NULL );
 
-//    if ( title )
-//        gtk_window_set_title( GTK_WINDOW( vdlg ), title );
-
-    GtkWidget* ent_grp = gtk_entry_new();
+    GtkWidget* cb_grp = gtk_combo_box_text_new_with_entry();
+    GtkWidget* ent_grp = gtk_bin_get_child( GTK_BIN( cb_grp ) );
     gtk_entry_set_text( GTK_ENTRY( ent_grp ), "newGrp" );
 
     GtkWidget* ent_key = gtk_entry_new();
@@ -1497,7 +1495,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
     gtk_entry_set_text( GTK_ENTRY( ent_val ), "newVal" );
 
     GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
-    gtk_box_pack_start( GTK_BOX( vbox ), ent_grp, TRUE, TRUE, 5 );
+    gtk_box_pack_start( GTK_BOX( vbox ), cb_grp,  TRUE, TRUE, 5 );
     gtk_box_pack_start( GTK_BOX( vbox ), ent_key, TRUE, TRUE, 5 );
     gtk_box_pack_start( GTK_BOX( vbox ), ent_val, TRUE, TRUE, 5 );
 
@@ -2396,7 +2394,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // select row:
     //
-    GtkTreePath* path = gtk_tree_path_new_from_string( "1" );
+    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
     gtk_tree_view_expand_to_path( dlg->tree_v_, path );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
     gtk_tree_path_free( path );
