@@ -519,10 +519,8 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
 
 
 
-// [it_result]: will be set to found row
 // {ret}: TRUE if cur row is grp and it has child row with [key]
 //
-//static gboolean
 static GtkTreePath*
 row_cur_find_child_key( cfg_edit_dlg* dlg,
                         const gchar* key )
@@ -1485,8 +1483,35 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
         NULL );
 
     GtkWidget* cb_grp = gtk_combo_box_text_new_with_entry();
+//    GtkWidget* cb_grp = gtk_combo_box_new_with_entry();
     GtkWidget* ent_grp = gtk_bin_get_child( GTK_BIN( cb_grp ) );
     gtk_entry_set_text( GTK_ENTRY( ent_grp ), "newGrp" );
+
+
+    // combo: add list of child groups:
+    //
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+
+    GtkTreeIter it_parent;
+    if ( !row_cur_get_iter( dlg, &it_parent ) )
+        return FALSE;
+
+    GtkTreeIter it_child;
+    gboolean next = gtk_tree_model_iter_children( mod,
+                                                  &it_child,
+                                                  &it_parent );
+
+    for ( ; next ; next = gtk_tree_model_iter_next( mod, &it_child ) )
+    {
+        row_data* rd = row_field_get_data( dlg, &it_child );
+        if ( rd != NULL )
+        {
+            gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( cb_grp ),
+                                            rd->group_ );
+        }
+    }
+
+
 
     GtkWidget* ent_key = gtk_entry_new();
     gtk_entry_set_text( GTK_ENTRY( ent_key ), "newKey" );
