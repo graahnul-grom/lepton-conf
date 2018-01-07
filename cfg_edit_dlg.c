@@ -544,22 +544,18 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
         return FALSE;
 
     GtkTreeIter it_child;
-    gboolean res = gtk_tree_model_iter_children( mod,
-                                                 &it_child,
-                                                 &it_parent );
-    const gchar* kname = NULL;
-
-    while ( res )
+    gboolean next = gtk_tree_model_iter_children( mod,
+                                                  &it_child,
+                                                  &it_parent );
+    for ( ; next; next = gtk_tree_model_iter_next( mod, &it_child ) )
     {
-        kname = row_field_get_name( dlg, &it_child );
+        row_data* rd = row_field_get_data( dlg, &it_child );
 
-        if ( g_strcmp0( kname, key ) == 0 )
+        if ( rd != NULL && g_strcmp0( rd->key_, key ) == 0 )
         {
             gchar* str = gtk_tree_model_get_string_from_iter( mod, &it_child );
             return gtk_tree_path_new_from_string( str );
         }
-
-        res = gtk_tree_model_iter_next( mod, &it_child );
     }
 
     return NULL;
