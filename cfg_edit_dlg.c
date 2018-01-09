@@ -538,6 +538,7 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
 
 
 
+// {post}: caller must gtk_tree_path_free( {ret} )
 // {ret}: path of row with name [name] if it's a child of [it_parent] row
 //
 static GtkTreePath*
@@ -1199,6 +1200,53 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     printf( "on_mitem_ctx_add( %s ): [%s] [%s] [%s]\n",
             conf_ctx_name( rdata->ctx_ ), grp, key, val );
 
+    // check if group already exists:
+    //
+    GtkTreeIter it_grp;
+    GtkTreeIter it_key;
+    GtkTreePath* path = NULL;
+
+    path = row_find_child_by_name( dlg, it, grp );
+    if ( path != NULL )
+    {
+        printf( "on_mitem_ctx_add(): GRP [%s] EXISTS\n", grp );
+        gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+        gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+        gtk_tree_path_free( path );
+
+        row_cur_get_iter( dlg, &it_grp );
+
+        // check if key already exists:
+        //
+        path = row_find_child_by_name( dlg, it_grp, key );
+        if ( path != NULL )
+        {
+            printf( "on_mitem_ctx_add(): KEY [%s] EXISTS\n", key );
+            gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+            gtk_tree_path_free( path );
+
+            row_cur_get_iter( dlg, &it_key );
+
+            row_data* rdata_key = row_field_get_data( dlg, &it_key );
+
+            if ( rdata_key->inh_ || g_strcmp0( val, rdata_key->val_ ) != 0 )
+            {
+                // NOTE: conf_chg_val() / conf_save() / conf_reload_child_ctxs()
+                //
+                conf_chg_val( rdata_key, val );
+                if ( conf_save( rdata->ctx_, dlg ) )
+                {
+                    row_field_set_val( dlg, it_key, val );
+                    row_key_unset_inh( dlg, it_key );
+                    conf_reload_child_ctxs( rdata->ctx_, dlg );
+                }
+            }
+
+        } // if key already exists
+
+    } // if grp already exists
+
     g_free( grp );
     g_free( key );
     g_free( val );
@@ -1554,7 +1602,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
     gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
 
     gtk_widget_show_all( vdlg );
-    gtk_widget_set_size_request( vdlg, 300, -1 );
+    gtk_widget_set_size_request( vdlg, 350, -1 );
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
     printf( "  run_dlg_add_val_2(): resp: %d\n", res );
