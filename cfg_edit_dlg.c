@@ -519,29 +519,26 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
 
 
 
-// {ret}: TRUE if cur row is grp and it has child row with [key]
+// {ret}: path of row with name [name] if it's a child of [it_parent] row
 //
 static GtkTreePath*
 row_cur_find_child_key( cfg_edit_dlg* dlg,
-                        const gchar* key )
+                        GtkTreeIter it_parent,
+                        const gchar* name )
 {
-    GtkTreeIter it_parent;
-    if ( !row_cur_get_iter( dlg, &it_parent ) )
-        return FALSE;
-
     row_data* rdata = row_field_get_data( dlg, &it_parent );
     if ( !rdata )
-        return FALSE;
+        return NULL;
 
     if ( rdata->rtype_ != RT_GRP )
-        return FALSE;
+        return NULL;
 
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
 
     if ( !gtk_tree_model_iter_has_child( mod, &it_parent ) ) // // //
-        return FALSE;
+        return NULL;
 
     GtkTreeIter it_child;
     gboolean next = gtk_tree_model_iter_children( mod,
@@ -551,7 +548,7 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
     {
         row_data* rd = row_field_get_data( dlg, &it_child );
 
-        if ( rd != NULL && g_strcmp0( rd->key_, key ) == 0 )
+        if ( rd != NULL && g_strcmp0( rd->key_, name ) == 0 )
         {
             gchar* str = gtk_tree_model_get_string_from_iter( mod, &it_child );
             return gtk_tree_path_new_from_string( str );
@@ -1043,7 +1040,7 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
     if ( !run_dlg_add_val( dlg, NULL, &key, &val ) )
         return;
 
-    GtkTreePath* path1 = row_cur_find_child_key( dlg, key );
+    GtkTreePath* path1 = row_cur_find_child_key( dlg, it, key );
 
     if ( path1 != NULL )
     {
