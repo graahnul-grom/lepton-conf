@@ -522,7 +522,7 @@ row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val )
 // {ret}: path of row with name [name] if it's a child of [it_parent] row
 //
 static GtkTreePath*
-row_cur_find_child_key( cfg_edit_dlg* dlg,
+row_find_child_by_name( cfg_edit_dlg* dlg,
                         GtkTreeIter it_parent,
                         const gchar* name )
 {
@@ -557,7 +557,7 @@ row_cur_find_child_key( cfg_edit_dlg* dlg,
 
     return NULL;
 
-} // row_cur_find_child_key()
+} // row_find_child_by_name()
 
 
 
@@ -1040,7 +1040,7 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
     if ( !run_dlg_add_val( dlg, NULL, &key, &val ) )
         return;
 
-    GtkTreePath* path1 = row_cur_find_child_key( dlg, it, key );
+    GtkTreePath* path1 = row_find_child_by_name( dlg, it, key );
 
     if ( path1 != NULL )
     {
