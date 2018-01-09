@@ -290,6 +290,25 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 *
 */
 
+static const gchar*
+rdata_get_name( const row_data* rdata )
+{
+    gchar* name = NULL;
+
+    if ( rdata != NULL )
+    {
+        if ( rdata->rtype_ == RT_GRP )
+            name = rdata->group_;
+        else
+        if ( rdata->rtype_ == RT_KEY )
+            name = rdata->key_;
+    }
+
+    return name;
+}
+
+
+
 static row_data*
 mk_rdata( EdaConfig*   ctx,
           const gchar* group,
@@ -530,10 +549,6 @@ row_find_child_by_name( cfg_edit_dlg* dlg,
     if ( !rdata )
         return NULL;
 
-    if ( rdata->rtype_ != RT_GRP )
-        return NULL;
-
-
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
     GtkTreeIter it_child;
@@ -546,7 +561,11 @@ row_find_child_by_name( cfg_edit_dlg* dlg,
     {
         row_data* rd = row_field_get_data( dlg, &it_child );
 
-        if ( rd != NULL && g_strcmp0( rd->key_, name ) == 0 )
+        const gchar* rdata_name = rdata_get_name( rd );
+        if ( rdata_name == NULL )
+            continue;
+
+        if ( g_strcmp0( rdata_name, name ) == 0 )
         {
             gchar* str = gtk_tree_model_get_string_from_iter( mod, &it_child );
             ret = gtk_tree_path_new_from_string( str );
