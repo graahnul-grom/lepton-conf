@@ -1204,27 +1204,28 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     //
     GtkTreeIter it_grp;
     GtkTreeIter it_key;
-    GtkTreePath* path = NULL;
+    GtkTreePath* path_grp = NULL;
+    GtkTreePath* path_key = NULL;
 
-    path = row_find_child_by_name( dlg, it, grp );
-    if ( path != NULL )
+    path_grp = row_find_child_by_name( dlg, it, grp );
+    if ( path_grp != NULL )
     {
         printf( "on_mitem_ctx_add(): GRP [%s] EXISTS\n", grp );
-        gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-        gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-        gtk_tree_path_free( path );
+        gtk_tree_view_expand_to_path( dlg->tree_v_, path_grp );
+        gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path_grp, NULL, NULL, FALSE );
+        gtk_tree_path_free( path_grp );
 
         row_cur_get_iter( dlg, &it_grp );
 
         // check if key already exists:
         //
-        path = row_find_child_by_name( dlg, it_grp, key );
-        if ( path != NULL )
+        path_key = row_find_child_by_name( dlg, it_grp, key );
+        if ( path_key != NULL )
         {
             printf( "on_mitem_ctx_add(): KEY [%s] EXISTS\n", key );
-            gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-            gtk_tree_path_free( path );
+            gtk_tree_view_expand_to_path( dlg->tree_v_, path_key );
+            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path_key, NULL, NULL, FALSE );
+            gtk_tree_path_free( path_key );
 
             row_cur_get_iter( dlg, &it_key );
 
