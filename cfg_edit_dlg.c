@@ -536,14 +536,12 @@ row_find_child_by_name( cfg_edit_dlg* dlg,
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
-
-    if ( !gtk_tree_model_iter_has_child( mod, &it_parent ) ) // // //
-        return NULL;
-
     GtkTreeIter it_child;
     gboolean next = gtk_tree_model_iter_children( mod,
                                                   &it_child,
                                                   &it_parent );
+    GtkTreePath* ret = NULL;
+
     for ( ; next; next = gtk_tree_model_iter_next( mod, &it_child ) )
     {
         row_data* rd = row_field_get_data( dlg, &it_child );
@@ -551,11 +549,13 @@ row_find_child_by_name( cfg_edit_dlg* dlg,
         if ( rd != NULL && g_strcmp0( rd->key_, name ) == 0 )
         {
             gchar* str = gtk_tree_model_get_string_from_iter( mod, &it_child );
-            return gtk_tree_path_new_from_string( str );
+            ret = gtk_tree_path_new_from_string( str );
+            g_free( str );
+            break;
         }
     }
 
-    return NULL;
+    return ret;
 
 } // row_find_child_by_name()
 
