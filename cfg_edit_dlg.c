@@ -1278,27 +1278,32 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
                                           &it_grp_tstrore
                                         );
 
-//return;
-            // select newly added key node:
-            // TODO: does not select the rifght node when [show inh] == false
-            //
-            GtkTreePath* path_new_key =
-                gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ), &it_new_key );
-            printf( " >> path_new_key: [%p]\n", path_new_key );
-//            gtk_tree_view_expand_to_path( dlg->tree_v_, path_new_key );
-//            gtk_tree_view_scroll_to_cell( dlg->tree_v_, path_new_key, NULL, FALSE, 0, 0 );
-            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path_new_key,
-                                              NULL, NULL, FALSE );
-            gtk_tree_path_free( path_new_key );
 
-return;
+            // NOTE XXX: select newly added key node:
+            //
+            GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+
+            // path within tstore:
+            GtkTreePath* path_new_key_tstore =
+                gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ), &it_new_key );
+
+            // path within current tree model:
+            GtkTreePath* path_new_key_mod =
+                gtk_tree_model_filter_convert_child_path_to_path(
+                    GTK_TREE_MODEL_FILTER(mod), path_new_key_tstore);
+
+            gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path_new_key_mod,
+                                              NULL, NULL, FALSE );
+
+            gtk_tree_path_free( path_new_key_tstore );
+            gtk_tree_path_free( path_new_key_mod );
+
+
             // unset inherited:
             //
             GtkTreeIter it_cur;
             if ( row_cur_get_iter( dlg, &it_cur ) )
                 row_key_unset_inh( dlg, it_cur );
-
-//            row_key_unset_inh( dlg, it_new_key );
 
 
             // reload child ctxs:
