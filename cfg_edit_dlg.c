@@ -374,11 +374,13 @@ rm_rdata_func( GtkTreeModel* mod,
 */
 
 
-// [path_mod]: model path
+// [path_mod]: path within model
 //
 static void
 row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod )
 {
+    g_return_if_fail( path_mod != 0 && "row_select_by_path_mod()" );
+    
     gtk_tree_view_expand_to_path( dlg->tree_v_, path_mod );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path_mod,
                                       NULL, NULL, FALSE );
@@ -398,10 +400,13 @@ row_select_by_path_tstore( cfg_edit_dlg* dlg, GtkTreePath* path_tstore )
         gtk_tree_model_filter_convert_child_path_to_path(
             GTK_TREE_MODEL_FILTER( mod ), path_tstore );
 
+    g_return_if_fail( path_tstore != 0 && "row_select_by_path_tstore()" );
+
     row_select_by_path_mod( dlg, path_mod );
 
     gtk_tree_path_free( path_mod );
-}
+    
+} // row_select_by_path_tstore()
 
 
 
@@ -414,10 +419,13 @@ row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore )
     GtkTreePath* path_tstore =
         gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ), &it_tstore );
 
+    g_return_if_fail( path_tstore != 0 && "row_select_by_iter_tstore()" );
+
     row_select_by_path_tstore( dlg, path_tstore );
 
-    gtk_tree_path_free( path_tstore );    
-}
+    gtk_tree_path_free( path_tstore );
+    
+} // row_select_by_iter_tstore()
 
 
 
