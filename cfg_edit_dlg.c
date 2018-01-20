@@ -473,8 +473,7 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
     gboolean res = gtk_tree_selection_get_selected( sel, &model, it );
 
 //    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
-    if ( !res )
-        printf( " >> >> row_cur_get_iter(): !sel\n");
+    g_return_val_if_fail( res && "row_cur_get_iter(): !sel\n", res );
 
     return res;
 
@@ -1142,7 +1141,7 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
             {
                 row_field_set_val( dlg, it_child, val );
 
-                // unset inherited:
+                // NOTE: unset inherited:
                 //
                 row_key_unset_inh( dlg, it_child );
 
@@ -1246,32 +1245,30 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     GtkTreePath* path_grp = NULL;
     GtkTreePath* path_key = NULL;
 
-    // check if group already exists:
-    //
     path_grp = row_find_child_by_name( dlg, it_ctx, grp );
     if ( path_grp != NULL )
     {
-        row_select_by_path_mod( dlg, path_grp );
+        // XXX: group exists:
 
         printf( "on_mitem_ctx_add(): GRP [%s] EXISTS\n", grp );
+
+        row_select_by_path_mod( dlg, path_grp );
         gtk_tree_path_free( path_grp );
 
         row_cur_get_iter( dlg, &it_grp );
-
         row_data* rdata_grp = row_field_get_data( dlg, &it_grp );
 
-        // check if key already exists:
-        //
         path_key = row_find_child_by_name( dlg, it_grp, key );
         if ( path_key != NULL )
         {
-            row_select_by_path_mod( dlg, path_key );
+            // XXX: group exists, key exists
 
             printf( "on_mitem_ctx_add(): KEY [%s] EXISTS\n", key );
+
+            row_select_by_path_mod( dlg, path_key );
             gtk_tree_path_free( path_key );
 
             row_cur_get_iter( dlg, &it_key );
-
             row_data* rdata_key = row_field_get_data( dlg, &it_key );
 
             if ( rdata_key->inh_ || g_strcmp0( val, rdata_key->val_ ) != 0 )
@@ -1287,10 +1284,10 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
                 }
             }
 
-        } // if key already exists
+        }
         else
         {
-            // group exists, key - does not:
+            // XXX: group exists, key does not
 
             // NOTE: conf_add_val() / conf_save():
             //
@@ -1325,16 +1322,22 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
             // NOTE: unset inherited:
             //
             GtkTreeIter it_cur;
-            if ( row_cur_get_iter( dlg, &it_cur ) )
-                row_key_unset_inh( dlg, it_cur );
+            row_cur_get_iter( dlg, &it_cur );
+
+            row_key_unset_inh( dlg, it_cur );
 
             // NOTE: conf_reload_child_ctxs():
             //
             conf_reload_child_ctxs( rdata_new->ctx_, dlg );
 
-        } // else: key does not exists
+        }
 
-    } // if grp already exists
+    }
+    else
+    {
+        // XXX: group does not exist:
+
+    }
 
     g_free( grp );
     g_free( key );
