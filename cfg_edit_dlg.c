@@ -413,8 +413,6 @@ row_select_by_path_tstore( cfg_edit_dlg* dlg, GtkTreePath* path_tstore )
 static void
 row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore )
 {
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-
     // path within tstore:
     GtkTreePath* path_tstore =
         gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ), &it_tstore );
@@ -1122,12 +1120,14 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
     {
         printf( "on_mitem_add(): [%s] EXISTS\n", key );
 
-        gtk_tree_view_expand_to_path( dlg->tree_v_, path1 );
-        gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path1, NULL, NULL, FALSE );
+        row_select_by_path_mod( dlg, path1 );
 
         GtkTreeIter it_child;
-        GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-        gtk_tree_model_get_iter( mod, &it_child, path1 );
+        row_cur_get_iter( dlg, &it_child );
+
+//        GtkTreeIter it_child;
+//        GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+//        gtk_tree_model_get_iter( mod, &it_child, path1 );
 
         row_data* rdata_child = row_field_get_data( dlg, &it_child );
 
@@ -1165,10 +1165,8 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
     // NOTE: conf_add_val() / conf_save()
     //
     conf_add_val( rdata, key, val );
-
     if ( !conf_save( rdata->ctx_, dlg ) )
         return;
-
 
     printf( "on_mitem_add(): [%s] = [%s]\n", key, val );
 
@@ -1192,29 +1190,16 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
                                   &it_grp_tstrore
                                 );
 
-    GtkTreePath* path2 = NULL;
 
-    // expand parent:
+    // NOTE: select newly added key node:
     //
-    path2 = gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ),
-                                    &it_grp_tstrore );
-    gtk_tree_view_expand_row( dlg->tree_v_, path2, FALSE );
-    gtk_tree_path_free( path2 );
+    row_select_by_iter_tstore( dlg, it_new );
 
-    // select child:
-    //
-    path2 = gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ),
-                                    &it_new );
-    // gtk_tree_view_set_cursor( dlg->tree_v_, path2, NULL, FALSE );
-    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path2, NULL, NULL, FALSE );
-    gtk_tree_path_free( path2 );
-
-    // unset inherited:
+    // NOTE: unset inherited:
     //
     GtkTreeIter it_cur;
     if ( row_cur_get_iter( dlg, &it_cur ) )
         row_key_unset_inh( dlg, it_cur );
-
 
     // NOTE: conf_reload_child_ctxs()
     //
@@ -1333,11 +1318,11 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
                                           &it_grp_tstrore
                                         );
 
-            // NOTE XXX: select newly added key node:
+            // NOTE: select newly added key node:
             //
             row_select_by_iter_tstore( dlg, it_new_key );
 
-            // unset inherited:
+            // NOTE: unset inherited:
             //
             GtkTreeIter it_cur;
             if ( row_cur_get_iter( dlg, &it_cur ) )
