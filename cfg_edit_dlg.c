@@ -1225,8 +1225,8 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     if ( !row_cur_get_iter( dlg, &it_ctx ) )
         return;
 
-    row_data* rdata = row_field_get_data( dlg, &it_ctx );
-    if ( !rdata )
+    row_data* rdata_ctx = row_field_get_data( dlg, &it_ctx );
+    if ( !rdata_ctx )
         return;
 
 
@@ -1238,7 +1238,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
         return;
 
     printf( "on_mitem_ctx_add( %s ): [%s] [%s] [%s]\n",
-            conf_ctx_name( rdata->ctx_ ), grp, key, val );
+            conf_ctx_name( rdata_ctx->ctx_ ), grp, key, val );
 
     GtkTreeIter it_grp;
     GtkTreeIter it_key;
@@ -1276,11 +1276,11 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
                 // NOTE: conf_chg_val() / conf_save()
                 //
                 conf_chg_val( rdata_key, val );
-                if ( conf_save( rdata->ctx_, dlg ) )
+                if ( conf_save( rdata_ctx->ctx_, dlg ) )
                 {
                     row_field_set_val( dlg, it_key, val );
                     row_key_unset_inh( dlg, it_key );
-                    conf_reload_child_ctxs( rdata->ctx_, dlg );
+                    conf_reload_child_ctxs( rdata_ctx->ctx_, dlg );
                 }
             }
 
@@ -1297,7 +1297,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
             // NOTE: rdata:
             //
-            row_data* rdata_new = mk_rdata( rdata_grp->ctx_,
+            row_data* rdata_new_key = mk_rdata( rdata_grp->ctx_,
                                             rdata_grp->group_, // group
                                             key,               // key
                                             val,               // val
@@ -1311,7 +1311,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
             GtkTreeIter it_new_key = row_add( dlg,
                                           key,
                                           val,
-                                          rdata_new,
+                                          rdata_new_key,
                                           &it_grp_tstrore
                                         );
 
@@ -1328,7 +1328,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
             // NOTE: conf_reload_child_ctxs():
             //
-            conf_reload_child_ctxs( rdata_new->ctx_, dlg );
+            conf_reload_child_ctxs( rdata_new_key->ctx_, dlg );
 
         }
 
@@ -1336,6 +1336,70 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     else
     {
         // XXX: group does not exist:
+
+        // NOTE: rdata: new grp:
+        //
+        row_data* rdata_new_grp = mk_rdata( rdata_ctx->ctx_,
+                                    grp,    // group
+                                    NULL,   // key
+                                    NULL,   // val
+                                    FALSE,  // ro
+                                    FALSE,  // inh
+                                    RT_GRP  // rtype
+                                  );
+
+
+        // NOTE: conf_add_val() / conf_save():
+        //
+        conf_add_val( rdata_new_grp, key, val );
+        if ( !conf_save( rdata_new_grp->ctx_, dlg ) )
+        {
+            rm_rdata( rdata_new_grp );
+            return;
+        }
+
+
+        GtkTreeIter it_ctx_tstrore = row_get_tstore_iter( dlg, it_ctx );
+
+        gchar* display_name = g_strdup_printf( "[%s]", grp );
+        GtkTreeIter it_new_grp = row_add( dlg,
+                                          display_name,  // name
+                                          "",            // val
+                                          rdata_new_grp, // rdata
+                                          &it_ctx_tstrore
+                                        );
+        g_free( display_name );
+
+        // NOTE: select newly added grp node:
+        //
+        row_select_by_iter_tstore( dlg, it_new_grp );
+
+
+        // NOTE: rdata: new key:
+        //
+        row_data* rdata_new_key = mk_rdata( rdata_new_grp->ctx_,
+                                            rdata_new_grp->group_, // group
+                                            key,                   // key
+                                            val,                   // val
+                                            FALSE,                 // ro
+                                            FALSE,                 // inh
+                                            RT_KEY                 // rtype
+                                          );
+
+        GtkTreeIter it_new_key = row_add( dlg,
+                                          key,
+                                          val,
+                                          rdata_new_key,
+                                          &it_new_grp
+                                        );
+
+        // NOTE: select newly added key node:
+        //
+        row_select_by_iter_tstore( dlg, it_new_key );
+
+        // NOTE: conf_reload_child_ctxs():
+        //
+        conf_reload_child_ctxs( rdata_new_key->ctx_, dlg );
 
     }
 
