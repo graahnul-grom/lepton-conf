@@ -12,6 +12,9 @@
 
 
 
+static const gchar g_exted[] = "gvim";
+
+
 struct _conf_key_data
 {
     const gchar* grp_;
@@ -996,8 +999,8 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
     const gchar* fname = gtk_label_get_current_uri( lab );
 
-    const gchar exted[] = "gvim";
-//    const gchar exted[] = "leaf pad";
+    const gchar* exted = g_exted;
+//    const gchar exted[] = "leaf_pad";
 
     GError* err = NULL;
     GAppInfo* ai =
@@ -1007,7 +1010,8 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
                                         &err );
     if ( err )
     {
-        printf( " >> on_lab_fname(): err: [%s]\n", err->message );
+        printf( " >> on_lab_fname(): GAppInfo err: [%d], msg: [%s]\n",
+                err->code, err->message );
         g_clear_error( &err );
     }
 
@@ -1018,8 +1022,21 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
         if ( !g_app_info_launch( ai, args, NULL, &err ) )
         {
-            printf( " >> on_lab_fname(): !g_app_info_launch():\n" );
-            printf( "    err: [%d], msg: [%s]\n", err->code, err->message );
+            printf( " >> on_lab_fname(): LAUNCH err: [%d], msg: [%s]\n",
+                    err->code, err->message );
+
+            GtkWidget* mdlg = gtk_message_dialog_new(
+                NULL,
+                // GTK_WINDOW( dlg ), // TODO: => SIGBUS
+                (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
+                GTK_MESSAGE_ERROR,
+                GTK_BUTTONS_OK,
+                "Could not launch external editor [%s].\n"
+                "Please set it via [lepton-conf]::editor config key."
+                , exted );
+
+            gtk_dialog_run( GTK_DIALOG( mdlg ) );
+            gtk_widget_destroy( mdlg );
         }
 
         g_clear_error( &err );
