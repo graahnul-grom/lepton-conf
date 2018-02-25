@@ -12,7 +12,7 @@
 
 
 
-static const gchar g_exted[] = "gvim";
+static const gchar g_exted_default[] = "gvim";
 
 
 struct _conf_key_data
@@ -999,10 +999,19 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
     const gchar* fname = gtk_label_get_current_uri( lab );
 
-    const gchar* exted = g_exted;
-//    const gchar exted[] = "leaf_pad";
-
+    // external editor [read config]:
+    //
     GError* err = NULL;
+    gchar* exted = eda_config_get_string( eda_config_get_user_context(),
+                                          "lepton-conf",
+                                          "editor",
+                                          &err );
+    g_clear_error( &err );
+
+    if (!exted)
+        exted = g_strdup( g_exted_default );
+
+
     GAppInfo* ai =
     g_app_info_create_from_commandline( exted,
                                         NULL,
@@ -1042,6 +1051,19 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
         g_clear_error( &err );
         g_list_free( args );
     }
+
+
+    // external editor [write config]: TODO: reload config here?
+    //
+    eda_config_set_string( eda_config_get_user_context(),
+                           "lepton-conf",
+                           "editor",
+                           exted );
+
+    eda_config_save( eda_config_get_user_context(), &err );
+    g_clear_error( &err );
+
+    g_free( exted );
 
 } // on_lab_fname()
 
