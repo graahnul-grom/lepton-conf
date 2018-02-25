@@ -1,6 +1,14 @@
 #ifndef CFG_EDIT_DLG_H_
 #define CFG_EDIT_DLG_H_
 
+/*
+ * Lepton EDA configuration utility
+ * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * License: GPL 2 - same as Lepton EDA, see
+ * https://github.com/lepton-eda/lepton-eda
+ */
+
+
 #include <gtk/gtk.h>
 
 

@@ -1,3 +1,10 @@
+/*
+ * Lepton EDA configuration utility
+ * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * License: GPL 2 - same as Lepton EDA, see
+ * https://github.com/lepton-eda/lepton-eda
+ */
+
 #include "cfg_edit_dlg.h"
 
 #include <liblepton/liblepton.h>

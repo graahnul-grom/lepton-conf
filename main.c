@@ -1,3 +1,10 @@
+/*
+ * Lepton EDA configuration utility
+ * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * License: GPL 2 - same as Lepton EDA, see
+ * https://github.com/lepton-eda/lepton-eda
+ */
+
 // how to display g_debug() messages:
 // usage:
 // > export G_MESSAGES_DEBUG="lepton-conf"
