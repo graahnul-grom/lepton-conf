@@ -535,6 +535,8 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 
 
 
+/* unused:
+ *
 // {post}: caller must free {ret}
 //
 static gchar*
@@ -562,6 +564,8 @@ row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
     return val;
 }
+*
+*/
 
 
 
