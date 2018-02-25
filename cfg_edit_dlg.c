@@ -2469,7 +2469,7 @@ mk_gui( cfg_edit_dlg* dlg )
     // TODO: set window's title elsewhere:
     //
     gtk_window_set_title( GTK_WINDOW( dlg ),
-                          g_strdup_printf( "lepton-conf - %s", cwd ) );
+                          g_strdup_printf( "%s - lepton-conf", cwd ) );
 
 
 
@@ -2480,7 +2480,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // cwd label:
     //
-    mk_labels_line( "<b>cwd: </b>", gtk_label_new( cwd ), box_top );
+    // mk_labels_line( "<b>cwd: </b>", gtk_label_new( cwd ), box_top );
 
 
     // add box_top to ca:
@@ -2509,13 +2509,18 @@ mk_gui( cfg_edit_dlg* dlg )
     GtkWidget* box_bot = gtk_vbox_new( FALSE, 5 );
 //    GtkWidget* box_bot = gtk_vbox_new( TRUE, 0 );
 
+    // cwd label:
+    //
+    mk_labels_line( "<b>working directory: </b>", gtk_label_new( cwd ), box_bot );
+
+    mk_labels_line_separ( box_bot );
 
     dlg->lab_ctx_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>ctx: </b>", dlg->lab_ctx_, box_bot );
+    mk_labels_line( "<b>config context: </b>", dlg->lab_ctx_, box_bot );
 
     dlg->lab_fname_ = gtk_label_new( NULL );
     gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
-    mk_labels_line( "<b>fname: </b>", dlg->lab_fname_, box_bot );
+    mk_labels_line( "<b>config file: </b>", dlg->lab_fname_, box_bot );
 
     mk_labels_line_separ( box_bot );
 
@@ -2523,7 +2528,7 @@ mk_gui( cfg_edit_dlg* dlg )
     mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
 
     dlg->lab_name_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>name: </b>", dlg->lab_name_, box_bot );
+    mk_labels_line( "<b>key: </b>", dlg->lab_name_, box_bot );
 
     dlg->lab_val_ = gtk_label_new( NULL );
     mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
