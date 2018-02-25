@@ -1,4 +1,4 @@
-EXE=gedacfged
+EXE=lepton-conf
 SRC=main.c cfg_edit_dlg.c
 CFLAGS=-Wall -ansi -std=c99 -O0 -ggdb -pthread
 

@@ -1,9 +1,9 @@
 // how to display g_debug() messages:
 // usage:
-// > export G_MESSAGES_DEBUG="gedacfged"
-// > /path/to/gedacfged
+// > export G_MESSAGES_DEBUG="lepton-conf"
+// > /path/to/lepton-conf
 //
-//#define G_LOG_DOMAIN "gedacfged"
+//#define G_LOG_DOMAIN "lepton-conf"
 
 
 #include <libguile.h>

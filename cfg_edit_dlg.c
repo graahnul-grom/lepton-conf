@@ -2453,7 +2453,7 @@ mk_gui( cfg_edit_dlg* dlg )
     // TODO: set window's title elsewhere:
     //
     gtk_window_set_title( GTK_WINDOW( dlg ),
-                          g_strdup_printf( "gedacfged - %s", cwd ) );
+                          g_strdup_printf( "lepton-conf - %s", cwd ) );
 
 
 
