@@ -55,6 +55,7 @@ struct _cfg_edit_dlg
 
     GtkWidget* lab_ctx_;
     GtkWidget* lab_fname_;
+    GtkWidget* lab_grp_;
     GtkWidget* lab_name_;
     GtkWidget* lab_val_;
 

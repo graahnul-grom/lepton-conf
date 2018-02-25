@@ -866,6 +866,15 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
 
     gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
 
+    if ( rdata->rtype_ == RT_GRP || rdata->rtype_ == RT_KEY )
+    {
+        gtk_label_set_text( GTK_LABEL( dlg->lab_grp_ ), rdata->group_ );
+    }
+    else
+    {
+        gtk_label_set_text( GTK_LABEL( dlg->lab_grp_ ), NULL );
+    }
+
     if ( rdata->rtype_ == RT_KEY )
     {
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), rdata->key_ );
@@ -2509,6 +2518,9 @@ mk_gui( cfg_edit_dlg* dlg )
     mk_labels_line( "<b>fname: </b>", dlg->lab_fname_, box_bot );
 
     mk_labels_line_separ( box_bot );
+
+    dlg->lab_grp_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
 
     dlg->lab_name_ = gtk_label_new( NULL );
     mk_labels_line( "<b>name: </b>", dlg->lab_name_, box_bot );
