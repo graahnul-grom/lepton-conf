@@ -15,7 +15,7 @@
 static const gchar g_exted_default[] = "gvim";
 
 
-struct _conf_key_data
+struct _CfgKeyDescr
 {
     const gchar* grp_;
     const gchar* key_;
@@ -23,10 +23,10 @@ struct _conf_key_data
     const gchar* desc_;
 };
 
-typedef struct _conf_key_data conf_key_data;
+typedef struct _CfgKeyDescr CfgKeyDescr;
 
 
-static conf_key_data g_conf_key_data[] =
+static CfgKeyDescr g_conf_key_data[] =
 {
     {
         "sys",
@@ -66,13 +66,13 @@ static conf_key_data g_conf_key_data[] =
 };
 
 
-const conf_key_data*
+const CfgKeyDescr*
 conf_key_data_lookup( const gchar* grp, const gchar* key )
 {
-    const conf_key_data* data = g_conf_key_data;
+    const CfgKeyDescr* data = g_conf_key_data;
 
     char* seed = g_strdup_printf( "%s__%s", grp, key );
-    const conf_key_data* ret = NULL;
+    const CfgKeyDescr* ret = NULL;
 
     for ( ; data->seed_ != NULL; ++data )
     {
@@ -92,7 +92,7 @@ conf_key_data_lookup( const gchar* grp, const gchar* key )
 static const gchar*
 conf_key_data_lookup_desc( const gchar* grp, const gchar* key )
 {
-    const conf_key_data* data = conf_key_data_lookup( grp, key );
+    const CfgKeyDescr* data = conf_key_data_lookup( grp, key );
 
     if ( data != NULL)
         return data->desc_;
