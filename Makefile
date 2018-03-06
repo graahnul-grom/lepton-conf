@@ -31,7 +31,7 @@ clean:
 	@rm -f $(EXE)
 	@echo "done."
 
-$(EXE): $(SRC)
+$(EXE): $(SRC) cfg_registry.h
 	cc $(CFLAGS) -o $(EXE) $(SRC) \
 	$(OPT_GTK) $(OPT_GUILE) $(OPT_LIBGEDA)
 
