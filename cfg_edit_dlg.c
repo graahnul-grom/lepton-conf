@@ -77,6 +77,12 @@ mk_gui( cfg_edit_dlg* dlg );
 static row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
 
+static gchar*
+row_cur_pos_save( cfg_edit_dlg* dlg );
+
+static void
+row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
+
 static void
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
@@ -162,32 +168,45 @@ xxx_toggle( cfg_edit_dlg* dlg );
 static void
 settings_restore( GtkWidget* widget )
 {
-    printf( "cfg_edit_dlg::on_show()\n" );
-
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
 
     EdaConfig* ctx = eda_config_get_user_context();
 
+    // geometry:
+    //
     gint x = eda_config_get_int( ctx, "lepton-conf", "x", NULL );
     gint y = eda_config_get_int( ctx, "lepton-conf", "y", NULL );
-
     gtk_window_move( GTK_WINDOW( dlg ), x, y );
-
 
     gint width = eda_config_get_int( ctx, "lepton-conf", "width", NULL );
     gint height = eda_config_get_int( ctx, "lepton-conf", "height", NULL );
-
     if ( width != 0 && height != 0 )
-    {
         gtk_window_resize( GTK_WINDOW( dlg ), width, height );
-    }
 
 
+    // show inherited:
+    //
     gboolean showinh = eda_config_get_boolean( ctx, "lepton-conf",
         "showinh", NULL );
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   showinh );
+
+
+    // tree path:
+    //
+    GError* err = NULL;
+    gchar* path = eda_config_get_string( eda_config_get_user_context(),
+                                          "lepton-conf",
+                                          "path",
+                                          &err );
+    g_clear_error( &err );
+
+    // NOTE: row_cur_pos_restore() will free the string:
+    //
+    if ( path != NULL )
+        row_cur_pos_restore( dlg, path );
+        // row_cur_pos_restore( dlg, g_strdup( TESTING:eklmn:oprst ) );
 
 } // settings_restore()
 
@@ -209,12 +228,26 @@ settings_save( GtkWidget* widget )
 
     EdaConfig* ctx = eda_config_get_user_context();
 
+    // show inh bn state:
+    //
     eda_config_set_boolean( ctx, "lepton-conf", "showinh", dlg->showinh_ );
 
+
+    // geometry:
+    //
     eda_config_set_int( ctx, "lepton-conf", "x", x );
     eda_config_set_int( ctx, "lepton-conf", "y", y );
     eda_config_set_int( ctx, "lepton-conf", "width",  width );
     eda_config_set_int( ctx, "lepton-conf", "height", height );
+
+
+    // tree path:
+    //
+    gchar* path = row_cur_pos_save( dlg );
+    if ( path != NULL )
+        eda_config_set_string( ctx, "lepton-conf", "path", path );
+    g_free( path );
+
 
     eda_config_save( ctx, NULL );
 
@@ -496,6 +529,8 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 
 
+// {post}: allocates return string on success
+//
 static gchar*
 row_cur_pos_save( cfg_edit_dlg* dlg )
 {
@@ -514,6 +549,8 @@ row_cur_pos_save( cfg_edit_dlg* dlg )
 
 
 
+// {post}: frees [path_str]
+//
 static void
 row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 {
@@ -2829,10 +2866,10 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // select row:
     //
-    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
-    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-    gtk_tree_path_free( path );
+//    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
+//    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+//    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+//    gtk_tree_path_free( path );
 
 
     g_free( cwd );
