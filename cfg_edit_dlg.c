@@ -147,6 +147,9 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 static void
 xxx_chg_val( cfg_edit_dlg* dlg, const row_data* rdata, GtkTreeIter it, const gchar* txt );
 
+static void
+xxx_toggle( cfg_edit_dlg* dlg );
+
 
 
 
@@ -1011,38 +1014,9 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
+    xxx_toggle( dlg );
 
-    const row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return;
-
-    if ( rdata->rtype_ != RT_KEY )
-        return;
-
-    if ( g_strcmp0( rdata->val_, "true" ) == 0 )
-    {
-        xxx_chg_val( dlg, rdata, it, "false" );
-    }
-    else
-    if ( g_strcmp0( rdata->val_, "false" ) == 0 )
-    {
-        xxx_chg_val( dlg, rdata, it, "true" );
-    }
-
-    if ( g_strcmp0( rdata->val_, "enabled" ) == 0 )
-    {
-        xxx_chg_val( dlg, rdata, it, "disabled" );
-    }
-    else
-    if ( g_strcmp0( rdata->val_, "disabled" ) == 0 )
-    {
-        xxx_chg_val( dlg, rdata, it, "enabled" );
-    }
-
-} // on_btn_toggle()
+}
 
 
 
@@ -1501,6 +1475,10 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 static gboolean
 on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 {
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
     GdkEventButton* ebtn = ( GdkEventButton* ) e;
 
 
@@ -1508,7 +1486,7 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
     //
     if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
     {
-        on_btn_toggle( NULL, p );
+        xxx_toggle( dlg );
         return FALSE;
     }
 
@@ -1523,10 +1501,6 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
     // further down only return TRUE to not allow selecting rows with RMB
     //
 
-
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return TRUE;
 
     if ( ebtn->window != gtk_tree_view_get_bin_window( dlg->tree_v_ ) )
         return TRUE;
@@ -2820,5 +2794,45 @@ xxx_chg_val( cfg_edit_dlg* dlg, const row_data* rdata, GtkTreeIter it, const gch
         conf_reload_child_ctxs( rdata->ctx_, dlg );
     }
 
-} // gui_chg_val()
+} // xxx_chg_val()
+
+
+
+static void
+xxx_toggle( cfg_edit_dlg* dlg )
+{
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    const row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    if ( rdata->rtype_ != RT_KEY )
+        return;
+
+
+    if ( g_strcmp0( rdata->val_, "true" ) == 0 )
+    {
+        xxx_chg_val( dlg, rdata, it, "false" );
+    }
+    else
+    if ( g_strcmp0( rdata->val_, "false" ) == 0 )
+    {
+        xxx_chg_val( dlg, rdata, it, "true" );
+    }
+
+
+    if ( g_strcmp0( rdata->val_, "enabled" ) == 0 )
+    {
+        xxx_chg_val( dlg, rdata, it, "disabled" );
+    }
+    else
+    if ( g_strcmp0( rdata->val_, "disabled" ) == 0 )
+    {
+        xxx_chg_val( dlg, rdata, it, "enabled" );
+    }
+
+} // xxx_toggle()
 
