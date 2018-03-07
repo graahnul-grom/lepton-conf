@@ -144,6 +144,9 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p );
 static void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
+static void
+gui_chg_val( cfg_edit_dlg* dlg );
+
 
 
 
@@ -983,18 +986,7 @@ on_btn_edit( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
-
-    const row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return;
-
-    if ( rdata->rtype_ == RT_KEY )
-    {
-        on_mitem_key_edit( NULL, dlg );
-    }
+    gui_chg_val( dlg );
 
 } // on_btn_edit()
 
@@ -1018,6 +1010,10 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
     if ( rdata->rtype_ != RT_KEY )
         return;
 
+    if ( g_strcmp0( rdata->val_, "true" ) == 0 )
+    {
+
+    }
 
 } // on_btn_toggle()
 
@@ -1136,49 +1132,9 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
     if ( !dlg )
         return;
 
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
+    gui_chg_val( dlg );
 
-    row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return;
-
-//    printf( "cfg_edit_dlg_on_mitem_edit(): k: [%s], v: [%s]\n", rdata->key_, rdata->val_ );
-
-    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
-
-    if ( txt == NULL )
-        return;
-
-    if ( !rdata->inh_ && g_strcmp0( rdata->val_, txt ) == 0 )
-    {
-        g_free( txt );
-        return;
-    }
-
-
-    // NOTE: conf_chg_val() / conf_save()
-    //
-    conf_chg_val( rdata, txt );
-
-    if ( conf_save( rdata->ctx_, dlg ) )
-    {
-        row_field_set_val( dlg, it, txt );
-
-        // unset inherited:
-        //
-        row_key_unset_inh( dlg, it );
-
-        // NOTE: conf_reload_child_ctxs()
-        //
-        conf_reload_child_ctxs( rdata->ctx_, dlg );
-    }
-
-
-    g_free( txt );
-
-} // on_mitem_key_edit()
+}
 
 
 
@@ -2415,6 +2371,11 @@ conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 
 
 
+
+
+
+
+
 static void
 conf_chg_val( row_data* rdata, const gchar* txt )
 {
@@ -2681,7 +2642,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // toggle btn:
     //
-    dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "toggl_e" );
+    dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_toggle" );
     gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_toggle_, FALSE, FALSE, 0 );
 
 
@@ -2775,4 +2736,55 @@ mk_gui( cfg_edit_dlg* dlg )
     g_free( cwd );
 
 } // mk_gui()
+
+
+
+
+
+
+
+
+
+static void
+gui_chg_val( cfg_edit_dlg* dlg )
+{
+    g_return_if_fail( dlg != NULL );
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+
+    if ( txt == NULL )
+        return;
+
+    if ( !rdata->inh_ && g_strcmp0( rdata->val_, txt ) == 0 )
+        return;
+
+
+    // NOTE: conf_chg_val() / conf_save()
+    //
+    conf_chg_val( rdata, txt );
+
+    if ( conf_save( rdata->ctx_, dlg ) )
+    {
+        row_field_set_val( dlg, it, txt );
+
+        // unset inherited:
+        //
+        row_key_unset_inh( dlg, it );
+
+        // NOTE: conf_reload_child_ctxs()
+        //
+        conf_reload_child_ctxs( rdata->ctx_, dlg );
+    }
+
+    g_free( txt );
+
+} // gui_chg_val()
 
