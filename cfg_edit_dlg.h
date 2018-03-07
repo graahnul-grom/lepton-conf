@@ -62,6 +62,7 @@ struct _cfg_edit_dlg
     GtkTextBuffer* txtbuf_desc_;
 
     GtkWidget* btn_reload_;
+    GtkWidget* btn_add_;
 
     gboolean showinh_;
 
