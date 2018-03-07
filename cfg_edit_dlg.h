@@ -64,6 +64,7 @@ struct _cfg_edit_dlg
     GtkWidget* btn_reload_;
     GtkWidget* btn_add_;
     GtkWidget* btn_edit_;
+    GtkWidget* btn_toggle_;
 
     gboolean showinh_;
 

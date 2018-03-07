@@ -845,6 +845,18 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
         gtk_widget_set_sensitive( dlg->btn_edit_, FALSE );
     }
 
+    // set sensitivity for toggle btn
+    //
+    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_)
+    {
+        gtk_widget_set_sensitive( dlg->btn_toggle_, TRUE );
+    }
+    else
+    {
+        gtk_widget_set_sensitive( dlg->btn_toggle_, FALSE );
+    }
+
+
     gboolean exist = FALSE;
     gboolean rok   = FALSE;
     gboolean wok   = FALSE;
@@ -985,6 +997,29 @@ on_btn_edit( GtkButton* btn, gpointer* p )
     }
 
 } // on_btn_edit()
+
+
+
+static void
+on_btn_toggle( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    const row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    if ( rdata->rtype_ != RT_KEY )
+        return;
+
+
+} // on_btn_toggle()
 
 
 
@@ -2631,7 +2666,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // tst btn:
     //
-    GtkWidget* btn_tst = gtk_button_new_with_mnemonic( "_tst" );
+    GtkWidget* btn_tst = gtk_button_new_with_mnemonic( "t_st" );
     gtk_box_pack_start( GTK_BOX( aa ), btn_tst, FALSE, FALSE, 0 );
 
     // add btn:
@@ -2643,6 +2678,11 @@ mk_gui( cfg_edit_dlg* dlg )
     //
     dlg->btn_edit_ = gtk_button_new_with_mnemonic( "_edit" );
     gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_edit_, FALSE, FALSE, 0 );
+
+    // toggle btn:
+    //
+    dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "toggl_e" );
+    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_toggle_, FALSE, FALSE, 0 );
 
 
 
@@ -2693,6 +2733,11 @@ mk_gui( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( dlg->btn_edit_ ),
                       "clicked",
                       G_CALLBACK( &on_btn_edit ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( dlg->btn_toggle_ ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_toggle ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
