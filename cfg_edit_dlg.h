@@ -61,6 +61,7 @@ struct _cfg_edit_dlg
 
     GtkTextBuffer* txtbuf_desc_;
 
+    GtkWidget* btn_showinh_;
     GtkWidget* btn_reload_;
     GtkWidget* btn_add_;
     GtkWidget* btn_edit_;

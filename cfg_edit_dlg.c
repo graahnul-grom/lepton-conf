@@ -182,6 +182,13 @@ settings_restore( GtkWidget* widget )
         gtk_window_resize( GTK_WINDOW( dlg ), width, height );
     }
 
+
+    gboolean showinh = eda_config_get_boolean( ctx, "lepton-conf",
+        "showinh", NULL );
+
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
+                                  showinh );
+
 } // settings_restore()
 
 
@@ -201,6 +208,8 @@ settings_save( GtkWidget* widget )
 
 
     EdaConfig* ctx = eda_config_get_user_context();
+
+    eda_config_set_boolean( ctx, "lepton-conf", "showinh", dlg->showinh_ );
 
     eda_config_set_int( ctx, "lepton-conf", "x", x );
     eda_config_set_int( ctx, "lepton-conf", "y", y );
@@ -2689,14 +2698,16 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // 'show inh' check box:
     //
-    GtkWidget* btn_showinh = gtk_check_button_new_with_mnemonic( "" );
-    GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( btn_showinh ) );
+    dlg->btn_showinh_ = gtk_check_button_new_with_mnemonic( "" );
+
+    GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( dlg->btn_showinh_ ) );
     gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab_showinh ),
                                         "<i>sho_w inherited</i>" );
 
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( btn_showinh ), dlg->showinh_ );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
+                                  dlg->showinh_ );
 
-    gtk_box_pack_start( GTK_BOX( box_bot ), btn_showinh, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_bot ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
 
     // add box_bot to ca:
@@ -2752,7 +2763,7 @@ mk_gui( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_delete_event ),
                       NULL );
 
-    g_signal_connect( G_OBJECT( btn_showinh ),
+    g_signal_connect( G_OBJECT( dlg->btn_showinh_ ),
                       "toggled",
                       G_CALLBACK( &on_btn_showinh ),
                       dlg );
