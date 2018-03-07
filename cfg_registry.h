@@ -1,6 +1,8 @@
 #ifndef CFG_REGISTRY_H_
 #define CFG_REGISTRY_H_
 
+#include <liblepton/liblepton.h>
+
 /*
  * Lepton EDA configuration utility
  * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
@@ -93,6 +95,23 @@ cfgreg_lookup_descr( const gchar* grp, const gchar* key )
     return NULL;
 }
 
+
+
+static void
+cfgreg_populate_ctx( EdaConfig* ctx )
+{
+    const CfgEntry* entry = g_cfg_registry;
+
+    for ( ; entry->grp_ != NULL; ++entry )
+    {
+        const gchar* grp = entry->grp_;
+        const gchar* key = entry->key_;
+
+        const gchar* default_val = "EKLMN";
+
+        eda_config_set_string( ctx, grp, key, default_val );
+    }
+}
 
 #endif /* CFG_REGISTRY_H_ */
 
