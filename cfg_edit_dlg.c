@@ -141,6 +141,9 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
 static void
 on_mitem_grp_add( GtkMenuItem* mitem, gpointer p );
 
+static void
+on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
+
 
 
 
@@ -820,6 +823,8 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
     }
 
+    // set sensitivity for add btn
+    //
     if ( (rdata->rtype_ == RT_CTX || rdata->rtype_ == RT_GRP) && !rdata->ro_)
     {
         gtk_widget_set_sensitive( dlg->btn_add_, TRUE );
@@ -827,6 +832,17 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     else
     {
         gtk_widget_set_sensitive( dlg->btn_add_, FALSE );
+    }
+
+    // set sensitivity for edit btn
+    //
+    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_)
+    {
+        gtk_widget_set_sensitive( dlg->btn_edit_, TRUE );
+    }
+    else
+    {
+        gtk_widget_set_sensitive( dlg->btn_edit_, FALSE );
     }
 
     gboolean exist = FALSE;
@@ -944,7 +960,31 @@ on_btn_add( GtkButton* btn, gpointer* p )
         on_mitem_grp_add( NULL, dlg );
     }
 
-}
+} // on_btn_add()
+
+
+
+static void
+on_btn_edit( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    const row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    if ( rdata->rtype_ == RT_KEY )
+    {
+        on_mitem_key_edit( NULL, dlg );
+    }
+
+} // on_btn_edit()
 
 
 
@@ -2599,6 +2639,11 @@ mk_gui( cfg_edit_dlg* dlg )
     dlg->btn_add_ = gtk_button_new_with_mnemonic( "_add" );
     gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_add_, FALSE, FALSE, 0 );
 
+    // edit btn:
+    //
+    dlg->btn_edit_ = gtk_button_new_with_mnemonic( "_edit" );
+    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_edit_, FALSE, FALSE, 0 );
+
 
 
 
@@ -2643,6 +2688,11 @@ mk_gui( cfg_edit_dlg* dlg )
     g_signal_connect( G_OBJECT( dlg->btn_add_ ),
                       "clicked",
                       G_CALLBACK( &on_btn_add ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( dlg->btn_edit_ ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_edit ),
                       dlg );
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
