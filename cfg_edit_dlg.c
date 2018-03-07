@@ -1472,8 +1472,10 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
 
 
+// handler for button-press-event signal:
+//
 static gboolean
-on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
+on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -2732,7 +2734,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
                       "button-press-event",
-                      G_CALLBACK( &on_rmb ),
+                      G_CALLBACK( &on_mouse_click ),
                       dlg );
 
 
