@@ -81,7 +81,7 @@ static void
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
 static void
-conf_chg_val( row_data* rdata, const gchar* txt );
+conf_chg_val( const row_data* rdata, const gchar* txt );
 
 static gboolean
 conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
@@ -145,7 +145,7 @@ static void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
 static void
-xxx_chg_val( cfg_edit_dlg* dlg, row_data* rdata, GtkTreeIter it, const gchar* txt );
+xxx_chg_val( cfg_edit_dlg* dlg, const row_data* rdata, GtkTreeIter it, const gchar* txt );
 
 
 
@@ -1024,7 +1024,22 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
 
     if ( g_strcmp0( rdata->val_, "true" ) == 0 )
     {
+        xxx_chg_val( dlg, rdata, it, "false" );
+    }
+    else
+    if ( g_strcmp0( rdata->val_, "false" ) == 0 )
+    {
+        xxx_chg_val( dlg, rdata, it, "true" );
+    }
 
+    if ( g_strcmp0( rdata->val_, "enabled" ) == 0 )
+    {
+        xxx_chg_val( dlg, rdata, it, "disabled" );
+    }
+    else
+    if ( g_strcmp0( rdata->val_, "disabled" ) == 0 )
+    {
+        xxx_chg_val( dlg, rdata, it, "enabled" );
     }
 
 } // on_btn_toggle()
@@ -2401,7 +2416,7 @@ conf_add_val( row_data* rdata, const gchar* key, const gchar* val )
 
 
 static void
-conf_chg_val( row_data* rdata, const gchar* txt )
+conf_chg_val( const row_data* rdata, const gchar* txt )
 {
     eda_config_set_string( rdata->ctx_,
                            rdata->group_,
@@ -2770,7 +2785,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 static void
-xxx_chg_val( cfg_edit_dlg* dlg, row_data* rdata, GtkTreeIter it, const gchar* txt )
+xxx_chg_val( cfg_edit_dlg* dlg, const row_data* rdata, GtkTreeIter it, const gchar* txt )
 {
     if ( txt == NULL )
         return;
