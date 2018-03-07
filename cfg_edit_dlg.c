@@ -1503,6 +1503,16 @@ on_rmb( GtkWidget* w, GdkEvent* e, gpointer p )
 {
     GdkEventButton* ebtn = ( GdkEventButton* ) e;
 
+
+    // LMB double click:
+    //
+    if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
+    {
+        on_btn_toggle( NULL, p );
+        return FALSE;
+    }
+
+
     // not an RMB => do not process event (return FALSE):
     //
     if ( ebtn->type != GDK_BUTTON_PRESS || ebtn->button != 3 )
