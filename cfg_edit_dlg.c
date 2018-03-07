@@ -160,7 +160,7 @@ xxx_toggle( cfg_edit_dlg* dlg );
 */
 
 static void
-geom_restore( GtkWidget* widget )
+settings_restore( GtkWidget* widget )
 {
     printf( "cfg_edit_dlg::on_show()\n" );
 
@@ -182,12 +182,12 @@ geom_restore( GtkWidget* widget )
         gtk_window_resize( GTK_WINDOW( dlg ), width, height );
     }
 
-} // geom_restore()
+} // settings_restore()
 
 
 
 static void
-geom_save( GtkWidget* widget )
+settings_save( GtkWidget* widget )
 {
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
 
@@ -209,7 +209,7 @@ geom_save( GtkWidget* widget )
 
     eda_config_save( ctx, NULL );
 
-} // geom_save()
+} // settings_save()
 
 
 
@@ -275,7 +275,7 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 
     GtkWidgetClass* wcls = GTK_WIDGET_CLASS( cls );
     // wcls->show =  &on_show; // TODO: doesn't work
-    wcls->unmap = &geom_save;
+    wcls->unmap = &settings_save;
 }
 
 
@@ -2813,7 +2813,7 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 
-    geom_restore( GTK_WIDGET( dlg ) );
+    settings_restore( GTK_WIDGET( dlg ) );
 
 
     // select row:
