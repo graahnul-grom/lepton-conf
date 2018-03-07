@@ -11,12 +11,12 @@
 
 
 // struct represents a configuration key:
+// NOTE: unique( grp, key )
 //
 struct _CfgEntry
 {
     const gchar* grp_;
     const gchar* key_;
-    const gchar* seed_;
     const gchar* desc_;
 };
 
@@ -28,34 +28,22 @@ static CfgEntry g_cfg_registry[] =
     {
         "sys",
         "newKey",
-        "sys__newKey",
         "eklmn oprst"
     },
     {
         "gschem",
         "default-filename",
-        "gschem__default-filename",
         "Define the default file name for any new schematic files created in gschem.\n"
         "It is used to create filenames of the form “untitled_N.sch” where N is a number."
     },
     {
         "schematic.gui",
         "use-docks",
-        "schematic.gui__use-docks",
-//        "The type of GUI is controlled by \"use-docks\" boolean"
-//        " configuration key in \"gschem.gui\" group."
-//        " If widgets will be shown"
-//        " in docks (true) or as"
-//        " a dialog boxes (false)"
-
         "The type of GUI: how to display widgets.\n"
         " If true, widgets will be shown in docks.\n"
         " If false, widgets will be shown as a dialog boxes."
-
-//        "The type of GUI is controlled by \"use-docks\" boolean configuration key in \"gschem.gui\" group. If widgets will be shown in docks (true) or as a dialog boxes (false)"
     },
     {
-        NULL,
         NULL,
         NULL,
         NULL
@@ -70,20 +58,19 @@ const CfgEntry*
 cfgreg_lookup( const gchar* grp, const gchar* key )
 {
     const CfgEntry* entry = g_cfg_registry;
+    const CfgEntry* ret   = NULL;
 
-    char* seed = g_strdup_printf( "%s__%s", grp, key );
-    const CfgEntry* ret = NULL;
-
-    for ( ; entry->seed_ != NULL; ++entry )
+    for ( ; entry->grp_ != NULL; ++entry )
     {
-        if ( g_strcmp0( entry->seed_, seed ) == 0 )
+        gboolean cond1 = g_strcmp0( entry->grp_, grp ) == 0;
+        gboolean cond2 = g_strcmp0( entry->key_, key ) == 0;
+
+        if ( cond1 && cond2 )
         {
             ret = entry;
             break;
         }
     }
-
-    g_free( seed );
 
     return ret;
 }
