@@ -202,11 +202,12 @@ settings_restore( GtkWidget* widget )
                                           &err );
     g_clear_error( &err );
 
-    // NOTE: row_cur_pos_restore() will free the string:
-    //
     if ( path != NULL )
         row_cur_pos_restore( dlg, path );
-        // row_cur_pos_restore( dlg, g_strdup( TESTING:eklmn:oprst ) );
+
+    g_free( path );
+
+    // row_cur_pos_restore( dlg, "TESTING:eklmn:oprst" );
 
 } // settings_restore()
 
@@ -549,8 +550,6 @@ row_cur_pos_save( cfg_edit_dlg* dlg )
 
 
 
-// {post}: frees [path_str]
-//
 static void
 row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 {
@@ -561,6 +560,11 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
     }
 
     GtkTreePath* path = gtk_tree_path_new_from_string( path_str );
+    if ( !path )
+    {
+        printf( " >> >> row_cur_pos_restore(): !path\n");
+        return;
+    }
 
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
@@ -575,7 +579,6 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
 
     gtk_tree_path_free( path );
-    g_free( path_str );
 }
 
 
@@ -1044,6 +1047,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
 
     row_cur_pos_restore( dlg, path );
+    g_free( path );
 
 } // on_btn_reload()
 
@@ -2337,6 +2341,7 @@ conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
     }
 
     row_cur_pos_restore( dlg, path );
+    g_free( path );
 
 } // conf_reload_child_ctxs()
 
