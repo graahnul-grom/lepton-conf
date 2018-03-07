@@ -19,6 +19,7 @@ struct _CfgEntry
 {
     const gchar* grp_;
     const gchar* key_;
+    const gchar* def_val_; // default value
     const gchar* desc_;
 };
 
@@ -30,22 +31,26 @@ static CfgEntry g_cfg_registry[] =
     {
         "sys",
         "newKey",
+        "newVal",
         "eklmn oprst"
     },
     {
         "gschem",
         "default-filename",
+        "untitled",
         "Define the default file name for any new schematic files created in gschem.\n"
         "It is used to create filenames of the form “untitled_N.sch” where N is a number."
     },
     {
         "schematic.gui",
         "use-docks",
+        "true",
         "The type of GUI: how to display widgets.\n"
         " If true, widgets will be shown in docks.\n"
         " If false, widgets will be shown as a dialog boxes."
     },
     {
+        NULL,
         NULL,
         NULL,
         NULL
@@ -104,12 +109,11 @@ cfgreg_populate_ctx( EdaConfig* ctx )
 
     for ( ; entry->grp_ != NULL; ++entry )
     {
-        const gchar* grp = entry->grp_;
-        const gchar* key = entry->key_;
+        const gchar* grp     = entry->grp_;
+        const gchar* key     = entry->key_;
+        const gchar* def_val = entry->def_val_;
 
-        const gchar* default_val = "EKLMN";
-
-        eda_config_set_string( ctx, grp, key, default_val );
+        eda_config_set_string( ctx, grp, key, def_val );
     }
 }
 
