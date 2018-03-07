@@ -802,7 +802,7 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), rdata->key_ );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  rdata->val_ );
 
-        const gchar* desc = conf_key_data_lookup_desc( rdata->group_, rdata->key_ );
+        const gchar* desc = cfgreg_lookup_descr( rdata->group_, rdata->key_ );
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, desc ? desc : "", -1 );
     }
     else

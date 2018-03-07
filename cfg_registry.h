@@ -8,7 +8,11 @@
  * https://github.com/lepton-eda/lepton-eda
  */
 
-struct _CfgKeyDescr
+
+
+// struct represents a configuration key:
+//
+struct _CfgEntry
 {
     const gchar* grp_;
     const gchar* key_;
@@ -16,10 +20,10 @@ struct _CfgKeyDescr
     const gchar* desc_;
 };
 
-typedef struct _CfgKeyDescr CfgKeyDescr;
+typedef struct _CfgEntry CfgEntry;
 
 
-static CfgKeyDescr g_cfg_registry[] =
+static CfgEntry g_cfg_registry[] =
 {
     {
         "sys",
@@ -59,19 +63,22 @@ static CfgKeyDescr g_cfg_registry[] =
 };
 
 
-const CfgKeyDescr*
-conf_key_data_lookup( const gchar* grp, const gchar* key )
+// private:
+// find CfgEntry in global cfg registry by group name and key name
+//
+const CfgEntry*
+cfgreg_lookup( const gchar* grp, const gchar* key )
 {
-    const CfgKeyDescr* data = g_cfg_registry;
+    const CfgEntry* entry = g_cfg_registry;
 
     char* seed = g_strdup_printf( "%s__%s", grp, key );
-    const CfgKeyDescr* ret = NULL;
+    const CfgEntry* ret = NULL;
 
-    for ( ; data->seed_ != NULL; ++data )
+    for ( ; entry->seed_ != NULL; ++entry )
     {
-        if ( g_strcmp0( data->seed_, seed ) == 0 )
+        if ( g_strcmp0( entry->seed_, seed ) == 0 )
         {
-            ret = data;
+            ret = entry;
             break;
         }
     }
@@ -82,13 +89,19 @@ conf_key_data_lookup( const gchar* grp, const gchar* key )
 }
 
 
-static const gchar*
-conf_key_data_lookup_desc( const gchar* grp, const gchar* key )
-{
-    const CfgKeyDescr* data = conf_key_data_lookup( grp, key );
 
-    if ( data != NULL)
-        return data->desc_;
+// public:
+// convenience func:
+// find CfgEntry in global cfg registry by group name and key name,
+//   and if found, return description for that entry
+//
+static const gchar*
+cfgreg_lookup_descr( const gchar* grp, const gchar* key )
+{
+    const CfgEntry* entry = cfgreg_lookup( grp, key );
+
+    if ( entry != NULL)
+        return entry->desc_;
 
     return NULL;
 }
