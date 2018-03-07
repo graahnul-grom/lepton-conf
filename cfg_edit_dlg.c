@@ -145,7 +145,7 @@ static void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
 static void
-gui_chg_val( cfg_edit_dlg* dlg );
+xxx_chg_val( cfg_edit_dlg* dlg, row_data* rdata, GtkTreeIter it, const gchar* txt );
 
 
 
@@ -986,7 +986,19 @@ on_btn_edit( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    gui_chg_val( dlg );
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+
+    xxx_chg_val( dlg, rdata, it, txt );
+
+    g_free( txt );
 
 } // on_btn_edit()
 
@@ -1132,9 +1144,21 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
     if ( !dlg )
         return;
 
-    gui_chg_val( dlg );
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
 
-}
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+
+    xxx_chg_val( dlg, rdata, it, txt );
+
+    g_free( txt );
+
+} // on_mitem_key_edit()
 
 
 
@@ -2746,26 +2770,13 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 static void
-gui_chg_val( cfg_edit_dlg* dlg )
+xxx_chg_val( cfg_edit_dlg* dlg, row_data* rdata, GtkTreeIter it, const gchar* txt )
 {
-    g_return_if_fail( dlg != NULL );
-
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
-
-    row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return;
-
-    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
-
     if ( txt == NULL )
         return;
 
     if ( !rdata->inh_ && g_strcmp0( rdata->val_, txt ) == 0 )
         return;
-
 
     // NOTE: conf_chg_val() / conf_save()
     //
@@ -2783,8 +2794,6 @@ gui_chg_val( cfg_edit_dlg* dlg )
         //
         conf_reload_child_ctxs( rdata->ctx_, dlg );
     }
-
-    g_free( txt );
 
 } // gui_chg_val()
 
