@@ -36,8 +36,8 @@ int main( int argc, char* argv[] )
 
     GtkWidget* wnd = cfg_edit_dlg_new();
 
-    gtk_widget_set_size_request( wnd, 800, 650 );
-//    gtk_window_set_default_size( GTK_WINDOW(wnd), 800, 650 );
+//    gtk_widget_set_size_request( wnd, 800, 650 );
+//    gtk_window_set_default_size( GTK_WINDOW(wnd), 800, 1000 );
 
 
 //    gtk_dialog_run( GTK_DIALOG( wnd ) );

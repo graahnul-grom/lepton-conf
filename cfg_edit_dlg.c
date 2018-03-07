@@ -155,12 +155,72 @@ xxx_toggle( cfg_edit_dlg* dlg );
 
 /* ******************************************************************
 *
+*  save/restore window's geomtry:
+*
+*/
+
+static void
+geom_restore( GtkWidget* widget )
+{
+    printf( "cfg_edit_dlg::on_show()\n" );
+
+    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
+
+    EdaConfig* ctx = eda_config_get_user_context();
+
+    gint x = eda_config_get_int( ctx, "lepton-conf", "x", NULL );
+    gint y = eda_config_get_int( ctx, "lepton-conf", "y", NULL );
+
+    gtk_window_move( GTK_WINDOW( dlg ), x, y );
+
+
+    gint width = eda_config_get_int( ctx, "lepton-conf", "width", NULL );
+    gint height = eda_config_get_int( ctx, "lepton-conf", "height", NULL );
+
+    if ( width != 0 && height != 0 )
+    {
+        gtk_window_resize( GTK_WINDOW( dlg ), width, height );
+    }
+
+} // geom_restore()
+
+
+
+static void
+geom_save( GtkWidget* widget )
+{
+    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
+
+    gint x = 0;
+    gint y = 0;
+    gtk_window_get_position( GTK_WINDOW( dlg ), &x, &y );
+
+    gint width  = 0;
+    gint height = 0;
+    gtk_window_get_size( GTK_WINDOW( dlg ), &width, &height );
+
+
+    EdaConfig* ctx = eda_config_get_user_context();
+
+    eda_config_set_int( ctx, "lepton-conf", "x", x );
+    eda_config_set_int( ctx, "lepton-conf", "y", y );
+    eda_config_set_int( ctx, "lepton-conf", "width",  width );
+    eda_config_set_int( ctx, "lepton-conf", "height", height );
+
+    eda_config_save( ctx, NULL );
+
+} // geom_save()
+
+
+
+
+/* ******************************************************************
+*
 *  gobject stuff:
 *
 */
 
 G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
-// G_DEFINE_TYPE (GschemObjectPropertiesWidget, gschem_object_properties_widget, GSCHEM_TYPE_BIN);
 
 
 
@@ -211,6 +271,11 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
     gcls->dispose      = &cfg_edit_dlg_dispose;
     gcls->get_property = &cfg_edit_dlg_get_property;
     gcls->set_property = &cfg_edit_dlg_set_property;
+
+
+    GtkWidgetClass* wcls = GTK_WIDGET_CLASS( cls );
+    // wcls->show =  &on_show; // TODO: doesn't work
+    wcls->unmap = &geom_save;
 }
 
 
@@ -2748,6 +2813,7 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 
+    geom_restore( GTK_WIDGET( dlg ) );
 
 
     // select row:
