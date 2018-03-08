@@ -29,25 +29,47 @@ typedef struct _CfgEntry CfgEntry;
 static CfgEntry g_cfg_registry[] =
 {
     {
-        "sys",
-        "newKey",
-        "newVal",
-        "eklmn oprst"
-    },
-    {
         "gschem",
         "default-filename",
         "untitled",
-        "Define the default file name for any new schematic files created in gschem.\n"
+        "Default file name for any new schematic files.\n"
         "It is used to create filenames of the form “untitled_N.sch” where N is a number."
     },
     {
         "schematic.gui",
         "use-docks",
         "true",
-        "The type of GUI: how to display widgets.\n"
-        " If true, widgets will be shown in docks.\n"
-        " If false, widgets will be shown as a dialog boxes."
+        "How to display widgets: as dialogs or inside the dock widgets."
+    },
+    {
+        "schematic.gui",
+        "use-tabs",
+        "false",
+        "Whether to use tabbed GUI."
+    },
+    {
+        "schematic.tabs",
+        "show-close-button",
+        "true",
+        "Whether to show \"close\" button on each tab."
+    },
+    {
+        "schematic.tabs",
+        "show-up-button",
+        "true",
+        "Whether to show \"hierarchy up\" button on each tab."
+    },
+    {
+        "schematic.undo",
+        "modify-viewport",
+        "false",
+        "Allow undo/redo operations to change pan and zoom."
+    },
+    {
+        "schematic.log-window",
+        "font",
+        "",
+        "Custom font for the log window (e.g. \"Monospace 10\")."
     },
     {
         NULL,
