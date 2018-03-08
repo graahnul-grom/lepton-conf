@@ -2968,7 +2968,7 @@ xxx_toggle( cfg_edit_dlg* dlg )
     if ( !rdata )
         return;
 
-    if ( rdata->rtype_ != RT_KEY )
+    if ( rdata->rtype_ != RT_KEY || rdata->ro_ )
         return;
 
 
