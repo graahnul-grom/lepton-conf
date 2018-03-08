@@ -2051,6 +2051,10 @@ conf_load_keys( EdaConfig*    ctx,
     {
         const gchar* name = pp[ ndx ];
 
+
+        // TODO: filter out lepton-conf hidden settings here //
+
+
         gchar* val = eda_config_get_string( ctx, group, name, &err );
         if ( val == NULL )
         {
@@ -2749,7 +2753,7 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   dlg->showinh_ );
 
-    gtk_box_pack_start( GTK_BOX( box_bot ), dlg->btn_showinh_, FALSE, FALSE, 0 );
+    // gtk_box_pack_start( GTK_BOX( box_bot ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
 
     // add box_bot to ca:
@@ -2761,32 +2765,44 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // action area:
     //
-    GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG(dlg) );
+    GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG( dlg ) );
+
+
+    GtkWidget* aa_box_left  = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* aa_box_right = gtk_hbox_new( FALSE, 5 );
+
+    gtk_box_pack_start( GTK_BOX( aa ), aa_box_left, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( aa ), aa_box_right, FALSE, FALSE, 0 );
+
+
+    // 'show inh' check box:
+    //
+    gtk_box_pack_start( GTK_BOX( aa_box_left ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
     // reload btn:
     //
     dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
-    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_reload_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_reload_, FALSE, FALSE, 0 );
 
     // tst btn:
     //
     GtkWidget* btn_tst = gtk_button_new_with_mnemonic( "t_st" );
-    gtk_box_pack_start( GTK_BOX( aa ), btn_tst, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), btn_tst, FALSE, FALSE, 0 );
 
     // add btn:
     //
     dlg->btn_add_ = gtk_button_new_with_mnemonic( "_add" );
-    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_add_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_add_, FALSE, FALSE, 0 );
 
     // edit btn:
     //
     dlg->btn_edit_ = gtk_button_new_with_mnemonic( "_edit" );
-    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_edit_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_edit_, FALSE, FALSE, 0 );
 
     // toggle btn:
     //
     dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_toggle" );
-    gtk_box_pack_start( GTK_BOX( aa ), dlg->btn_toggle_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_toggle_, FALSE, FALSE, 0 );
 
 
 
