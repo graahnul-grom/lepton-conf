@@ -13,6 +13,7 @@
 
 
 
+gboolean g_populate_default_ctx = TRUE;
 static const gchar g_exted_default[] = "gvim";
 
 
@@ -2395,7 +2396,10 @@ conf_load( cfg_edit_dlg* dlg )
     wok = conf_ctx_file_writable( ctx_dflt );
     it = conf_mk_ctx_node( ctx_dflt, wok, name_dflt, dlg );
     // conf_load_ctx( ctx_dflt );
-    cfgreg_populate_ctx( ctx_dflt ); // TESTING
+    if ( g_populate_default_ctx )
+    {
+        cfgreg_populate_ctx( ctx_dflt );
+    }
     conf_load_groups( ctx_dflt, wok, dlg, it );
 
     wok = conf_ctx_file_writable( ctx_sys );

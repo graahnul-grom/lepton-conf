@@ -36,6 +36,10 @@
 
 
 
+extern gboolean g_populate_default_ctx;
+
+
+
 struct _cfg_edit_dlgClass
 {
     GtkDialogClass parent_class;

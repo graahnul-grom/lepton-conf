@@ -34,7 +34,7 @@ void out_version()
 
 void out_help( int exit_code )
 {
-    printf( "usage: lepton-conf [-h] [-v] [dirname]\n" );
+    printf( "usage: lepton-conf [-h] [-v] [-d] [dirname]\n" );
     exit( exit_code );
 }
 
@@ -51,7 +51,7 @@ int main( int argc, char* argv[] )
     int ch = -1;
     do
     {
-        int ch = getopt( argc, argv, "hvd:" );
+        int ch = getopt( argc, argv, "hvd" );
 
         if ( ch == 'v' )
             out_version();
@@ -59,13 +59,16 @@ int main( int argc, char* argv[] )
         if ( ch == 'h' )
             out_help( 0 );
         else
+        if ( ch == 'd' )
+            g_populate_default_ctx = FALSE;
+        else
         if ( ch == '?' )
             out_help( 1 );
     }
     while ( ch != -1 );
 
-    printf( " >> optind:         [ %d ]\n", optind );
-    printf( " >> argv[ optind ]: [ %s ]\n", argv[ optind ] );
+//    printf( " >> optind:         [ %d ]\n", optind );
+//    printf( " >> argv[ optind ]: [ %s ]\n", argv[ optind ] );
 
     const gchar* dir = argv[ optind ];
     if ( dir != NULL )
