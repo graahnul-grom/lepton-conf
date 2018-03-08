@@ -967,9 +967,10 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
 
     // set sensitivity for toggle btn
     //
-    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_)
+    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_ )
     {
-        gtk_widget_set_sensitive( dlg->btn_toggle_, TRUE );
+        gboolean can_toggle = cfgreg_can_toggle( rdata->val_ );
+        gtk_widget_set_sensitive( dlg->btn_toggle_, can_toggle );
     }
     else
     {

@@ -102,6 +102,25 @@ cfgreg_lookup_descr( const gchar* grp, const gchar* key )
 
 
 
+// public:
+//
+static gboolean
+cfgreg_can_toggle( const gchar* val )
+{
+    gboolean can_toggle = FALSE;
+
+    can_toggle |= g_strcmp0( val, "true"     ) == 0;
+    can_toggle |= g_strcmp0( val, "false"    ) == 0;
+    can_toggle |= g_strcmp0( val, "enabled"  ) == 0;
+    can_toggle |= g_strcmp0( val, "disabled" ) == 0;
+
+    return can_toggle;
+}
+
+
+
+// public:
+//
 static void
 cfgreg_populate_ctx( EdaConfig* ctx )
 {
