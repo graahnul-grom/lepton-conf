@@ -161,7 +161,7 @@ xxx_toggle( cfg_edit_dlg* dlg );
 
 /* ******************************************************************
 *
-*  save/restore window's geomtry:
+*  save/restore app settings:
 *
 */
 
@@ -174,20 +174,22 @@ settings_restore( GtkWidget* widget )
 
     // geometry:
     //
-    gint x = eda_config_get_int( ctx, "lepton-conf", "x", NULL );
-    gint y = eda_config_get_int( ctx, "lepton-conf", "y", NULL );
+    gint x = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-x", NULL );
+    gint y = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-y", NULL );
     gtk_window_move( GTK_WINDOW( dlg ), x, y );
 
-    gint width = eda_config_get_int( ctx, "lepton-conf", "width", NULL );
-    gint height = eda_config_get_int( ctx, "lepton-conf", "height", NULL );
+    gint width = eda_config_get_int(  ctx, "lepton-conf", "lepton-conf-hidden-width", NULL );
+    gint height = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-height", NULL );
     if ( width != 0 && height != 0 )
         gtk_window_resize( GTK_WINDOW( dlg ), width, height );
 
 
     // show inherited:
     //
-    gboolean showinh = eda_config_get_boolean( ctx, "lepton-conf",
-        "showinh", NULL );
+    gboolean showinh = eda_config_get_boolean(
+        ctx,
+        "lepton-conf",
+        "lepton-conf-hidden-showinh", NULL );
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   showinh );
@@ -198,7 +200,7 @@ settings_restore( GtkWidget* widget )
     GError* err = NULL;
     gchar* path = eda_config_get_string( eda_config_get_user_context(),
                                           "lepton-conf",
-                                          "path",
+                                          "lepton-conf-hidden-path",
                                           &err );
     g_clear_error( &err );
 
@@ -231,22 +233,22 @@ settings_save( GtkWidget* widget )
 
     // show inh bn state:
     //
-    eda_config_set_boolean( ctx, "lepton-conf", "showinh", dlg->showinh_ );
+    eda_config_set_boolean( ctx, "lepton-conf", "lepton-conf-hidden-showinh", dlg->showinh_ );
 
 
     // geometry:
     //
-    eda_config_set_int( ctx, "lepton-conf", "x", x );
-    eda_config_set_int( ctx, "lepton-conf", "y", y );
-    eda_config_set_int( ctx, "lepton-conf", "width",  width );
-    eda_config_set_int( ctx, "lepton-conf", "height", height );
+    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-x", x );
+    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-y", y );
+    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-width",  width );
+    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-height", height );
 
 
     // tree path:
     //
     gchar* path = row_cur_pos_save( dlg );
     if ( path != NULL )
-        eda_config_set_string( ctx, "lepton-conf", "path", path );
+        eda_config_set_string( ctx, "lepton-conf", "lepton-conf-hidden-path", path );
     g_free( path );
 
 
@@ -2018,6 +2020,26 @@ on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 *
 */
 
+static gboolean
+conf_is_hidden_key( const gchar* name )
+{
+    gboolean hidden = FALSE;
+    hidden = strstr( name, "lepton-conf-hidden" ) != NULL;
+    return hidden;
+}
+
+
+
+static gboolean
+conf_is_hidden_group( const gchar* name )
+{
+    gboolean hidden = FALSE;
+    hidden = strstr( name, "dialog-geometry" ) != NULL;
+    return hidden;
+}
+
+
+
 static void
 conf_load_keys( EdaConfig*    ctx,
                 const gchar*  group,
@@ -2052,9 +2074,8 @@ conf_load_keys( EdaConfig*    ctx,
     {
         const gchar* name = pp[ ndx ];
 
-
-        // TODO: filter out lepton-conf hidden settings here //
-
+        if ( conf_is_hidden_key( name ) )
+            continue;
 
         gchar* val = eda_config_get_string( ctx, group, name, &err );
         if ( val == NULL )
@@ -2125,7 +2146,7 @@ conf_load_groups( EdaConfig*    ctx,
     {
         const gchar* name = pp[ ndx ];
 
-        if ( strstr( name, "dialog-geometry" ) != NULL )
+        if ( conf_is_hidden_group( name ) )
             continue;
 
 
