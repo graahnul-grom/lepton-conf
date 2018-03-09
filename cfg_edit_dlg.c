@@ -2565,12 +2565,15 @@ mk_toolbar( cfg_edit_dlg* dlg )
 {
     GtkWidget* box_tbar  = gtk_hbox_new( FALSE, 0 );
 
-    GtkWidget* aa_box_left  = gtk_hbox_new( FALSE, 0 );
-    GtkWidget* aa_box_right = gtk_hbutton_box_new();
+    GtkWidget* aa_box_right  = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* box2 = gtk_hbutton_box_new();
+    gtk_button_box_set_layout( GTK_BUTTON_BOX( box2 ),
+                               GTK_BUTTONBOX_SPREAD );
+//                               GTK_BUTTONBOX_START );
     // GtkWidget* aa_box_right = gtk_hbox_new( FALSE, 5 );
 
     gtk_box_pack_start( GTK_BOX( box_tbar ), aa_box_right, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box_tbar ), aa_box_left, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_tbar ), box2, FALSE, FALSE, 0 );
 
 
     // 'show inh' check box:
@@ -2581,7 +2584,8 @@ mk_toolbar( cfg_edit_dlg* dlg )
                                         "<i>sho_w inherited</i>" );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   dlg->showinh_ );
-    gtk_box_pack_start( GTK_BOX( aa_box_left ), dlg->btn_showinh_, FALSE, FALSE, 0 );
+//    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_showinh_, FALSE, FALSE, 0 );
+//    gtk_box_pack_start( GTK_BOX( aa_box_left ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
     // reload btn:
     //
@@ -2607,6 +2611,12 @@ mk_toolbar( cfg_edit_dlg* dlg )
     //
     dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_toggle" );
     gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_toggle_, FALSE, FALSE, 0 );
+
+
+    gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
+//    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_showinh_, FALSE, FALSE, 0 );
+//    gtk_button_box_set_child_secondary( GTK_BUTTON_BOX( aa_box_right ),
+//                                        dlg->btn_showinh_, TRUE );
 
     return box_tbar;
 }
@@ -2668,6 +2678,12 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_window_set_title( GTK_WINDOW( dlg ),
                           g_strdup_printf( "%s - lepton-conf", cwd ) );
 
+
+
+    // add toolbar to ca:
+    //
+    GtkWidget* toolbar = mk_toolbar( dlg );
+    gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
 
 
     // box (top):
@@ -2752,7 +2768,7 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( box_bot ), wscroll_desc, FALSE, FALSE, 0 );
 
 
-    mk_labels_line_separ( box_bot );
+    // mk_labels_line_separ( box_bot );
 
 
     // add box_bot to ca:
@@ -2762,7 +2778,8 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // add toolbar to ca:
     //
-    gtk_box_pack_start( GTK_BOX( ca ), mk_toolbar( dlg ), FALSE, FALSE, 0 );
+//    GtkWidget* toolbar = mk_toolbar( dlg );
+//    gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
 
 
 
