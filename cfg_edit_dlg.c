@@ -205,6 +205,18 @@ settings_restore( GtkWidget* widget )
     on_btn_showinh( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ), (gpointer*) dlg );
 
 
+    // geometry:
+    //
+    gint x = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-x", NULL );
+    gint y = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-y", NULL );
+    gtk_window_move( GTK_WINDOW( dlg ), x, y );
+
+    gint width = eda_config_get_int(  ctx, "lepton-conf", "lepton-conf-hidden-width", NULL );
+    gint height = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-height", NULL );
+    if ( width != 0 && height != 0 )
+        gtk_window_resize( GTK_WINDOW( dlg ), width, height );
+
+
     // tree path:
     //
     GError* err = NULL;
@@ -218,21 +230,6 @@ settings_restore( GtkWidget* widget )
         row_cur_pos_restore( dlg, path );
 
     g_free( path );
-
-    // row_cur_pos_restore( dlg, "TESTING:eklmn:oprst" );
-
-
-    // geometry:
-    // NOTE: restore geometry *after* all other settings
-    //
-    gint x = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-x", NULL );
-    gint y = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-y", NULL );
-    gtk_window_move( GTK_WINDOW( dlg ), x, y );
-
-    gint width = eda_config_get_int(  ctx, "lepton-conf", "lepton-conf-hidden-width", NULL );
-    gint height = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-height", NULL );
-    if ( width != 0 && height != 0 )
-        gtk_window_resize( GTK_WINDOW( dlg ), width, height );
 
 
     // NOTE: call parent gobject:
