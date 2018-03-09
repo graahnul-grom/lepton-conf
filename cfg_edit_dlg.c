@@ -2686,10 +2686,13 @@ mk_gui( cfg_edit_dlg* dlg )
         , G_TYPE_POINTER  // rdata
     );
 
+
     // tree view:
     //
-    dlg->tree_w_ = gtk_tree_view_new_with_model( GTK_TREE_MODEL(dlg->store_) );
-    dlg->tree_v_ = GTK_TREE_VIEW( dlg->tree_w_ );
+    GtkTreeModel* tree_model = GTK_TREE_MODEL( dlg->store_ );
+    GtkWidget* tree_widget = gtk_tree_view_new_with_model( tree_model );
+    dlg->tree_v_ = GTK_TREE_VIEW( tree_widget );
+
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
 
     // tree view columns:
@@ -2712,6 +2715,7 @@ mk_gui( cfg_edit_dlg* dlg )
     // setup filter:
     //
     tree_filter_setup( dlg );
+
 
 
     // window's title:
@@ -2738,7 +2742,7 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_tree ),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );
-    gtk_container_add( GTK_CONTAINER( wscroll_tree ), dlg->tree_w_ );
+    gtk_container_add( GTK_CONTAINER( wscroll_tree ), GTK_WIDGET( dlg->tree_v_ ) );
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
 
 
