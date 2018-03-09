@@ -190,6 +190,9 @@ xxx_toggle( cfg_edit_dlg* dlg );
 static void
 xxx_update_gui( cfg_edit_dlg* dlg );
 
+static void
+xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
+
 
 
 
@@ -229,7 +232,8 @@ settings_restore( GtkWidget* widget )
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   showinh );
 
-    on_btn_showinh( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ), (gpointer*) dlg );
+    xxx_showinh( dlg, showinh );
+    // was: on_btn_showinh( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ), (gpointer*) dlg );
 
 
     // geometry:
@@ -1045,6 +1049,9 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     // char* path_str = row_cur_pos_save( dlg );
     // conf_reload_ctx_path( dlg );
     // row_cur_pos_restore( dlg, path_str );
+    row_cur_pos_restore( dlg, "0:1:0" );
+    GtkTreePath* path = gtk_tree_path_new_from_string( "0:1:0" );
+    gtk_tree_path_up( path );
 }
 
 
@@ -1202,26 +1209,23 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-    dlg->showinh_ = gtk_toggle_button_get_active( btn );
+    gboolean showinh = gtk_toggle_button_get_active( btn );
 
-
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-
-    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-
+    xxx_showinh( dlg, showinh );
 
     // ensure that current node is visible after refiltering:
     //
     GtkTreeIter it;
     row_cur_get_iter( dlg, &it );
 
-    mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
 
-    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
-
-    gtk_tree_path_free( path );
+    if ( path != NULL )
+    {
+        gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+        gtk_tree_path_free( path );
+    }
 
 } // on_btn_showinh()
 
@@ -2722,7 +2726,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_add_,    FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,   FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_, FALSE, FALSE, 0 );
-    // gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
@@ -3057,4 +3061,18 @@ xxx_update_gui( cfg_edit_dlg* dlg )
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
 } // update_gui()
+
+
+
+static void
+xxx_showinh( cfg_edit_dlg* dlg, gboolean show )
+{
+    dlg->showinh_ = show;
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+
+    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+}
 
