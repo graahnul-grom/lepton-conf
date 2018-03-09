@@ -75,6 +75,12 @@ static int tree_cols_cnt()    { return NUM_COLS; }
 static void
 gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
 
+static void
+gui_mk_events( cfg_edit_dlg* dlg );
+
+static void
+tree_filter_setup( cfg_edit_dlg* p );
+
 static row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
 
@@ -369,9 +375,23 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
     printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
 
+    // by default, do not show inherited:
+    //
+    dlg->showinh_ = FALSE;
+
+
     gchar* cwd = g_get_current_dir();
     gui_mk( dlg, cwd );
     g_free( cwd );
+
+    // load data:
+    //
+    conf_load( dlg );
+
+    tree_filter_setup( dlg );
+    gtk_widget_show_all( GTK_WIDGET( dlg ) );
+    gui_mk_events( dlg );
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 }
 
 
@@ -2776,11 +2796,6 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 static void
 gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 {
-    // set show inherited:
-    //
-    dlg->showinh_ = FALSE;
-
-
     // window's title:
     //
     gtk_window_set_title( GTK_WINDOW( dlg ),
@@ -2816,40 +2831,6 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
     gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
-
-
-
-
-    // load conf:
-    //
-    conf_load( dlg );
-
-    // setup filter:
-    //
-    tree_filter_setup( dlg );
-
-
-
-
-    // show all:
-    //
-    gtk_widget_show_all( GTK_WIDGET( dlg ) );
-
-
-    // event handlers:
-    //
-    gui_mk_events( dlg );
-
-
-    //
-    // NOTE: dont't do it:
-    //  if tree not focused on startup => SIGSEGV
-    //
-    // g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
-    //
-
-
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 } // mk_gui()
 
