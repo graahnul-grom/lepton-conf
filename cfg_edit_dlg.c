@@ -2859,7 +2859,11 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 
 
 
-
+/* ******************************************************************
+*
+*  TODO: refactoring:
+*
+*/
 
 static void
 xxx_chg_val( cfg_edit_dlg* dlg, const row_data* rdata, GtkTreeIter it, const gchar* txt )

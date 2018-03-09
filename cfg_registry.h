@@ -28,6 +28,19 @@ typedef struct _CfgEntry CfgEntry;
 
 static CfgEntry g_cfg_registry[] =
 {
+    //
+    // lepton-conf:
+    //
+    {
+        "lepton-conf",
+        "editor",
+        "gvim",
+        "External text editor for configuration files used by lepton-conf (this program)."
+    },
+
+    //
+    // lepton-schematic:
+    //
     {
         "gschem",
         "default-filename",
