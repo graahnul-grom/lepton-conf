@@ -2709,6 +2709,11 @@ mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 static void
 mk_gui( cfg_edit_dlg* dlg )
 {
+    // set show inherited:
+    //
+    dlg->showinh_ = FALSE;
+
+
     // window's title:
     //
     gchar* cwd = g_get_current_dir();
@@ -2726,29 +2731,13 @@ mk_gui( cfg_edit_dlg* dlg )
     );
 
 
-    // tree view:
-    //
-    GtkWidget* wscroll_tree = mk_tree_view( dlg, dlg->store_ );
-
-
-
-    // set show inherited:
-    //
-    dlg->showinh_ = FALSE;
-
-    // load conf:
-    //
-    conf_load( dlg );
-
-    // setup filter:
-    //
-    tree_filter_setup( dlg );
-
-
-
     // toolbar:
     //
     GtkWidget* toolbar = mk_toolbar( dlg );
+
+    // tree view:
+    //
+    GtkWidget* wscroll_tree = mk_tree_view( dlg, dlg->store_ );
 
     // bottom box:
     //
@@ -2758,14 +2747,24 @@ mk_gui( cfg_edit_dlg* dlg )
     // pack to content area:
     //
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( dlg ) );
-
     gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
 
 
-
     g_free( cwd );
+
+
+
+
+    // load conf:
+    //
+    conf_load( dlg );
+
+    // setup filter:
+    //
+    tree_filter_setup( dlg );
+
 
 
 
