@@ -1,6 +1,9 @@
+# comment out the next line to suppress debug messages:
+#
+DBG=-O0 -ggdb -DDEBUG
 EXE=lepton-conf
 SRC=main.c cfg_edit_dlg.c
-CFLAGS=-Wall -ansi -std=c99 -O0 -ggdb -pthread
+CFLAGS=-Wall -ansi -std=c99 -pthread $(DBG)
 
 
 
@@ -31,7 +34,7 @@ clean:
 	@rm -f $(EXE)
 	@echo "done."
 
-$(EXE): $(SRC) cfg_registry.h
+$(EXE): $(SRC) cfg_edit_dlg.h cfg_registry.h
 	cc $(CFLAGS) -o $(EXE) $(SRC) \
 	$(OPT_GTK) $(OPT_GUILE) $(OPT_LIBGEDA)
 

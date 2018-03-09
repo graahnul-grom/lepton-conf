@@ -5,6 +5,10 @@
  * https://github.com/lepton-eda/lepton-eda
  */
 
+#ifdef DEBUG
+    #define G_LOG_DOMAIN "lepton-conf"
+#endif
+
 #include "cfg_edit_dlg.h"
 #include "cfg_registry.h"
 
@@ -366,7 +370,7 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
     // NOTE: glib debug messages:
     // NOTE: g_debug() adds newline:
     //
-    g_debug( " >> g_debug(): cfg_edit_dlg::class_init()" );
+    g_debug( "cfg_edit_dlg::class_init()" );
 
     GObjectClass* gcls = G_OBJECT_CLASS( cls );
 

@@ -9,8 +9,11 @@
 // usage:
 // > export G_MESSAGES_DEBUG="lepton-conf"
 // > /path/to/lepton-conf
+// NOTE: G_LOG_DOMAIN needs to be defined in each source file
 //
-//#define G_LOG_DOMAIN "lepton-conf"
+#ifdef DEBUG
+    #define G_LOG_DOMAIN "lepton-conf"
+#endif
 
 
 #include <libguile.h>
