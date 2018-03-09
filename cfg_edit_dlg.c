@@ -2563,17 +2563,15 @@ mk_labels_line_separ( GtkWidget* parent_box )
 static GtkWidget*
 mk_toolbar( cfg_edit_dlg* dlg )
 {
-    GtkWidget* box_tbar  = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* box_tbar  = gtk_hbox_new( FALSE, 20 );
 
     // boxes:
     //
-    GtkWidget* box1  = gtk_hbox_new( FALSE, 0 );
-    GtkWidget* box2 = gtk_hbutton_box_new();
-    gtk_button_box_set_layout( GTK_BUTTON_BOX( box2 ),
-                               GTK_BUTTONBOX_END );
+    GtkWidget* box1 = gtk_hbox_new( FALSE, 3 );
+    GtkWidget* box2 = gtk_hbox_new( FALSE, 0 );
 
-    gtk_box_pack_start( GTK_BOX( box_tbar ), box1, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_tbar ), box2, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_tbar ), box1, FALSE, FALSE, 0 );
 
 
     // create controls:
@@ -2585,25 +2583,39 @@ mk_toolbar( cfg_edit_dlg* dlg )
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   dlg->showinh_ );
 
-    dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
+    dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_Reload" );
+    dlg->btn_add_    = gtk_button_new_with_mnemonic( "_Add" );
+    dlg->btn_edit_   = gtk_button_new_with_mnemonic( "_Edit" );
+    dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_Toggle" );
     dlg->btn_tst_    = gtk_button_new_with_mnemonic( "t_st" );
-    dlg->btn_add_    = gtk_button_new_with_mnemonic( "_add" );
-    dlg->btn_edit_   = gtk_button_new_with_mnemonic( "_edit" );
-    dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_toggle" );
+
+
+    // images:
+    //
+    GtkWidget* img_add    = gtk_image_new_from_stock( GTK_STOCK_ADD,         GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget* img_reload = gtk_image_new_from_stock( GTK_STOCK_REFRESH,     GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget* img_edit   = gtk_image_new_from_stock( GTK_STOCK_EDIT,        GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget* img_toggle = gtk_image_new_from_stock( GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_LARGE_TOOLBAR );
+
+    gtk_button_set_image( GTK_BUTTON( dlg->btn_add_ ),    img_add );
+    gtk_button_set_image( GTK_BUTTON( dlg->btn_reload_ ), img_reload );
+    gtk_button_set_image( GTK_BUTTON( dlg->btn_edit_ ),   img_edit );
+    gtk_button_set_image( GTK_BUTTON( dlg->btn_toggle_ ), img_toggle );
 
 
     // pack controls:
     //
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_reload_, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_add_,    FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,   FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_, FALSE, FALSE, 0 );
+    // gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
     return box_tbar;
-}
+
+} // mk_toolbar()
 
 
 
