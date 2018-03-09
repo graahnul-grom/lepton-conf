@@ -2674,6 +2674,38 @@ mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
 
 
 
+// {ret}: scrolled window with tree view
+//
+static GtkWidget*
+mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
+{
+    GtkTreeModel* tree_model = GTK_TREE_MODEL( store );
+    GtkWidget*    tree_widget = gtk_tree_view_new_with_model( tree_model );
+    dlg->tree_v_ = GTK_TREE_VIEW( tree_widget );
+
+    gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
+
+    // columns:
+    //
+    dlg->ren_txt_ = gtk_cell_renderer_text_new();
+
+    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_name(), "name" );
+    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
+
+    // scrolled window for tree view:
+    //
+    GtkWidget* wscroll_tree = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_tree ),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC );
+    gtk_container_add( GTK_CONTAINER( wscroll_tree ), GTK_WIDGET( dlg->tree_v_ ) );
+
+    return wscroll_tree;
+
+} // mk_tree_view()
+
+
+
 static void
 mk_gui( cfg_edit_dlg* dlg )
 {
@@ -2696,26 +2728,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // tree view:
     //
-    GtkTreeModel* tree_model = GTK_TREE_MODEL( dlg->store_ );
-    GtkWidget* tree_widget = gtk_tree_view_new_with_model( tree_model );
-    dlg->tree_v_ = GTK_TREE_VIEW( tree_widget );
-
-    gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
-
-    // tree view columns:
-    //
-    dlg->ren_txt_ = gtk_cell_renderer_text_new();
-
-    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_name(), "name" );
-    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
-
-    // scrolled window for tree view:
-    //
-    GtkWidget* wscroll_tree = gtk_scrolled_window_new( NULL, NULL );
-    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_tree ),
-                                    GTK_POLICY_AUTOMATIC,
-                                    GTK_POLICY_AUTOMATIC );
-    gtk_container_add( GTK_CONTAINER( wscroll_tree ), GTK_WIDGET( dlg->tree_v_ ) );
+    GtkWidget* wscroll_tree = mk_tree_view( dlg, dlg->store_ );
 
 
 
