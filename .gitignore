@@ -1,3 +1,5 @@
 lepton-conf
 geda.conf
+*.wip.c
+*.vim
 
