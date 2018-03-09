@@ -1204,17 +1204,24 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
     dlg->showinh_ = gtk_toggle_button_get_active( btn );
 
-//    char* path = row_cur_pos_save( dlg );
-
 
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
     gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
-//    gtk_tree_view_expand_all( dlg->tree_v_ );
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 
-//    row_cur_pos_restore( dlg, path );
+    // ensure that current node is visible after refiltering:
+    //
+    GtkTreeIter it;
+    row_cur_get_iter( dlg, &it );
+
+    mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+
+    gtk_tree_path_free( path );
 
 } // on_btn_showinh()
 
