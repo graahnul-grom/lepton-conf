@@ -2616,6 +2616,64 @@ mk_toolbar( cfg_edit_dlg* dlg )
 
 
 
+static GtkWidget*
+mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
+{
+    GtkWidget* box_bot = gtk_vbox_new( FALSE, 5 );
+
+    // cwd label:
+    //
+    mk_labels_line( "<b>working directory: </b>", gtk_label_new( cwd ), box_bot );
+
+    mk_labels_line_separ( box_bot );
+
+    dlg->lab_ctx_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>config context: </b>", dlg->lab_ctx_, box_bot );
+
+    dlg->lab_fname_ = gtk_label_new( NULL );
+    gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
+    mk_labels_line( "<b>config file: </b>", dlg->lab_fname_, box_bot );
+
+    mk_labels_line_separ( box_bot );
+
+    dlg->lab_grp_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
+
+    dlg->lab_name_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>key: </b>", dlg->lab_name_, box_bot );
+
+    dlg->lab_val_ = gtk_label_new( NULL );
+    mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
+
+    mk_labels_line_separ( box_bot );
+
+
+    // description text view:
+    //
+    GtkWidget* tv = gtk_text_view_new();
+
+    gtk_text_view_set_editable( GTK_TEXT_VIEW( tv ), FALSE );
+    gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( tv ), GTK_WRAP_WORD );
+
+    dlg->txtbuf_desc_ = gtk_text_view_get_buffer( GTK_TEXT_VIEW( tv ) );
+    gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
+
+    // scrolled window for description text view:
+    //
+    GtkWidget* wscroll_desc = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_desc ),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC );
+
+    gtk_container_add( GTK_CONTAINER( wscroll_desc ), tv );
+    gtk_box_pack_start( GTK_BOX( box_bot ), wscroll_desc, FALSE, FALSE, 0 );
+
+    return box_bot;
+
+} // mk_bottom_box()
+
+
+
 static void
 mk_gui( cfg_edit_dlg* dlg )
 {
@@ -2656,6 +2714,11 @@ mk_gui( cfg_edit_dlg* dlg )
     tree_filter_setup( dlg );
 
 
+    // window's title:
+    //
+    gchar* cwd = g_get_current_dir();
+    gtk_window_set_title( GTK_WINDOW( dlg ),
+                          g_strdup_printf( "%s - lepton-conf", cwd ) );
 
 
     // content area:
@@ -2663,118 +2726,29 @@ mk_gui( cfg_edit_dlg* dlg )
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG(dlg) );
 
 
-
-    gchar* cwd = g_get_current_dir();
-
-    // TODO: set window's title elsewhere:
-    //
-    gtk_window_set_title( GTK_WINDOW( dlg ),
-                          g_strdup_printf( "%s - lepton-conf", cwd ) );
-
-
-
-    // add toolbar to ca:
+    // toolbar:
     //
     GtkWidget* toolbar = mk_toolbar( dlg );
     gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
 
 
-    // box (top):
-    //
-    GtkWidget* box_top = gtk_vbox_new( FALSE, 0 );
-
-
-    // cwd label:
-    //
-    // mk_labels_line( "<b>cwd: </b>", gtk_label_new( cwd ), box_top );
-
-
-    // add box_top to ca:
-    //
-    gtk_box_pack_start( GTK_BOX( ca ),  box_top, FALSE, FALSE, 0 );
-
-
-
-
-    // scrolled window for the tree:
+    // scrolled window for tree view:
     //
     GtkWidget* wscroll_tree = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_tree ),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );
-
     gtk_container_add( GTK_CONTAINER( wscroll_tree ), dlg->tree_w_ );
-
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
-
-
 
 
     // box (bottom):
     //
-    GtkWidget* box_bot = gtk_vbox_new( FALSE, 5 );
-//    GtkWidget* box_bot = gtk_vbox_new( TRUE, 0 );
-
-    // cwd label:
-    //
-    mk_labels_line( "<b>working directory: </b>", gtk_label_new( cwd ), box_bot );
-
-    mk_labels_line_separ( box_bot );
-
-    dlg->lab_ctx_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>config context: </b>", dlg->lab_ctx_, box_bot );
-
-    dlg->lab_fname_ = gtk_label_new( NULL );
-    gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
-    mk_labels_line( "<b>config file: </b>", dlg->lab_fname_, box_bot );
-
-    mk_labels_line_separ( box_bot );
-
-    dlg->lab_grp_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
-
-    dlg->lab_name_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>key: </b>", dlg->lab_name_, box_bot );
-
-    dlg->lab_val_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
-
-    mk_labels_line_separ( box_bot );
-
-
-    // description text view:
-    //
-    GtkWidget* tv = gtk_text_view_new();
-
-    gtk_text_view_set_editable( GTK_TEXT_VIEW( tv ), FALSE );
-    gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( tv ), GTK_WRAP_WORD );
-
-    dlg->txtbuf_desc_ = gtk_text_view_get_buffer( GTK_TEXT_VIEW( tv ) );
-    gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
-
-    GtkWidget* wscroll_desc = gtk_scrolled_window_new( NULL, NULL );
-    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_desc ),
-                                    GTK_POLICY_AUTOMATIC,
-                                    GTK_POLICY_AUTOMATIC );
-
-    gtk_container_add( GTK_CONTAINER( wscroll_desc ), tv );
-    gtk_box_pack_start( GTK_BOX( box_bot ), wscroll_desc, FALSE, FALSE, 0 );
-
-
-    // mk_labels_line_separ( box_bot );
-
-
-    // add box_bot to ca:
-    //
+    GtkWidget* box_bot = mk_bottom_box( dlg, cwd );
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
 
 
-    // add toolbar to ca:
-    //
-//    GtkWidget* toolbar = mk_toolbar( dlg );
-//    gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
-
-
+    g_free( cwd );
 
 
     // action area:
@@ -2782,12 +2756,9 @@ mk_gui( cfg_edit_dlg* dlg )
     // GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG( dlg ) );
 
 
-
     // show all:
     //
-    gtk_widget_show_all( GTK_WIDGET(dlg) );
-
-
+    gtk_widget_show_all( GTK_WIDGET( dlg ) );
 
 
     // event handlers:
@@ -2857,8 +2828,6 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-
-    g_free( cwd );
 
 } // mk_gui()
 
