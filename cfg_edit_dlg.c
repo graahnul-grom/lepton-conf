@@ -73,10 +73,27 @@ static int tree_cols_cnt()    { return NUM_COLS; }
 */
 
 static void
-gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
+gui_mk_events( cfg_edit_dlg* dlg );
 
 static void
-gui_mk_events( cfg_edit_dlg* dlg );
+gui_mk_labels_line( const gchar* left_txt,
+                    GtkWidget*   right_label,
+                    GtkWidget*   parent_box );
+
+static void
+gui_mk_labels_line_separ( GtkWidget* parent_box );
+
+static GtkWidget*
+gui_mk_toolbar( cfg_edit_dlg* dlg );
+
+static GtkWidget*
+gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd );
+
+static GtkWidget*
+gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store );
+
+static void
+gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
 
 static void
 tree_filter_setup( cfg_edit_dlg* p );
@@ -2618,8 +2635,8 @@ gui_mk_events( cfg_edit_dlg* dlg )
 
 static void
 gui_mk_labels_line( const gchar* left_txt,
-                GtkWidget* right_label,
-                GtkWidget* parent_box )
+                    GtkWidget*   right_label,
+                    GtkWidget*   parent_box )
 {
     GtkWidget* hbox = gtk_hbox_new( FALSE, 0 );
 
