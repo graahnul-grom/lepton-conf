@@ -173,18 +173,6 @@ settings_restore( GtkWidget* widget )
 
     EdaConfig* ctx = eda_config_get_user_context();
 
-    // geometry:
-    //
-    gint x = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-x", NULL );
-    gint y = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-y", NULL );
-    gtk_window_move( GTK_WINDOW( dlg ), x, y );
-
-    gint width = eda_config_get_int(  ctx, "lepton-conf", "lepton-conf-hidden-width", NULL );
-    gint height = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-height", NULL );
-    if ( width != 0 && height != 0 )
-        gtk_window_resize( GTK_WINDOW( dlg ), width, height );
-
-
     // show inherited:
     //
     gboolean showinh = eda_config_get_boolean(
@@ -211,6 +199,19 @@ settings_restore( GtkWidget* widget )
     g_free( path );
 
     // row_cur_pos_restore( dlg, "TESTING:eklmn:oprst" );
+
+
+    // geometry:
+    // NOTE: restore geometry *after* all other settings
+    //
+    gint x = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-x", NULL );
+    gint y = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-y", NULL );
+    gtk_window_move( GTK_WINDOW( dlg ), x, y );
+
+    gint width = eda_config_get_int(  ctx, "lepton-conf", "lepton-conf-hidden-width", NULL );
+    gint height = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-height", NULL );
+    if ( width != 0 && height != 0 )
+        gtk_window_resize( GTK_WINDOW( dlg ), width, height );
 
 } // settings_restore()
 
