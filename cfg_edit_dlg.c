@@ -539,7 +539,7 @@ row_select_by_path_tstore( cfg_edit_dlg* dlg, GtkTreePath* path_tstore )
     row_select_by_path_mod( dlg, path_mod );
 
     gtk_tree_path_free( path_mod );
-    
+
 } // row_select_by_path_tstore()
 
 
@@ -556,7 +556,7 @@ row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore )
     row_select_by_path_tstore( dlg, path_tstore );
 
     gtk_tree_path_free( path_tstore );
-    
+
 } // row_select_by_iter_tstore()
 
 
@@ -662,6 +662,7 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 
     gtk_tree_view_expand_to_path( dlg->tree_v_, path );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
 
     gtk_tree_path_free( path );
 }
