@@ -2691,7 +2691,7 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // set show inherited:
     //
-    dlg->showinh_ = TRUE;
+    dlg->showinh_ = FALSE;
 
     // load conf:
     //
