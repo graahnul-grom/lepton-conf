@@ -73,7 +73,7 @@ static int tree_cols_cnt()    { return NUM_COLS; }
 */
 
 static void
-mk_gui( cfg_edit_dlg* dlg );
+gui_mk( cfg_edit_dlg* dlg );
 
 static row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
@@ -368,7 +368,7 @@ static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
     printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
-    mk_gui( dlg );
+    gui_mk( dlg );
 }
 
 
@@ -2530,7 +2530,7 @@ conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg )
 */
 
 static void
-mk_labels_line( const gchar* left_txt,
+gui_mk_labels_line( const gchar* left_txt,
                 GtkWidget* right_label,
                 GtkWidget* parent_box )
 {
@@ -2549,7 +2549,7 @@ mk_labels_line( const gchar* left_txt,
 
 
 static void
-mk_labels_line_separ( GtkWidget* parent_box )
+gui_mk_labels_line_separ( GtkWidget* parent_box )
 {
     gtk_box_pack_start( GTK_BOX( parent_box ),
                         gtk_hseparator_new(), FALSE, FALSE, 0 );
@@ -2558,7 +2558,7 @@ mk_labels_line_separ( GtkWidget* parent_box )
 
 
 static GtkWidget*
-mk_toolbar( cfg_edit_dlg* dlg )
+gui_mk_toolbar( cfg_edit_dlg* dlg )
 {
     GtkWidget* box_tbar  = gtk_hbox_new( FALSE, 20 );
 
@@ -2612,40 +2612,40 @@ mk_toolbar( cfg_edit_dlg* dlg )
 
     return box_tbar;
 
-} // mk_toolbar()
+} // gui_mk_toolbar()
 
 
 
 static GtkWidget*
-mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
+gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
 {
     GtkWidget* box_bot = gtk_vbox_new( FALSE, 5 );
 
     // cwd label:
     //
-    mk_labels_line( "<b>working directory: </b>", gtk_label_new( cwd ), box_bot );
+    gui_mk_labels_line( "<b>working directory: </b>", gtk_label_new( cwd ), box_bot );
 
-    mk_labels_line_separ( box_bot );
+    gui_mk_labels_line_separ( box_bot );
 
     dlg->lab_ctx_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>config context: </b>", dlg->lab_ctx_, box_bot );
+    gui_mk_labels_line( "<b>config context: </b>", dlg->lab_ctx_, box_bot );
 
     dlg->lab_fname_ = gtk_label_new( NULL );
     gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
-    mk_labels_line( "<b>config file: </b>", dlg->lab_fname_, box_bot );
+    gui_mk_labels_line( "<b>config file: </b>", dlg->lab_fname_, box_bot );
 
-    mk_labels_line_separ( box_bot );
+    gui_mk_labels_line_separ( box_bot );
 
     dlg->lab_grp_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
+    gui_mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
 
     dlg->lab_name_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>key: </b>", dlg->lab_name_, box_bot );
+    gui_mk_labels_line( "<b>key: </b>", dlg->lab_name_, box_bot );
 
     dlg->lab_val_ = gtk_label_new( NULL );
-    mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
+    gui_mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
 
-    mk_labels_line_separ( box_bot );
+    gui_mk_labels_line_separ( box_bot );
 
 
     // description text view:
@@ -2670,14 +2670,14 @@ mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
 
     return box_bot;
 
-} // mk_bottom_box()
+} // gui_mk_bottom_box()
 
 
 
 // {ret}: scrolled window with tree view
 //
 static GtkWidget*
-mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
+gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 {
     GtkTreeModel* tree_model = GTK_TREE_MODEL( store );
     GtkWidget*    tree_widget = gtk_tree_view_new_with_model( tree_model );
@@ -2702,12 +2702,12 @@ mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 
     return wscroll_tree;
 
-} // mk_tree_view()
+} // gui_mk_tree_view()
 
 
 
 static void
-mk_gui( cfg_edit_dlg* dlg )
+gui_mk( cfg_edit_dlg* dlg )
 {
     // set show inherited:
     //
@@ -2733,15 +2733,15 @@ mk_gui( cfg_edit_dlg* dlg )
 
     // toolbar:
     //
-    GtkWidget* toolbar = mk_toolbar( dlg );
+    GtkWidget* toolbar = gui_mk_toolbar( dlg );
 
     // tree view:
     //
-    GtkWidget* wscroll_tree = mk_tree_view( dlg, dlg->store_ );
+    GtkWidget* wscroll_tree = gui_mk_tree_view( dlg, dlg->store_ );
 
     // bottom box:
     //
-    GtkWidget* box_bot = mk_bottom_box( dlg, cwd );
+    GtkWidget* box_bot = gui_mk_bottom_box( dlg, cwd );
 
 
     // pack to content area:
