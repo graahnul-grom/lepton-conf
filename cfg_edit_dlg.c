@@ -152,10 +152,24 @@ static void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
 static void
+on_btn_showinh( GtkToggleButton* btn, gpointer* p );
+
+static void
 xxx_chg_val( cfg_edit_dlg* dlg, const row_data* rdata, GtkTreeIter it, const gchar* txt );
 
 static void
 xxx_toggle( cfg_edit_dlg* dlg );
+
+
+
+
+
+/* ******************************************************************
+*
+*  gobject stuff: define class:
+*
+*/
+G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 
 
 
@@ -166,6 +180,9 @@ xxx_toggle( cfg_edit_dlg* dlg );
 *
 */
 
+// "show" handler for dialog:
+// NOTE: called *after* cfg_edit_dlg_init()
+//
 static void
 settings_restore( GtkWidget* widget )
 {
@@ -182,6 +199,8 @@ settings_restore( GtkWidget* widget )
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   showinh );
+
+    on_btn_showinh( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ), (gpointer*) dlg );
 
 
     // tree path:
@@ -213,10 +232,18 @@ settings_restore( GtkWidget* widget )
     if ( width != 0 && height != 0 )
         gtk_window_resize( GTK_WINDOW( dlg ), width, height );
 
+
+    // NOTE: call parent gobject:
+    //
+    GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
+
 } // settings_restore()
 
 
 
+// "unmap" handler for dialog:
+// called when dialog box is closed
+//
 static void
 settings_save( GtkWidget* widget )
 {
@@ -254,7 +281,14 @@ settings_save( GtkWidget* widget )
     g_free( path );
 
 
+    // save config:
+    //
     eda_config_save( ctx, NULL );
+
+
+    // NOTE: call parent gobject:
+    //
+    GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->unmap(widget);
 
 } // settings_save()
 
@@ -267,8 +301,7 @@ settings_save( GtkWidget* widget )
 *
 */
 
-G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
-
+// NOTE: moved above: G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 
 
 static void
@@ -321,7 +354,10 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 
 
     GtkWidgetClass* wcls = GTK_WIDGET_CLASS( cls );
-    // wcls->show =  &on_show; // TODO: doesn't work
+
+    // setup onShow/onClose handlers for dialog:
+    //
+    wcls->show =  &settings_restore;
     wcls->unmap = &settings_save;
 }
 
@@ -2899,26 +2935,15 @@ mk_gui( cfg_edit_dlg* dlg )
                       dlg );
 
 
-
-
+    //
     // NOTE: dont't do it:
     //  if tree not focused on startup => SIGSEGV
     //
     // g_signal_emit_by_name( dlg->tree_v_, "cursor-changed", dlg );
+    //
+
 
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-
-
-    settings_restore( GTK_WIDGET( dlg ) );
-
-
-    // select row:
-    //
-//    GtkTreePath* path = gtk_tree_path_new_from_string( "2" );
-//    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-//    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-//    gtk_tree_path_free( path );
-
 
     g_free( cwd );
 
