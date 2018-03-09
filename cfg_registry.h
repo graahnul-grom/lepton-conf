@@ -1,14 +1,15 @@
 #ifndef CFG_REGISTRY_H_
 #define CFG_REGISTRY_H_
 
-#include <liblepton/liblepton.h>
-
 /*
- * Lepton EDA configuration utility
+ * lepton-conf - Lepton EDA configuration utility.
  * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
- * License: GPL 2 - same as Lepton EDA, see
+ * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
+
+#include <liblepton/liblepton.h>
+
 
 
 

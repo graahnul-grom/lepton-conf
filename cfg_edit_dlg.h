@@ -2,27 +2,19 @@
 #define CFG_EDIT_DLG_H_
 
 /*
- * Lepton EDA configuration utility
+ * lepton-conf - Lepton EDA configuration utility.
  * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
- * License: GPL 2 - same as Lepton EDA, see
+ * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
-
 
 #include <gtk/gtk.h>
 
 
 
-// compare:
-//
-//#define GSCHEM_TYPE_OPTIONS_WIDGET           (gschem_options_widget_get_type())
-//#define GSCHEM_OPTIONS_WIDGET(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_OPTIONS_WIDGET, GschemOptionsWidget))
-//#define GSCHEM_OPTIONS_WIDGET_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  GSCHEM_TYPE_OPTIONS_WIDGET, GschemOptionsWidgetClass))
-//#define IS_GSCHEM_OPTIONS_WIDGET(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_OPTIONS_WIDGET))
-//#define GSCHEM_OPTIONS_WIDGET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj),  GSCHEM_TYPE_OPTIONS_WIDGET, GschemOptionsWidgetClass))
-
 
 #define CFG_EDIT_DLG_TYPE           (cfg_edit_dlg_get_type())
+
 // cast [obj] to cfg_edit_dlg*:
 //
 #define CFG_EDIT_DLG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), CFG_EDIT_DLG_TYPE, cfg_edit_dlg))
@@ -37,6 +29,7 @@
 
 
 extern gboolean g_populate_default_ctx;
+
 
 
 
@@ -78,7 +71,6 @@ struct _cfg_edit_dlg
 
 typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;
 typedef struct _cfg_edit_dlg      cfg_edit_dlg;
-
 
 
 GType cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
