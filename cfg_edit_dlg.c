@@ -2677,6 +2677,13 @@ mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
 static void
 mk_gui( cfg_edit_dlg* dlg )
 {
+    // window's title:
+    //
+    gchar* cwd = g_get_current_dir();
+    gtk_window_set_title( GTK_WINDOW( dlg ),
+                          g_strdup_printf( "%s - lepton-conf", cwd ) );
+
+
     // tree store:
     //
     dlg->store_ = gtk_tree_store_new(
@@ -2702,6 +2709,14 @@ mk_gui( cfg_edit_dlg* dlg )
     tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_name(), "name" );
     tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
 
+    // scrolled window for tree view:
+    //
+    GtkWidget* wscroll_tree = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_tree ),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC );
+    gtk_container_add( GTK_CONTAINER( wscroll_tree ), GTK_WIDGET( dlg->tree_v_ ) );
+
 
 
     // set show inherited:
@@ -2718,46 +2733,27 @@ mk_gui( cfg_edit_dlg* dlg )
 
 
 
-    // window's title:
-    //
-    gchar* cwd = g_get_current_dir();
-    gtk_window_set_title( GTK_WINDOW( dlg ),
-                          g_strdup_printf( "%s - lepton-conf", cwd ) );
-
-
-    // content area:
-    //
-    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG(dlg) );
-
-
     // toolbar:
     //
     GtkWidget* toolbar = mk_toolbar( dlg );
-    gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
 
-
-    // scrolled window for tree view:
-    //
-    GtkWidget* wscroll_tree = gtk_scrolled_window_new( NULL, NULL );
-    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll_tree ),
-                                    GTK_POLICY_AUTOMATIC,
-                                    GTK_POLICY_AUTOMATIC );
-    gtk_container_add( GTK_CONTAINER( wscroll_tree ), GTK_WIDGET( dlg->tree_v_ ) );
-    gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
-
-
-    // box (bottom):
+    // bottom box:
     //
     GtkWidget* box_bot = mk_bottom_box( dlg, cwd );
+
+
+    // pack to content area:
+    //
+    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( dlg ) );
+
+    gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
+
 
 
     g_free( cwd );
 
-
-    // action area:
-    //
-    // GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG( dlg ) );
 
 
     // show all:
