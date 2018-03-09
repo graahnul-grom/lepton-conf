@@ -242,8 +242,6 @@ settings_restore( GtkWidget* widget )
     //
     GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
 
-    xxx_update_gui( dlg );
-
 } // settings_restore()
 
 
@@ -392,6 +390,8 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
     gui_mk_events( dlg );
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+    xxx_update_gui( dlg );
 }
 
 
