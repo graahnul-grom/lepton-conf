@@ -73,7 +73,7 @@ static int tree_cols_cnt()    { return NUM_COLS; }
 */
 
 static void
-gui_mk( cfg_edit_dlg* dlg );
+gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
 
 static row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
@@ -368,7 +368,10 @@ static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
     printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
-    gui_mk( dlg );
+
+    gchar* cwd = g_get_current_dir();
+    gui_mk( dlg, cwd );
+    g_free( cwd );
 }
 
 
@@ -2707,7 +2710,7 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 
 
 static void
-gui_mk( cfg_edit_dlg* dlg )
+gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 {
     // set show inherited:
     //
@@ -2716,7 +2719,6 @@ gui_mk( cfg_edit_dlg* dlg )
 
     // window's title:
     //
-    gchar* cwd = g_get_current_dir();
     gtk_window_set_title( GTK_WINDOW( dlg ),
                           g_strdup_printf( "%s - lepton-conf", cwd ) );
 
@@ -2750,9 +2752,6 @@ gui_mk( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
-
-
-    g_free( cwd );
 
 
 
