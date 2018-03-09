@@ -351,7 +351,7 @@ cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val, GParamSpec
 static void
 cfg_edit_dlg_dispose( GObject* obj )
 {
-    printf( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
+    g_debug( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
         obj, obj ? obj->ref_count : 0 );
 
     cfg_edit_dlgClass* cls = CFG_EDIT_DLG_GET_CLASS( obj );
@@ -359,7 +359,7 @@ cfg_edit_dlg_dispose( GObject* obj )
     GObjectClass* parent_cls = g_type_class_peek_parent( cls );
     parent_cls->dispose( obj );
 
-    printf( "cfg_edit_dlg::dispose(): done.\n" );
+    g_debug( "cfg_edit_dlg::dispose(): done.\n" );
 }
 
 
@@ -392,7 +392,7 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
-    printf( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
+    g_debug( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
 
     // by default, do not show inherited:
     //
@@ -514,7 +514,7 @@ static void
 row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod )
 {
     g_return_if_fail( path_mod != 0 && "row_select_by_path_mod()" );
-    
+
     gtk_tree_view_expand_to_path( dlg->tree_v_, path_mod );
     gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path_mod,
                                       NULL, NULL, FALSE );
@@ -2188,11 +2188,11 @@ conf_load_ctx( EdaConfig* ctx )
 
         if ( !res )
         {
-            printf( " >> conf_load_ctx(): !eda_config_load( \"%s\" )\n", fname );
+            g_debug( "conf_load_ctx(): !eda_config_load( \"%s\" )\n", fname );
 
             if ( err != NULL )
             {
-                printf( "    err msg: [%s]\n", err->message );
+                g_debug( "    err msg: [%s]\n", err->message );
             }
         }
 
@@ -2492,11 +2492,11 @@ conf_ctx_file_writable( EdaConfig* ctx )
         gchar* dir = g_path_get_dirname( fname );
         ret = access( dir, W_OK ) == 0;
 
-        printf( " .. conf_ctx_file_writable( %s ): fname: [%s], dir: [%s]: wok: [%d]\n",
-                    conf_ctx_name( ctx ),
-                    fname,
-                    dir,
-                    ret );
+        g_debug( " .. conf_ctx_file_writable( %s ): fname: [%s], dir: [%s]: wok: [%d]\n",
+                 conf_ctx_name( ctx ),
+                 fname,
+                 dir,
+                 ret );
 
         g_free( dir );
     }
