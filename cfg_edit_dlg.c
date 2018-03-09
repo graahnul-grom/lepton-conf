@@ -2560,6 +2560,59 @@ mk_labels_line_separ( GtkWidget* parent_box )
 
 
 
+static GtkWidget*
+mk_toolbar( cfg_edit_dlg* dlg )
+{
+    GtkWidget* box_tbar  = gtk_hbox_new( FALSE, 0 );
+
+    GtkWidget* aa_box_left  = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* aa_box_right = gtk_hbutton_box_new();
+    // GtkWidget* aa_box_right = gtk_hbox_new( FALSE, 5 );
+
+    gtk_box_pack_start( GTK_BOX( box_tbar ), aa_box_right, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_tbar ), aa_box_left, FALSE, FALSE, 0 );
+
+
+    // 'show inh' check box:
+    //
+    dlg->btn_showinh_ = gtk_check_button_new_with_mnemonic( "" );
+    GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( dlg->btn_showinh_ ) );
+    gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab_showinh ),
+                                        "<i>sho_w inherited</i>" );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
+                                  dlg->showinh_ );
+    gtk_box_pack_start( GTK_BOX( aa_box_left ), dlg->btn_showinh_, FALSE, FALSE, 0 );
+
+    // reload btn:
+    //
+    dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_reload_, FALSE, FALSE, 0 );
+
+    // tst btn:
+    //
+    dlg->btn_tst_ = gtk_button_new_with_mnemonic( "t_st" );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_tst_, FALSE, FALSE, 0 );
+
+    // add btn:
+    //
+    dlg->btn_add_ = gtk_button_new_with_mnemonic( "_add" );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_add_, FALSE, FALSE, 0 );
+
+    // edit btn:
+    //
+    dlg->btn_edit_ = gtk_button_new_with_mnemonic( "_edit" );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_edit_, FALSE, FALSE, 0 );
+
+    // toggle btn:
+    //
+    dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_toggle" );
+    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_toggle_, FALSE, FALSE, 0 );
+
+    return box_tbar;
+}
+
+
+
 static void
 mk_gui( cfg_edit_dlg* dlg )
 {
@@ -2699,22 +2752,7 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( box_bot ), wscroll_desc, FALSE, FALSE, 0 );
 
 
-
     mk_labels_line_separ( box_bot );
-
-
-    // 'show inh' check box:
-    //
-    dlg->btn_showinh_ = gtk_check_button_new_with_mnemonic( "" );
-
-    GtkWidget* lab_showinh = gtk_bin_get_child( GTK_BIN( dlg->btn_showinh_ ) );
-    gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab_showinh ),
-                                        "<i>sho_w inherited</i>" );
-
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
-                                  dlg->showinh_ );
-
-    // gtk_box_pack_start( GTK_BOX( box_bot ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
 
     // add box_bot to ca:
@@ -2722,55 +2760,16 @@ mk_gui( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
 
 
+    // add toolbar to ca:
+    //
+    gtk_box_pack_start( GTK_BOX( ca ), mk_toolbar( dlg ), FALSE, FALSE, 0 );
+
+
 
 
     // action area:
     //
-    GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG( dlg ) );
-
-
-    GtkWidget* box_tools  = gtk_hbox_new( FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( aa ), box_tools, FALSE, FALSE, 0 );
-
-    GtkWidget* aa_box_left  = gtk_hbox_new( FALSE, 0 );
-    GtkWidget* aa_box_right = gtk_hbutton_box_new();
-    // GtkWidget* aa_box_right = gtk_hbox_new( FALSE, 5 );
-
-    gtk_box_pack_start( GTK_BOX( box_tools ), aa_box_right, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box_tools ), aa_box_left, FALSE, FALSE, 0 );
-    // gtk_box_pack_start( GTK_BOX( aa ), aa_box_left, FALSE, FALSE, 0 );
-    // gtk_box_pack_start( GTK_BOX( aa ), aa_box_right, FALSE, FALSE, 0 );
-
-
-    // 'show inh' check box:
-    //
-    gtk_box_pack_start( GTK_BOX( aa_box_left ), dlg->btn_showinh_, FALSE, FALSE, 0 );
-
-    // reload btn:
-    //
-    dlg->btn_reload_ = gtk_button_new_with_mnemonic( "_reload" );
-    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_reload_, FALSE, FALSE, 0 );
-
-    // tst btn:
-    //
-    GtkWidget* btn_tst = gtk_button_new_with_mnemonic( "t_st" );
-    gtk_box_pack_start( GTK_BOX( aa_box_right ), btn_tst, FALSE, FALSE, 0 );
-
-    // add btn:
-    //
-    dlg->btn_add_ = gtk_button_new_with_mnemonic( "_add" );
-    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_add_, FALSE, FALSE, 0 );
-
-    // edit btn:
-    //
-    dlg->btn_edit_ = gtk_button_new_with_mnemonic( "_edit" );
-    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_edit_, FALSE, FALSE, 0 );
-
-    // toggle btn:
-    //
-    dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_toggle" );
-    gtk_box_pack_start( GTK_BOX( aa_box_right ), dlg->btn_toggle_, FALSE, FALSE, 0 );
-
+    // GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG( dlg ) );
 
 
 
@@ -2807,7 +2806,7 @@ mk_gui( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_reload ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_tst ),
+    g_signal_connect( G_OBJECT( dlg->btn_tst_ ),
                       "clicked",
                       G_CALLBACK( &on_btn_tst ),
                       dlg );
