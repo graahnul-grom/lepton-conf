@@ -27,6 +27,9 @@
 void out_version()
 {
     printf( "lepton-conf version 1.0\n" );
+    printf( "Configuration utility for Lepton EDA\n" );
+    printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
+    printf( "Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>\n" );
     exit( 0 );
 }
 
@@ -34,8 +37,10 @@ void out_version()
 
 void out_help( int exit_code )
 {
-    printf( "usage: lepton-conf [-h] [-v] [-d] [dirname]\n" );
-    printf( "options:\n" );
+    printf( "lepton-conf - configuration utility for Lepton EDA\n" );
+    printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
+    printf( "Usage: lepton-conf [-h] [-v] [-d] [dirname]\n" );
+    printf( "Options:\n" );
     printf( "  -h    Help (this message).\n" );
     printf( "  -v    Show version.\n" );
     printf( "  -d    Do not populate DEFAULT config context on startup.\n" );
