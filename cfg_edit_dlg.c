@@ -22,6 +22,12 @@ static const gchar g_exted_default[] = "gvim";
 
 
 
+static gboolean g_gui_update_enabled = TRUE;
+static gboolean gui_update_enabled() { return g_gui_update_enabled;  }
+static void     gui_update_on()      { g_gui_update_enabled = TRUE;  }
+static void     gui_update_off()     { g_gui_update_enabled = FALSE; }
+
+
 
 GtkWidget* cfg_edit_dlg_new()
 {
@@ -1052,7 +1058,14 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     EdaConfig* ctx        = eda_config_get_context_for_path( "." );
     // conf_reload_child_ctxs( ctx_parent, dlg );
 
+    gchar* path = row_cur_pos_save( dlg );
+
+    gui_update_off();
     conf_reload_ctx( ctx, "3", dlg );
+    gui_update_on();
+
+    row_cur_pos_restore( dlg, path );
+    g_free( path );
 
     // char* path_str = row_cur_pos_save( dlg );
     // conf_reload_ctx_path( dlg );
@@ -2352,6 +2365,9 @@ conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
 {
     gchar* path = row_cur_pos_save( dlg );
 
+
+    gui_update_off();
+
     if ( parent_ctx == eda_config_get_system_context() )
     {
         conf_reload_ctx_user( dlg );
@@ -2362,6 +2378,9 @@ conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
     {
         conf_reload_ctx_path( dlg );
     }
+
+    gui_update_on();
+
 
     row_cur_pos_restore( dlg, path );
     g_free( path );
@@ -2976,6 +2995,10 @@ xxx_toggle( cfg_edit_dlg* dlg )
 static void
 xxx_update_gui( cfg_edit_dlg* dlg )
 {
+    printf( " >> xxx_update_gui(): enabled: [%d]\n", gui_update_enabled() );
+    if ( !gui_update_enabled() )
+        return;
+
     GtkTreeIter it;
     if ( !row_cur_get_iter( dlg, &it ) )
         return;
@@ -3082,7 +3105,7 @@ xxx_update_gui( cfg_edit_dlg* dlg )
 //    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
-} // update_gui()
+} // xxx_update_gui()
 
 
 
