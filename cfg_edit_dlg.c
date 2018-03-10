@@ -529,8 +529,7 @@ row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod )
     g_return_if_fail( path_mod != 0 && "row_select_by_path_mod()" );
 
     gtk_tree_view_expand_to_path( dlg->tree_v_, path_mod );
-    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path_mod,
-                                      NULL, NULL, FALSE );
+    gtk_tree_view_set_cursor( dlg->tree_v_, path_mod, NULL, FALSE );
 }
 
 
@@ -3130,6 +3129,8 @@ xxx_showinh( cfg_edit_dlg* dlg, gboolean show )
 static void
 xxx_reload( cfg_edit_dlg* dlg )
 {
+    gui_update_off();
+
     char* path = row_cur_pos_save( dlg );
 
     tree_filter_remove( dlg );
@@ -3149,6 +3150,8 @@ xxx_reload( cfg_edit_dlg* dlg )
 
     row_cur_pos_restore( dlg, path );
     g_free( path );
+
+    gui_update_on();
 
 } // xxx_reload()
 
