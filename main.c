@@ -5,18 +5,19 @@
  * https://github.com/lepton-eda/lepton-eda
  */
 
-// how to display g_debug() messages:
-// usage:
-// > export G_MESSAGES_DEBUG="lepton-conf"
-// > /path/to/lepton-conf
-// NOTE: G_LOG_DOMAIN needs to be defined in each source file
 //
+// how to display g_debug() messages:
+// - define G_LOG_DOMAIN macro in each source file
+// - export G_MESSAGES_DEBUG="lepton-conf"
+// - launch /path/to/lepton-conf
+//
+
 #ifdef DEBUG
     #define G_LOG_DOMAIN "lepton-conf"
 #endif
 
 
-#include <libguile.h>
+#include <stdlib.h>
 #include <gtk/gtk.h>
 
 #include "cfg_edit_dlg.h"

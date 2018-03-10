@@ -6,12 +6,12 @@
 #
 DBG=-O0 -ggdb -DDEBUG
 
-# [CHANGE IT]: pkgconfig packages' names:
+# [CHANGE IT]: GTK pkgconfig package name:
 #
 PK_GTK=gtk+-2.0
-PK_GUILE=guile-2.0
 
-# [CHANGE IT]: Lepton EDA install root:
+# [CHANGE IT]: where Lepton EDA is installed:
+# (--prefix configure argument used when building lepton)
 #
 # LEPTON_INST_ROOT=/usr/local
 LEPTON_INST_ROOT=$(lepton)/bin.master
@@ -31,7 +31,6 @@ PK_LIBLEPTON_DIR=$(LEPTON_INST_ROOT)/lib/pkgconfig
 PK_LIBLEPTON=liblepton
 
 OPT_GTK=`pkg-config --libs --cflags $(PK_GTK)`
-OPT_GUILE=`pkg-config --libs --cflags $(PK_GUILE)`
 OPT_LIBLEPTON=`PKG_CONFIG_PATH=$(PK_LIBLEPTON_DIR) pkg-config --libs --cflags $(PK_LIBLEPTON)`
 
 
@@ -43,5 +42,5 @@ clean:
 	@echo "done."
 
 $(EXE): $(SRC) $(HDR)
-	cc $(CFLAGS) -o $(EXE) $(SRC) $(OPT_GTK) $(OPT_GUILE) $(OPT_LIBLEPTON)
+	cc $(CFLAGS) -o $(EXE) $(SRC) $(OPT_GTK) $(OPT_LIBLEPTON)
 
