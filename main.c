@@ -17,6 +17,8 @@
 #endif
 
 
+#include <unistd.h>
+#include <getopt.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
