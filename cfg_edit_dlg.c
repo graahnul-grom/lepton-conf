@@ -1816,7 +1816,7 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
     gtk_entry_set_text( GTK_ENTRY( ent_key ), "newKey" );
 
     GtkWidget* ent_val = gtk_entry_new();
-    gtk_entry_set_text( GTK_ENTRY( ent_val ), "newVal" );
+    gtk_entry_set_text( GTK_ENTRY( ent_val ), "newValue" );
 
     GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
     gtk_box_pack_start( GTK_BOX( vbox ), ent_key, TRUE, TRUE, 5 );
@@ -1881,7 +1881,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
     GtkWidget* cb_grp = gtk_combo_box_text_new_with_entry();
 //    GtkWidget* cb_grp = gtk_combo_box_new_with_entry();
     GtkWidget* ent_grp = gtk_bin_get_child( GTK_BIN( cb_grp ) );
-    gtk_entry_set_text( GTK_ENTRY( ent_grp ), "newGrp" );
+    gtk_entry_set_text( GTK_ENTRY( ent_grp ), "newGroup" );
 
 
     // combo: add list of child groups:
@@ -1913,7 +1913,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
     gtk_entry_set_text( GTK_ENTRY( ent_key ), "newKey" );
 
     GtkWidget* ent_val = gtk_entry_new();
-    gtk_entry_set_text( GTK_ENTRY( ent_val ), "newVal" );
+    gtk_entry_set_text( GTK_ENTRY( ent_val ), "newValue" );
 
     GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
     gtk_box_pack_start( GTK_BOX( vbox ), cb_grp,  TRUE, TRUE, 5 );
@@ -2720,13 +2720,27 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     gtk_button_set_image( GTK_BUTTON( dlg->btn_toggle_ ), img_toggle );
 
 
+    // tooltips:
+    //
+    gtk_widget_set_tooltip_text( dlg->btn_reload_, "Reload configuration from disk." );
+    gtk_widget_set_tooltip_text( dlg->btn_add_, "Add new configuration key." );
+    gtk_widget_set_tooltip_text( dlg->btn_edit_, "Edit current value." );
+    gtk_widget_set_tooltip_text( dlg->btn_toggle_,
+                                 "Toggle values like true/false, enabled/disabled.\n"
+                                 "The same can be done with double-click."
+    );
+
+
     // pack controls:
     //
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_reload_, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_add_,    FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,   FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
+    //
+    // TESTING:
+    //
+    // gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
