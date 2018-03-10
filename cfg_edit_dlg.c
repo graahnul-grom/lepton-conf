@@ -675,9 +675,23 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
     }
 
 
+    //
+    // NOTE: hack: temporary select the first node ("0" path):
+    // restoring saved row sometimes breaks scrolling - the row
+    // goes out of sight and scroll bar is displayed incorrectly
+    //
+    GtkTreePath* p0 = gtk_tree_path_new_from_string( "0" );
+    gtk_tree_view_expand_to_path( dlg->tree_v_, p0 );
+    gtk_tree_view_set_cursor( dlg->tree_v_, p0, NULL, FALSE );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, p0, NULL, FALSE, 0, 0 );
+    gtk_tree_path_free( p0 );
+    //
+    //
+
+
     gtk_tree_view_expand_to_path( dlg->tree_v_, path );
-    gtk_tree_view_set_cursor_on_cell( dlg->tree_v_, path, NULL, NULL, FALSE );
-    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+    gtk_tree_view_set_cursor( dlg->tree_v_, path, NULL, FALSE );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, TRUE, 0.5, 0 );
 
     gtk_tree_path_free( path );
 
@@ -1044,7 +1058,8 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 //    GtkAdjustment* adj = gtk_tree_view_get_vadjustment( dlg->tree_v_ );
 //    gtk_tree_view_set_vadjustment( dlg->tree_v_, NULL );
 
-    conf_reload_ctx( ctx, "3", dlg );
+    xxx_reload( dlg );
+    // conf_reload_ctx( ctx, "3", dlg );
 
 //    gtk_tree_view_set_vadjustment( dlg->tree_v_, adj );
 
@@ -1061,7 +1076,8 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     // row_cur_pos_restore( dlg, "0:1:0" );
     // GtkTreePath* path = gtk_tree_path_new_from_string( "0:1:0" );
     // gtk_tree_path_up( path );
-}
+
+} // on_btn_tst()
 
 
 
