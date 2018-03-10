@@ -36,7 +36,8 @@ static CfgEntry g_cfg_registry[] =
         "lepton-conf",
         "editor",
         "gvim",
-        "External text editor for configuration files used by lepton-conf (this program)."
+        "External text editor for configuration files used by lepton-conf (this program).\n"
+        "Currently, it is stored/read from the USER config context only."
     },
 
     //
