@@ -652,14 +652,14 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 {
     if ( !path_str )
     {
-        printf( " >> >> row_cur_pos_restore(): !path_str\n");
+        printf( " >> row_cur_pos_restore(): !path_str\n");
         return;
     }
 
     GtkTreePath* path = gtk_tree_path_new_from_string( path_str );
     if ( !path )
     {
-        printf( " >> >> row_cur_pos_restore(): !path\n");
+        printf( " >> row_cur_pos_restore(): !path\n");
         return;
     }
 
@@ -1233,23 +1233,53 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+//    gchar* path = row_cur_pos_save( dlg );
+
     gboolean showinh = gtk_toggle_button_get_active( btn );
+
+    // about to hide inherited rows and
+    // current row is inherited
+    // => change to nearest non-inherited row:
+    //
+    if ( !showinh && rdata->inh_ )
+    {
+        GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+        GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+
+        g_return_if_fail( path != NULL && "on_btn_showinh(): !path" );
+
+        gtk_tree_path_up( path );
+        row_select_by_path_mod( dlg, path );
+
+        gtk_tree_path_free( path );
+    }
 
     xxx_showinh( dlg, showinh );
 
+//    row_cur_pos_restore( dlg, path );
+//    g_free( path );
+
     // ensure that current node is visible after refiltering:
     //
-    GtkTreeIter it;
-    row_cur_get_iter( dlg, &it );
-
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
-
-    if ( path != NULL )
-    {
-        gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
-        gtk_tree_path_free( path );
-    }
+//    GtkTreeIter it;
+//    row_cur_get_iter( dlg, &it );
+//
+//    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+//    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+//
+//    if ( path != NULL )
+//    {
+//        gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+//        gtk_tree_path_free( path );
+//    }
 
 } // on_btn_showinh()
 
