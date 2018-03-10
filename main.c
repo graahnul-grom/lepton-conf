@@ -35,6 +35,10 @@ void out_version()
 void out_help( int exit_code )
 {
     printf( "usage: lepton-conf [-h] [-v] [-d] [dirname]\n" );
+    printf( "options:\n" );
+    printf( "  -h    Help (this message).\n" );
+    printf( "  -v    Show version.\n" );
+    printf( "  -d    Do not populate DEFAULT config context on startup.\n" );
     exit( exit_code );
 }
 
