@@ -977,7 +977,7 @@ tree_add_col( cfg_edit_dlg*    dlg,
 static void
 on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
 {
-    printf( "cfg_edit_dlg::on_delete_event()\n" );
+    // printf( "cfg_edit_dlg::on_delete_event()\n" );
 
     // NOTE: free rdata
     //
@@ -1972,32 +1972,32 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
 static void
 on_conf_chg_ctx_dflt( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 {
-    printf( " >> >> on_conf_chg_ctx_dflt(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_default_context(), g, k );
+//    printf( " >> >> on_conf_chg_ctx_dflt(): [%d], [%s] [%s]\n",
+//        ctx == eda_config_get_default_context(), g, k );
 }
 
 
 static void
 on_conf_chg_ctx_sys( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 {
-    printf( " >> >> on_conf_chg_ctx_sys(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_system_context(), g, k );
+//    printf( " >> >> on_conf_chg_ctx_sys(): [%d], [%s] [%s]\n",
+//        ctx == eda_config_get_system_context(), g, k );
 }
 
 
 static void
 on_conf_chg_ctx_user( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 {
-    printf( " >> >> on_conf_chg_ctx_user(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_user_context(), g, k );
+//    printf( " >> >> on_conf_chg_ctx_user(): [%d], [%s] [%s]\n",
+//        ctx == eda_config_get_user_context(), g, k );
 }
 
 
 static void
 on_conf_chg_ctx_path( EdaConfig* ctx, const gchar* g, const gchar* k, void* p )
 {
-    printf( " >> >> on_conf_chg_ctx_path(): [%d], [%s] [%s]\n",
-        ctx == eda_config_get_context_for_path( "." ), g, k );
+//    printf( " >> >> on_conf_chg_ctx_path(): [%d], [%s] [%s]\n",
+//        ctx == eda_config_get_context_for_path( "." ), g, k );
 }
 
 
@@ -2413,7 +2413,7 @@ conf_load( cfg_edit_dlg* dlg )
 
 
     // setup "config-changed" handlers:
-    // NOTE: not used
+    // NOTE: not used for now
     //
     g_signal_connect( G_OBJECT( ctx_dflt ),
                       "config-changed",

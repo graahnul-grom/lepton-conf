@@ -104,7 +104,7 @@ int main( int argc, char* argv[] )
 
     gtk_main();
 
-    printf( " -- -- -- main(): done\n\n");
+    // printf( " -- -- -- main(): done\n\n");
     return 0;
 }
 
