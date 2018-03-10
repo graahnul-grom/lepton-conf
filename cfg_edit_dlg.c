@@ -199,6 +199,9 @@ xxx_update_gui( cfg_edit_dlg* dlg );
 static void
 xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
 
+static void
+xxx_reload( cfg_edit_dlg* dlg );
+
 
 
 
@@ -1017,31 +1020,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
-
-    char* path = row_cur_pos_save( dlg );
-
-
-    tree_filter_remove( dlg );
-
-
-    // NOTE: free rdata
-    //
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
-
-
-    gtk_tree_store_clear( dlg->store_ );
-
-    conf_load( dlg );
-
-    tree_filter_setup( dlg );
-
-
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-
-
-    row_cur_pos_restore( dlg, path );
-    g_free( path );
+    xxx_reload( dlg );
 
 } // on_btn_reload()
 
@@ -1061,7 +1040,16 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     gchar* path = row_cur_pos_save( dlg );
 
     gui_update_off();
+
+//    GtkAdjustment* adj = gtk_tree_view_get_vadjustment( dlg->tree_v_ );
+//    gtk_tree_view_set_vadjustment( dlg->tree_v_, NULL );
+
     conf_reload_ctx( ctx, "3", dlg );
+
+//    gtk_tree_view_set_vadjustment( dlg->tree_v_, adj );
+
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
     gui_update_on();
 
     row_cur_pos_restore( dlg, path );
@@ -3120,4 +3108,31 @@ xxx_showinh( cfg_edit_dlg* dlg, gboolean show )
     gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
 }
+
+
+
+static void
+xxx_reload( cfg_edit_dlg* dlg )
+{
+    char* path = row_cur_pos_save( dlg );
+
+    tree_filter_remove( dlg );
+
+    // NOTE: free rdata
+    //
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
+
+    gtk_tree_store_clear( dlg->store_ );
+
+    conf_load( dlg );
+
+    tree_filter_setup( dlg );
+
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+    row_cur_pos_restore( dlg, path );
+    g_free( path );
+
+} // xxx_reload()
 
