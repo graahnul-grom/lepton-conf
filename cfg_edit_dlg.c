@@ -2680,6 +2680,18 @@ conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg )
 *
 */
 
+//    static void
+//    on_tree_search( GtkTreeView* treeview, gpointer p )
+//    {
+//        printf( " >>  on_tree_search()\n" );
+//
+//        cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+//        if ( !dlg )
+//            return;
+//
+//        gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+//    }
+
 // setup signal handlers for dialog:
 //
 static void
@@ -2739,6 +2751,11 @@ gui_mk_events( cfg_edit_dlg* dlg )
                       "button-press-event",
                       G_CALLBACK( &on_mouse_click ),
                       dlg );
+
+//    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
+//                      "start-interactive-search",
+//                      G_CALLBACK( &on_tree_search ),
+//                      dlg );
 
 } // gui_mk_events()
 
@@ -2913,6 +2930,8 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
     dlg->tree_v_ = GTK_TREE_VIEW( tree_widget );
 
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
+    gtk_tree_view_set_enable_search( dlg->tree_v_, FALSE );
+    // gtk_tree_view_set_search_entry( dlg->tree_v_, NULL ); // fail
 
     // columns:
     //
