@@ -659,9 +659,11 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     GtkTreeIter it;
     if ( !gtk_tree_model_get_iter( mod, &it, path ) )
-        gtk_tree_path_up( path );
-    // gtk_tree_model_sort_iter_is_valid()
-
+    {
+        // TODO: when this happens?
+        printf( " >> row_cur_pos_restore(): !it\n" );
+        // was: gtk_tree_path_up( path );
+    }
 
 
     gtk_tree_view_expand_to_path( dlg->tree_v_, path );
@@ -669,7 +671,8 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
     gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
 
     gtk_tree_path_free( path );
-}
+
+} // row_cur_pos_restore()
 
 
 
@@ -1045,13 +1048,18 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
+    // EdaConfig* ctx_parent = eda_config_get_user_context();
+    EdaConfig* ctx        = eda_config_get_context_for_path( "." );
+    // conf_reload_child_ctxs( ctx_parent, dlg );
+
+    conf_reload_ctx( ctx, "3", dlg );
 
     // char* path_str = row_cur_pos_save( dlg );
     // conf_reload_ctx_path( dlg );
     // row_cur_pos_restore( dlg, path_str );
-    row_cur_pos_restore( dlg, "0:1:0" );
-    GtkTreePath* path = gtk_tree_path_new_from_string( "0:1:0" );
-    gtk_tree_path_up( path );
+    // row_cur_pos_restore( dlg, "0:1:0" );
+    // GtkTreePath* path = gtk_tree_path_new_from_string( "0:1:0" );
+    // gtk_tree_path_up( path );
 }
 
 
@@ -2740,7 +2748,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     //
     // TESTING:
     //
-    // gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
