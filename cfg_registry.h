@@ -85,6 +85,99 @@ static CfgEntry g_cfg_registry[] =
         "",
         "Custom font for the log window (e.g. \"Monospace 10\")."
     },
+
+    //
+    // lepton-netlist:
+    //
+    {
+        "gnetlist",
+        "default-net-name",
+        "unnamed_net",
+        "Default name used for nets for which the user has set\n"
+        "no explicit name via the netname= or net= attributes."
+    },
+    {
+        "gnetlist",
+        "default-bus-name",
+        "unnamed_bus",
+        "Default name used for buses for which the user has set\n"
+        "no explicit name via the netname= or net= attributes."
+    },
+    {   // TODO: net-naming-priority - what's this? possible values?
+        //
+        "gnetlist",
+        "net-naming-priority",
+        "net-attribute",
+        "By default, net= attributes beat netname= attributes.\n"
+        "TODO: description."
+    },
+    {
+        "gnetlist.hierarchy",
+        "traverse-hierarchy",
+        "true",
+        "Turn on/off hierarchy processing."
+    },
+    // attribute: //
+    {
+        "gnetlist.hierarchy",
+        "mangle-refdes-attribute",
+        "true",
+        "Whether to mangle sub-schematic's 'refdes' attributes."
+    },
+    {
+        "gnetlist.hierarchy",
+        "refdes-attribute-order",
+        "false",
+        "While mangling 'refdes' attributes, whether to append (false)\n"
+        "or prepend (true) sub-schematic's ones."
+    },
+    {
+        "gnetlist.hierarchy",
+        "refdes-attribute-separator",
+        "/",
+        "Separator string used to form mangled 'refdes' attribute names."
+    },
+    // netname: //
+    {
+        "gnetlist.hierarchy",
+        "mangle-netname-attribute",
+        "true",
+        "Whether to mangle sub-schematic's 'netname' attributes."
+    },
+    {
+        "gnetlist.hierarchy",
+        "netname-attribute-order",
+        "false",
+        "While mangling 'netname' attributes, whether to append (false)\n"
+        "or prepend (true) sub-schematic's ones."
+    },
+    {
+        "gnetlist.hierarchy",
+        "netname-attribute-separator",
+        "/",
+        "Separator string used to form mangled 'netname' attribute names."
+    },
+    // net: //
+    {
+        "gnetlist.hierarchy",
+        "mangle-net-attribute",
+        "true",
+        "Whether to mangle sub-schematic's 'net' attributes."
+    },
+    {
+        "gnetlist.hierarchy",
+        "net-attribute-order",
+        "false",
+        "While mangling 'net' attributes, whether to append (false)\n"
+        "or prepend (true) sub-schematic's ones."
+    },
+    {
+        "gnetlist.hierarchy",
+        "net-attribute-separator",
+        "/",
+        "Separator string used to form mangled 'net' attribute names."
+    },
+
     {
         NULL,
         NULL,
