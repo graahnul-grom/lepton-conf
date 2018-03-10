@@ -118,6 +118,9 @@ static void
 row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
 
 static void
+row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
+
+static void
 conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
 
 static void
@@ -570,6 +573,50 @@ row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore )
     gtk_tree_path_free( path_tstore );
 
 } // row_select_by_iter_tstore()
+
+
+
+// selects nearest non-inherited row in hierarchy (upwards)
+// i.e. select parent, then, if parent is inh too - parent of parent:
+//
+static void
+row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
+{
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+
+    g_return_if_fail( path != NULL && "row_select_non_inh()" );
+
+    gtk_tree_path_up( path );
+    row_select_by_path_mod( dlg, path );
+
+
+    // check if this is also inherited:
+    //
+    GtkTreeIter it_2;
+    if ( gtk_tree_model_get_iter( mod, &it_2, path ) )
+    {
+        GtkTreePath* path_2 = gtk_tree_model_get_path( mod, &it_2 );
+        g_return_if_fail( path_2 != NULL && "row_select_non_inh()" );
+
+        row_data* rdata_2 = row_field_get_data( dlg, &it_2 );
+        g_return_if_fail( rdata_2 != NULL && "row_select_non_inh()" );
+
+        if ( rdata_2->inh_ )
+        {
+            gtk_tree_path_up( path_2 );
+            row_select_by_path_mod( dlg, path_2 );
+        }
+
+        gtk_tree_path_free( path );
+        gtk_tree_path_free( path_2 );
+    }
+    else
+    {
+        g_return_if_fail( FALSE && "row_select_non_inh(): !it_2" );
+    }
+
+} // row_select_non_inh()
 
 
 
@@ -1241,45 +1288,33 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     if ( !rdata )
         return;
 
-//    gchar* path = row_cur_pos_save( dlg );
 
     gboolean showinh = gtk_toggle_button_get_active( btn );
 
-    // about to hide inherited rows and
-    // current row is inherited
-    // => change to nearest non-inherited row:
+    // - about to hide all inherited rows
+    // - current row is inherited
+    // => change to nearest non-inherited row upwards in hierarchy:
     //
     if ( !showinh && rdata->inh_ )
     {
-        GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-        GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
-
-        g_return_if_fail( path != NULL && "on_btn_showinh(): !path" );
-
-        gtk_tree_path_up( path );
-        row_select_by_path_mod( dlg, path );
-
-        gtk_tree_path_free( path );
+        row_select_non_inh( dlg, it );
     }
 
     xxx_showinh( dlg, showinh );
 
-//    row_cur_pos_restore( dlg, path );
-//    g_free( path );
 
     // ensure that current node is visible after refiltering:
     //
-//    GtkTreeIter it;
-//    row_cur_get_iter( dlg, &it );
-//
-//    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-//    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
-//
-//    if ( path != NULL )
-//    {
-//        gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
-//        gtk_tree_path_free( path );
-//    }
+    row_cur_get_iter( dlg, &it );
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+
+    if ( path != NULL )
+    {
+        gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, TRUE, 0.5, 0 );
+        gtk_tree_path_free( path );
+    }
 
 } // on_btn_showinh()
 
