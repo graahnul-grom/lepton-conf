@@ -1827,11 +1827,19 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
     //
     if ( e->key.keyval == GDK_KEY_f )
     {
-        printf( " ** ** on_key_press(): BLCOK 'F' KEY\n" );
+        // printf( " ** ** on_key_press(): BLCOK 'F' KEY\n" );
         return TRUE;
     }
 
-    return FALSE; // we do not handle the event
+    // do not close dialog on 'Escape' key:
+    //
+    if ( e->key.keyval == GDK_KEY_Escape )
+    {
+        // printf( " ** ** on_key_press(): ESC KEY\n" );
+        return TRUE;
+    }
+
+    return FALSE; // propagate event
 
 } // on_key_press()
 
@@ -2950,7 +2958,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     //
     // TESTING:
     //
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
+    // gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 

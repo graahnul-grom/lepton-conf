@@ -29,7 +29,7 @@
 
 void out_version()
 {
-    printf( "lepton-conf version 1.0\n" );
+    printf( "lepton-conf version 1.0 beta\n" );
     printf( "Configuration utility for Lepton EDA\n" );
     printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
     printf( "Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>\n" );
@@ -79,26 +79,12 @@ int main( int argc, char* argv[] )
     }
     while ( ch != -1 );
 
-//    printf( " >> optind:         [ %d ]\n", optind );
-//    printf( " >> argv[ optind ]: [ %s ]\n", argv[ optind ] );
 
     const gchar* dir = argv[ optind ];
     if ( dir != NULL )
     {
         chdir( dir );
     }
-
-
-    /* w/o getopt():
-    *
-    if ( argc >= 2 )
-    {
-        const gchar* dir = NULL;
-        dir = argv[ 1 ];
-        chdir( dir );
-        printf( " >> CD: [ %s ]\n\n", dir );
-    }
-    */
 
 
     GtkWidget* wnd = cfg_edit_dlg_new();
