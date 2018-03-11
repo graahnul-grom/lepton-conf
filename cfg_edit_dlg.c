@@ -2520,7 +2520,7 @@ conf_reload_ctx_path( cfg_edit_dlg* dlg )
 static void
 conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
 {
-    gchar* path = row_cur_pos_save( dlg );
+//    gchar* path = row_cur_pos_save( dlg );
 
 
     tree_set_focus( dlg );
@@ -3165,8 +3165,7 @@ xxx_toggle( cfg_edit_dlg* dlg )
     {
         xxx_chg_val( dlg, rdata, it, "true" );
     }
-
-
+    else
     if ( g_strcmp0( rdata->val_, "enabled" ) == 0 )
     {
         xxx_chg_val( dlg, rdata, it, "disabled" );
