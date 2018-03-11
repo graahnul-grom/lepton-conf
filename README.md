@@ -1,13 +1,19 @@
 lepton-conf - configuration utility for [Lepton EDA](https://github.com/lepton-eda/lepton-eda)
 ====================================================
 
+lepton-conf is designed to ease the process of editing Lepton EDA configuration that
+is stored in ini-like files (`geda.conf`) - that is, new-style configuration, as opposed
+to settings stored in `guile` source code files. It is a graphical user interface application
+(GTK 2.x) that does essentially the same as `lepton-cli` ("[`gaf`](http://wiki.geda-project.org/geda:gaf_utility)")
+command-line utility invoked with `config` command.
+
 Installation
 ============
 
 Dependencies
 ------------
 
-- [Lepton EDA](https://github.com/lepton-eda/lepton-eda) suite
+- [Lepton Electronic Design Automation](https://github.com/lepton-eda/lepton-eda) suite
 
 Installation from source
 ------------------------
@@ -39,4 +45,11 @@ Installation from source
 * Install:
 
   Place `lepton-conf` executable file anywhere in your `$PATH`
+
+
+Limitations
+===========
+Currently `liblepton` API does not support deletion of configuration
+keys and groups. Hence, those operations have to be performed manually,
+i.e. by editing configuration files in text editor.
 
