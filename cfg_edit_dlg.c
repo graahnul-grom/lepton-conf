@@ -2523,24 +2523,27 @@ conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
     gchar* path = row_cur_pos_save( dlg );
 
 
-    gui_update_off();
-
-    if ( parent_ctx == eda_config_get_system_context() )
-    {
-        conf_reload_ctx_user( dlg );
-        conf_reload_ctx_path( dlg );
-    }
-    else
-    if ( parent_ctx == eda_config_get_user_context() )
-    {
-        conf_reload_ctx_path( dlg );
-    }
-
-    gui_update_on();
+    tree_set_focus( dlg );
+    xxx_reload( dlg );
 
 
-    row_cur_pos_restore( dlg, path );
-    g_free( path );
+//    gui_update_off();
+//
+//    if ( parent_ctx == eda_config_get_system_context() )
+//    {
+//        conf_reload_ctx_user( dlg );
+//        conf_reload_ctx_path( dlg );
+//    }
+//    else
+//    if ( parent_ctx == eda_config_get_user_context() )
+//    {
+//        conf_reload_ctx_path( dlg );
+//    }
+//
+//    gui_update_on();
+//
+//    row_cur_pos_restore( dlg, path );
+//    g_free( path );
 
 } // conf_reload_child_ctxs()
 
