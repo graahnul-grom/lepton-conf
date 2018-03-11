@@ -731,7 +731,7 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
     // goes out of sight and scroll bar is displayed incorrectly
     //
     GtkTreePath* p0 = gtk_tree_path_new_from_string( "0" );
-    gtk_tree_view_expand_to_path( dlg->tree_v_, p0 );
+    // gtk_tree_view_expand_to_path( dlg->tree_v_, p0 );
     gtk_tree_view_set_cursor( dlg->tree_v_, p0, NULL, FALSE );
     gtk_tree_view_scroll_to_cell( dlg->tree_v_, p0, NULL, FALSE, 0, 0 );
     gtk_tree_path_free( p0 );
