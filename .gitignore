@@ -2,4 +2,7 @@ lepton-conf
 geda.conf
 *.wip.c
 *.vim
+*tags*
+*.patch
+*.diff
 
