@@ -2,7 +2,7 @@
 #
 #
 
-# comment out the next line to suppress debug messages:
+# comment out the next line to disable debugging support:
 #
 DBG=-O0 -ggdb -DDEBUG
 
@@ -18,7 +18,7 @@ LEPTON_INST_ROOT=$(lepton)/bin.master
 
 #
 #
-################################################################
+###### end of user-editable section  ###########################
 
 
 
