@@ -12,6 +12,7 @@
 #include "cfg_edit_dlg.h"
 #include "cfg_registry.h"
 
+#include <gdk/gdkkeysyms.h>
 #include <liblepton/liblepton.h>
 
 
@@ -104,6 +105,9 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store );
 
 static void
 gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
+
+static void
+tree_set_focus( cfg_edit_dlg* dlg );
 
 static void
 tree_filter_setup( cfg_edit_dlg* p );
@@ -426,7 +430,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     tree_filter_setup( dlg );
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
     gui_mk_events( dlg );
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+    tree_set_focus( dlg );
 
     xxx_update_gui( dlg );
 }
@@ -916,6 +920,30 @@ row_add( cfg_edit_dlg* dlg,
 *
 */
 
+static void
+tree_set_focus( cfg_edit_dlg* dlg )
+{
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+    // XXX: hack:
+    //
+    // body of row_cur_get_iter( dlg, &it ):
+    //
+    // GtkTreeIter it;
+    // GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    // gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    //
+    // if ( !res )
+    // {
+    //     gtk_test_widget_send_key( GTK_WIDGET( dlg->tree_v_ ),
+    //                               GDK_KEY_Return,
+    //                               (GdkModifierType) 0 );
+    // }
+
+} // tree_set_focus()
+
+
+
 static void tree_cell_draw( GtkTreeViewColumn* col,
                             GtkCellRenderer*   ren,
                             GtkTreeModel*      model,
@@ -1080,6 +1108,8 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
+    tree_set_focus( dlg );
+
     xxx_reload( dlg );
 
 } // on_btn_reload()
@@ -1093,8 +1123,33 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
+    tree_set_focus( dlg );
+
+    return;
+
+//    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+//    GdkEvent* ev = gdk_event_new( GDK_KEY_PRESS );
+//    ev->key.window = gtk_widget_get_window( GTK_WIDGET( dlg->tree_v_ ) );
+//    ev->key.window = gtk_widget_get_window( GTK_WIDGET( dlg->tree_v_ ) );
+//    ev->key.keyval = GDK_KEY_space;
+//    ev->key.  is_modifier keyval = GDK_KEY_space;
+//    ev->key.hardware_keycode = 32;
+//    gdk_event_put( ev );
+
+    // XXX: OK!
+    //
+//    gtk_test_widget_send_key( GTK_WIDGET( dlg->tree_v_ ),
+//                              GDK_KEY_Return,
+//                              (GdkModifierType) 0 );
+
+//    gboolean res = gtk_widget_activate( GTK_WIDGET( dlg->tree_v_ ) );
+//    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+//    printf( " >>  res(): [%d]\n", res ); // => false
+
+
     // EdaConfig* ctx_parent = eda_config_get_user_context();
-    EdaConfig* ctx        = eda_config_get_context_for_path( "." );
+    // EdaConfig* ctx        = eda_config_get_context_for_path( "." );
     // conf_reload_child_ctxs( ctx_parent, dlg );
 
     gchar* path = row_cur_pos_save( dlg );
@@ -1109,7 +1164,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 //    gtk_tree_view_set_vadjustment( dlg->tree_v_, adj );
 
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+    tree_set_focus( dlg );
 
     gui_update_on();
 
@@ -1133,6 +1188,8 @@ on_btn_add( GtkButton* btn, gpointer* p )
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
+
+    tree_set_focus( dlg );
 
     GtkTreeIter it;
     if ( !row_cur_get_iter( dlg, &it ) )
@@ -1163,6 +1220,8 @@ on_btn_edit( GtkButton* btn, gpointer* p )
     if ( !dlg )
         return;
 
+    tree_set_focus( dlg );
+
     GtkTreeIter it;
     if ( !row_cur_get_iter( dlg, &it ) )
         return;
@@ -1187,6 +1246,8 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
+
+    tree_set_focus( dlg );
 
     xxx_toggle( dlg );
 
@@ -1279,6 +1340,8 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
+
+    tree_set_focus( dlg );
 
     GtkTreeIter it;
     if ( !row_cur_get_iter( dlg, &it ) )
@@ -1745,6 +1808,32 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
     return TRUE;
 
 } // on_rmb()
+
+
+
+// handler for key-press-event signal:
+// [e]: GdkEventKey
+//
+static gboolean
+on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+    // printf( " >> on_key_press(): [0x%X]\n", e->key.keyval );
+
+    // block Ctrl+F:
+    //
+    if ( e->key.keyval == GDK_KEY_f )
+    {
+        printf( " ** ** on_key_press(): BLCOK 'F' KEY\n" );
+        return TRUE;
+    }
+
+    return FALSE; // we do not handle the event
+
+} // on_key_press()
 
 
 
@@ -2399,7 +2488,7 @@ conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg )
 
 
 
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+    tree_set_focus( dlg );
 
 
     tree_filter_setup( dlg ); // NOTE: !!!
@@ -2757,6 +2846,12 @@ gui_mk_events( cfg_edit_dlg* dlg )
 //                      G_CALLBACK( &on_tree_search ),
 //                      dlg );
 
+
+    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
+                      "key-press-event",
+                      G_CALLBACK( &on_key_press ),
+                      dlg );
+
 } // gui_mk_events()
 
 
@@ -2930,8 +3025,14 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
     dlg->tree_v_ = GTK_TREE_VIEW( tree_widget );
 
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
+
+    // disable "search as you type".
+    // Ctrl+F search is disabled by blocking that key sequence,
+    // see on_key_press().
+    // This is done 'cos on deactivation of a search box,
+    // the tree widget's focus gets lost.
+    //
     gtk_tree_view_set_enable_search( dlg->tree_v_, FALSE );
-    // gtk_tree_view_set_search_entry( dlg->tree_v_, NULL ); // fail
 
     // columns:
     //
@@ -3204,7 +3305,7 @@ xxx_showinh( cfg_edit_dlg* dlg, gboolean show )
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
     gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+    tree_set_focus( dlg );
 
 }
 
@@ -3230,7 +3331,7 @@ xxx_reload( cfg_edit_dlg* dlg )
 
     tree_filter_setup( dlg );
 
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+    tree_set_focus( dlg );
 
     row_cur_pos_restore( dlg, path );
     g_free( path );
