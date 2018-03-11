@@ -28,6 +28,7 @@
 
 
 
+extern gboolean g_close_with_esc;
 extern gboolean g_populate_default_ctx;
 
 

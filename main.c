@@ -46,6 +46,7 @@ void out_help( int exit_code )
     printf( "Options:\n" );
     printf( "  -h    Help (this message).\n" );
     printf( "  -v    Show version.\n" );
+    printf( "  -e    Close window with 'Escape' key.\n" );
     printf( "  -d    Do not populate DEFAULT config context on startup.\n" );
     exit( exit_code );
 }
@@ -63,7 +64,7 @@ int main( int argc, char* argv[] )
     int ch = -1;
     do
     {
-        int ch = getopt( argc, argv, "hvd" );
+        int ch = getopt( argc, argv, "hvde" );
 
         if ( ch == 'v' )
             out_version();
@@ -73,6 +74,9 @@ int main( int argc, char* argv[] )
         else
         if ( ch == 'd' )
             g_populate_default_ctx = FALSE;
+        else
+        if ( ch == 'e' )
+            g_close_with_esc = TRUE;
         else
         if ( ch == '?' )
             out_help( 1 );

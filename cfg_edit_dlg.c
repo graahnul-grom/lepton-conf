@@ -18,6 +18,7 @@
 
 
 
+gboolean g_close_with_esc = FALSE;
 gboolean g_populate_default_ctx = TRUE;
 static const gchar g_exted_default[] = "gvim";
 
@@ -1833,7 +1834,7 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
 
     // do not close dialog on 'Escape' key:
     //
-    if ( e->key.keyval == GDK_KEY_Escape )
+    if ( e->key.keyval == GDK_KEY_Escape && !g_close_with_esc )
     {
         // printf( " ** ** on_key_press(): ESC KEY\n" );
         return TRUE;
