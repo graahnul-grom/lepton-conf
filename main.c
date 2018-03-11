@@ -61,10 +61,8 @@ int main( int argc, char* argv[] )
 
 
     int ch = -1;
-    do
+    while ( (ch = getopt( argc, argv, "hvde" )) != -1 )
     {
-        int ch = getopt( argc, argv, "hvde" );
-
         if ( ch == 'v' )
             out_version();
         else
@@ -79,9 +77,9 @@ int main( int argc, char* argv[] )
         else
         if ( ch == '?' )
             out_help( 1 );
+        else
+            out_help( 1 );
     }
-    while ( ch != -1 );
-
 
     const gchar* dir = argv[ optind ];
     if ( dir != NULL )

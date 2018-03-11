@@ -56,5 +56,4 @@ i.e. by editing configuration files in text editor.
 License
 -------
 The same as Lepton EDA: GNU Public License (GPL) version 2.0 or (at your option) any later version.
-See the COPYING file.
 
