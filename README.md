@@ -8,8 +8,6 @@ to settings stored in `guile` source code files. It is a graphical user interfac
 command-line utility invoked with `config` command.<br />
 Some [screenshots](https://graahnul-grom.github.io/lepton-conf).
 
-Installation
-============
 
 Dependencies
 ------------
@@ -49,8 +47,14 @@ Installation from source
 
 
 Limitations
-===========
+-----------
 Currently `liblepton` API does not support deletion of configuration
 keys and groups. Hence, those operations have to be performed manually,
 i.e. by editing configuration files in text editor.
+
+
+License
+-------
+The same as Lepton EDA: GNU Public License (GPL) version 2.0 or (at your option) any later version.
+See the COPYING file.
 
