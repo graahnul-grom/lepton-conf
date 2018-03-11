@@ -5,7 +5,8 @@ lepton-conf is designed to ease the process of editing Lepton EDA configuration 
 is stored in ini-like files (`geda.conf`) - that is, new-style configuration, as opposed
 to settings stored in `guile` source code files. It is a graphical user interface application
 (GTK 2.x) that does essentially the same as `lepton-cli` ("[`gaf`](http://wiki.geda-project.org/geda:gaf_utility)")
-command-line utility invoked with `config` command.
+command-line utility invoked with `config` command.<br />
+Some [screenshots](https://graahnul-grom.github.io/lepton-conf).
 
 Installation
 ============
