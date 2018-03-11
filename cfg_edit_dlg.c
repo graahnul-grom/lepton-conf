@@ -140,6 +140,8 @@ conf_load_ctx( EdaConfig* ctx );
 static GtkTreeIter
 conf_mk_ctx_node( EdaConfig* ctx, gboolean wok, const gchar* name, cfg_edit_dlg* dlg );
 
+/*
+
 static void
 conf_reload_ctx( EdaConfig* ctx, const gchar* path, cfg_edit_dlg* dlg );
 
@@ -148,6 +150,8 @@ conf_reload_ctx_user( cfg_edit_dlg* dlg );
 
 static void
 conf_reload_ctx_path( cfg_edit_dlg* dlg );
+
+*/
 
 static void
 conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg );
@@ -2441,6 +2445,8 @@ conf_mk_ctx_node( EdaConfig*    ctx,
 
 
 
+/*
+
 // reload groups and keys in [ctx]
 //
 // [path]: string:
@@ -2521,6 +2527,8 @@ conf_reload_ctx_path( cfg_edit_dlg* dlg )
     printf( "-- -- RELOAD CTX: [path] -- --\n" );
     conf_reload_ctx( eda_config_get_context_for_path( "." ), "3", dlg );
 }
+
+*/
 
 
 
