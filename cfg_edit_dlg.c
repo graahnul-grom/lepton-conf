@@ -24,7 +24,7 @@ static const gchar g_exted_default[] = "gvim";
 
 
 
-static gboolean g_gui_update_enabled = TRUE;
+static gboolean g_gui_update_enabled = FALSE;
 static gboolean gui_update_enabled() { return g_gui_update_enabled;  }
 static void     gui_update_on()      { g_gui_update_enabled = TRUE;  }
 static void     gui_update_off()     { g_gui_update_enabled = FALSE; }
@@ -239,6 +239,8 @@ G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 static void
 settings_restore( GtkWidget* widget )
 {
+//    printf( " ++ settings_restore()\n" );
+
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
 
     EdaConfig* ctx = eda_config_get_user_context();
@@ -278,15 +280,24 @@ settings_restore( GtkWidget* widget )
                                           &err );
     g_clear_error( &err );
 
+
+    tree_set_focus( dlg );
+
     if ( path != NULL )
+    {
         row_cur_pos_restore( dlg, path );
-
-    g_free( path );
-
+        g_free( path );
+    }
+    else
+    {
+        row_cur_pos_restore( dlg, "0" );
+    }
 
     // NOTE: call parent gobject:
     //
     GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
+
+//    printf( " -- settings_restore()\n" );
 
 } // settings_restore()
 
@@ -392,6 +403,8 @@ cfg_edit_dlg_dispose( GObject* obj )
 static void
 cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 {
+//    printf( " >> cfg_edit_dlg_class_init()\n" );
+
     // NOTE: glib debug messages:
     // NOTE: g_debug() adds newline:
     //
@@ -417,6 +430,8 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 static void
 cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
+//    printf( " ++ cfg_edit_dlg_init()\n" );
+
     // g_debug( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
 
     // by default, do not show inherited:
@@ -435,9 +450,12 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
     tree_filter_setup( dlg );
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
     gui_mk_events( dlg );
-    tree_set_focus( dlg );
 
+    tree_set_focus( dlg );
+    gui_update_on();
     xxx_update_gui( dlg );
+
+//    printf( " -- cfg_edit_dlg_init()\n" );
 }
 
 
@@ -1967,7 +1985,7 @@ run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title )
 
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
-    printf( "  run_dlg_edit_val(): resp: %d\n", res );
+//    printf( "  run_dlg_edit_val(): resp: %d\n", res );
 
     gchar* ret = NULL;
 
@@ -2033,7 +2051,7 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
     gtk_widget_set_size_request( vdlg, 300, -1 );
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
-    printf( "  run_dlg_add_val(): resp: %d\n", res );
+//    printf( "  run_dlg_add_val(): resp: %d\n", res );
 
     gboolean ret = FALSE;
 
@@ -2132,7 +2150,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
     gtk_widget_set_size_request( vdlg, 350, -1 );
     gint res = gtk_dialog_run( GTK_DIALOG( vdlg ) );
 
-    printf( "  run_dlg_add_val_2(): resp: %d\n", res );
+//    printf( "  run_dlg_add_val_2(): resp: %d\n", res );
 
     gboolean ret = FALSE;
 
@@ -3078,6 +3096,8 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 static void
 gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 {
+//    printf( " ++ gui_mk()\n" );
+
     // window's title:
     //
     gtk_window_set_title( GTK_WINDOW( dlg ),
@@ -3113,6 +3133,8 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
     gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
+
+//    printf( " -- gui_mk()\n" );
 
 } // mk_gui()
 
@@ -3202,7 +3224,8 @@ xxx_toggle( cfg_edit_dlg* dlg )
 static void
 xxx_update_gui( cfg_edit_dlg* dlg )
 {
-    printf( " >> xxx_update_gui(): enabled: [%d]\n", gui_update_enabled() );
+//    printf( " >> xxx_update_gui(): enabled: [%d]\n", gui_update_enabled() );
+
     if ( !gui_update_enabled() )
         return;
 
