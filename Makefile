@@ -24,7 +24,7 @@ LEPTON_INST_ROOT=$(lepton)/bin.master
 
 EXE=lepton-conf
 SRC=main.c cfg_edit_dlg.c
-HDR=cfg_edit_dlg.h cfg_registry.h
+HDR=cfg_edit_dlg.h cfgreg.h
 CFLAGS=-Wall -ansi -std=c99 -pthread $(DBG)
 
 PK_LIBLEPTON_DIR=$(LEPTON_INST_ROOT)/lib/pkgconfig

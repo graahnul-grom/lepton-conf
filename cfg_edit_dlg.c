@@ -11,7 +11,7 @@
 #endif
 
 #include "cfg_edit_dlg.h"
-#include "cfg_registry.h"
+#include "cfgreg.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <liblepton/liblepton.h>
