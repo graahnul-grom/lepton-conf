@@ -4,9 +4,12 @@ lepton-conf - configuration utility for [Lepton EDA](https://github.com/lepton-e
 lepton-conf is designed to ease the process of editing Lepton EDA configuration that
 is stored in ini-like files (`geda.conf`) - that is, new-style configuration, as opposed
 to settings stored in `guile` source code files. It is a graphical user interface application
-(GTK 2.x) that does essentially the same as `lepton-cli` ("[`gaf`](http://wiki.geda-project.org/geda:gaf_utility)")
-command-line utility invoked with `config` command.<br />
-Some [screenshots](https://graahnul-grom.github.io/lepton-conf).
+(using GTK 2.x, see [screenshots](https://graahnul-grom.github.io/lepton-conf)) that does
+essentially the same as `lepton-cli` (formerly named "[`gaf`](http://wiki.geda-project.org/geda:gaf_utility)")
+command-line utility invoked with `config` command.
+<br />
+The project is a work in progress, so please report any spotted bugs and provide
+your suggestions on the [issues](https://github.com/graahnul-grom/lepton-conf/issues) page.
 
 
 Dependencies
@@ -44,6 +47,27 @@ Installation from source
 * Install:
 
   Place `lepton-conf` executable file anywhere in your `$PATH`
+
+* Run:
+
+  `> lepton-conf`
+
+  If Lepton EDA is installed in non-standard location, you may have to adjust
+  `$LD_LIBRARY_PATH` environment variable, so that `liblepton` can be found, e.g.:
+
+  `> LD_LIBRARY_PATH=/path/to/lepton-eda/lib lepton-conf`
+
+  Command line arguments:
+
+  `> lepton-conf -h`
+  ```
+  Usage: lepton-conf [-h] [-v] [-e] [-d] [dirname]
+  Options:
+    -h    Help (this message).
+    -v    Show version.
+    -e    Close window with 'Escape' key.
+    -d    Do not populate DEFAULT config context on startup.
+  ```
 
 
 Limitations
