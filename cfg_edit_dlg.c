@@ -1135,6 +1135,9 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
     xxx_reload( dlg );
 
+    tree_set_focus( dlg );
+    xxx_update_gui( dlg );
+
 } // on_btn_reload()
 
 
@@ -3220,6 +3223,7 @@ xxx_toggle( cfg_edit_dlg* dlg )
 
 
 // update labels, disable/enable controls
+// {pre}: tree has focus, row selected
 //
 static void
 xxx_update_gui( cfg_edit_dlg* dlg )
