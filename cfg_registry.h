@@ -105,13 +105,13 @@ static CfgEntry g_cfg_registry[] =
         "Default name used for buses for which the user has set\n"
         "no explicit name via the netname= or net= attributes."
     },
-    {   // TODO: net-naming-priority - what's this? possible values?
-        //
+    {
         "gnetlist",
         "net-naming-priority",
         "net-attribute",
-        "By default, net= attributes beat netname= attributes.\n"
-        "TODO: description."
+        "Specify which attribute, net (\"net-attribute\") or netname (\"netname-attribute\"),"
+        " has priority if a net is found with two names. Any netname"
+        " conflict will be resolved using the chosen attribute."
     },
     {
         "gnetlist.hierarchy",
