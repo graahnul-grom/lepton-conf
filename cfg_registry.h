@@ -60,7 +60,7 @@ static CfgEntry g_cfg_registry[] =
         "schematic.gui",
         "use-tabs",
         "false",
-        "Whether to use tabbed GUI."
+        "Whether to use tabbed GUI: display each schematic in its own tab within GtkNotebook widget."
     },
     {
         "schematic.tabs",
