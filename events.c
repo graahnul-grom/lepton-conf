@@ -158,21 +158,6 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 */
 
 void
-on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
-{
-    // printf( "cfg_edit_dlg::on_delete_event()\n" );
-
-    // NOTE: free rdata
-    //
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
-
-    gtk_widget_destroy( GTK_WIDGET( dlg ) );
-}
-
-
-
-void
 on_row_sel( GtkTreeView* tree, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -185,93 +170,16 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
 
 
 void
-on_btn_reload( GtkButton* btn, gpointer* p )
+on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
 {
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return;
+    // printf( "cfg_edit_dlg::on_delete_event()\n" );
 
-    tree_set_focus( dlg );
+    // NOTE: free rdata
+    //
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
 
-    xxx_reload( dlg );
-
-    tree_set_focus( dlg );
-    xxx_update_gui( dlg );
-
-} // on_btn_reload()
-
-
-
-
-void
-on_btn_add( GtkButton* btn, gpointer* p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return;
-
-    tree_set_focus( dlg );
-
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
-
-    const row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return;
-
-    if ( rdata->rtype_ == RT_CTX )
-    {
-        on_mitem_ctx_add( NULL, dlg );
-    }
-    else
-    if ( rdata->rtype_ == RT_GRP )
-    {
-        on_mitem_grp_add( NULL, dlg );
-    }
-
-} // on_btn_add()
-
-
-
-void
-on_btn_edit( GtkButton* btn, gpointer* p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return;
-
-    tree_set_focus( dlg );
-
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return;
-
-    row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return;
-
-    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
-
-    xxx_chg_val( dlg, rdata, it, txt );
-
-    g_free( txt );
-
-} // on_btn_edit()
-
-
-
-void
-on_btn_toggle( GtkButton* btn, gpointer* p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return;
-
-    tree_set_focus( dlg );
-
-    xxx_toggle( dlg );
-
+    gtk_widget_destroy( GTK_WIDGET( dlg ) );
 }
 
 
@@ -355,6 +263,160 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
 
 
+// handler for button-press-event signal:
+//
+gboolean
+on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+    GdkEventButton* ebtn = ( GdkEventButton* ) e;
+
+
+    // LMB double click:
+    //
+    if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
+    {
+        xxx_toggle( dlg );
+        return FALSE;
+    }
+
+
+    // not an RMB => do not process event (return FALSE):
+    //
+    if ( ebtn->type != GDK_BUTTON_PRESS || ebtn->button != 3 )
+        return FALSE;
+
+
+    //
+    // further down only return TRUE to not allow selecting rows with RMB
+    //
+
+
+    if ( ebtn->window != gtk_tree_view_get_bin_window( dlg->tree_v_ ) )
+        return TRUE;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return TRUE;
+
+
+    GtkTreePath* path_cur = NULL;
+    path_cur = gtk_tree_model_get_path( gtk_tree_view_get_model( dlg->tree_v_ ), &it );
+
+    GtkTreePath* path_rmb = NULL;
+    gboolean onrow =
+        gtk_tree_view_get_path_at_pos( dlg->tree_v_, ebtn->x, ebtn->y, &path_rmb,
+                                       NULL, NULL, NULL );
+
+    if ( onrow )
+    {
+        if ( gtk_tree_path_compare( path_cur, path_rmb ) != 0 )
+            onrow = FALSE;
+    }
+
+    gtk_tree_path_free( path_cur );
+    gtk_tree_path_free( path_rmb );
+
+    if ( !onrow )
+        return TRUE;
+
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return TRUE;
+
+    GtkMenu* menu = gui_mk_popup_menu( dlg, rdata );
+
+    if ( menu )
+    {
+        gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
+                        ebtn->button, ebtn->time );
+                        // 0, gtk_get_current_event_time() );
+    }
+
+    return TRUE;
+
+} // on_rmb()
+
+
+
+// handler for key-press-event signal:
+// [e]: GdkEventKey
+//
+gboolean
+on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+    // printf( " >> on_key_press(): [0x%X]\n", e->key.keyval );
+
+    // block Ctrl+F:
+    //
+    if ( e->key.keyval == GDK_KEY_f )
+    {
+        // printf( " ** ** on_key_press(): BLCOK 'F' KEY\n" );
+        return TRUE;
+    }
+
+    // do not close dialog on 'Escape' key:
+    //
+    if ( e->key.keyval == GDK_KEY_Escape && !g_close_with_esc )
+    {
+        // printf( " ** ** on_key_press(): ESC KEY\n" );
+        return TRUE;
+    }
+
+    return FALSE; // propagate event
+
+} // on_key_press()
+
+
+
+
+/* ******************************************************************
+*
+*  TOGGLE / RELOAD / SHOWINH:
+*
+*/
+
+void
+on_btn_toggle( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    tree_set_focus( dlg );
+
+    xxx_toggle( dlg );
+
+}
+
+
+
+void
+on_btn_reload( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    tree_set_focus( dlg );
+
+    xxx_reload( dlg );
+
+    tree_set_focus( dlg );
+    xxx_update_gui( dlg );
+
+} // on_btn_reload()
+
+
+
 void
 on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 {
@@ -404,8 +466,40 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 
 
 
-// key node: "edit" mitem
-//
+
+/* ******************************************************************
+*
+*  EDIT:
+*
+*/
+
+void
+on_btn_edit( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    tree_set_focus( dlg );
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+
+    xxx_chg_val( dlg, rdata, it, txt );
+
+    g_free( txt );
+
+} // on_btn_edit()
+
+
+
 void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 {
@@ -428,6 +522,44 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
     g_free( txt );
 
 } // on_mitem_key_edit()
+
+
+
+
+/* ******************************************************************
+*
+*  ADD:
+*
+*/
+
+void
+on_btn_add( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    tree_set_focus( dlg );
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    const row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    if ( rdata->rtype_ == RT_CTX )
+    {
+        on_mitem_ctx_add( NULL, dlg );
+    }
+    else
+    if ( rdata->rtype_ == RT_GRP )
+    {
+        on_mitem_grp_add( NULL, dlg );
+    }
+
+} // on_btn_add()
 
 
 
@@ -749,118 +881,4 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     g_free( val );
 
 } // on_mitem_ctx_add()
-
-
-
-// handler for button-press-event signal:
-//
-gboolean
-on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return FALSE;
-
-    GdkEventButton* ebtn = ( GdkEventButton* ) e;
-
-
-    // LMB double click:
-    //
-    if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
-    {
-        xxx_toggle( dlg );
-        return FALSE;
-    }
-
-
-    // not an RMB => do not process event (return FALSE):
-    //
-    if ( ebtn->type != GDK_BUTTON_PRESS || ebtn->button != 3 )
-        return FALSE;
-
-
-    //
-    // further down only return TRUE to not allow selecting rows with RMB
-    //
-
-
-    if ( ebtn->window != gtk_tree_view_get_bin_window( dlg->tree_v_ ) )
-        return TRUE;
-
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
-        return TRUE;
-
-
-    GtkTreePath* path_cur = NULL;
-    path_cur = gtk_tree_model_get_path( gtk_tree_view_get_model( dlg->tree_v_ ), &it );
-
-    GtkTreePath* path_rmb = NULL;
-    gboolean onrow =
-        gtk_tree_view_get_path_at_pos( dlg->tree_v_, ebtn->x, ebtn->y, &path_rmb,
-                                       NULL, NULL, NULL );
-
-    if ( onrow )
-    {
-        if ( gtk_tree_path_compare( path_cur, path_rmb ) != 0 )
-            onrow = FALSE;
-    }
-
-    gtk_tree_path_free( path_cur );
-    gtk_tree_path_free( path_rmb );
-
-    if ( !onrow )
-        return TRUE;
-
-
-    row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return TRUE;
-
-    GtkMenu* menu = gui_mk_popup_menu( dlg, rdata );
-
-    if ( menu )
-    {
-        gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
-                        ebtn->button, ebtn->time );
-                        // 0, gtk_get_current_event_time() );
-    }
-
-    return TRUE;
-
-} // on_rmb()
-
-
-
-// handler for key-press-event signal:
-// [e]: GdkEventKey
-//
-gboolean
-on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
-{
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
-    if ( !dlg )
-        return FALSE;
-
-    // printf( " >> on_key_press(): [0x%X]\n", e->key.keyval );
-
-    // block Ctrl+F:
-    //
-    if ( e->key.keyval == GDK_KEY_f )
-    {
-        // printf( " ** ** on_key_press(): BLCOK 'F' KEY\n" );
-        return TRUE;
-    }
-
-    // do not close dialog on 'Escape' key:
-    //
-    if ( e->key.keyval == GDK_KEY_Escape && !g_close_with_esc )
-    {
-        // printf( " ** ** on_key_press(): ESC KEY\n" );
-        return TRUE;
-    }
-
-    return FALSE; // propagate event
-
-} // on_key_press()
 
