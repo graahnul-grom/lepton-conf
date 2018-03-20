@@ -359,3 +359,65 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 
 } // mk_gui()
 
+
+
+
+/* ******************************************************************
+*
+*  popup menu:
+*
+*/
+
+GtkMenu*
+gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
+{
+//    if ( rdata->rtype_ == RT_CTX )
+//        return NULL;
+
+    GtkWidget* menu = gtk_menu_new();
+
+
+    if ( rdata->rtype_ == RT_CTX )
+    {
+        GtkWidget* mitem_ctx_add = NULL;
+        mitem_ctx_add = gtk_menu_item_new_with_mnemonic( "_add" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_ctx_add);
+        g_signal_connect( G_OBJECT( mitem_ctx_add ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_ctx_add ),
+                          dlg );
+        gtk_widget_show( mitem_ctx_add );
+        gtk_widget_set_sensitive( mitem_ctx_add, !rdata->ro_ );
+    }
+    else
+    if ( rdata->rtype_ == RT_KEY )
+    {
+        GtkWidget* mitem_key_edit = NULL;
+        mitem_key_edit = gtk_menu_item_new_with_mnemonic( "_edit" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_key_edit);
+        g_signal_connect( G_OBJECT( mitem_key_edit ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_key_edit ),
+                          dlg );
+        gtk_widget_show( mitem_key_edit );
+        gtk_widget_set_sensitive( mitem_key_edit, !rdata->ro_ );
+    }
+    else
+    if ( rdata->rtype_ == RT_GRP )
+    {
+        GtkWidget* mitem_grp_add = NULL;
+        mitem_grp_add = gtk_menu_item_new_with_mnemonic( "_add" );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_grp_add);
+        g_signal_connect( G_OBJECT( mitem_grp_add ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_grp_add ),
+                          dlg );
+        gtk_widget_show( mitem_grp_add );
+        gtk_widget_set_sensitive( mitem_grp_add, !rdata->ro_ );
+    }
+
+
+    return GTK_MENU( menu );
+
+} // gui_mk_popup_menu()
+

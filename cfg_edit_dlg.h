@@ -150,6 +150,15 @@ tree_set_focus( cfg_edit_dlg* dlg );
 void
 xxx_reload( cfg_edit_dlg* dlg );
 
+void
+on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_grp_add( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
+
 
 
 
@@ -186,6 +195,9 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store );
 
 void
 gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
+
+GtkMenu*
+gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
 
 
 
