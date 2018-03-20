@@ -132,7 +132,7 @@ conf_load_keys( EdaConfig*    ctx,
 
         // NOTE: rdata:
         //
-        row_data* rdata = mk_rdata( ctx,
+        row_data* rdata = rdata_mk( ctx,
                                     group,          // group
                                     name,           // key
                                     val,            // val
@@ -187,7 +187,7 @@ conf_load_groups( EdaConfig*    ctx,
 
         // NOTE: rdata:
         //
-        row_data* rdata = mk_rdata( ctx,
+        row_data* rdata = rdata_mk( ctx,
                                     name,   // group
                                     NULL,   // key
                                     NULL,   // val
@@ -272,7 +272,7 @@ conf_mk_ctx_node( EdaConfig*    ctx,
 
     // NOTE: rdata:
     //
-    row_data* rdata = mk_rdata( ctx,
+    row_data* rdata = rdata_mk( ctx,
                                 NULL,  // group
                                 NULL,  // key
                                 NULL,  // val

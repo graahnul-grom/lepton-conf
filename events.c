@@ -177,7 +177,7 @@ on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
     // NOTE: free rdata
     //
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
+    gtk_tree_model_foreach( mod, &rdata_rm_func, dlg );
 
     gtk_widget_destroy( GTK_WIDGET( dlg ) );
 }
@@ -651,7 +651,7 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
 
     // NOTE: rdata:
     //
-    row_data* rdata_new = mk_rdata( rdata->ctx_,
+    row_data* rdata_new = rdata_mk( rdata->ctx_,
                                     rdata->group_,  // group
                                     key,            // key
                                     val,            // val
@@ -777,7 +777,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
             // NOTE: rdata:
             //
-            row_data* rdata_new_key = mk_rdata( rdata_grp->ctx_,
+            row_data* rdata_new_key = rdata_mk( rdata_grp->ctx_,
                                             rdata_grp->group_, // group
                                             key,               // key
                                             val,               // val
@@ -819,7 +819,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
         // NOTE: rdata: new grp:
         //
-        row_data* rdata_new_grp = mk_rdata( rdata_ctx->ctx_,
+        row_data* rdata_new_grp = rdata_mk( rdata_ctx->ctx_,
                                     grp,    // group
                                     NULL,   // key
                                     NULL,   // val
@@ -834,7 +834,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
         conf_add_val( rdata_new_grp, key, val );
         if ( !conf_save( rdata_new_grp->ctx_, dlg ) )
         {
-            rm_rdata( rdata_new_grp );
+            rdata_rm( rdata_new_grp );
             return;
         }
 
@@ -857,7 +857,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
         // NOTE: rdata: new key:
         //
-        row_data* rdata_new_key = mk_rdata( rdata_new_grp->ctx_,
+        row_data* rdata_new_key = rdata_mk( rdata_new_grp->ctx_,
                                             rdata_new_grp->group_, // group
                                             key,                   // key
                                             val,                   // val

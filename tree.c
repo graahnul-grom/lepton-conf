@@ -29,7 +29,7 @@ rdata_get_name( const row_data* rdata )
 
 
 row_data*
-mk_rdata( EdaConfig*   ctx,
+rdata_mk( EdaConfig*   ctx,
           const gchar* group,
           const gchar* key,
           const gchar* val,
@@ -53,7 +53,7 @@ mk_rdata( EdaConfig*   ctx,
 
 
 void
-rm_rdata( row_data* rdata )
+rdata_rm( row_data* rdata )
 {
     if ( rdata == NULL )
         return;
@@ -68,7 +68,7 @@ rm_rdata( row_data* rdata )
 
 
 gboolean
-rm_rdata_func( GtkTreeModel* mod,
+rdata_rm_func( GtkTreeModel* mod,
                GtkTreePath*  path,
                GtkTreeIter*  it,
                gpointer      p )
@@ -78,7 +78,7 @@ rm_rdata_func( GtkTreeModel* mod,
         return FALSE;
 
     row_data* rdata = row_field_get_data( dlg, it );
-    rm_rdata( rdata );
+    rdata_rm( rdata );
 
     return FALSE; // FALSE => continue gtk_tree_model_foreach()
 }

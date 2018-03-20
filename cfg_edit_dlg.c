@@ -371,7 +371,7 @@ xxx_reload( cfg_edit_dlg* dlg )
     // NOTE: free rdata
     //
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_foreach( mod, &rm_rdata_func, dlg );
+    gtk_tree_model_foreach( mod, &rdata_rm_func, dlg );
 
     gtk_tree_store_clear( dlg->store_ );
 
