@@ -40,7 +40,7 @@ GtkWidget* cfg_edit_dlg_new()
 */
 
 static void
-gui_mk_events( cfg_edit_dlg* dlg );
+events_setup( cfg_edit_dlg* dlg );
 
 static void
 tree_filter_setup( cfg_edit_dlg* p );
@@ -332,7 +332,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     tree_filter_setup( dlg );
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
-    gui_mk_events( dlg );
+    events_setup( dlg );
 
     tree_set_focus( dlg );
     gui_update_on();
@@ -2003,7 +2003,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
 // setup signal handlers for dialog:
 //
 static void
-gui_mk_events( cfg_edit_dlg* dlg )
+events_setup( cfg_edit_dlg* dlg )
 {
     g_signal_connect( G_OBJECT( dlg ),
                       "delete-event",
@@ -2071,7 +2071,7 @@ gui_mk_events( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_key_press ),
                       dlg );
 
-} // gui_mk_events()
+} // events_setup()
 
 
 
