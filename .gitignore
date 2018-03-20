@@ -5,4 +5,5 @@ geda.conf
 *tags*
 *.patch
 *.diff
+t0_*
 

@@ -10,6 +10,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <liblepton/liblepton.h>
 
 
 
@@ -75,9 +76,89 @@ typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;
 typedef struct _cfg_edit_dlg      cfg_edit_dlg;
 
 
-GType cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
+GType
+cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
 
-GtkWidget* cfg_edit_dlg_new();
+GtkWidget*
+cfg_edit_dlg_new();
+
+
+
+
+// row data:
+//
+typedef enum
+{
+    RT_CTX,
+    RT_GRP,
+    RT_KEY,
+}
+RowType;
+
+struct _row_data
+{
+    EdaConfig* ctx_;
+    gchar*     group_;
+    gchar*     key_;
+    gchar*     val_;
+    gboolean   ro_;   // read-only
+    gboolean   inh_;  // inherited
+    RowType    rtype_;
+};
+
+typedef struct _row_data row_data;
+
+
+
+
+// tree columns:
+//
+enum
+{
+    COL_NAME,
+    COL_VAL,
+    COL_DATA, // rdata: hidden
+    NUM_COLS
+};
+
+int tree_colid_name();
+int tree_colid_val();
+int tree_colid_data();
+int tree_cols_cnt();
+
+
+
+
+//
+//
+row_data*
+row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+
+
+
+// gui_mk.c:
+//
+void
+gui_mk_labels_line_separ( GtkWidget* parent_box );
+
+void
+gui_mk_labels_line( const gchar* left_txt,
+                    GtkWidget*   right_label,
+                    GtkWidget*   parent_box );
+
+GtkWidget*
+gui_mk_toolbar( cfg_edit_dlg* dlg );
+
+GtkWidget*
+gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd );
+
+GtkWidget*
+gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store );
+
+void
+gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
+
 
 #endif
 
