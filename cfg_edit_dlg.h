@@ -405,6 +405,12 @@ tree_add_row( cfg_edit_dlg* dlg,
               gpointer      rdata,
               GtkTreeIter*  itParent );
 
+void
+tree_filter_setup( cfg_edit_dlg* p );
+
+void
+tree_filter_remove( cfg_edit_dlg* p );
+
 
 
 #endif

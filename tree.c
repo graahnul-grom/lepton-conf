@@ -10,6 +10,71 @@ int tree_cols_cnt()    { return NUM_COLS; }
 
 
 
+static gboolean
+tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+    // NOTE: models are different:
+    //
+    // printf( " >> tree_filter( model ):              model: %p\n",
+    //         model );
+    // printf( " >> tree_filter(): gtk_tree_view_get_model(): %p\n",
+    //         gtk_tree_view_get_model( dlg->tree_v_ ) );
+
+    row_data* rdata = NULL;
+    gtk_tree_model_get( model, it, tree_colid_data(), &rdata, -1 );
+
+    // FAIL: const row_data* rdata = row_field_get_data( dlg, it );
+
+    if ( !rdata )
+        return FALSE;
+
+    if ( !dlg->showinh_ )
+        return !rdata->inh_;
+
+    return TRUE;
+
+} // tree_filter()
+
+
+
+void
+tree_filter_setup( cfg_edit_dlg* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModel* modf = gtk_tree_model_filter_new( mod, NULL );
+
+    gtk_tree_model_filter_set_visible_func(
+        GTK_TREE_MODEL_FILTER( modf ),
+        &tree_filter,
+        dlg,
+        NULL);
+
+    gtk_tree_view_set_model( dlg->tree_v_, modf );
+
+} // tree_filter_setup()
+
+
+
+void
+tree_filter_remove( cfg_edit_dlg* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    gtk_tree_view_set_model( dlg->tree_v_, GTK_TREE_MODEL( dlg->store_ ) );
+}
+
+
+
 static void
 tree_cell_draw( GtkTreeViewColumn* col,
                 GtkCellRenderer*   ren,
