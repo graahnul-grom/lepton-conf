@@ -4,9 +4,134 @@
 
 
 gboolean g_gui_update_enabled = FALSE;
+
+
+
+
 gboolean gui_update_enabled() { return g_gui_update_enabled;  }
 void     gui_update_on()      { g_gui_update_enabled = TRUE;  }
 void     gui_update_off()     { g_gui_update_enabled = FALSE; }
+
+
+
+// update labels, disable/enable controls
+// {pre}: tree has focus, row selected
+//
+void
+xxx_update_gui( cfg_edit_dlg* dlg )
+{
+//    printf( " >> xxx_update_gui(): enabled: [%d]\n", gui_update_enabled() );
+
+    if ( !gui_update_enabled() )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    const row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+
+    gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
+
+    if ( rdata->rtype_ == RT_GRP || rdata->rtype_ == RT_KEY )
+    {
+        gtk_label_set_text( GTK_LABEL( dlg->lab_grp_ ), rdata->group_ );
+    }
+    else
+    {
+        gtk_label_set_text( GTK_LABEL( dlg->lab_grp_ ), NULL );
+    }
+
+    if ( rdata->rtype_ == RT_KEY )
+    {
+        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), rdata->key_ );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  rdata->val_ );
+
+        const gchar* desc = cfgreg_lookup_descr( rdata->group_, rdata->key_ );
+        gtk_text_buffer_set_text( dlg->txtbuf_desc_, desc ? desc : "", -1 );
+    }
+    else
+    {
+        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), NULL );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
+
+        gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
+    }
+
+    // set sensitivity for add btn
+    //
+    if ( (rdata->rtype_ == RT_CTX || rdata->rtype_ == RT_GRP) && !rdata->ro_)
+    {
+        gtk_widget_set_sensitive( dlg->btn_add_, TRUE );
+    }
+    else
+    {
+        gtk_widget_set_sensitive( dlg->btn_add_, FALSE );
+    }
+
+    // set sensitivity for edit btn
+    //
+    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_)
+    {
+        gtk_widget_set_sensitive( dlg->btn_edit_, TRUE );
+    }
+    else
+    {
+        gtk_widget_set_sensitive( dlg->btn_edit_, FALSE );
+    }
+
+    // set sensitivity for toggle btn
+    //
+    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_ )
+    {
+        gboolean can_toggle = cfgreg_can_toggle( rdata->val_ );
+        gtk_widget_set_sensitive( dlg->btn_toggle_, can_toggle );
+    }
+    else
+    {
+        gtk_widget_set_sensitive( dlg->btn_toggle_, FALSE );
+    }
+
+
+    gboolean exist = FALSE;
+    gboolean rok   = FALSE;
+    gboolean wok   = FALSE;
+
+    const gchar* fname = conf_ctx_fname( rdata->ctx_, &exist, &rok, &wok );
+
+    gchar* str_access = NULL;
+    gchar* str_markup = NULL;
+
+    if ( fname != NULL )
+    {
+        if ( !exist )
+            str_access = g_strdup( " <b>[doesn't exist]</b>" );
+        else
+        if ( !wok )
+            str_access = g_strdup( " <b>[read only]</b>" );
+
+//        str_access = g_strdup_printf( "[%s%s%s]",
+//                                      exist ? "f" : "-",
+//                                      rok   ? "r" : "-",
+//                                      wok   ? "w" : "-" );
+
+        str_markup = g_strdup_printf( "<a href='%s'>%s</a>%s",
+                                     fname, fname,
+                                     str_access ? str_access : "" );
+    }
+
+    gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str_markup ? str_markup : "" );
+
+    g_free( str_access );
+    g_free( str_markup );
+
+//    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
+//    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
+
+} // xxx_update_gui()
 
 
 

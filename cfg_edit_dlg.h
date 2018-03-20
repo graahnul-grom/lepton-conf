@@ -127,18 +127,19 @@ xxx_chg_val( cfg_edit_dlg*   dlg,
 void
 xxx_toggle( cfg_edit_dlg* dlg );
 
-void
-xxx_update_gui( cfg_edit_dlg* dlg );
-
 
 
 
 // gui_mk.c:
 //
 gboolean g_gui_update_enabled;
+
 gboolean gui_update_enabled();
 void     gui_update_on();
 void     gui_update_off();
+
+void
+xxx_update_gui( cfg_edit_dlg* dlg );
 
 void
 gui_mk_labels_line_separ( GtkWidget* parent_box );
