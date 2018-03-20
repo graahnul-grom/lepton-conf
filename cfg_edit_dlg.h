@@ -139,7 +139,7 @@ void     gui_update_on();
 void     gui_update_off();
 
 void
-xxx_update_gui( cfg_edit_dlg* dlg );
+gui_update( cfg_edit_dlg* dlg );
 
 void
 gui_mk_labels_line_separ( GtkWidget* parent_box );

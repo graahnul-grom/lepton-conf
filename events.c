@@ -164,7 +164,7 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     if ( !dlg )
         return;
 
-    xxx_update_gui( dlg );
+    gui_update( dlg );
 }
 
 
@@ -418,7 +418,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
     xxx_reload( dlg );
 
     tree_set_focus( dlg );
-    xxx_update_gui( dlg );
+    gui_update( dlg );
 
 } // on_btn_reload()
 

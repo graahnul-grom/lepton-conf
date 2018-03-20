@@ -138,7 +138,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 
     tree_set_focus( dlg );
     gui_update_on();
-    xxx_update_gui( dlg );
+    gui_update( dlg );
 
 //    printf( " -- cfg_edit_dlg_init()\n" );
 }

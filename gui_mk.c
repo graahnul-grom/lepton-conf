@@ -18,7 +18,7 @@ void     gui_update_off()     { g_gui_update_enabled = FALSE; }
 // {pre}: tree has focus, row selected
 //
 void
-xxx_update_gui( cfg_edit_dlg* dlg )
+gui_update( cfg_edit_dlg* dlg )
 {
 //    printf( " >> xxx_update_gui(): enabled: [%d]\n", gui_update_enabled() );
 
