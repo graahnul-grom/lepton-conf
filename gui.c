@@ -131,7 +131,7 @@ gui_update( cfg_edit_dlg* dlg )
 //    printf( " >> on_row_sel(): ctx fname: [%s]\n", fname );
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
-} // xxx_update_gui()
+} // gui_update()
 
 
 

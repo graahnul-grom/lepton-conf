@@ -4,10 +4,10 @@
 
 
 void
-xxx_chg_val( cfg_edit_dlg*   dlg,
-             const row_data* rdata,
-             GtkTreeIter     it,
-             const gchar*    txt )
+a_chg_val( cfg_edit_dlg*   dlg,
+           const row_data* rdata,
+           GtkTreeIter     it,
+           const gchar*    txt )
 {
     if ( txt == NULL )
         return;
@@ -32,12 +32,12 @@ xxx_chg_val( cfg_edit_dlg*   dlg,
         conf_reload_child_ctxs( rdata->ctx_, dlg );
     }
 
-} // xxx_chg_val()
+} // a_chg_val()
 
 
 
 void
-xxx_toggle( cfg_edit_dlg* dlg )
+a_toggle( cfg_edit_dlg* dlg )
 {
     GtkTreeIter it;
     if ( !row_cur_get_iter( dlg, &it ) )
@@ -53,30 +53,30 @@ xxx_toggle( cfg_edit_dlg* dlg )
 
     if ( g_strcmp0( rdata->val_, "true" ) == 0 )
     {
-        xxx_chg_val( dlg, rdata, it, "false" );
+        a_chg_val( dlg, rdata, it, "false" );
     }
     else
     if ( g_strcmp0( rdata->val_, "false" ) == 0 )
     {
-        xxx_chg_val( dlg, rdata, it, "true" );
+        a_chg_val( dlg, rdata, it, "true" );
     }
     else
     if ( g_strcmp0( rdata->val_, "enabled" ) == 0 )
     {
-        xxx_chg_val( dlg, rdata, it, "disabled" );
+        a_chg_val( dlg, rdata, it, "disabled" );
     }
     else
     if ( g_strcmp0( rdata->val_, "disabled" ) == 0 )
     {
-        xxx_chg_val( dlg, rdata, it, "enabled" );
+        a_chg_val( dlg, rdata, it, "enabled" );
     }
 
-} // xxx_toggle()
+} // a_toggle()
 
 
 
 void
-xxx_showinh( cfg_edit_dlg* dlg, gboolean show )
+a_showinh( cfg_edit_dlg* dlg, gboolean show )
 {
     dlg->showinh_ = show;
 
@@ -85,12 +85,12 @@ xxx_showinh( cfg_edit_dlg* dlg, gboolean show )
     gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
     tree_set_focus( dlg );
 
-}
+} // a_showinh()
 
 
 
 void
-xxx_reload( cfg_edit_dlg* dlg )
+a_reload( cfg_edit_dlg* dlg )
 {
     gui_update_off();
 
@@ -116,5 +116,5 @@ xxx_reload( cfg_edit_dlg* dlg )
 
     gui_update_on();
 
-} // xxx_reload()
+} // a_reload()
 

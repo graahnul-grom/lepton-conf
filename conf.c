@@ -391,7 +391,7 @@ conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg )
 
 
     tree_set_focus( dlg );
-    xxx_reload( dlg );
+    a_reload( dlg );
 
 
 //    gui_update_off();

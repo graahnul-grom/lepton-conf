@@ -127,7 +127,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 //    GtkAdjustment* adj = gtk_tree_view_get_vadjustment( dlg->tree_v_ );
 //    gtk_tree_view_set_vadjustment( dlg->tree_v_, NULL );
 
-    xxx_reload( dlg );
+    a_reload( dlg );
     // conf_reload_ctx( ctx, "3", dlg );
 
 //    gtk_tree_view_set_vadjustment( dlg->tree_v_, adj );
@@ -286,7 +286,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
     //
     if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
     {
-        xxx_toggle( dlg );
+        a_toggle( dlg );
         return FALSE;
     }
 
@@ -400,7 +400,7 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
 
     tree_set_focus( dlg );
 
-    xxx_toggle( dlg );
+    a_toggle( dlg );
 
 }
 
@@ -415,7 +415,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
     tree_set_focus( dlg );
 
-    xxx_reload( dlg );
+    a_reload( dlg );
 
     tree_set_focus( dlg );
     gui_update( dlg );
@@ -453,7 +453,7 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
         row_select_non_inh( dlg, it );
     }
 
-    xxx_showinh( dlg, showinh );
+    a_showinh( dlg, showinh );
 
 
     // ensure that current node is visible after refiltering:
@@ -499,7 +499,7 @@ on_btn_edit( GtkButton* btn, gpointer* p )
 
     gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
 
-    xxx_chg_val( dlg, rdata, it, txt );
+    a_chg_val( dlg, rdata, it, txt );
 
     g_free( txt );
 
@@ -524,7 +524,7 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 
     gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
 
-    xxx_chg_val( dlg, rdata, it, txt );
+    a_chg_val( dlg, rdata, it, txt );
 
     g_free( txt );
 

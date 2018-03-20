@@ -31,7 +31,7 @@ settings_restore( GtkWidget* widget )
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
                                   showinh );
 
-    xxx_showinh( dlg, showinh );
+    a_showinh( dlg, showinh );
     // was: on_btn_showinh( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ), (gpointer*) dlg );
 
 
