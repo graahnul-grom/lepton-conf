@@ -15,13 +15,8 @@
 
 
 
-/* ******************************************************************
-*
-*  gobject stuff:
-*
-*/
-
 G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
+
 
 
 

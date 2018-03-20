@@ -24,7 +24,7 @@ LEPTON_INST_ROOT=$(lepton)/bin.master
 
 EXE=lepton-conf
 SRC=main.c \
-    cfg_edit_dlg.c \
+    gobj.c \
     gui.c \
     conf.c \
     cfgreg.c \
