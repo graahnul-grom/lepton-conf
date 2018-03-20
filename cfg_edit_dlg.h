@@ -144,6 +144,9 @@ mk_rdata( EdaConfig*   ctx,
 row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
 
+gboolean
+row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
 void
 tree_set_focus( cfg_edit_dlg* dlg );
 
@@ -198,6 +201,29 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
 
 GtkMenu*
 gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
+
+
+
+
+// dlg.c:
+//
+gchar*
+run_dlg_edit_val( cfg_edit_dlg* dlg,
+                  const gchar* txt,
+                  const gchar* title );
+
+gboolean
+run_dlg_add_val( cfg_edit_dlg* dlg,
+                 const gchar* title,
+                 gchar** key,
+                 gchar** val );
+
+gboolean
+run_dlg_add_val_2( cfg_edit_dlg* dlg,
+                 const gchar* title,
+                 gchar** grp,
+                 gchar** key,
+                 gchar** val );
 
 
 
