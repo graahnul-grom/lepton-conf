@@ -1,6 +1,7 @@
 lepton-conf
 geda.conf
 *.wip.c
+*.wip.c.BCK
 *.vim
 *tags*
 *.patch

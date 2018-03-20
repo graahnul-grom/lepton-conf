@@ -221,13 +221,6 @@ gboolean gui_update_enabled();
 void     gui_update_on();
 void     gui_update_off();
 
-GtkTreeIter
-tree_add_row( cfg_edit_dlg* dlg,
-              const gchar*  name,
-              const gchar*  val,
-              gpointer      rdata,
-              GtkTreeIter*  itParent );
-
 void
 gui_mk_labels_line_separ( GtkWidget* parent_box );
 
@@ -393,6 +386,24 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p );
 gboolean
 on_key_press( GtkWidget* w, GdkEvent* e, gpointer p );
 
+
+
+
+// tree.c:
+//
+void
+tree_add_col( cfg_edit_dlg*    dlg,
+              GtkCellRenderer* ren,
+              const gchar*     prop,
+              gint             col_id,
+              const gchar*     title );
+
+GtkTreeIter
+tree_add_row( cfg_edit_dlg* dlg,
+              const gchar*  name,
+              const gchar*  val,
+              gpointer      rdata,
+              GtkTreeIter*  itParent );
 
 
 
