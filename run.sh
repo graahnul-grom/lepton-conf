@@ -11,5 +11,5 @@ export G_MESSAGES_DEBUG="lepton-conf"
 export GTK2_RC_FILES=${HOME}/.gtkrc-2.0
 export LD_LIBRARY_PATH=${LIB}:$LD_LIBRARY_PATH
 
-$EXE $*
+$EXE -e $*
 
