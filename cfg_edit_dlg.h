@@ -303,6 +303,9 @@ settings_save( GtkWidget* widget );
 // events.c:
 //
 void
+events_setup( cfg_edit_dlg* dlg );
+
+void
 on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p );
 
 void
