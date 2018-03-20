@@ -28,6 +28,13 @@
 
 
 
+gboolean g_close_with_esc = FALSE;
+gboolean g_populate_default_ctx = TRUE;
+// TODO: const gchar g_exted_default[] = "gvim";
+
+
+
+
 void out_version()
 {
     printf( "lepton-conf version 1.0 beta\n" );

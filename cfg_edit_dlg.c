@@ -15,22 +15,6 @@
 
 
 
-gboolean g_close_with_esc = FALSE;
-gboolean g_populate_default_ctx = TRUE;
-// TODO: const gchar g_exted_default[] = "gvim";
-
-
-
-
-/* ******************************************************************
-*
-*  forward declarations:
-*
-*/
-
-
-
-
 /* ******************************************************************
 *
 *  gobject stuff:
