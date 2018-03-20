@@ -98,8 +98,8 @@ typedef struct _row_data row_data;
 //
 gboolean g_close_with_esc;
 gboolean g_populate_default_ctx;
-// TODO: const gchar* g_exted_default;
-#define g_exted_default "gvim"
+const gchar* g_exted_default;
+// #define g_exted_default "gvim"
 
 
 
