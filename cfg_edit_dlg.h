@@ -31,26 +31,17 @@
 
 
 
-extern gboolean g_close_with_esc;
-extern gboolean g_populate_default_ctx;
-
-
-
-
 struct _cfg_edit_dlgClass
 {
     GtkDialogClass parent_class;
 };
 
-
 struct _cfg_edit_dlg
 {
     GtkDialog parent;
 
-    GtkTreeStore* store_;
-
-    GtkTreeView* tree_v_;
-
+    GtkTreeStore*    store_;
+    GtkTreeView*     tree_v_;
     GtkCellRenderer* ren_txt_;
 
     GtkWidget* lab_ctx_;
@@ -59,8 +50,6 @@ struct _cfg_edit_dlg
     GtkWidget* lab_name_;
     GtkWidget* lab_val_;
 
-    GtkTextBuffer* txtbuf_desc_;
-
     GtkWidget* btn_showinh_;
     GtkWidget* btn_reload_;
     GtkWidget* btn_add_;
@@ -68,20 +57,13 @@ struct _cfg_edit_dlg
     GtkWidget* btn_toggle_;
     GtkWidget* btn_tst_;
 
+    GtkTextBuffer* txtbuf_desc_;
+
     gboolean showinh_;
-
 };
-
 
 typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;
 typedef struct _cfg_edit_dlg      cfg_edit_dlg;
-
-
-GType
-cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
-
-GtkWidget*
-cfg_edit_dlg_new();
 
 
 
@@ -120,8 +102,16 @@ gboolean g_populate_default_ctx;
 #define g_exted_default "gvim"
 
 
+
+
 // cfg_edit_dlg.c:
 //
+GType
+cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
+
+GtkWidget*
+cfg_edit_dlg_new();
+
 void
 xxx_reload( cfg_edit_dlg* dlg );
 
