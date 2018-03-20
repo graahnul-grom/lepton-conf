@@ -11,6 +11,7 @@
 
 #include <gtk/gtk.h>
 #include <liblepton/liblepton.h>
+#include "cfgreg.h"
 
 
 
@@ -129,16 +130,38 @@ int tree_cols_cnt();
 
 
 
-//
+// cfg_edit_dlg.c:
 //
 row_data*
+mk_rdata( EdaConfig*   ctx,
+          const gchar* group,
+          const gchar* key,
+          const gchar* val,
+          gboolean     ro,
+          gboolean     inh,
+          RowType      rtype );
+
+row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+void
+tree_set_focus( cfg_edit_dlg* dlg );
+
+void
+xxx_reload( cfg_edit_dlg* dlg );
 
 
 
 
 // gui_mk.c:
 //
+GtkTreeIter
+row_add( cfg_edit_dlg* dlg,
+         const gchar*  name,
+         const gchar*  val,
+         gpointer      rdata,
+         GtkTreeIter*  itParent );
+
 void
 gui_mk_labels_line_separ( GtkWidget* parent_box );
 
@@ -158,6 +181,65 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store );
 
 void
 gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
+
+
+
+
+// conf.c:
+//
+gboolean
+conf_is_hidden_key( const gchar* name );
+
+gboolean
+conf_is_hidden_group( const gchar* name );
+
+void
+conf_load_keys( EdaConfig*    ctx,
+                const gchar*  group,
+                cfg_edit_dlg* dlg,
+                GtkTreeIter   itParent,
+                gboolean      wok,
+                gboolean*     inh_all );
+
+void
+conf_load_groups( EdaConfig*    ctx,
+                  gboolean      wok,
+                  cfg_edit_dlg* dlg,
+                  GtkTreeIter   itParent );
+
+gboolean
+conf_load_ctx( EdaConfig* ctx );
+
+GtkTreeIter
+conf_mk_ctx_node( EdaConfig*    ctx,
+                  gboolean      wok,
+                  const gchar*  name,
+                  cfg_edit_dlg* dlg );
+
+void
+conf_reload_child_ctxs( EdaConfig* parent_ctx, cfg_edit_dlg* dlg );
+
+void
+conf_load( cfg_edit_dlg* dlg );
+
+const gchar*
+conf_ctx_name( EdaConfig* ctx );
+
+const gchar*
+conf_ctx_fname( EdaConfig* ctx, gboolean* exist, gboolean* rok, gboolean* wok );
+
+const gboolean
+conf_ctx_file_writable( EdaConfig* ctx );
+
+void
+conf_add_val( row_data* rdata, const gchar* key, const gchar* val );
+
+void
+conf_chg_val( const row_data* rdata, const gchar* txt );
+
+gboolean
+conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
+
 
 
 #endif

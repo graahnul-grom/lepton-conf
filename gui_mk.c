@@ -67,6 +67,31 @@ tree_add_col( cfg_edit_dlg*    dlg,
 
 
 
+GtkTreeIter
+row_add( cfg_edit_dlg* dlg,
+         const gchar*  name,
+         const gchar*  val,
+         gpointer      rdata,
+         GtkTreeIter*  itParent )
+{
+    GtkTreeIter it;
+    gtk_tree_store_append( dlg->store_, &it, itParent );
+
+    // NOTE: gtk_tree_store_set() makes copies of strings:
+    //
+    gtk_tree_store_set( dlg->store_,
+                        &it,
+                        tree_colid_name(),     name,
+                        tree_colid_val(),      val,
+                        tree_colid_data(),     rdata,
+                        -1 );
+
+    return it;
+
+} // row_add()
+
+
+
 
 /* ******************************************************************
 *
