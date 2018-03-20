@@ -55,7 +55,7 @@ static void
 row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
 
 static GtkMenu*
-mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
+gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
 
 static gchar*
 run_dlg_edit_val( cfg_edit_dlg* dlg, const gchar* txt, const gchar* title );
@@ -1630,7 +1630,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
     if ( !rdata )
         return TRUE;
 
-    GtkMenu* menu = mk_popup_menu( dlg, rdata );
+    GtkMenu* menu = gui_mk_popup_menu( dlg, rdata );
 
     if ( menu )
     {
@@ -1687,7 +1687,7 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
 */
 
 static GtkMenu*
-mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
+gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 {
 //    if ( rdata->rtype_ == RT_CTX )
 //        return NULL;
@@ -1737,7 +1737,7 @@ mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 
     return GTK_MENU( menu );
 
-} // mk_popup_menu()
+} // gui_mk_popup_menu()
 
 
 
