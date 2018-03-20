@@ -1,7 +1,8 @@
 #!/bin/sh
 
 LIB="${lepton}/bin.master/lib"
-EXE="${lepton}/lepton-conf.git/lepton-conf"
+EXE="./lepton-conf"
+# EXE="${lepton}/lepton-conf.git/lepton-conf"
 
 export G_MESSAGES_DEBUG="lepton-conf"
 # export G_MESSAGES_DEBUG="all"
