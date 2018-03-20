@@ -132,6 +132,11 @@ int tree_cols_cnt();
 
 // cfg_edit_dlg.c:
 //
+gboolean g_close_with_esc;
+gboolean g_populate_default_ctx;
+// TODO: const gchar* g_exted_default;
+#define g_exted_default "gvim"
+
 row_data*
 mk_rdata( EdaConfig*   ctx,
           const gchar* group,
@@ -141,11 +146,43 @@ mk_rdata( EdaConfig*   ctx,
           gboolean     inh,
           RowType      rtype );
 
+void
+rm_rdata( row_data* rdata );
+
+gboolean
+rm_rdata_func( GtkTreeModel* mod,
+               GtkTreePath*  path,
+               GtkTreeIter*  it,
+               gpointer      p );
+
+GtkTreePath*
+row_find_child_by_name( cfg_edit_dlg* dlg,
+                        GtkTreeIter it_parent,
+                        const gchar* name );
+
+void
+row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val );
+
 row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
 
 gboolean
 row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+GtkTreeIter
+row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it );
+
+void
+row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
+
+void
+row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore );
+
+void
+row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod );
+
+void
+row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
 
 gchar*
 row_cur_pos_save( cfg_edit_dlg* dlg );
@@ -162,8 +199,17 @@ xxx_reload( cfg_edit_dlg* dlg );
 void
 xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
 
+void
+xxx_chg_val( cfg_edit_dlg*   dlg,
+             const row_data* rdata,
+             GtkTreeIter     it,
+             const gchar*    txt );
 
+void
+xxx_toggle( cfg_edit_dlg* dlg );
 
+void
+xxx_update_gui( cfg_edit_dlg* dlg );
 
 
 
