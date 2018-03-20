@@ -263,6 +263,13 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
 
 
+
+/* ******************************************************************
+*
+*  mouse / keyboard:
+*
+*/
+
 // handler for button-press-event signal:
 //
 gboolean

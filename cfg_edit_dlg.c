@@ -22,31 +22,11 @@ gboolean g_populate_default_ctx = TRUE;
 
 
 
-GtkWidget* cfg_edit_dlg_new()
-{
-  gpointer obj = g_object_new (CFG_EDIT_DLG_TYPE, NULL);
-  return GTK_WIDGET (obj);
-}
-
-
-
-
 /* ******************************************************************
 *
 *  forward declarations:
 *
 */
-
-
-
-
-
-/* ******************************************************************
-*
-*  gobject stuff: define class:
-*
-*/
-G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 
 
 
@@ -57,7 +37,16 @@ G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
 *
 */
 
-// NOTE: moved above: G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
+
+
+
+GtkWidget* cfg_edit_dlg_new()
+{
+  gpointer obj = g_object_new (CFG_EDIT_DLG_TYPE, NULL);
+  return GTK_WIDGET (obj);
+}
+
 
 
 static void
@@ -484,40 +473,6 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 
 
 
-/* unused:
- *
-// {post}: caller must free {ret}
-//
-static gchar*
-row_field_get_name( cfg_edit_dlg* dlg, GtkTreeIter* it )
-{
-    gchar* val = NULL;
-
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_get( mod, it, tree_colid_name(), &val, -1 );
-
-    return val;
-}
-
-
-
-// {post}: caller must free {ret}
-//
-static gchar*
-row_field_get_val( cfg_edit_dlg* dlg, GtkTreeIter* it )
-{
-    gchar* val = NULL;
-
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gtk_tree_model_get( mod, it, tree_colid_val(), &val, -1 );
-
-    return val;
-}
-*
-*/
-
-
-
 row_data*
 row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it )
 {
@@ -620,37 +575,6 @@ row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
     }
 
 } // row_unset_inh()
-
-
-
-
-/* ******************************************************************
-*
-*  tree:
-*
-*/
-
-void
-tree_set_focus( cfg_edit_dlg* dlg )
-{
-    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
-
-    // XXX: hack:
-    //
-    // body of row_cur_get_iter( dlg, &it ):
-    //
-    // GtkTreeIter it;
-    // GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
-    // gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
-    //
-    // if ( !res )
-    // {
-    //     gtk_test_widget_send_key( GTK_WIDGET( dlg->tree_v_ ),
-    //                               GDK_KEY_Return,
-    //                               (GdkModifierType) 0 );
-    // }
-
-} // tree_set_focus()
 
 
 

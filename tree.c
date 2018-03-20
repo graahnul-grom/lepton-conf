@@ -10,6 +10,30 @@ int tree_cols_cnt()    { return NUM_COLS; }
 
 
 
+void
+tree_set_focus( cfg_edit_dlg* dlg )
+{
+    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
+
+    // XXX: hack:
+    //
+    // body of row_cur_get_iter( dlg, &it ):
+    //
+    // GtkTreeIter it;
+    // GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    // gboolean res = gtk_tree_selection_get_selected( sel, NULL, &it );
+    //
+    // if ( !res )
+    // {
+    //     gtk_test_widget_send_key( GTK_WIDGET( dlg->tree_v_ ),
+    //                               GDK_KEY_Return,
+    //                               (GdkModifierType) 0 );
+    // }
+
+} // tree_set_focus()
+
+
+
 static gboolean
 tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
 {
