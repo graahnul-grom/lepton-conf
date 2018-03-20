@@ -45,12 +45,6 @@ events_setup( cfg_edit_dlg* dlg );
 static void
 tree_filter_setup( cfg_edit_dlg* p );
 
-static gchar*
-row_cur_pos_save( cfg_edit_dlg* dlg );
-
-static void
-row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
-
 static void
 row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
 
@@ -66,9 +60,6 @@ xxx_toggle( cfg_edit_dlg* dlg );
 static void
 xxx_update_gui( cfg_edit_dlg* dlg );
 
-static void
-xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
-
 
 
 
@@ -78,136 +69,6 @@ xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
 *
 */
 G_DEFINE_TYPE(cfg_edit_dlg, cfg_edit_dlg, GTK_TYPE_DIALOG);
-
-
-
-
-/* ******************************************************************
-*
-*  save/restore app settings:
-*
-*/
-
-// "show" handler for dialog:
-// NOTE: called *after* cfg_edit_dlg_init()
-//
-static void
-settings_restore( GtkWidget* widget )
-{
-//    printf( " ++ settings_restore()\n" );
-
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
-
-    EdaConfig* ctx = eda_config_get_user_context();
-
-    // show inherited:
-    //
-    gboolean showinh = eda_config_get_boolean(
-        ctx,
-        "lepton-conf",
-        "lepton-conf-hidden-showinh", NULL );
-
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
-                                  showinh );
-
-    xxx_showinh( dlg, showinh );
-    // was: on_btn_showinh( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ), (gpointer*) dlg );
-
-
-    // geometry:
-    //
-    gint x = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-x", NULL );
-    gint y = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-y", NULL );
-    gtk_window_move( GTK_WINDOW( dlg ), x, y );
-
-    gint width = eda_config_get_int(  ctx, "lepton-conf", "lepton-conf-hidden-width", NULL );
-    gint height = eda_config_get_int( ctx, "lepton-conf", "lepton-conf-hidden-height", NULL );
-    if ( width != 0 && height != 0 )
-        gtk_window_resize( GTK_WINDOW( dlg ), width, height );
-
-
-    // tree path:
-    //
-    GError* err = NULL;
-    gchar* path = eda_config_get_string( eda_config_get_user_context(),
-                                          "lepton-conf",
-                                          "lepton-conf-hidden-path",
-                                          &err );
-    g_clear_error( &err );
-
-
-    tree_set_focus( dlg );
-
-    if ( path != NULL )
-    {
-        row_cur_pos_restore( dlg, path );
-        g_free( path );
-    }
-    else
-    {
-        row_cur_pos_restore( dlg, "0" );
-    }
-
-    // NOTE: call parent gobject:
-    //
-    GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
-
-//    printf( " -- settings_restore()\n" );
-
-} // settings_restore()
-
-
-
-// "unmap" handler for dialog:
-// called when dialog box is closed
-//
-static void
-settings_save( GtkWidget* widget )
-{
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
-
-    gint x = 0;
-    gint y = 0;
-    gtk_window_get_position( GTK_WINDOW( dlg ), &x, &y );
-
-    gint width  = 0;
-    gint height = 0;
-    gtk_window_get_size( GTK_WINDOW( dlg ), &width, &height );
-
-
-    EdaConfig* ctx = eda_config_get_user_context();
-
-    // show inh bn state:
-    //
-    eda_config_set_boolean( ctx, "lepton-conf", "lepton-conf-hidden-showinh", dlg->showinh_ );
-
-
-    // geometry:
-    //
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-x", x );
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-y", y );
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-width",  width );
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-height", height );
-
-
-    // tree path:
-    //
-    gchar* path = row_cur_pos_save( dlg );
-    if ( path != NULL )
-        eda_config_set_string( ctx, "lepton-conf", "lepton-conf-hidden-path", path );
-    g_free( path );
-
-
-    // save config:
-    //
-    eda_config_save( ctx, NULL );
-
-
-    // NOTE: call parent gobject:
-    //
-    GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->unmap(widget);
-
-} // settings_save()
 
 
 
@@ -256,6 +117,24 @@ cfg_edit_dlg_dispose( GObject* obj )
 
 
 static void
+cfg_edit_dlg_on_show( GtkWidget* widget )
+{
+    settings_restore( widget );
+    GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
+}
+
+
+
+static void
+cfg_edit_dlg_on_unmap( GtkWidget* widget )
+{
+    settings_save( widget );
+    GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->unmap(widget);
+}
+
+
+
+static void
 cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 {
 //    printf( " >> cfg_edit_dlg_class_init()\n" );
@@ -276,8 +155,8 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
 
     // setup onShow/onClose handlers for dialog:
     //
-    wcls->show =  &settings_restore;
-    wcls->unmap = &settings_save;
+    wcls->show =  &cfg_edit_dlg_on_show;
+    wcls->unmap = &cfg_edit_dlg_on_unmap;
 }
 
 
@@ -558,7 +437,7 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
 
 // {post}: allocates return string on success
 //
-static gchar*
+gchar*
 row_cur_pos_save( cfg_edit_dlg* dlg )
 {
     GtkTreeIter it;
@@ -576,7 +455,7 @@ row_cur_pos_save( cfg_edit_dlg* dlg )
 
 
 
-static void
+void
 row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str )
 {
     if ( !path_str )
@@ -1942,7 +1821,7 @@ xxx_update_gui( cfg_edit_dlg* dlg )
 
 
 
-static void
+void
 xxx_showinh( cfg_edit_dlg* dlg, gboolean show )
 {
     dlg->showinh_ = show;

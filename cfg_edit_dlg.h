@@ -147,11 +147,20 @@ row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
 gboolean
 row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it );
 
+gchar*
+row_cur_pos_save( cfg_edit_dlg* dlg );
+
+void
+row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
+
 void
 tree_set_focus( cfg_edit_dlg* dlg );
 
 void
 xxx_reload( cfg_edit_dlg* dlg );
+
+void
+xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
 
 void
 on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
@@ -283,6 +292,16 @@ conf_chg_val( const row_data* rdata, const gchar* txt );
 gboolean
 conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 
+
+
+
+// sett.c:
+//
+void
+settings_restore( GtkWidget* widget );
+
+void
+settings_save( GtkWidget* widget );
 
 
 #endif
