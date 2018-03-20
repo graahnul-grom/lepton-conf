@@ -78,6 +78,16 @@ a_toggle( cfg_edit_dlg* dlg )
     {
         a_chg_val( dlg, rdata, it, "enabled" );
     }
+    else
+    if ( g_strcmp0( rdata->val_, "net-attribute" ) == 0 )
+    {
+        a_chg_val( dlg, rdata, it, "netname-attribute" );
+    }
+    else
+    if ( g_strcmp0( rdata->val_, "netname-attribute" ) == 0 )
+    {
+        a_chg_val( dlg, rdata, it, "net-attribute" );
+    }
 
 } // a_toggle()
 

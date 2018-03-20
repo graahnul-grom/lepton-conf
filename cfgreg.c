@@ -230,6 +230,9 @@ cfgreg_can_toggle( const gchar* val )
     can_toggle |= g_strcmp0( val, "enabled"  ) == 0;
     can_toggle |= g_strcmp0( val, "disabled" ) == 0;
 
+    can_toggle |= g_strcmp0( val, "net-attribute" )     == 0;
+    can_toggle |= g_strcmp0( val, "netname-attribute" ) == 0;
+
     return can_toggle;
 }
 
