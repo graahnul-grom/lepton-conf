@@ -3,6 +3,19 @@
 
 
 
+// tree columns:
+//
+enum
+{
+    COL_NAME,
+    COL_VAL,
+    COL_DATA, // rdata: hidden
+    NUM_COLS
+};
+
+
+
+
 int tree_colid_name()  { return COL_NAME; }
 int tree_colid_val()   { return COL_VAL;  }
 int tree_colid_data()  { return COL_DATA; }

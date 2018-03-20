@@ -112,24 +112,6 @@ typedef struct _row_data row_data;
 
 
 
-// tree columns:
-//
-enum
-{
-    COL_NAME,
-    COL_VAL,
-    COL_DATA, // rdata: hidden
-    NUM_COLS
-};
-
-int tree_colid_name();
-int tree_colid_val();
-int tree_colid_data();
-int tree_cols_cnt();
-
-
-
-
 // cfg_edit_dlg.c:
 //
 gboolean g_close_with_esc;
@@ -356,6 +338,11 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
 
 // tree.c:
 //
+int tree_colid_name();
+int tree_colid_val();
+int tree_colid_data();
+int tree_cols_cnt();
+
 void
 tree_set_focus( cfg_edit_dlg* dlg );
 
