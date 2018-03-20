@@ -162,14 +162,8 @@ xxx_reload( cfg_edit_dlg* dlg );
 void
 xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
 
-void
-on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
 
-void
-on_mitem_grp_add( GtkMenuItem* mitem, gpointer p );
 
-void
-on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
 
 
@@ -302,6 +296,55 @@ settings_restore( GtkWidget* widget );
 
 void
 settings_save( GtkWidget* widget );
+
+
+
+
+// events.c:
+//
+void
+on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p );
+
+void
+on_row_sel( GtkTreeView* tree, gpointer* p );
+
+void
+on_btn_reload( GtkButton* btn, gpointer* p );
+
+void
+on_btn_tst( GtkButton* btn, gpointer* p );
+
+void
+on_btn_add( GtkButton* btn, gpointer* p );
+
+void
+on_btn_edit( GtkButton* btn, gpointer* p );
+
+void
+on_btn_toggle( GtkButton* btn, gpointer* p );
+
+void
+on_lab_fname( GtkLabel* lab, gpointer* p );
+
+void
+on_btn_showinh( GtkToggleButton* btn, gpointer* p );
+
+void
+on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_grp_add( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
+
+gboolean
+on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p );
+
+gboolean
+on_key_press( GtkWidget* w, GdkEvent* e, gpointer p );
+
+
 
 
 #endif

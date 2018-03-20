@@ -49,9 +49,6 @@ static void
 row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
 
 static void
-on_btn_showinh( GtkToggleButton* btn, gpointer* p );
-
-static void
 xxx_chg_val( cfg_edit_dlg* dlg, const row_data* rdata, GtkTreeIter it, const gchar* txt );
 
 static void
@@ -756,7 +753,7 @@ tree_filter_remove( cfg_edit_dlg* p )
 *
 */
 
-static void
+void
 on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
 {
     // printf( "cfg_edit_dlg::on_delete_event()\n" );
@@ -771,7 +768,7 @@ on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
 
 
 
-static void
+void
 on_row_sel( GtkTreeView* tree, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -783,7 +780,7 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
 
 
 
-static void
+void
 on_btn_reload( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -801,7 +798,7 @@ on_btn_reload( GtkButton* btn, gpointer* p )
 
 
 
-static void
+void
 on_btn_tst( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -867,7 +864,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
-static void
+void
 on_btn_add( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -898,7 +895,7 @@ on_btn_add( GtkButton* btn, gpointer* p )
 
 
 
-static void
+void
 on_btn_edit( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -925,7 +922,7 @@ on_btn_edit( GtkButton* btn, gpointer* p )
 
 
 
-static void
+void
 on_btn_toggle( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -940,7 +937,7 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
 
 
 
-static void
+void
 on_lab_fname( GtkLabel* lab, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -1019,7 +1016,7 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
 
 
-static void
+void
 on_btn_showinh( GtkToggleButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -1418,7 +1415,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
 // handler for button-press-event signal:
 //
-static gboolean
+gboolean
 on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
@@ -1499,7 +1496,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
 // handler for key-press-event signal:
 // [e]: GdkEventKey
 //
-static gboolean
+gboolean
 on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
