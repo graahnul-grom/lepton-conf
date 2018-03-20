@@ -34,7 +34,7 @@ SRC=main.c \
     tree.c \
     row.c \
     actions.c
-HDR=cfg_edit_dlg.h cfgreg.h
+HDR=proto.h cfgreg.h
 CFLAGS=-Wall -ansi -std=c99 -pthread $(DBG)
 
 PK_LIBLEPTON_DIR=$(LEPTON_INST_ROOT)/lib/pkgconfig

@@ -10,7 +10,7 @@
     #define G_LOG_DOMAIN "lepton-conf"
 #endif
 
-#include "cfg_edit_dlg.h"
+#include "proto.h"
 
 
 

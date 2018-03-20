@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-#include "cfg_edit_dlg.h"
+#include "proto.h"
 
 
 
