@@ -155,6 +155,9 @@ rm_rdata_func( GtkTreeModel* mod,
                GtkTreeIter*  it,
                gpointer      p );
 
+const gchar*
+rdata_get_name( const row_data* rdata );
+
 GtkTreePath*
 row_find_child_by_name( cfg_edit_dlg* dlg,
                         GtkTreeIter it_parent,

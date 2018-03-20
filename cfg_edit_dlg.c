@@ -168,7 +168,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 *
 */
 
-static const gchar*
+const gchar*
 rdata_get_name( const row_data* rdata )
 {
     gchar* name = NULL;
