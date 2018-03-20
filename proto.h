@@ -1,5 +1,5 @@
-#ifndef CFG_EDIT_DLG_H_
-#define CFG_EDIT_DLG_H_
+#ifndef LEPTON_CONF_PROTO_H_
+#define LEPTON_CONF_PROTO_H_
 
 /*
  * lepton-conf - Lepton EDA configuration utility.
@@ -409,5 +409,5 @@ a_toggle( cfg_edit_dlg* dlg );
 
 
 
-#endif
+#endif /* LEPTON_CONF_PROTO_H_ */
 

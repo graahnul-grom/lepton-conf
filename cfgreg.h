@@ -1,5 +1,5 @@
-#ifndef CFG_REGISTRY_H_
-#define CFG_REGISTRY_H_
+#ifndef LEPTON_CONF_CFG_REG_H_
+#define LEPTON_CONF_CFG_REG_H_
 
 /*
  * lepton-conf - Lepton EDA configuration utility.
@@ -214,5 +214,5 @@ void
 cfgreg_populate_ctx( EdaConfig* ctx );
 
 
-#endif /* CFG_REGISTRY_H_ */
+#endif /* LEPTON_CONF_CFG_REG_H_ */
 
