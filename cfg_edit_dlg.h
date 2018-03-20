@@ -112,20 +112,6 @@ cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
 GtkWidget*
 cfg_edit_dlg_new();
 
-void
-xxx_reload( cfg_edit_dlg* dlg );
-
-void
-xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
-
-void
-xxx_chg_val( cfg_edit_dlg*   dlg,
-             const row_data* rdata,
-             GtkTreeIter     it,
-             const gchar*    txt );
-
-void
-xxx_toggle( cfg_edit_dlg* dlg );
 
 
 
@@ -400,6 +386,26 @@ row_cur_pos_save( cfg_edit_dlg* dlg );
 
 void
 row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
+
+
+
+
+// actions.c:
+//
+void
+xxx_reload( cfg_edit_dlg* dlg );
+
+void
+xxx_showinh( cfg_edit_dlg* dlg, gboolean show );
+
+void
+xxx_chg_val( cfg_edit_dlg*   dlg,
+             const row_data* rdata,
+             GtkTreeIter     it,
+             const gchar*    txt );
+
+void
+xxx_toggle( cfg_edit_dlg* dlg );
 
 
 

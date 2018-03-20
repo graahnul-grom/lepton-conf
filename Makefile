@@ -23,7 +23,17 @@ LEPTON_INST_ROOT=$(lepton)/bin.master
 
 
 EXE=lepton-conf
-SRC=main.c cfg_edit_dlg.c gui.c conf.c cfgreg.c dlg.c sett.c events.c tree.c row.c
+SRC=main.c \
+    cfg_edit_dlg.c \
+    gui.c \
+    conf.c \
+    cfgreg.c \
+    dlg.c \
+    sett.c \
+    events.c \
+    tree.c \
+    row.c \
+    actions.c
 HDR=cfg_edit_dlg.h cfgreg.h
 CFLAGS=-Wall -ansi -std=c99 -pthread $(DBG)
 
