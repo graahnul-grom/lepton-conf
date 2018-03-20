@@ -158,41 +158,6 @@ rm_rdata_func( GtkTreeModel* mod,
 const gchar*
 rdata_get_name( const row_data* rdata );
 
-GtkTreePath*
-row_find_child_by_name( cfg_edit_dlg* dlg,
-                        GtkTreeIter it_parent,
-                        const gchar* name );
-
-void
-row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val );
-
-row_data*
-row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
-
-gboolean
-row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it );
-
-GtkTreeIter
-row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it );
-
-void
-row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
-
-void
-row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore );
-
-void
-row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod );
-
-void
-row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
-
-gchar*
-row_cur_pos_save( cfg_edit_dlg* dlg );
-
-void
-row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
-
 void
 xxx_reload( cfg_edit_dlg* dlg );
 
@@ -413,6 +378,46 @@ tree_filter_setup( cfg_edit_dlg* p );
 
 void
 tree_filter_remove( cfg_edit_dlg* p );
+
+
+
+
+// row.c:
+//
+GtkTreePath*
+row_find_child_by_name( cfg_edit_dlg* dlg,
+                        GtkTreeIter it_parent,
+                        const gchar* name );
+
+void
+row_field_set_val( cfg_edit_dlg* dlg, GtkTreeIter it, const gchar* val );
+
+row_data*
+row_field_get_data( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+gboolean
+row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it );
+
+GtkTreeIter
+row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it );
+
+void
+row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
+
+void
+row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore );
+
+void
+row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod );
+
+void
+row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
+
+gchar*
+row_cur_pos_save( cfg_edit_dlg* dlg );
+
+void
+row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
 
 
 
