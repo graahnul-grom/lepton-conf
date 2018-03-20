@@ -34,17 +34,17 @@ SRC=main.c \
     tree.c \
     row.c \
     actions.c
-OBJ=obj/main.o \
-    obj/gobj.o \
-    obj/gui.o \
-    obj/conf.o \
-    obj/cfgreg.o \
-    obj/dlg.o \
-    obj/sett.o \
-    obj/events.o \
-    obj/tree.o \
-    obj/row.o \
-    obj/actions.o
+OBJ=.obj/main.o \
+    .obj/gobj.o \
+    .obj/gui.o \
+    .obj/conf.o \
+    .obj/cfgreg.o \
+    .obj/dlg.o \
+    .obj/sett.o \
+    .obj/events.o \
+    .obj/tree.o \
+    .obj/row.o \
+    .obj/actions.o
 HDR=proto.h cfgreg.h
 CFLAGS=-Wall -std=c99 -pthread $(DBG)
 CFLAGS_OBJ=-Wall -ansi -std=c99 -pthread $(DBG)
@@ -65,7 +65,7 @@ clean:
 	@rm -f $(EXE) $(OBJ)
 	@echo "done."
 
-obj/%.o: %.c $(HDR)
+.obj/%.o: %.c $(HDR)
 	cc $(CFLAGS) -c $< $(OPT_GTK_OBJ) $(OPT_LIBLEPTON_OBJ) -o $@
 
 $(EXE): $(OBJ)
