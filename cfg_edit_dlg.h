@@ -112,34 +112,16 @@ typedef struct _row_data row_data;
 
 
 
-// cfg_edit_dlg.c:
+// main.c:
 //
 gboolean g_close_with_esc;
 gboolean g_populate_default_ctx;
 // TODO: const gchar* g_exted_default;
 #define g_exted_default "gvim"
 
-row_data*
-mk_rdata( EdaConfig*   ctx,
-          const gchar* group,
-          const gchar* key,
-          const gchar* val,
-          gboolean     ro,
-          gboolean     inh,
-          RowType      rtype );
 
-void
-rm_rdata( row_data* rdata );
-
-gboolean
-rm_rdata_func( GtkTreeModel* mod,
-               GtkTreePath*  path,
-               GtkTreeIter*  it,
-               gpointer      p );
-
-const gchar*
-rdata_get_name( const row_data* rdata );
-
+// cfg_edit_dlg.c:
+//
 void
 xxx_reload( cfg_edit_dlg* dlg );
 
@@ -338,6 +320,28 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
 
 // tree.c:
 //
+
+row_data*
+mk_rdata( EdaConfig*   ctx,
+          const gchar* group,
+          const gchar* key,
+          const gchar* val,
+          gboolean     ro,
+          gboolean     inh,
+          RowType      rtype );
+
+void
+rm_rdata( row_data* rdata );
+
+gboolean
+rm_rdata_func( GtkTreeModel* mod,
+               GtkTreePath*  path,
+               GtkTreeIter*  it,
+               gpointer      p );
+
+const gchar*
+rdata_get_name( const row_data* rdata );
+
 int tree_colid_name();
 int tree_colid_val();
 int tree_colid_data();

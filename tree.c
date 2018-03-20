@@ -3,6 +3,95 @@
 
 
 
+/* ******************************************************************
+*
+*  rdata:
+*
+*/
+
+const gchar*
+rdata_get_name( const row_data* rdata )
+{
+    gchar* name = NULL;
+
+    if ( rdata != NULL )
+    {
+        if ( rdata->rtype_ == RT_GRP )
+            name = rdata->group_;
+        else
+        if ( rdata->rtype_ == RT_KEY )
+            name = rdata->key_;
+    }
+
+    return name;
+}
+
+
+
+row_data*
+mk_rdata( EdaConfig*   ctx,
+          const gchar* group,
+          const gchar* key,
+          const gchar* val,
+          gboolean     ro,
+          gboolean     inh,
+          RowType      rtype )
+{
+    row_data* rdata = g_malloc( sizeof( row_data ) );
+
+    rdata->ctx_   = ctx;
+    rdata->group_ = group ? g_strdup( group ) : NULL;
+    rdata->key_   = key   ? g_strdup( key )   : NULL;
+    rdata->val_   = val   ? g_strdup( val )   : NULL;
+    rdata->ro_    = ro;
+    rdata->inh_   = inh;
+    rdata->rtype_ = rtype;
+
+    return rdata;
+}
+
+
+
+void
+rm_rdata( row_data* rdata )
+{
+    if ( rdata == NULL )
+        return;
+
+    g_free( rdata->group_ );
+    g_free( rdata->key_ );
+    g_free( rdata->val_ );
+
+    g_free( rdata );
+}
+
+
+
+gboolean
+rm_rdata_func( GtkTreeModel* mod,
+               GtkTreePath*  path,
+               GtkTreeIter*  it,
+               gpointer      p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+    row_data* rdata = row_field_get_data( dlg, it );
+    rm_rdata( rdata );
+
+    return FALSE; // FALSE => continue gtk_tree_model_foreach()
+}
+
+
+
+
+/* ******************************************************************
+*
+*  tree:
+*
+*/
+
 // tree columns:
 //
 enum
