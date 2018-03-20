@@ -130,7 +130,7 @@ xxx_toggle( cfg_edit_dlg* dlg );
 
 
 
-// gui_mk.c:
+// gui.c:
 //
 gboolean g_gui_update_enabled;
 
