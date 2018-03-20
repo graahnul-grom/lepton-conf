@@ -155,6 +155,11 @@ xxx_reload( cfg_edit_dlg* dlg );
 
 // gui_mk.c:
 //
+gboolean g_gui_update_enabled;
+gboolean gui_update_enabled();
+void     gui_update_on();
+void     gui_update_off();
+
 GtkTreeIter
 row_add( cfg_edit_dlg* dlg,
          const gchar*  name,

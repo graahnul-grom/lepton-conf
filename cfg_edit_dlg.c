@@ -23,12 +23,6 @@ static const gchar g_exted_default[] = "gvim";
 
 
 
-static gboolean g_gui_update_enabled = FALSE;
-static gboolean gui_update_enabled() { return g_gui_update_enabled;  }
-static void     gui_update_on()      { g_gui_update_enabled = TRUE;  }
-static void     gui_update_off()     { g_gui_update_enabled = FALSE; }
-
-
 
 GtkWidget* cfg_edit_dlg_new()
 {

@@ -1,10 +1,26 @@
 #include "cfg_edit_dlg.h"
 
+
+
+
+gboolean g_gui_update_enabled = FALSE;
+gboolean gui_update_enabled() { return g_gui_update_enabled;  }
+void     gui_update_on()      { g_gui_update_enabled = TRUE;  }
+void     gui_update_off()     { g_gui_update_enabled = FALSE; }
+
+
+
+
+/* ******************************************************************
+*
+*  tree:
+*
+*/
+
 int tree_colid_name()  { return COL_NAME; }
 int tree_colid_val()   { return COL_VAL;  }
 int tree_colid_data()  { return COL_DATA; }
 int tree_cols_cnt()    { return NUM_COLS; }
-
 
 
 
