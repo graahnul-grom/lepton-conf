@@ -84,11 +84,11 @@ tree_add_col( cfg_edit_dlg*    dlg,
 
 
 GtkTreeIter
-row_add( cfg_edit_dlg* dlg,
-         const gchar*  name,
-         const gchar*  val,
-         gpointer      rdata,
-         GtkTreeIter*  itParent )
+tree_add_row( cfg_edit_dlg* dlg,
+              const gchar*  name,
+              const gchar*  val,
+              gpointer      rdata,
+              GtkTreeIter*  itParent )
 {
     GtkTreeIter it;
     gtk_tree_store_append( dlg->store_, &it, itParent );
@@ -104,7 +104,7 @@ row_add( cfg_edit_dlg* dlg,
 
     return it;
 
-} // row_add()
+} // tree_add_row()
 
 
 

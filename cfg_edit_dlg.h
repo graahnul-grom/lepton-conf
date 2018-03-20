@@ -222,11 +222,11 @@ void     gui_update_on();
 void     gui_update_off();
 
 GtkTreeIter
-row_add( cfg_edit_dlg* dlg,
-         const gchar*  name,
-         const gchar*  val,
-         gpointer      rdata,
-         GtkTreeIter*  itParent );
+tree_add_row( cfg_edit_dlg* dlg,
+              const gchar*  name,
+              const gchar*  val,
+              gpointer      rdata,
+              GtkTreeIter*  itParent );
 
 void
 gui_mk_labels_line_separ( GtkWidget* parent_box );

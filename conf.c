@@ -141,12 +141,12 @@ conf_load_keys( EdaConfig*    ctx,
                                     RT_KEY          // rtype
                                   );
 
-        row_add( dlg,
-                 name,
-                 val,
-                 rdata,
-                 &itParent
-               );
+        tree_add_row( dlg,
+                      name,
+                      val,
+                      rdata,
+                      &itParent
+                    );
 
         g_free( val );
 
@@ -198,12 +198,12 @@ conf_load_groups( EdaConfig*    ctx,
 
         gchar* display_name = g_strdup_printf( "[%s]", name );
 
-        GtkTreeIter it = row_add( dlg,
-                                  display_name, // name
-                                  "",           // val
-                                  rdata,        // rdata
-                                  &itParent
-                                );
+        GtkTreeIter it = tree_add_row( dlg,
+                                       display_name, // name
+                                       "",           // val
+                                       rdata,        // rdata
+                                       &itParent
+                                     );
 
         g_free( display_name );
 
@@ -282,12 +282,12 @@ conf_mk_ctx_node( EdaConfig*    ctx,
                               );
 
     GtkTreeIter
-    it = row_add( dlg,
-                   name,  // name
-                   "",    // val
-                   rdata, // rdata
-                   NULL   // itParent
-                 );
+    it = tree_add_row( dlg,
+                       name,  // name
+                       "",    // val
+                       rdata, // rdata
+                       NULL   // itParent
+                     );
 
     return it;
 
