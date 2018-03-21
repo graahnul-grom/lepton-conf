@@ -34,6 +34,45 @@ static CfgEntry g_cfg_registry[] =
         "Default file name for any new schematic files.\n"
         "It is used to create filenames of the form “untitled_N.sch” where N is a number."
     },
+    // library: //
+    {
+        "gschem.library",
+        "component-attributes",
+        "*",
+        "List of attribute names (semicolon-separated) that are displayed in the component select dialog.\n"
+        "An empty list will disable the attribute view.\n"
+        "If the first list element is an asterisk \"*\", all attributes will be displayed in the alphabetical order."
+    },
+    {
+        "gschem.library",
+        "sort",
+        "false",
+        "If \"true\", the component libraries are sorted alphabetically.\n"
+        "Otherwise they are sorted in the order opposite to what they were added in."
+    },
+    // printing: //
+    {
+        "gschem.printing",
+        "layout",
+        "auto",
+        "When using a paper size, set the orientation of the output.\n"
+        "If \"auto\" layout is used, the orientation that best fits the drawing will be used.\n"
+        "Possible values: \"portrait\", \"landscape\", or \"auto\""
+    },
+    {
+        "gschem.printing",
+        "monochrome",
+        "false",
+        "Toggle monochrome (\"true\") or color (\"false\") output."
+    },
+    {
+        "gschem.printing",
+        "paper",
+        "",
+        "Size the output for a particular paper size.\n"
+        "The default value depends on the current locale."
+    },
+    // gui: //
     {
         "schematic.gui",
         "use-docks",
@@ -46,6 +85,7 @@ static CfgEntry g_cfg_registry[] =
         "false",
         "Whether to use tabbed GUI: display each schematic in its own tab within GtkNotebook widget."
     },
+    // tabs: //
     {
         "schematic.tabs",
         "show-close-button",
@@ -58,12 +98,14 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Whether to show \"hierarchy up\" button on each tab."
     },
+    // undo: //
     {
         "schematic.undo",
         "modify-viewport",
         "false",
         "Allow undo/redo operations to change pan and zoom."
     },
+    // log-window: //
     {
         "schematic.log-window",
         "font",
