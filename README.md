@@ -10,7 +10,11 @@ command-line utility invoked with `config` command.
 <br />
 The project is a work in progress, so please report any spotted bugs and provide
 your suggestions on the [issues](https://github.com/graahnul-grom/lepton-conf/issues) page.
+<br />
 
+Documentation
+------------
+Information about the configuration system can be found on this [wiki page](https://github.com/graahnul-grom/lepton-eda/wiki/Configuration-Settings).
 
 Dependencies
 ------------
