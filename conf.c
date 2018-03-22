@@ -433,10 +433,10 @@ conf_load( cfg_edit_dlg* dlg )
     EdaConfig* ctx_user = eda_config_get_user_context();
     EdaConfig* ctx_path = eda_config_get_context_for_path( "." );
 
-    gchar* name_dflt = g_strdup_printf( "context: %s", conf_ctx_name( ctx_dflt ) );
-    gchar* name_sys  = g_strdup_printf( "context: %s", conf_ctx_name( ctx_sys  ) );
-    gchar* name_user = g_strdup_printf( "context: %s", conf_ctx_name( ctx_user ) );
-    gchar* name_path = g_strdup_printf( "context: %s", conf_ctx_name( ctx_path ) );
+    gchar* name_dflt = g_strdup_printf( "1: %s", conf_ctx_name( ctx_dflt ) );
+    gchar* name_sys  = g_strdup_printf( "2: %s", conf_ctx_name( ctx_sys  ) );
+    gchar* name_user = g_strdup_printf( "3: %s", conf_ctx_name( ctx_user ) );
+    gchar* name_path = g_strdup_printf( "4: %s", conf_ctx_name( ctx_path ) );
 
 
     // load:
