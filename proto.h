@@ -297,7 +297,6 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
 
 // tree.c:
 //
-
 row_data*
 rdata_mk( EdaConfig*   ctx,
           const gchar* group,
@@ -346,6 +345,12 @@ tree_filter_setup( cfg_edit_dlg* p );
 
 void
 tree_filter_remove( cfg_edit_dlg* p );
+
+gint
+tree_sort_cmp_fun( GtkTreeModel* model,
+                   GtkTreeIter*  a,
+                   GtkTreeIter*  b,
+                   gpointer      data );
 
 
 

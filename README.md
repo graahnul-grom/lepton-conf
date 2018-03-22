@@ -79,6 +79,9 @@ Limitations
 Currently `liblepton` API does not support deletion of configuration
 keys and groups. Hence, those operations have to be performed manually,
 i.e. by editing configuration files in text editor.
+<br />
+**Note**: when you modify configuration files in external editor,
+do not forget to press the `Reload` button!
 
 
 License

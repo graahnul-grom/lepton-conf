@@ -20,15 +20,26 @@
 const gchar*
 rdata_get_name( const row_data* rdata )
 {
-    gchar* name = NULL;
+    const gchar* name = NULL;
 
     if ( rdata != NULL )
     {
         if ( rdata->rtype_ == RT_GRP )
+        {
             name = rdata->group_;
+        }
         else
         if ( rdata->rtype_ == RT_KEY )
+        {
             name = rdata->key_;
+        }
+        else
+        if ( rdata->rtype_ == RT_CTX )
+        {
+            name = conf_ctx_name( rdata->ctx_ );
+            //
+            // TODO: free() name
+        }
     }
 
     return name;
@@ -141,6 +152,43 @@ tree_set_focus( cfg_edit_dlg* dlg )
     // }
 
 } // tree_set_focus()
+
+
+
+// TODO: figure out how to use it:
+//
+gint
+tree_sort_cmp_fun( GtkTreeModel* model,
+                   GtkTreeIter*  a,
+                   GtkTreeIter*  b,
+                   gpointer      data )
+{
+    printf ( "tree_sort_cmp_fun()\n" );
+
+    GtkTreePath* path_a = gtk_tree_model_get_path( model, a );
+    gint depth = gtk_tree_path_get_depth( path_a );
+    gtk_tree_path_free( path_a );
+
+    // root node => do not sort:
+    //
+    if ( depth == 1 )
+        return 0;
+
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) data;
+
+    row_data* rdata_a = row_field_get_data( dlg, a );
+    row_data* rdata_b = row_field_get_data( dlg, b );
+
+    // TODO: free [?] names:
+    //
+    const gchar* name_a = rdata_get_name( rdata_a );
+    const gchar* name_b = rdata_get_name( rdata_b );
+
+    printf ( "sort_cmp_fun( %s, %s )\n", name_a, name_b );
+
+    return g_strcmp0( name_a, name_b );
+
+} // tree_sort_cmp_fun()
 
 
 
