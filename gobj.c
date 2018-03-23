@@ -62,12 +62,17 @@ cfg_edit_dlg_dispose( GObject* obj )
 
 
 
+// "show" handler for dialog:
+// NOTE: called *after* cfg_edit_dlg_init()
+//
 static void
 cfg_edit_dlg_on_show( GtkWidget* widget )
 {
     cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
 
-    settings_restore( dlg );
+    settings_restore_showinh( dlg );
+    settings_restore_path( dlg );
+    settings_restore_geom( dlg );
 
     GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
 }

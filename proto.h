@@ -237,7 +237,13 @@ conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 // sett.c:
 //
 void
-settings_restore( cfg_edit_dlg* dlg );
+settings_restore_showinh( cfg_edit_dlg* dlg );
+
+void
+settings_restore_path( cfg_edit_dlg* dlg );
+
+void
+settings_restore_geom( cfg_edit_dlg* dlg );
 
 void
 settings_save( cfg_edit_dlg* dlg );
