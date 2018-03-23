@@ -65,7 +65,10 @@ cfg_edit_dlg_dispose( GObject* obj )
 static void
 cfg_edit_dlg_on_show( GtkWidget* widget )
 {
-    settings_restore( widget );
+    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
+
+    settings_restore( dlg );
+
     GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
 }
 
@@ -74,7 +77,10 @@ cfg_edit_dlg_on_show( GtkWidget* widget )
 static void
 cfg_edit_dlg_on_unmap( GtkWidget* widget )
 {
-    settings_save( widget );
+    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
+
+    settings_save( dlg );
+
     GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->unmap(widget);
 }
 

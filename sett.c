@@ -21,11 +21,9 @@
 // NOTE: called *after* cfg_edit_dlg_init()
 //
 void
-settings_restore( GtkWidget* widget )
+settings_restore( cfg_edit_dlg* dlg )
 {
 //    printf( " ++ settings_restore()\n" );
-
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
 
     EdaConfig* ctx = eda_config_get_user_context();
 
@@ -87,10 +85,8 @@ settings_restore( GtkWidget* widget )
 // called when dialog box is closed
 //
 void
-settings_save( GtkWidget* widget )
+settings_save( cfg_edit_dlg* dlg )
 {
-    cfg_edit_dlg* dlg = CFG_EDIT_DLG( widget );
-
     gint x = 0;
     gint y = 0;
     gtk_window_get_position( GTK_WINDOW( dlg ), &x, &y );

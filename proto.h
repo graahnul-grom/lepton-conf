@@ -237,10 +237,10 @@ conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 // sett.c:
 //
 void
-settings_restore( GtkWidget* widget );
+settings_restore( cfg_edit_dlg* dlg );
 
 void
-settings_save( GtkWidget* widget );
+settings_save( cfg_edit_dlg* dlg );
 
 
 
