@@ -315,7 +315,34 @@ GtkWidget*
 gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 {
     GtkTreeModel* tree_model = GTK_TREE_MODEL( store );
+//    GtkTreeModel* sort_model =  gtk_tree_model_sort_new_with_model( tree_model );
+
     GtkWidget*    tree_widget = gtk_tree_view_new_with_model( tree_model );
+//    GtkWidget*    tree_widget = gtk_tree_view_new_with_model( sort_model );
+
+//    GtkTreeSortable* sortable = GTK_TREE_SORTABLE( sort_model );
+//    gtk_tree_sortable_set_sort_column_id( sortable,
+//                                          tree_colid_name(),
+//                                          GTK_SORT_ASCENDING );
+
+
+
+    // TODO: use sort function:
+    //
+//    gtk_tree_sortable_set_default_sort_func(
+//    gtk_tree_sortable_set_sort_func(
+//        sortable,
+//        tree_colid_name(),
+//        &tree_sort_cmp_fun,
+//        dlg,
+//        NULL );
+//    GtkWidget*    tree_widget = gtk_tree_view_new_with_model( sort_model );
+//    gtk_tree_sortable_set_sort_column_id( GTK_TREE_SORTABLE( sort_model ),
+//                                          tree_colid_name(),
+//                                          GTK_SORT_ASCENDING );
+
+
+
     dlg->tree_v_ = GTK_TREE_VIEW( tree_widget );
 
     gtk_tree_view_set_show_expanders( dlg->tree_v_, TRUE );
