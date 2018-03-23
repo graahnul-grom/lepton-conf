@@ -112,28 +112,7 @@ cfg_edit_dlg_init( cfg_edit_dlg* dlg )
 {
 //    printf( " ++ cfg_edit_dlg_init()\n" );
 
-    // g_debug( "cfg_edit_dlg::cfg_edit_dlg_init()\n" );
-
-    // by default, do not show inherited:
-    //
-    dlg->showinh_ = FALSE;
-
-
-    gchar* cwd = g_get_current_dir();
-    gui_mk( dlg, cwd );
-    g_free( cwd );
-
-    // load data:
-    //
-    conf_load( dlg );
-
-    tree_filter_setup( dlg );
-    gtk_widget_show_all( GTK_WIDGET( dlg ) );
-    events_setup( dlg );
-
-    tree_set_focus( dlg );
-    gui_update_on();
-    gui_update( dlg );
+    a_init( dlg );
 
 //    printf( " -- cfg_edit_dlg_init()\n" );
 }

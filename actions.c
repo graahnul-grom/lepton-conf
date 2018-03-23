@@ -136,3 +136,29 @@ a_reload( cfg_edit_dlg* dlg )
 
 } // a_reload()
 
+
+
+void
+a_init( cfg_edit_dlg* dlg )
+{
+//    printf( " ++ a_init()\n" );
+
+    dlg->showinh_ = FALSE;
+
+    gchar* cwd = g_get_current_dir();
+    gui_mk( dlg, cwd );
+    g_free( cwd );
+
+    conf_load( dlg );
+
+    tree_filter_setup( dlg );
+    gtk_widget_show_all( GTK_WIDGET( dlg ) );
+    events_setup( dlg );
+
+    tree_set_focus( dlg );
+    gui_update_on();
+    gui_update( dlg );
+
+//    printf( " -- a_init()\n" );
+}
+

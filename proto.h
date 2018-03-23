@@ -398,6 +398,9 @@ row_cur_pos_restore( cfg_edit_dlg* dlg, gchar* path_str );
 // actions.c:
 //
 void
+a_init( cfg_edit_dlg* dlg );
+
+void
 a_reload( cfg_edit_dlg* dlg );
 
 void
