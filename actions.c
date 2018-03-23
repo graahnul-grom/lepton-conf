@@ -152,10 +152,16 @@ a_init( cfg_edit_dlg* dlg )
     conf_load( dlg );
 
     tree_filter_setup( dlg );
+
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
+
+    settings_restore_showinh( dlg );
+    settings_restore_path( dlg );
+
     events_setup( dlg );
 
     tree_set_focus( dlg );
+
     gui_update_on();
     gui_update( dlg );
 
