@@ -205,6 +205,72 @@ static CfgEntry g_cfg_registry[] =
         "Separator string used to form mangled 'net' attribute names."
     },
 
+    //
+    // lepton-cli:
+    //
+
+    // [export] group:
+    {
+        "export",
+        "align",
+        "auto",
+        "List of two doubles in the form HALIGN;VALIGN or string \"auto\".\n"
+        "Set how the drawing is aligned within the page. HALIGN controls the"
+        " horizontal alignment, and VALIGN the vertical. Each alignment value"
+        " should be in the range 0.0 to 1.0. The \"auto\" alignment is equivalent"
+        " to a value of 0.5;0.5, i.e. centered."
+    },
+    {
+        "export",
+        "dpi",
+        "96",
+        "Set the number of pixels per inch used when generating PNG output."
+    },
+    {
+        "export",
+        "font",
+        "Arial",
+        "Set the font to be used for drawing text."
+    },
+    {
+        "export",
+        "layout",
+        "auto",
+        "Predefined string: \"portrait\", \"landscape\", or \"auto\".\n"
+        "When using a paper size, set the orientation of the output. If \"auto\""
+        " layout is used, the orientation that best fits the drawing will be used."
+    },
+    {
+        "export",
+        "margins",
+        "18;18;18;18",
+        "List of four integers in the form TOP;LEFT;BOTTOM;RIGHT.\n"
+        "Set the widths of the margins to be used (the minimal distances"
+        " from the sheet edges; actual margins may be larger if the sizes"
+        " of the chosen paper do not meet the sizes of the printed schematic)."
+    },
+    {
+        "export",
+        "monochrome",
+        "false",
+        "Toggle monochrome (true) or color (false) output."
+    },
+    {
+        "export",
+        "paper",
+        "",
+        "Size the output for a particular paper size. The default value"
+        " depends on the current locale."
+    },
+    {
+        "export",
+        "size",
+        "",
+        "Size the output with specific dimensions. If the size is \"auto\","
+        " select the size that best fits the drawing. This overrides the"
+        " [export]::paper key."
+    },
+
     {
         NULL,
         NULL,
