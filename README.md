@@ -14,7 +14,7 @@ your suggestions on the [issues](https://github.com/graahnul-grom/lepton-conf/is
 
 Documentation
 ------------
-Information about the configuration system can be found on this [wiki page](https://github.com/graahnul-grom/lepton-eda/wiki/Configuration-Settings).
+Information about the configuration system can be found on this [wiki page](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings).
 
 Dependencies
 ------------
