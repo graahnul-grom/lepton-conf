@@ -98,6 +98,39 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Whether to show \"hierarchy up\" button on each tab."
     },
+    // status-bar: //
+    {
+        "schematic.status-bar",
+        "show-mouse-buttons",
+        "true",
+        "Whether to show mouse buttons assignment indicators."
+    },
+    {
+        "schematic.status-bar",
+        "show-rubber-band",
+        "false",
+        "Whether to show net rubber band mode indicator."
+    },
+    {
+        "schematic.status-bar",
+        "show-magnetic-net",
+        "false",
+        "Whether to show magnetic net mode indicator."
+    },
+    {
+        "schematic.status-bar",
+        "status-bold-font",
+        "false",
+        "Whether to display the status line with bolder font weight."
+    },
+    {
+        "schematic.status-bar",
+        "status-active-color",
+        "green",
+        "Color to use for the status line text when some mode is activated.\n"
+        "The string can be either one of a set of standard names "
+        "(taken from the X11 rgb.txt file), or a hex value in the form '#rrggbb'."
+    },
     // undo: //
     {
         "schematic.undo",
