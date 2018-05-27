@@ -96,10 +96,10 @@ typedef struct _row_data row_data;
 
 // main.c:
 //
-gboolean g_close_with_esc;
-gboolean g_populate_default_ctx;
-const gchar* g_exted_default;
-gboolean g_warn_cfg_file_not_found;
+extern gboolean g_close_with_esc;
+extern gboolean g_populate_default_ctx;
+extern const gchar* g_exted_default;
+extern gboolean g_warn_cfg_file_not_found;
 // #define g_exted_default "gvim"
 
 
