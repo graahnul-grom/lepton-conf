@@ -99,6 +99,7 @@ typedef struct _row_data row_data;
 gboolean g_close_with_esc;
 gboolean g_populate_default_ctx;
 const gchar* g_exted_default;
+gboolean g_warn_cfg_file_not_found;
 // #define g_exted_default "gvim"
 
 

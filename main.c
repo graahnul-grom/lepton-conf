@@ -31,6 +31,7 @@
 gboolean g_close_with_esc = FALSE;
 gboolean g_populate_default_ctx = TRUE;
 const gchar* g_exted_default = "gvim";
+gboolean g_warn_cfg_file_not_found = TRUE;
 
 
 
@@ -54,6 +55,7 @@ void out_help( int exit_code )
     printf( "  -h    Help (this message).\n" );
     printf( "  -v    Show version.\n" );
     printf( "  -e    Close window with 'Escape' key.\n" );
+    printf( "  -m    Do not warn about missing config files.\n" );
     printf( "  -d    Do not populate DEFAULT config context on startup.\n" );
     exit( exit_code );
 }
@@ -69,7 +71,7 @@ int main( int argc, char* argv[] )
 
 
     int ch = -1;
-    while ( (ch = getopt( argc, argv, "hvde" )) != -1 )
+    while ( (ch = getopt( argc, argv, "hvdem" )) != -1 )
     {
         if ( ch == 'v' )
             out_version();
@@ -82,6 +84,9 @@ int main( int argc, char* argv[] )
         else
         if ( ch == 'e' )
             g_close_with_esc = TRUE;
+        else
+        if ( ch == 'm' )
+            g_warn_cfg_file_not_found = FALSE;
         else
         if ( ch == '?' )
             out_help( 1 );

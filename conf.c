@@ -241,24 +241,36 @@ conf_load_ctx( EdaConfig* ctx )
 
     const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, NULL );
 
-    if ( fname != NULL )
+    if ( fname == NULL )
+        return TRUE;
+
+    GError* err = NULL;
+    res = eda_config_load( ctx, &err );
+
+    if ( res )
+        return TRUE;
+
+    if ( err != NULL )
     {
-        GError* err = NULL;
+        gboolean file_found = !g_error_matches( err, G_IO_ERROR,
+                                                     G_IO_ERROR_NOT_FOUND );
 
-        res = eda_config_load( ctx, &err );
+        gboolean do_warn = FALSE;
 
-        if ( !res )
+        if ( file_found )
+            do_warn = TRUE;
+
+        if ( !file_found && g_warn_cfg_file_not_found )
+            do_warn = TRUE;
+
+        if ( do_warn )
         {
             printf( "conf_load_ctx(): !eda_config_load( \"%s\" )\n", fname );
-
-            if ( err != NULL )
-            {
-                printf( "    err msg: [%s]\n", err->message );
-            }
+            printf( "    err msg: [%s]\n", err->message );
         }
-
-        g_clear_error( &err );
     }
+
+    g_clear_error( &err );
 
     return res;
 
