@@ -70,6 +70,7 @@ Installation from source
     -h    Help (this message).
     -v    Show version.
     -e    Close window with 'Escape' key.
+    -m    Do not warn about missing config files.
     -d    Do not populate DEFAULT config context on startup.
   ```
 
