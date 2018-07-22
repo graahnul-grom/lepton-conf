@@ -261,6 +261,9 @@ void
 on_btn_tst( GtkButton* btn, gpointer* p );
 
 void
+on_tree_sel_changed( GtkTreeSelection* sel, gpointer p );
+
+void
 on_row_sel( GtkTreeView* tree, gpointer* p );
 
 void

@@ -59,11 +59,32 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_toggle ),
                       dlg );
 
+
+
+
+
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
                       "cursor-changed",         // tree sel changed
 //                      "row-activated",
                       G_CALLBACK( &on_row_sel ),
                       dlg );
+
+
+    // testing:
+    //
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    gtk_tree_selection_set_mode( sel, GTK_SELECTION_BROWSE );
+
+    g_signal_connect( G_OBJECT( sel ),
+                      "changed",
+                      G_CALLBACK( &on_tree_sel_changed ),
+                      dlg );
+
+
+
+
+
+
 
     g_signal_connect( G_OBJECT( dlg->tree_v_ ),
                       "button-press-event",
@@ -164,6 +185,20 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 *  event handlers:
 *
 */
+
+// testing:
+//
+void
+on_tree_sel_changed( GtkTreeSelection* sel, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    g_return_if_fail( dlg != NULL );
+
+//    if ( !dlg )
+//        return;
+}
+
+
 
 void
 on_row_sel( GtkTreeView* tree, gpointer* p )
