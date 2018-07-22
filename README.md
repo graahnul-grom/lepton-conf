@@ -19,7 +19,8 @@ Information about the configuration system can be found on this [wiki page](http
 Dependencies
 ------------
 
-- [Lepton Electronic Design Automation](https://github.com/lepton-eda/lepton-eda) suite
+- [Lepton Electronic Design Automation](https://github.com/lepton-eda/lepton-eda) suite,
+at least [a2d49a8](https://github.com/lepton-eda/lepton-eda/commit/a2d49a816ca527839f0cd312d38ce16b1e15da9b) (Jun 8, 2018).
 
 Installation from source
 ------------------------
