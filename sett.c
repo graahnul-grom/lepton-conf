@@ -14,7 +14,10 @@
 void
 settings_restore_showinh( cfg_edit_dlg* dlg )
 {
-    EdaConfig* ctx = eda_config_get_user_context();
+    EdaConfig* ctx = eda_config_get_cache_context();
+
+    eda_config_load( ctx, NULL );
+
     gboolean showinh = eda_config_get_boolean( ctx,
                                                "lepton-conf",
                                                "lepton-conf-hidden-showinh",
@@ -32,7 +35,10 @@ settings_restore_showinh( cfg_edit_dlg* dlg )
 void
 settings_restore_path( cfg_edit_dlg* dlg )
 {
-    EdaConfig* ctx = eda_config_get_user_context();
+    EdaConfig* ctx = eda_config_get_cache_context();
+
+    eda_config_load( ctx, NULL );
+
     gchar* path = eda_config_get_string( ctx,
                                          "lepton-conf",
                                          "lepton-conf-hidden-path",
@@ -57,7 +63,9 @@ settings_restore_path( cfg_edit_dlg* dlg )
 void
 settings_restore_geom( cfg_edit_dlg* dlg )
 {
-    EdaConfig* ctx = eda_config_get_user_context();
+    EdaConfig* ctx = eda_config_get_cache_context();
+
+    eda_config_load( ctx, NULL );
 
     gint x = eda_config_get_int( ctx,
                                  "lepton-conf",
@@ -102,7 +110,7 @@ settings_save( cfg_edit_dlg* dlg )
     gtk_window_get_size( GTK_WINDOW( dlg ), &width, &height );
 
 
-    EdaConfig* ctx = eda_config_get_user_context();
+    EdaConfig* ctx = eda_config_get_cache_context();
 
     // show inh bn state:
     //
