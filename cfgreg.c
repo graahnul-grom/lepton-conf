@@ -85,6 +85,13 @@ static CfgEntry g_cfg_registry[] =
         "false",
         "Whether to use tabbed GUI: display each schematic in its own tab within GtkNotebook widget."
     },
+    {
+        "schematic.gui",
+        "font",
+        "",
+        "Sets the name of the font to be used to draw text in schematics. For example:\n"
+        "font=OpenGost Type B TT Regular"
+    },
     // tabs: //
     {
         "schematic.tabs",
