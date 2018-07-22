@@ -20,7 +20,7 @@ settings_restore_showinh( cfg_edit_dlg* dlg )
 
     gboolean showinh = eda_config_get_boolean( ctx,
                                                "lepton-conf",
-                                               "lepton-conf-hidden-showinh",
+                                               "showinh",
                                                NULL );
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( dlg->btn_showinh_ ),
@@ -41,7 +41,7 @@ settings_restore_path( cfg_edit_dlg* dlg )
 
     gchar* path = eda_config_get_string( ctx,
                                          "lepton-conf",
-                                         "lepton-conf-hidden-path",
+                                         "path",
                                          NULL );
 
     tree_set_focus( dlg );
@@ -69,11 +69,11 @@ settings_restore_geom( cfg_edit_dlg* dlg )
 
     gint x = eda_config_get_int( ctx,
                                  "lepton-conf",
-                                 "lepton-conf-hidden-x",
+                                 "x",
                                  NULL );
     gint y = eda_config_get_int( ctx,
                                  "lepton-conf",
-                                 "lepton-conf-hidden-y",
+                                 "y",
                                  NULL );
 
     gtk_window_move( GTK_WINDOW( dlg ), x, y );
@@ -81,11 +81,11 @@ settings_restore_geom( cfg_edit_dlg* dlg )
 
     gint width = eda_config_get_int( ctx,
                                      "lepton-conf",
-                                     "lepton-conf-hidden-width",
+                                     "width",
                                      NULL );
     gint height = eda_config_get_int( ctx,
                                       "lepton-conf",
-                                      "lepton-conf-hidden-height",
+                                      "height",
                                       NULL );
 
     if ( width != 0 && height != 0 )
@@ -114,22 +114,22 @@ settings_save( cfg_edit_dlg* dlg )
 
     // show inh bn state:
     //
-    eda_config_set_boolean( ctx, "lepton-conf", "lepton-conf-hidden-showinh", dlg->showinh_ );
+    eda_config_set_boolean( ctx, "lepton-conf", "showinh", dlg->showinh_ );
 
 
     // geometry:
     //
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-x", x );
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-y", y );
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-width",  width );
-    eda_config_set_int( ctx, "lepton-conf", "lepton-conf-hidden-height", height );
+    eda_config_set_int( ctx, "lepton-conf", "x", x );
+    eda_config_set_int( ctx, "lepton-conf", "y", y );
+    eda_config_set_int( ctx, "lepton-conf", "width",  width );
+    eda_config_set_int( ctx, "lepton-conf", "height", height );
 
 
     // tree path:
     //
     gchar* path = row_cur_pos_save( dlg );
     if ( path != NULL )
-        eda_config_set_string( ctx, "lepton-conf", "lepton-conf-hidden-path", path );
+        eda_config_set_string( ctx, "lepton-conf", "path", path );
     g_free( path );
 
 
