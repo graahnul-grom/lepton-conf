@@ -92,6 +92,16 @@ static CfgEntry g_cfg_registry[] =
         "Sets the name of the font to be used to draw text in schematics. For example:\n"
         "font=OpenGost Type B TT Regular"
     },
+    {
+        "schematic.gui",
+        "text-sizes",
+        "",
+        "If set, these values will appear in the 'size' combo box of 'add text'"
+        " and 'edit text' dialogs instead of the default ones "
+        "(set in gschem_toplevel.c: 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26)."
+        " For example:\n"
+        "text-sizes=2;3;4;5;6;8"
+    },
     // tabs: //
     {
         "schematic.tabs",
