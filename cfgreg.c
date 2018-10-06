@@ -102,6 +102,12 @@ static CfgEntry g_cfg_registry[] =
         " For example:\n"
         "text-sizes=2;3;4;5;6;8"
     },
+    {
+        "schematic.gui",
+        "max-recent-files",
+        "10",
+        "Maximum number of recent files to show in 'File->Open Recent' menu."
+    },
     // tabs: //
     {
         "schematic.tabs",
