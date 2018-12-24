@@ -168,6 +168,22 @@ static CfgEntry g_cfg_registry[] =
         "",
         "Custom font for the log window (e.g. \"Monospace 10\")."
     },
+    // macro-widget: //
+    {
+        "schematic.macro-widget",
+        "history-length",
+        "10",
+        "Maximum number of items to keep in the macro-widget "
+        "command history (10 by default)."
+    },
+    {
+        "schematic.macro-widget",
+        "font",
+        "",
+        "Font to be used to draw text in the macro-widget command entry.\n"
+        "For example:\n"
+        "font=Monospace 12"
+    },
 
     //
     // lepton-netlist:
