@@ -106,7 +106,8 @@ static CfgEntry g_cfg_registry[] =
         "schematic.gui",
         "max-recent-files",
         "10",
-        "Maximum number of recent files to show in 'File->Open Recent' menu."
+        "Maximum number of recent files to show in 'File->Open Recent' menu.\n"
+        "The default is 10."
     },
     // tabs: //
     {
