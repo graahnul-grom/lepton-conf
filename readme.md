@@ -66,13 +66,14 @@ Installation from source
 
   `> lepton-conf -h`
   ```
-  Usage: lepton-conf [-h] [-v] [-e] [-d] [dirname]
+  Usage: lepton-conf [-h] [-v] [-e] [-d] [-p] [dirname]
   Options:
     -h    Help (this message).
     -v    Show version.
     -e    Close window with 'Escape' key.
     -m    Do not warn about missing config files.
     -d    Do not populate DEFAULT config context on startup.
+    -p    Print DEFAULT cfg ctx (in the form of *.conf file) and exit.
   ```
 
 
