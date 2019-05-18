@@ -79,9 +79,10 @@ Installation from source
 
 Limitations
 -----------
-Currently `liblepton` API does not support deletion of configuration
-keys and groups. Hence, those operations have to be performed manually,
-i.e. by editing configuration files in text editor.
+Since [039c08c](https://github.com/lepton-eda/lepton-eda/commit/039c08c6fd106a8402cc690206eeae3ac4d1a7e7) `liblepton` API supports deletion of configuration
+keys and groups. `lepton-conf`, however, does not utilize new functions yet.
+Hence, those operations have to be performed manually, i.e. by editing
+configuration files in text editor.
 <br />
 **Note**: when you modify configuration files in external editor,
 do not forget to press the `Reload` button!
@@ -90,4 +91,6 @@ do not forget to press the `Reload` button!
 License
 -------
 The same as Lepton EDA: GNU Public License (GPL) version 2.0 or (at your option) any later version.
+<br />
+Copyright (C) 2017-2019 dmn.
 
