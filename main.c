@@ -32,6 +32,7 @@ gboolean g_close_with_esc = FALSE;
 gboolean g_populate_default_ctx = TRUE;
 const gchar* g_exted_default = "gvim";
 gboolean g_warn_cfg_file_not_found = TRUE;
+gboolean g_print_default_cfg = FALSE;
 
 
 
@@ -41,7 +42,7 @@ void out_version()
     printf( "lepton-conf version 1.0 beta\n" );
     printf( "Configuration utility for Lepton EDA " );
     printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
-    printf( "Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>\n" );
+    printf( "Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>\n" );
     printf( "WWW: https://github.com/graahnul-grom/lepton-conf\n" );
     exit( 0 );
 }
@@ -50,13 +51,14 @@ void out_version()
 
 void out_help( int exit_code )
 {
-    printf( "Usage: lepton-conf [-h] [-v] [-e] [-d] [dirname]\n" );
+    printf( "Usage: lepton-conf [-h] [-v] [-e] [-d] [-p] [dirname]\n" );
     printf( "Options:\n" );
     printf( "  -h    Help (this message).\n" );
     printf( "  -v    Show version.\n" );
     printf( "  -e    Close window with 'Escape' key.\n" );
     printf( "  -m    Do not warn about missing config files.\n" );
     printf( "  -d    Do not populate DEFAULT config context on startup.\n" );
+    printf( "  -p    Print DEFAULT cfg ctx (in the form of *.conf file) and exit.\n" );
     exit( exit_code );
 }
 
@@ -71,7 +73,7 @@ int main( int argc, char* argv[] )
 
 
     int ch = -1;
-    while ( (ch = getopt( argc, argv, "hvdem" )) != -1 )
+    while ( (ch = getopt( argc, argv, "hvdemp" )) != -1 )
     {
         if ( ch == 'v' )
             out_version();
@@ -87,6 +89,9 @@ int main( int argc, char* argv[] )
         else
         if ( ch == 'm' )
             g_warn_cfg_file_not_found = FALSE;
+        else
+        if ( ch == 'p' )
+            g_print_default_cfg = TRUE;
         else
         if ( ch == '?' )
             out_help( 1 );

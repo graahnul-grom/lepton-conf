@@ -84,7 +84,8 @@ conf_load_keys( EdaConfig*    ctx,
                 cfg_edit_dlg* dlg,
                 GtkTreeIter   itParent,
                 gboolean      wok,
-                gboolean*     inh_all )
+                gboolean*     inh_all,
+                gboolean      print )
 {
     gsize len = 0;
     GError* err = NULL;
@@ -125,6 +126,12 @@ conf_load_keys( EdaConfig*    ctx,
             }
             continue;
         }
+
+
+
+        if ( print )
+            printf( "%s=%s\n", name, val );
+
 
 
         gboolean inh = eda_config_is_inherited( ctx, group, name, &err );
@@ -170,7 +177,8 @@ void
 conf_load_groups( EdaConfig*    ctx,
                   gboolean      wok,
                   cfg_edit_dlg* dlg,
-                  GtkTreeIter   itParent )
+                  GtkTreeIter   itParent,
+                  gboolean      print )
 {
     gsize len = 0;
     gchar** pp = eda_config_get_groups( ctx, &len );
@@ -206,6 +214,13 @@ conf_load_groups( EdaConfig*    ctx,
 
         gchar* display_name = g_strdup_printf( "[%s]", name );
 
+
+
+        if ( print )
+            printf( "%s\n", display_name );
+
+
+
         GtkTreeIter it = tree_add_row( dlg,
                                        display_name, // name
                                        "",           // val
@@ -220,7 +235,14 @@ conf_load_groups( EdaConfig*    ctx,
         //
         gboolean inh_all = FALSE;
 
-        conf_load_keys( ctx, name, dlg, it, wok, &inh_all );
+        conf_load_keys( ctx, name, dlg, it, wok, &inh_all, print );
+
+
+
+        if ( print )
+            printf( "\n" );
+
+
 
         // mark group itself as inh if all children are inh:
         //
@@ -463,22 +485,25 @@ conf_load( cfg_edit_dlg* dlg )
     {
         cfgreg_populate_ctx( ctx_dflt );
     }
-    conf_load_groups( ctx_dflt, wok, dlg, it );
+    conf_load_groups( ctx_dflt, wok, dlg, it, g_print_default_cfg );
+
+    if ( g_print_default_cfg )
+        exit( 0 );
 
     wok = conf_ctx_file_writable( ctx_sys );
     it = conf_mk_ctx_node( ctx_sys, wok, name_sys, dlg );
     conf_load_ctx( ctx_sys );
-    conf_load_groups( ctx_sys, wok, dlg, it );
+    conf_load_groups( ctx_sys, wok, dlg, it, FALSE );
 
     wok = conf_ctx_file_writable( ctx_user );
     it = conf_mk_ctx_node( ctx_user, wok, name_user, dlg );
     conf_load_ctx( ctx_user );
-    conf_load_groups( ctx_user, wok, dlg, it );
+    conf_load_groups( ctx_user, wok, dlg, it, FALSE );
 
     wok = conf_ctx_file_writable( ctx_path );
     it = conf_mk_ctx_node( ctx_path, wok, name_path, dlg );
     conf_load_ctx( ctx_path );
-    conf_load_groups( ctx_path, wok, dlg, it );
+    conf_load_groups( ctx_path, wok, dlg, it, FALSE );
 
 
     g_free( name_dflt );

@@ -101,6 +101,7 @@ extern gboolean g_populate_default_ctx;
 extern const gchar* g_exted_default;
 extern gboolean g_warn_cfg_file_not_found;
 // #define g_exted_default "gvim"
+extern gboolean g_print_default_cfg;
 
 
 
@@ -191,13 +192,15 @@ conf_load_keys( EdaConfig*    ctx,
                 cfg_edit_dlg* dlg,
                 GtkTreeIter   itParent,
                 gboolean      wok,
-                gboolean*     inh_all );
+                gboolean*     inh_all,
+                gboolean      print );
 
 void
 conf_load_groups( EdaConfig*    ctx,
                   gboolean      wok,
                   cfg_edit_dlg* dlg,
-                  GtkTreeIter   itParent );
+                  GtkTreeIter   itParent,
+                  gboolean      print );
 
 gboolean
 conf_load_ctx( EdaConfig* ctx );
