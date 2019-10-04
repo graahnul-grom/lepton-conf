@@ -76,13 +76,13 @@ static CfgEntry g_cfg_registry[] =
     {
         "schematic.gui",
         "use-docks",
-        "true",
+        "false",
         "How to display widgets: as dialogs or inside the dock widgets."
     },
     {
         "schematic.gui",
         "use-tabs",
-        "false",
+        "true",
         "Whether to use tabbed GUI: display each schematic in its own tab within GtkNotebook widget."
     },
     {
@@ -126,19 +126,19 @@ static CfgEntry g_cfg_registry[] =
     {
         "schematic.status-bar",
         "show-mouse-buttons",
-        "true",
+        "false",
         "Whether to show mouse buttons assignment indicators."
     },
     {
         "schematic.status-bar",
         "show-rubber-band",
-        "false",
+        "true",
         "Whether to show net rubber band mode indicator."
     },
     {
         "schematic.status-bar",
         "show-magnetic-net",
-        "false",
+        "true",
         "Whether to show magnetic net mode indicator."
     },
     {
@@ -166,7 +166,7 @@ static CfgEntry g_cfg_registry[] =
     {
         "schematic.log-window",
         "font",
-        "",
+        "Monospace 11",
         "Custom font for the log window (e.g. \"Monospace 10\")."
     },
     // macro-widget: //
@@ -180,7 +180,7 @@ static CfgEntry g_cfg_registry[] =
     {
         "schematic.macro-widget",
         "font",
-        "",
+        "Monospace 11",
         "Font to be used to draw text in the macro-widget command entry.\n"
         "For example:\n"
         "font=Monospace 12"
@@ -302,7 +302,7 @@ static CfgEntry g_cfg_registry[] =
     {
         "export",
         "font",
-        "Arial",
+        "Sans",
         "Set the font to be used for drawing text."
     },
     {
