@@ -109,6 +109,18 @@ static CfgEntry g_cfg_registry[] =
         "Maximum number of recent files to show in 'File->Open Recent' menu.\n"
         "The default is 10."
     },
+    {
+        "schematic.gui",
+        "title-show-path",
+        "false",
+        "Whether to show full file path in the main window's title."
+    },
+    {
+        "schematic.gui",
+        "restore-window-geometry",
+        "true",
+        "Whether to restore main window's size and position on startup."
+    },
     // tabs: //
     {
         "schematic.tabs",
