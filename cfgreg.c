@@ -70,7 +70,10 @@ static CfgEntry g_cfg_registry[] =
         "paper",
         "",
         "Size the output for a particular paper size.\n"
-        "The default value depends on the current locale."
+        "The default value depends on the current locale.\n"
+        "Described in the PWG 5101.1 standard (Printer Working Group\n"
+        "\"Media Standardized Names\" (http://www.pwg.org/standards.html#s5101).\n"
+        "Examples: \"iso_a4\", \"iso_a5\", \"na_letter\"."
     },
     // gui: //
     {
@@ -344,8 +347,11 @@ static CfgEntry g_cfg_registry[] =
         "export",
         "paper",
         "",
-        "Size the output for a particular paper size. The default value"
-        " depends on the current locale."
+        "Size the output for a particular paper size.\n"
+        "The default value depends on the current locale.\n"
+        "Described in the PWG 5101.1 standard (Printer Working Group\n"
+        "\"Media Standardized Names\" (http://www.pwg.org/standards.html#s5101).\n"
+        "Examples: \"iso_a4\", \"iso_a5\", \"na_letter\"."
     },
     {
         "export",
