@@ -68,7 +68,7 @@ static CfgEntry g_cfg_registry[] =
     {
         "gschem.printing",
         "paper",
-        "",
+        "iso_a4",
         "Size the output for a particular paper size.\n"
         "The default value depends on the current locale.\n"
         "Described in the PWG 5101.1 standard (Printer Working Group\n"
@@ -346,7 +346,7 @@ static CfgEntry g_cfg_registry[] =
     {
         "export",
         "paper",
-        "",
+        "iso_a4",
         "Size the output for a particular paper size.\n"
         "The default value depends on the current locale.\n"
         "Described in the PWG 5101.1 standard (Printer Working Group\n"
