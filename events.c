@@ -575,6 +575,32 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 
 
 
+void
+on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
+    if (dflt != NULL)
+    {
+        printf( " >> dflt: [%s]\n", dflt );
+        a_chg_val( dlg, rdata, it, dflt );
+    }
+
+} // on_mitem_rest_dflt()
+
+
+
 
 /* ******************************************************************
 *

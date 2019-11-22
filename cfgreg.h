@@ -43,6 +43,9 @@ cfgreg_lookup( const gchar* grp, const gchar* key );
 const gchar*
 cfgreg_lookup_descr( const gchar* grp, const gchar* key );
 
+const gchar*
+cfgreg_lookup_dflt_val( const gchar* grp, const gchar* key );
+
 // public:
 //
 gboolean

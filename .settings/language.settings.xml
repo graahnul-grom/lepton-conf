@@ -5,11 +5,11 @@
 			<provider copy-of="extension" id="org.eclipse.cdt.ui.UserLanguageSettingsProvider"/>
 			<provider-reference id="org.eclipse.cdt.core.ReferencedProjectsLanguageSettingsProvider" ref="shared-provider"/>
 			<provider-reference id="org.eclipse.cdt.managedbuilder.core.MBSLanguageSettingsProvider" ref="shared-provider"/>
-			<provider class="org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector" console="true" env-hash="-1584035580955622614" id="org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector" keep-relative-paths="false" name="CDT GCC Built-in Compiler Settings" parameter="cc ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" store-entries-with-project="true">
+			<provider class="org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector" console="true" env-hash="605901088267079496" id="org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector" keep-relative-paths="false" name="CDT GCC Built-in Compiler Settings" parameter="cc ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" store-entries-with-project="true">
 				<language-scope id="org.eclipse.cdt.core.gcc"/>
 				<language-scope id="org.eclipse.cdt.core.g++"/>
 				<language id="org.eclipse.cdt.core.gcc">
-					<entry kind="includePath" name="/usr/lib/clang/6.0.1/include">
+					<entry kind="includePath" name="/usr/lib/clang/8.0.0/include">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="includePath" name="/usr/include">
@@ -231,7 +231,7 @@
 					<entry kind="macro" name="__FreeBSD__" value="11">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__FreeBSD_cc_version" value="1100509">
+					<entry kind="macro" name="__FreeBSD_cc_version" value="1100512">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__GCC_ATOMIC_BOOL_LOCK_FREE" value="2">
@@ -981,7 +981,7 @@
 					<entry kind="macro" name="__USER_LABEL_PREFIX__" value="">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__VERSION__" value="&quot;4.2.1 Compatible FreeBSD Clang 6.0.1 (tags/RELEASE_601/final 335540)&quot;">
+					<entry kind="macro" name="__VERSION__" value="&quot;4.2.1 Compatible FreeBSD Clang 8.0.0 (tags/RELEASE_800/final 356365)&quot;">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__WCHAR_MAX__" value="2147483647">
@@ -1011,16 +1011,19 @@
 					<entry kind="macro" name="__clang__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_major__" value="6">
+					<entry kind="macro" name="__clang_major__" value="8">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__clang_minor__" value="0">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_patchlevel__" value="1">
+					<entry kind="macro" name="__clang_patchlevel__" value="0">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_version__" value="&quot;6.0.1 (tags/RELEASE_601/final 335540)&quot;">
+					<entry kind="macro" name="__clang_version__" value="&quot;8.0.0 (tags/RELEASE_800/final 356365)&quot;">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__code_model_small_" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__k8" value="1">
@@ -1055,7 +1058,7 @@
 					<entry kind="includePath" name="/usr/include/c++/v1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="includePath" name="/usr/lib/clang/6.0.1/include">
+					<entry kind="includePath" name="/usr/lib/clang/8.0.0/include">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="includePath" name="/usr/include">
@@ -1283,7 +1286,7 @@
 					<entry kind="macro" name="__FreeBSD__" value="11">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__FreeBSD_cc_version" value="1100509">
+					<entry kind="macro" name="__FreeBSD_cc_version" value="1100512">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__GCC_ATOMIC_BOOL_LOCK_FREE" value="2">
@@ -2051,7 +2054,7 @@
 					<entry kind="macro" name="__USER_LABEL_PREFIX__" value="">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__VERSION__" value="&quot;4.2.1 Compatible FreeBSD Clang 6.0.1 (tags/RELEASE_601/final 335540)&quot;">
+					<entry kind="macro" name="__VERSION__" value="&quot;4.2.1 Compatible FreeBSD Clang 8.0.0 (tags/RELEASE_800/final 356365)&quot;">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__WCHAR_MAX__" value="2147483647">
@@ -2081,106 +2084,112 @@
 					<entry kind="macro" name="__clang__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_major__" value="6">
+					<entry kind="macro" name="__clang_major__" value="8">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__clang_minor__" value="0">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_patchlevel__" value="1">
+					<entry kind="macro" name="__clang_patchlevel__" value="0">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_version__" value="&quot;6.0.1 (tags/RELEASE_601/final 335540)&quot;">
+					<entry kind="macro" name="__clang_version__" value="&quot;8.0.0 (tags/RELEASE_800/final 356365)&quot;">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__code_model_small_" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__cplusplus" value="201402L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_aggregate_nsdmi" value="201304">
+					<entry kind="macro" name="__cpp_aggregate_nsdmi" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_alias_templates" value="200704">
+					<entry kind="macro" name="__cpp_alias_templates" value="200704L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_attributes" value="200809">
+					<entry kind="macro" name="__cpp_attributes" value="200809L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_binary_literals" value="201304">
+					<entry kind="macro" name="__cpp_binary_literals" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_constexpr" value="201304">
+					<entry kind="macro" name="__cpp_constexpr" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_decltype" value="200707">
+					<entry kind="macro" name="__cpp_decltype" value="200707L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_decltype_auto" value="201304">
+					<entry kind="macro" name="__cpp_decltype_auto" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_delegating_constructors" value="200604">
+					<entry kind="macro" name="__cpp_delegating_constructors" value="200604L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_digit_separators" value="201309">
+					<entry kind="macro" name="__cpp_digit_separators" value="201309L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_exceptions" value="199711">
+					<entry kind="macro" name="__cpp_exceptions" value="199711L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_generic_lambdas" value="201304">
+					<entry kind="macro" name="__cpp_generic_lambdas" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_inheriting_constructors" value="201511">
+					<entry kind="macro" name="__cpp_impl_destroying_delete" value="201806L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_init_captures" value="201304">
+					<entry kind="macro" name="__cpp_inheriting_constructors" value="201511L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_initializer_lists" value="200806">
+					<entry kind="macro" name="__cpp_init_captures" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_lambdas" value="200907">
+					<entry kind="macro" name="__cpp_initializer_lists" value="200806L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_nsdmi" value="200809">
+					<entry kind="macro" name="__cpp_lambdas" value="200907L">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__cpp_nsdmi" value="200809L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__cpp_range_based_for" value="200907">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_raw_strings" value="200710">
+					<entry kind="macro" name="__cpp_raw_strings" value="200710L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_ref_qualifiers" value="200710">
+					<entry kind="macro" name="__cpp_ref_qualifiers" value="200710L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_return_type_deduction" value="201304">
+					<entry kind="macro" name="__cpp_return_type_deduction" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_rtti" value="199711">
+					<entry kind="macro" name="__cpp_rtti" value="199711L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_rvalue_references" value="200610">
+					<entry kind="macro" name="__cpp_rvalue_references" value="200610L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__cpp_static_assert" value="200410">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_threadsafe_static_init" value="200806">
+					<entry kind="macro" name="__cpp_threadsafe_static_init" value="200806L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_unicode_characters" value="200704">
+					<entry kind="macro" name="__cpp_unicode_characters" value="200704L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_unicode_literals" value="200710">
+					<entry kind="macro" name="__cpp_unicode_literals" value="200710L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_user_defined_literals" value="200809">
+					<entry kind="macro" name="__cpp_user_defined_literals" value="200809L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_variable_templates" value="201304">
+					<entry kind="macro" name="__cpp_variable_templates" value="201304L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__cpp_variadic_templates" value="200704">
+					<entry kind="macro" name="__cpp_variadic_templates" value="200704L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__k8" value="1">

@@ -409,8 +409,21 @@ cfgreg_lookup_descr( const gchar* grp, const gchar* key )
 {
     const CfgEntry* entry = cfgreg_lookup( grp, key );
 
-    if ( entry != NULL)
+    if ( entry != NULL )
         return entry->desc_;
+
+    return NULL;
+}
+
+
+
+const gchar*
+cfgreg_lookup_dflt_val( const gchar* grp, const gchar* key )
+{
+    const CfgEntry* entry = cfgreg_lookup( grp, key );
+
+    if ( entry != NULL )
+        return entry->def_val_;
 
     return NULL;
 }

@@ -455,7 +455,7 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
     if ( rdata->rtype_ == RT_KEY )
     {
         GtkWidget* mitem_key_edit = NULL;
-        mitem_key_edit = gtk_menu_item_new_with_mnemonic( "_edit" );
+        mitem_key_edit = gtk_menu_item_new_with_mnemonic( "_edit..." );
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_key_edit);
         g_signal_connect( G_OBJECT( mitem_key_edit ),
                           "activate",
@@ -463,6 +463,16 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                           dlg );
         gtk_widget_show( mitem_key_edit );
         gtk_widget_set_sensitive( mitem_key_edit, !rdata->ro_ );
+
+        GtkWidget* mitem_rest_dflt = NULL;
+        mitem_rest_dflt = gtk_menu_item_new_with_mnemonic( "_restore default..." );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_rest_dflt);
+        g_signal_connect( G_OBJECT( mitem_rest_dflt ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_rest_dflt ),
+                          dlg );
+        gtk_widget_show( mitem_rest_dflt );
+        gtk_widget_set_sensitive( mitem_rest_dflt, !rdata->ro_ && !rdata->inh_);
     }
     else
     if ( rdata->rtype_ == RT_GRP )

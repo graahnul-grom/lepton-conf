@@ -297,6 +297,9 @@ void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
 void
+on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p );
+
+void
 on_btn_add( GtkButton* btn, gpointer* p );
 
 void
