@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -594,7 +594,34 @@ on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p )
     if (dflt != NULL)
     {
         printf( " >> dflt: [%s]\n", dflt );
-        a_chg_val( dlg, rdata, it, dflt );
+
+
+        GtkWidget* mdlg = gtk_message_dialog_new_with_markup(
+            NULL,
+            (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
+            GTK_MESSAGE_WARNING,
+            GTK_BUTTONS_YES_NO,
+            "key: <b>[%s]::%s</b>\n"
+            "default: %s"
+            , rdata->group_, rdata->key_, dflt );
+
+        gtk_window_set_title( GTK_WINDOW( mdlg ),
+                              "Restore default value?" );
+
+        gtk_dialog_set_alternative_button_order( GTK_DIALOG( mdlg ),
+                                                 GTK_RESPONSE_YES,
+                                                 GTK_RESPONSE_NO,
+                                                 -1 );
+
+        gtk_dialog_set_default_response( GTK_DIALOG( mdlg ),
+                                         GTK_RESPONSE_NO );
+
+        if ( gtk_dialog_run( GTK_DIALOG( mdlg ) ) == GTK_RESPONSE_YES )
+        {
+            a_chg_val( dlg, rdata, it, dflt );
+        }
+
+        gtk_widget_destroy( mdlg );
     }
 
 } // on_mitem_rest_dflt()
