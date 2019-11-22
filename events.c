@@ -238,8 +238,10 @@ on_lab_fname( GtkLabel* lab, gpointer* p )
 
     // external editor [read config]:
     //
+    EdaConfig* ctx = eda_config_get_context_for_path( "." );
+
     GError* err = NULL;
-    gchar* exted = eda_config_get_string( eda_config_get_user_context(),
+    gchar* exted = eda_config_get_string( ctx,
                                           "lepton-conf",
                                           "editor",
                                           &err );

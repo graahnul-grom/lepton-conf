@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -99,11 +99,19 @@ int main( int argc, char* argv[] )
             out_help( 1 );
     }
 
+#ifdef DEBUG
+    printf( " >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
+#endif
+
     const gchar* dir = argv[ optind ];
     if ( dir != NULL )
     {
         chdir( dir );
     }
+
+#ifdef DEBUG
+    printf( " >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
+#endif
 
 
     GtkWidget* wnd = cfg_edit_dlg_new();
