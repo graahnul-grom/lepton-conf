@@ -1,15 +1,13 @@
-lepton-conf - configuration utility for [Lepton EDA](https://github.com/lepton-eda/lepton-eda)
-====================================================
+Lepton EDA configuration utility
+================================
 
-lepton-conf is designed to ease the process of editing Lepton EDA configuration that
-is stored in ini-like files (`geda.conf`) - that is, new-style configuration, as opposed
+lepton-conf is designed to ease the process of editing [Lepton EDA](https://github.com/lepton-eda/lepton-eda)
+(Lepton Electronic Design Automation)
+configuration that is stored in ini-like files (`*.conf`) - that is, new-style configuration, as opposed
 to settings stored in `guile` source code files. It is a graphical user interface application
 (using GTK 2.x, see [screenshots](https://graahnul-grom.github.io/lepton-conf)) that does
-essentially the same as `lepton-cli` (formerly named "[`gaf`](http://wiki.geda-project.org/geda:gaf_utility)")
-command-line utility invoked with `config` command.
-<br />
-The project is a work in progress, so please report any spotted bugs and provide
-your suggestions on the [issues](https://github.com/graahnul-grom/lepton-conf/issues) page.
+essentially the same as [`lepton-cli(1)`](https://graahnul-grom.github.io/ref-man/lepton-cli.html)
+command-line utility invoked with the `config` command.
 <br />
 
 Documentation
@@ -19,53 +17,57 @@ Information about the configuration system can be found on this [wiki page](http
 Dependencies
 ------------
 
-- [Lepton Electronic Design Automation](https://github.com/lepton-eda/lepton-eda) suite,
+- The [Lepton EDA](https://github.com/lepton-eda/lepton-eda) suite,
 at least [a2d49a8](https://github.com/lepton-eda/lepton-eda/commit/a2d49a816ca527839f0cd312d38ce16b1e15da9b) (Jun 8, 2018).
 
 Installation from source
 ------------------------
 
-* Checkout lepton-conf:
+* Checkout:
 
-  `git clone https://github.com/graahnul-grom/lepton-conf.git`
-
-* Change to source folder:
-
-  `cd lepton-conf`
-
-* Edit `Makefile`:
-
-  - Set `LEPTON_INST_ROOT` variable to point to Lepton EDA installation path, e.g.:
-
-    `LEPTON_INST_ROOT=/usr/local`
-
-  - Set `PK_GTK` variable to match GTK 2.0 `pkg-config` package name on your system, e.g.:
-
-    `PK_GTK=gtk+-2.0`
-
-  - (Optionally) comment out line that starts with `DBG=` to disable debugging.
+```sh
+  $ git clone https://github.com/graahnul-grom/lepton-conf.git
+  $ cd lepton-conf
+```
 
 * Build:
 
-  `make`
+```sh
+  $ make
+```
+
+  If Lepton EDA is installed in non-standard location, adjust the `$PKG_CONFIG_PATH`
+  environment variable when running `make`, e.g.:
+
+```sh
+  $ PKG_CONFIG_PATH=/path/to/lepton-eda/lib/pkgconfig make
+```
+
+  If GTK `pkgconfig` package (`gtk+-2.0`) has different name on your system, edit it
+  at the top of the `Makefile`.
 
 * Install:
 
-  Place `lepton-conf` executable file anywhere in your `$PATH`
+  Copy `lepton-conf` executable file anywhere in your `$PATH`
 
 * Run:
 
-  `> lepton-conf`
+```sh
+  $ lepton-conf
+```
 
-  If Lepton EDA is installed in non-standard location, you may have to adjust
-  `$LD_LIBRARY_PATH` environment variable, so that `liblepton` can be found, e.g.:
+  If Lepton EDA is installed in non-standard location, you may have to set the
+  `$LD_LIBRARY_PATH` environment variable, so that `liblepton.so` can be found, e.g.:
 
-  `> LD_LIBRARY_PATH=/path/to/lepton-eda/lib lepton-conf`
+```sh
+  $ LD_LIBRARY_PATH=/path/to/lepton-eda/lib lepton-conf
+```
 
   Command line arguments:
 
-  `> lepton-conf -h`
-  ```
+```sh
+  $ lepton-conf -h
+
   Usage: lepton-conf [-h] [-v] [-e] [-d] [-p] [dirname]
   Options:
     -h    Help (this message).
@@ -74,8 +76,7 @@ Installation from source
     -m    Do not warn about missing config files.
     -d    Do not populate DEFAULT config context on startup.
     -p    Print DEFAULT cfg ctx (in the form of *.conf file) and exit.
-  ```
-
+```
 
 Limitations
 -----------
@@ -87,10 +88,9 @@ configuration files in text editor.
 **Note**: when you modify configuration files in external editor,
 do not forget to press the `Reload` button!
 
-
 License
 -------
 The same as Lepton EDA: GNU Public License (GPL) version 2.0 or (at your option) any later version.
 <br />
-Copyright (C) 2017-2019 dmn.
+Copyright (C) 2017-2019 [dmn](https://github.com/graahnul-grom)
 
