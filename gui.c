@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -58,6 +58,9 @@ gui_update( cfg_edit_dlg* dlg )
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), rdata->key_ );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  rdata->val_ );
 
+        const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_dflt_ ), dflt ? dflt : "" );
+
         const gchar* desc = cfgreg_lookup_descr( rdata->group_, rdata->key_ );
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, desc ? desc : "", -1 );
     }
@@ -65,6 +68,7 @@ gui_update( cfg_edit_dlg* dlg )
     {
         gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), NULL );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_dflt_ ), NULL );
 
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
     }
@@ -279,6 +283,9 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
 
     dlg->lab_val_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
+
+    dlg->lab_dflt_ = gtk_label_new( NULL );
+    gui_mk_labels_line( "<b>default: </b>", dlg->lab_dflt_, box_bot );
 
     gui_mk_labels_line_separ( box_bot );
 
