@@ -8,3 +8,4 @@ geda.conf
 *.diff
 t0_*
 wip
+*.o
