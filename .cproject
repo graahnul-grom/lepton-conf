@@ -29,7 +29,6 @@
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.1328555559" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.833856288" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/include/guile/2.0"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/glib-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/cairo"/>
@@ -41,12 +40,12 @@
 									<listOptionValue builtIn="false" value="/usr/local/include/gdk-pixbuf-2.0"/>
 									<listOptionValue builtIn="false" value="/home/dmn/lepton/bin.master/include/liblepton"/>
 									<listOptionValue builtIn="false" value="/home/dmn/lepton/bin.master/include"/>
+									<listOptionValue builtIn="false" value="/usr/local/include/guile/2.2"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1077100724" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.657834348" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1940571723" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/include/guile/2.0"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/glib-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/gtk-2.0"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/cairo"/>
@@ -57,6 +56,7 @@
 									<listOptionValue builtIn="false" value="/usr/local/include/gdk-pixbuf-2.0"/>
 									<listOptionValue builtIn="false" value="/home/dmn/lepton/bin.master/include/liblepton"/>
 									<listOptionValue builtIn="false" value="/home/dmn/lepton/bin.master/include"/>
+									<listOptionValue builtIn="false" value="/usr/local/include/guile/2.2"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.180307550" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
