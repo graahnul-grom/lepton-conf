@@ -322,6 +322,16 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
     if ( !dlg )
         return FALSE;
 
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return FALSE;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return FALSE;
+
+
     GdkEventButton* ebtn = ( GdkEventButton* ) e;
 
 
@@ -329,8 +339,19 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
     //
     if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
     {
-        a_toggle( dlg );
-        return FALSE;
+        if ( cfgreg_can_toggle( rdata->val_ ) )
+        {
+            a_toggle( dlg );
+        }
+        else
+        if ( rdata->rtype_ == RT_KEY )
+        {
+            gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+            a_chg_val( dlg, rdata, it, txt );
+            g_free( txt );
+        }
+
+        return TRUE;
     }
 
 
@@ -346,10 +367,6 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
 
 
     if ( ebtn->window != gtk_tree_view_get_bin_window( dlg->tree_v_ ) )
-        return TRUE;
-
-    GtkTreeIter it;
-    if ( !row_cur_get_iter( dlg, &it ) )
         return TRUE;
 
 
@@ -373,13 +390,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
     if ( !onrow )
         return TRUE;
 
-
-    row_data* rdata = row_field_get_data( dlg, &it );
-    if ( !rdata )
-        return TRUE;
-
     GtkMenu* menu = gui_mk_popup_menu( dlg, rdata );
-
     if ( menu )
     {
         gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
