@@ -55,7 +55,7 @@ gui_update( cfg_edit_dlg* dlg )
 
     if ( rdata->rtype_ == RT_KEY )
     {
-        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), rdata->key_ );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_key_ ), rdata->key_ );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  rdata->val_ );
 
         const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
@@ -66,7 +66,7 @@ gui_update( cfg_edit_dlg* dlg )
     }
     else
     {
-        gtk_label_set_text( GTK_LABEL( dlg->lab_name_ ), NULL );
+        gtk_label_set_text( GTK_LABEL( dlg->lab_key_ ), NULL );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
         gtk_label_set_text( GTK_LABEL( dlg->lab_dflt_ ), NULL );
 
@@ -278,8 +278,8 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
     dlg->lab_grp_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
 
-    dlg->lab_name_ = gtk_label_new( NULL );
-    gui_mk_labels_line( "<b>key: </b>", dlg->lab_name_, box_bot );
+    dlg->lab_key_ = gtk_label_new( NULL );
+    gui_mk_labels_line( "<b>key: </b>", dlg->lab_key_, box_bot );
 
     dlg->lab_val_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>value: </b>", dlg->lab_val_, box_bot );
