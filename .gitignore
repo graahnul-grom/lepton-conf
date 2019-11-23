@@ -9,3 +9,4 @@ geda.conf
 t0_*
 wip
 *.o
+build
