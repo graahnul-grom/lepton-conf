@@ -482,6 +482,23 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                           dlg );
         gtk_widget_show( mitem_rest_dflt );
         gtk_widget_set_sensitive( mitem_rest_dflt, !rdata->ro_ && !rdata->inh_);
+
+        if ( strcmp( rdata->key_, "font" ) == 0 )
+        {
+            GtkWidget* mitem_separ = gtk_separator_menu_item_new();
+            gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem_separ );
+            gtk_widget_show( mitem_separ );
+
+            GtkWidget* mitem_font_edit = NULL;
+            mitem_font_edit = gtk_menu_item_new_with_mnemonic( "_select font..." );
+            gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_font_edit);
+            g_signal_connect( G_OBJECT( mitem_font_edit ),
+                              "activate",
+                              G_CALLBACK( &on_mitem_font_edit ),
+                              dlg );
+            gtk_widget_show( mitem_font_edit );
+            gtk_widget_set_sensitive( mitem_font_edit, !rdata->ro_ );
+        }
     }
     else
     if ( rdata->rtype_ == RT_GRP )

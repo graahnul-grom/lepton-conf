@@ -643,6 +643,48 @@ on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p )
 
 
 
+void
+on_mitem_font_edit( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    GtkWidget* fdlg = gtk_font_selection_dialog_new( "Select Font" );
+    GtkWidget* fsdfs = gtk_font_selection_dialog_get_font_selection(
+        GTK_FONT_SELECTION_DIALOG( fdlg ) );
+    GtkFontSelection* sel =
+        GTK_FONT_SELECTION( fsdfs );
+
+    gtk_font_selection_set_font_name( sel, rdata->val_ );
+
+    if ( gtk_dialog_run( GTK_DIALOG( fdlg ) ) == GTK_RESPONSE_OK )
+    {
+        PangoFontFamily* family = gtk_font_selection_get_family (sel);
+        const char* family_name = pango_font_family_get_name (family);
+
+        PangoFontFace* face = gtk_font_selection_get_face (sel);
+        const char* face_name = pango_font_face_get_face_name (face);
+
+        gchar* txt = g_strdup_printf ("%s %s", family_name, face_name);
+        a_chg_val( dlg, rdata, it, txt );
+        g_free( txt );
+    }
+
+    gtk_widget_destroy( fdlg );
+
+} // on_mitem_font_edit()
+
+
+
 
 /* ******************************************************************
 *

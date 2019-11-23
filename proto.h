@@ -301,6 +301,9 @@ void
 on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p );
 
 void
+on_mitem_font_edit( GtkMenuItem* mitem, gpointer p );
+
+void
 on_btn_add( GtkButton* btn, gpointer* p );
 
 void
