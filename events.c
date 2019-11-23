@@ -664,7 +664,13 @@ on_mitem_font_edit( GtkMenuItem* mitem, gpointer p )
     GtkFontSelection* sel =
         GTK_FONT_SELECTION( fsdfs );
 
-    gtk_font_selection_set_font_name( sel, rdata->val_ );
+    const int preview_size = 18;
+    gchar* fname = g_strdup_printf ("%s %d", rdata->val_, preview_size);
+    gtk_font_selection_set_font_name( sel, fname );
+    g_free (fname);
+
+    const char preview[] = "refdes=R1 Q23 U45 footprint=TQFN20_4_EP.fp";
+    gtk_font_selection_set_preview_text( sel, preview );
 
     if ( gtk_dialog_run( GTK_DIALOG( fdlg ) ) == GTK_RESPONSE_OK )
     {
