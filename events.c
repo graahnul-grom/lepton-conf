@@ -606,7 +606,9 @@ on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p )
     const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
     if (dflt != NULL)
     {
+#ifdef DEBUG
         printf( " >> dflt: [%s]\n", dflt );
+#endif
 
 
         GtkWidget* mdlg = gtk_message_dialog_new_with_markup(

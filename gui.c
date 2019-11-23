@@ -393,6 +393,8 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
     gtk_window_set_title( GTK_WINDOW( dlg ),
                           g_strdup_printf( "%s - lepton-conf", cwd ) );
 
+    gtk_window_set_default_icon_name( GTK_STOCK_PREFERENCES );
+
 
     // tree store:
     //
