@@ -176,6 +176,12 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
                  gchar** key,
                  gchar** val );
 
+gchar*
+run_dlg_list_sel( cfg_edit_dlg* dlg,
+                  GList* names,
+                  const gchar* txt,
+                  const gchar* title );
+
 
 
 
@@ -302,6 +308,9 @@ on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p );
 
 void
 on_mitem_font_edit( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_sel_paper_size( GtkMenuItem* mitem, gpointer p );
 
 void
 on_btn_add( GtkButton* btn, gpointer* p );

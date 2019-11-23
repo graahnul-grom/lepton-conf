@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -244,4 +244,112 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
 
 } // run_dlg_add_val_2()
 
+
+
+// {post}: caller must g_free() {ret}
+//
+gchar*
+run_dlg_list_sel( cfg_edit_dlg* dlg,
+                  GList* items,
+                  const gchar* current_item,
+                  const gchar* title )
+{
+    GtkWidget* sdlg = gtk_dialog_new_with_buttons(
+        title ? title : "Select:",
+        GTK_WINDOW( dlg ),
+        GTK_DIALOG_MODAL,
+        GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+        NULL );
+
+    GtkListStore* store = gtk_list_store_new( 1, G_TYPE_STRING );
+    GtkTreeModel* model = GTK_TREE_MODEL( store );
+    GtkWidget*    tree_w = gtk_tree_view_new_with_model( model );
+    GtkTreeView*  tree_v = GTK_TREE_VIEW( tree_w );
+
+    // column:
+    //
+    GtkCellRenderer* ren = gtk_cell_renderer_text_new();
+    GtkTreeViewColumn* col = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title( col, "title" );
+    gtk_tree_view_column_pack_start( col, ren, TRUE );
+
+    gtk_tree_view_column_add_attribute( col, ren, "text", 0 );
+
+    gtk_tree_view_append_column( tree_v, col );
+    //
+    //
+
+
+    // fill list:
+    //
+    GtkTreeIter it_current;
+    for (GList* p = items; p != NULL; p = p->next)
+    {
+        const gchar* item = (const gchar*) p->data;
+
+        GtkTreeIter it;
+        gtk_list_store_append( store, &it );
+        gtk_list_store_set( store, &it, 0, item, -1 );
+
+        if ( strcmp( item, current_item ) == 0 )
+        {
+            it_current = it;
+            GtkTreeSelection* sel = gtk_tree_view_get_selection( tree_v );
+            gtk_tree_selection_select_iter( sel, &it );
+        }
+    }
+    //
+    //
+
+
+    GtkWidget* wscroll = gtk_scrolled_window_new( NULL, NULL );
+    gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( wscroll ),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    gtk_container_add( GTK_CONTAINER( wscroll ), tree_w );
+
+    GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( sdlg ) );
+    gtk_box_pack_start( GTK_BOX( ca ), wscroll, TRUE, TRUE, 10 );
+
+
+    gtk_dialog_set_alternative_button_order(GTK_DIALOG(sdlg),
+                                            GTK_RESPONSE_ACCEPT,
+                                            GTK_RESPONSE_REJECT,
+                                            -1);
+    gtk_dialog_set_default_response (GTK_DIALOG (sdlg),
+                                     GTK_RESPONSE_ACCEPT);
+    gtk_widget_show_all( sdlg );
+//    gtk_widget_set_size_request( sdlg, 300, -1 );
+
+
+    // select current value in the list:
+    //
+    gchar* str = gtk_tree_model_get_string_from_iter( model, &it_current );
+    GtkTreePath* path = gtk_tree_path_new_from_string( str );
+
+    gtk_tree_view_scroll_to_cell( tree_v, path, NULL, FALSE, 0, 0 );
+
+    gtk_tree_path_free( path );
+    g_free( str );
+    //
+    //
+
+
+    gint res = gtk_dialog_run( GTK_DIALOG( sdlg ) );
+    gchar* ret = NULL;
+
+    if ( res == GTK_RESPONSE_ACCEPT )
+    {
+        GtkTreeSelection* sel = gtk_tree_view_get_selection( tree_v );
+        GtkTreeIter it_new;
+        gtk_tree_selection_get_selected( sel, NULL, &it_new );
+
+        gtk_tree_model_get( model, &it_new, 0, &ret, -1 );
+    }
+
+    gtk_widget_destroy( sdlg );
+
+    return ret;
+
+} // run_dlg_list_sel()
 

@@ -691,6 +691,51 @@ on_mitem_font_edit( GtkMenuItem* mitem, gpointer p )
 
 
 
+void
+on_mitem_sel_paper_size( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+
+    GList* lst = gtk_paper_size_get_paper_sizes (TRUE); // TRUE: include custom
+    GList* names = NULL;
+
+    for (GList* p = lst; p != NULL; p = p->next)
+    {
+        const gchar* name = gtk_paper_size_get_name ((GtkPaperSize*) p->data);
+        names = g_list_append( names, (gpointer) name );
+    }
+
+
+    gchar* txt = run_dlg_list_sel( dlg, names, rdata->val_, "Select Paper Size:" );
+
+    if ( txt && strcmp( txt, rdata->val_ ) != 0 )
+    {
+        a_chg_val( dlg, rdata, it, txt );
+        g_free( txt );
+    }
+
+    g_list_free (names);
+
+    for (GList* p = lst; p != NULL; p = p->next)
+      gtk_paper_size_free ((GtkPaperSize*) p->data);
+
+    g_list_free (lst);
+
+} // on_mitem_sel_paper_size()
+
+
+
 
 /* ******************************************************************
 *
