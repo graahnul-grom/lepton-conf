@@ -717,7 +717,7 @@ on_mitem_sel_paper_size( GtkMenuItem* mitem, gpointer p )
     }
 
 
-    gchar* txt = run_dlg_list_sel( dlg, names, rdata->val_, "Select Paper Size:" );
+    gchar* txt = run_dlg_list_sel( dlg, names, rdata->val_, "Select Paper Size" );
 
     if ( txt && strcmp( txt, rdata->val_ ) != 0 )
     {
@@ -733,6 +733,61 @@ on_mitem_sel_paper_size( GtkMenuItem* mitem, gpointer p )
     g_list_free (lst);
 
 } // on_mitem_sel_paper_size()
+
+
+
+void
+on_mitem_sel_color( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+
+    GtkWidget* cdlg = gtk_color_selection_dialog_new( "Select Color" );
+    GtkColorSelectionDialog* csd = GTK_COLOR_SELECTION_DIALOG( cdlg );
+    GtkWidget* wsel =
+            gtk_color_selection_dialog_get_color_selection( csd );
+    GtkColorSelection* sel = GTK_COLOR_SELECTION( wsel );
+
+
+    GdkColormap* cmap = gdk_colormap_get_system();
+    GdkColor color;
+    gdk_colormap_alloc_color( cmap, &color,
+                              TRUE, TRUE );  // writeable, best_match
+
+    if ( gdk_color_parse( rdata->val_, &color ) )
+    {
+        gtk_color_selection_set_current_color( sel, &color );
+    }
+
+
+    if ( gtk_dialog_run( GTK_DIALOG( cdlg ) ) == GTK_RESPONSE_OK )
+    {
+        GdkColor c;
+        gtk_color_selection_get_current_color( sel, &c );
+        char txt[ 64 ] = "";
+        sprintf( txt, "#%.2X%.2X%.2X", c.red >> 8, c.green >> 8, c.blue >> 8 );
+#ifdef DEBUG
+        printf( " >> c: [%s]\n", txt );
+#endif
+
+        a_chg_val( dlg, rdata, it, txt );
+    }
+
+    gtk_widget_destroy( cdlg );
+
+    gdk_colormap_free_colors( cmap, &color, 1 );
+
+} // on_mitem_sel_color()
 
 
 

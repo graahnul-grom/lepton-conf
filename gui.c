@@ -516,6 +516,23 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
             gtk_widget_show( mitem_sel_paper_size );
             gtk_widget_set_sensitive( mitem_sel_paper_size, !rdata->ro_ );
         }
+        else
+        if ( strcmp( rdata->key_, "status-active-color" ) == 0 )
+        {
+            GtkWidget* mitem_separ = gtk_separator_menu_item_new();
+            gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem_separ );
+            gtk_widget_show( mitem_separ );
+
+            GtkWidget* mitem_sel_color = NULL;
+            mitem_sel_color = gtk_menu_item_new_with_mnemonic( "_select color..." );
+            gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_sel_color);
+            g_signal_connect( G_OBJECT( mitem_sel_color ),
+                              "activate",
+                              G_CALLBACK( &on_mitem_sel_color ),
+                              dlg );
+            gtk_widget_show( mitem_sel_color );
+            gtk_widget_set_sensitive( mitem_sel_color, !rdata->ro_ );
+        }
     }
     else
     if ( rdata->rtype_ == RT_GRP )
