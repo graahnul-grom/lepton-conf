@@ -284,6 +284,8 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
     // fill list:
     //
     GtkTreeIter it_current;
+    gboolean found = FALSE;
+
     for (GList* p = items; p != NULL; p = p->next)
     {
         const gchar* item = (const gchar*) p->data;
@@ -294,6 +296,7 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
 
         if ( strcmp( item, current_item ) == 0 )
         {
+            found = TRUE;
             it_current = it;
             GtkTreeSelection* sel = gtk_tree_view_get_selection( tree_v );
             gtk_tree_selection_select_iter( sel, &it );
@@ -322,15 +325,16 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
 //    gtk_widget_set_size_request( sdlg, 300, -1 );
 
 
-    // select current value in the list:
+    // select current value in the list, scroll to selection:
     //
-    gchar* str = gtk_tree_model_get_string_from_iter( model, &it_current );
-    GtkTreePath* path = gtk_tree_path_new_from_string( str );
-
-    gtk_tree_view_scroll_to_cell( tree_v, path, NULL, FALSE, 0, 0 );
-
-    gtk_tree_path_free( path );
-    g_free( str );
+    if ( found )
+    {
+        gchar* str = gtk_tree_model_get_string_from_iter( model, &it_current );
+        GtkTreePath* path = gtk_tree_path_new_from_string( str );
+        gtk_tree_view_scroll_to_cell( tree_v, path, NULL, FALSE, 0, 0 );
+        gtk_tree_path_free( path );
+        g_free( str );
+    }
     //
     //
 
