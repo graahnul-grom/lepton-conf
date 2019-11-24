@@ -139,3 +139,60 @@ settings_save( cfg_edit_dlg* dlg )
 
 } // settings_save()
 
+
+
+void
+settings_wnd_geom_save( GtkWindow* wnd, const gchar* name )
+{
+    gint x = 0;
+    gint y = 0;
+    gtk_window_get_position( wnd, &x, &y );
+
+    gint width  = 0;
+    gint height = 0;
+    gtk_window_get_size( wnd, &width, &height );
+
+    EdaConfig* ctx = eda_config_get_cache_context();
+
+    gchar grp[ 64 ] = "";
+    if ( name != NULL )
+        sprintf( grp, "lepton-conf.%s", name );
+    else
+        sprintf( grp, "lepton-conf" );
+
+    eda_config_set_int( ctx, grp, "x", x );
+    eda_config_set_int( ctx, grp, "y", y );
+    eda_config_set_int( ctx, grp, "width",  width );
+    eda_config_set_int( ctx, grp, "height", height );
+
+    eda_config_save( ctx, NULL );
+
+} // settings_wnd_geom_save()
+
+
+
+void
+settings_wnd_geom_restore( GtkWindow* wnd, const gchar* name )
+{
+    EdaConfig* ctx = eda_config_get_cache_context();
+    eda_config_load( ctx, NULL );
+
+    gchar grp[ 64 ] = "";
+    if ( name != NULL )
+        sprintf( grp, "lepton-conf.%s", name );
+    else
+        sprintf( grp, "lepton-conf" );
+
+    gint x = eda_config_get_int( ctx, grp, "x", NULL );
+    gint y = eda_config_get_int( ctx, grp, "y", NULL );
+    gtk_window_move( wnd, x, y );
+
+    gint width  = eda_config_get_int( ctx, grp, "width",  NULL );
+    gint height = eda_config_get_int( ctx, grp, "height", NULL );
+    if ( width != 0 && height != 0 )
+    {
+        gtk_window_resize( wnd, width, height );
+    }
+
+} // settings_wnd_geom_restore()
+

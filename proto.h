@@ -259,6 +259,12 @@ settings_restore_geom( cfg_edit_dlg* dlg );
 void
 settings_save( cfg_edit_dlg* dlg );
 
+void
+settings_wnd_geom_save( GtkWindow* wnd, const gchar* name );
+
+void
+settings_wnd_geom_restore( GtkWindow* wnd, const gchar* name );
+
 
 
 
