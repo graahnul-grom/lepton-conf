@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -72,7 +72,7 @@ cfg_edit_dlg_on_show( GtkWidget* widget )
 
 //    settings_restore_showinh( dlg );
 //    settings_restore_path( dlg );
-    settings_restore_geom( dlg );
+    settings_wnd_geom_restore( GTK_WINDOW( dlg ), NULL );
 
     GTK_WIDGET_CLASS(cfg_edit_dlg_parent_class)->show(widget);
 }

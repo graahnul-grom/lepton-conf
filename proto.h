@@ -254,9 +254,6 @@ void
 settings_restore_path( cfg_edit_dlg* dlg );
 
 void
-settings_restore_geom( cfg_edit_dlg* dlg );
-
-void
 settings_save( cfg_edit_dlg* dlg );
 
 void
