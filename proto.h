@@ -310,7 +310,7 @@ void
 on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p );
 
 void
-on_mitem_font_edit( GtkMenuItem* mitem, gpointer p );
+on_mitem_sel_font( GtkMenuItem* mitem, gpointer p );
 
 void
 on_mitem_sel_paper_size( GtkMenuItem* mitem, gpointer p );

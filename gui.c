@@ -494,7 +494,7 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
             gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_font_edit);
             g_signal_connect( G_OBJECT( mitem_font_edit ),
                               "activate",
-                              G_CALLBACK( &on_mitem_font_edit ),
+                              G_CALLBACK( &on_mitem_sel_font ),
                               dlg );
             gtk_widget_show( mitem_font_edit );
             gtk_widget_set_sensitive( mitem_font_edit, !rdata->ro_ );

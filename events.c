@@ -644,7 +644,7 @@ on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p )
 
 
 void
-on_mitem_font_edit( GtkMenuItem* mitem, gpointer p )
+on_mitem_sel_font( GtkMenuItem* mitem, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -672,6 +672,8 @@ on_mitem_font_edit( GtkMenuItem* mitem, gpointer p )
     const char preview[] = "refdes=R1 Q23 U45 footprint=TQFN20_4_EP.fp";
     gtk_font_selection_set_preview_text( sel, preview );
 
+    settings_wnd_geom_restore( GTK_WINDOW( fdlg ), "selfont" );
+
     if ( gtk_dialog_run( GTK_DIALOG( fdlg ) ) == GTK_RESPONSE_OK )
     {
         PangoFontFamily* family = gtk_font_selection_get_family (sel);
@@ -685,6 +687,7 @@ on_mitem_font_edit( GtkMenuItem* mitem, gpointer p )
         g_free( txt );
     }
 
+    settings_wnd_geom_save( GTK_WINDOW( fdlg ), "selfont" );
     gtk_widget_destroy( fdlg );
 
 } // on_mitem_font_edit()
