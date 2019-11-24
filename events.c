@@ -773,6 +773,8 @@ on_mitem_sel_color( GtkMenuItem* mitem, gpointer p )
     }
 
 
+    settings_wnd_geom_restore( GTK_WINDOW( cdlg ), "selcolor" );
+
     if ( gtk_dialog_run( GTK_DIALOG( cdlg ) ) == GTK_RESPONSE_OK )
     {
         GdkColor c;
@@ -786,6 +788,7 @@ on_mitem_sel_color( GtkMenuItem* mitem, gpointer p )
         a_chg_val( dlg, rdata, it, txt );
     }
 
+    settings_wnd_geom_save( GTK_WINDOW( cdlg ), "selcolor" );
     gtk_widget_destroy( cdlg );
 
     gdk_colormap_free_colors( cmap, &color, 1 );
