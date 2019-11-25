@@ -616,9 +616,10 @@ on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p )
             (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
             GTK_MESSAGE_WARNING,
             GTK_BUTTONS_YES_NO,
-            "key: <b>[%s]::%s</b>\n"
-            "default: %s"
-            , rdata->group_, rdata->key_, dflt );
+            "<b>key</b>: [%s]::%s\n"
+            "<b>current value</b>: %s\n"
+            "<b>default value</b>: %s"
+            , rdata->group_, rdata->key_, rdata->val_, dflt );
 
         gtk_window_set_title( GTK_WINDOW( mdlg ),
                               "Restore default value?" );
