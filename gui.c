@@ -473,6 +473,7 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
         gtk_widget_show( mitem_key_edit );
         gtk_widget_set_sensitive( mitem_key_edit, !rdata->ro_ );
 
+
         GtkWidget* mitem_rest_dflt = NULL;
         mitem_rest_dflt = gtk_menu_item_new_with_mnemonic( "_restore default..." );
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_rest_dflt);
@@ -481,7 +482,11 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                           G_CALLBACK( &on_mitem_rest_dflt ),
                           dlg );
         gtk_widget_show( mitem_rest_dflt );
-        gtk_widget_set_sensitive( mitem_rest_dflt, !rdata->ro_ && !rdata->inh_);
+
+        const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
+        gboolean en = dflt != NULL && strcmp( dflt, rdata->val_) != 0;
+        gtk_widget_set_sensitive( mitem_rest_dflt, en && !rdata->ro_ && !rdata->inh_ );
+
 
         if ( strcmp( rdata->key_, "font" ) == 0 )
         {
