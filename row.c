@@ -335,3 +335,33 @@ row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
 
 } // row_unset_inh()
 
+
+
+void
+row_select_parent( cfg_edit_dlg* dlg, GtkTreeIter it )
+{
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+
+    if ( !gtk_tree_path_up( path ) )
+    {
+        printf( " >> row_select_parent(): !gtk_tree_path_up()\n" );
+        return;
+    }
+
+    GtkTreeIter parent_it;
+    if ( gtk_tree_model_get_iter( mod, &parent_it, path ) )
+    {
+        row_select_by_path_mod( dlg, path );
+    }
+    else
+    {
+        printf( " >> row_select_parent(): !parent_it\n" );
+    }
+
+} // row_select_parent()
+
