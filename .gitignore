@@ -10,3 +10,4 @@ t0_*
 wip
 *.o
 build
+builddir

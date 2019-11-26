@@ -2,6 +2,8 @@
 
 LIB="${lepton}/bin.master/lib"
 EXE="./lepton-conf"
+# EXE="./builddir/lepton-conf"
+# EXE="./build/lepton-conf"
 # EXE="${lepton}/lepton-conf.git/lepton-conf"
 
 export G_MESSAGES_DEBUG="lepton-conf"
