@@ -444,9 +444,17 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
     if ( e->key.keyval == GDK_KEY_Delete )
     {
         on_mitem_del( NULL, (gpointer) dlg );
-//        a_delete( dlg );
         return TRUE;
     }
+
+    // F5:
+    //
+    if ( e->key.keyval == GDK_KEY_F5 )
+    {
+        on_btn_reload( NULL, (gpointer) dlg );
+        return TRUE;
+    }
+
 
     return FALSE; // propagate event
 
@@ -479,6 +487,10 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
 void
 on_btn_reload( GtkButton* btn, gpointer* p )
 {
+    // NOTE: do not use [btn], since this function is called
+    //       not only from the button event handler
+    //
+
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
