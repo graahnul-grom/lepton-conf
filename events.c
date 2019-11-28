@@ -344,7 +344,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
 
     // LMB double click:
     //
-    if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
+    if ( !rdata->ro_ && ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
     {
         if ( cfgreg_can_toggle( rdata->val_ ) )
         {
