@@ -452,6 +452,36 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 *
 */
 
+static void
+mk_mitem_separ( GtkWidget* menu )
+{
+    GtkWidget* mitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem );
+    gtk_widget_show( mitem );
+}
+
+
+
+static void
+mk_mitem( GtkWidget* menu,
+          const gchar* text,
+          void (*callback) (GtkMenuItem*, gpointer),
+          gpointer data,
+          gboolean enabled )
+{
+    GtkWidget* mitem = gtk_menu_item_new_with_mnemonic( text );
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem);
+    g_signal_connect( G_OBJECT( mitem ),
+                      "activate",
+                      G_CALLBACK( callback ),
+                      data );
+    gtk_widget_show( mitem );
+    gtk_widget_set_sensitive( mitem, enabled );
+
+} // mk_mitem()
+
+
+
 GtkMenu*
 gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 {
@@ -463,125 +493,49 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 
     if ( rdata->rtype_ == RT_CTX )
     {
-        GtkWidget* mitem_ctx_add = NULL;
-        mitem_ctx_add = gtk_menu_item_new_with_mnemonic( "_add" );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_ctx_add);
-        g_signal_connect( G_OBJECT( mitem_ctx_add ),
-                          "activate",
-                          G_CALLBACK( &on_mitem_ctx_add ),
-                          dlg );
-        gtk_widget_show( mitem_ctx_add );
-        gtk_widget_set_sensitive( mitem_ctx_add, !rdata->ro_ );
+        mk_mitem( menu, "_add", &on_mitem_ctx_add, dlg, !rdata->ro_ );
     }
     else
     if ( rdata->rtype_ == RT_KEY )
     {
-        GtkWidget* mitem_key_edit = NULL;
-        mitem_key_edit = gtk_menu_item_new_with_mnemonic( "_edit..." );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_key_edit);
-        g_signal_connect( G_OBJECT( mitem_key_edit ),
-                          "activate",
-                          G_CALLBACK( &on_mitem_key_edit ),
-                          dlg );
-        gtk_widget_show( mitem_key_edit );
-        gtk_widget_set_sensitive( mitem_key_edit, !rdata->ro_ );
-
-
-        GtkWidget* mitem_rest_dflt = NULL;
-        mitem_rest_dflt = gtk_menu_item_new_with_mnemonic( "_restore default..." );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_rest_dflt);
-        g_signal_connect( G_OBJECT( mitem_rest_dflt ),
-                          "activate",
-                          G_CALLBACK( &on_mitem_rest_dflt ),
-                          dlg );
-        gtk_widget_show( mitem_rest_dflt );
+        mk_mitem( menu, "_edit...", &on_mitem_key_edit, dlg, !rdata->ro_ );
 
         const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
         gboolean en = dflt != NULL && strcmp( dflt, rdata->val_) != 0;
-        gtk_widget_set_sensitive( mitem_rest_dflt, en && !rdata->ro_ && !rdata->inh_ );
+        en = en && !rdata->ro_ && !rdata->inh_;
+
+        mk_mitem( menu, "_restore default...", &on_mitem_rest_dflt, dlg, en );
 
 
         if ( strcmp( rdata->key_, "font" ) == 0 )
         {
-            GtkWidget* mitem_separ = gtk_separator_menu_item_new();
-            gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem_separ );
-            gtk_widget_show( mitem_separ );
-
-            GtkWidget* mitem_font_edit = NULL;
-            mitem_font_edit = gtk_menu_item_new_with_mnemonic( "_select font..." );
-            gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_font_edit);
-            g_signal_connect( G_OBJECT( mitem_font_edit ),
-                              "activate",
-                              G_CALLBACK( &on_mitem_sel_font ),
-                              dlg );
-            gtk_widget_show( mitem_font_edit );
-            gtk_widget_set_sensitive( mitem_font_edit, !rdata->ro_ );
+            mk_mitem_separ( menu );
+            mk_mitem( menu, "_select font...", &on_mitem_sel_font, dlg, !rdata->ro_ );
         }
         else
         if ( strcmp( rdata->key_, "paper" ) == 0 )
         {
-            GtkWidget* mitem_separ = gtk_separator_menu_item_new();
-            gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem_separ );
-            gtk_widget_show( mitem_separ );
-
-            GtkWidget* mitem_sel_paper_size = NULL;
-            mitem_sel_paper_size = gtk_menu_item_new_with_mnemonic( "_select paper size..." );
-            gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_sel_paper_size);
-            g_signal_connect( G_OBJECT( mitem_sel_paper_size ),
-                              "activate",
-                              G_CALLBACK( &on_mitem_sel_paper_size ),
-                              dlg );
-            gtk_widget_show( mitem_sel_paper_size );
-            gtk_widget_set_sensitive( mitem_sel_paper_size, !rdata->ro_ );
+            mk_mitem_separ( menu );
+            mk_mitem( menu, "_select paper size...", &on_mitem_sel_paper_size, dlg, !rdata->ro_ );
         }
         else
         if ( strcmp( rdata->key_, "status-active-color" ) == 0 )
         {
-            GtkWidget* mitem_separ = gtk_separator_menu_item_new();
-            gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem_separ );
-            gtk_widget_show( mitem_separ );
-
-            GtkWidget* mitem_sel_color = NULL;
-            mitem_sel_color = gtk_menu_item_new_with_mnemonic( "_select color..." );
-            gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_sel_color);
-            g_signal_connect( G_OBJECT( mitem_sel_color ),
-                              "activate",
-                              G_CALLBACK( &on_mitem_sel_color ),
-                              dlg );
-            gtk_widget_show( mitem_sel_color );
-            gtk_widget_set_sensitive( mitem_sel_color, !rdata->ro_ );
+            mk_mitem_separ( menu );
+            mk_mitem( menu, "_select color...", &on_mitem_sel_color, dlg, !rdata->ro_ );
         }
     }
     else
     if ( rdata->rtype_ == RT_GRP )
     {
-        GtkWidget* mitem_grp_add = NULL;
-        mitem_grp_add = gtk_menu_item_new_with_mnemonic( "_add" );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_grp_add);
-        g_signal_connect( G_OBJECT( mitem_grp_add ),
-                          "activate",
-                          G_CALLBACK( &on_mitem_grp_add ),
-                          dlg );
-        gtk_widget_show( mitem_grp_add );
-        gtk_widget_set_sensitive( mitem_grp_add, !rdata->ro_ );
+        mk_mitem( menu, "_add", &on_mitem_grp_add, dlg, !rdata->ro_ );
     }
 
 
     if ( rdata->rtype_ == RT_KEY || rdata->rtype_ == RT_GRP )
     {
-        GtkWidget* mitem_separ = gtk_separator_menu_item_new();
-        gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem_separ );
-        gtk_widget_show( mitem_separ );
-
-        GtkWidget* mitem_del = NULL;
-        mitem_del = gtk_menu_item_new_with_mnemonic( "_delete..." );
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_del);
-        g_signal_connect( G_OBJECT( mitem_del ),
-                          "activate",
-                          G_CALLBACK( &on_mitem_del ),
-                          dlg );
-        gtk_widget_show( mitem_del );
-        gtk_widget_set_sensitive( mitem_del, !rdata->ro_ && !rdata->inh_ );
+        mk_mitem_separ( menu );
+        mk_mitem( menu, "_delete...", &on_mitem_del, dlg, !rdata->ro_ && !rdata->inh_ );
     }
 
 
