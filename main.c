@@ -39,7 +39,7 @@ gboolean g_print_default_cfg = FALSE;
 
 void out_version()
 {
-    printf( "lepton-conf version 1.0 beta\n" );
+    printf( "lepton-conf version 1.0 gamma\n" );
     printf( "Configuration utility for Lepton EDA " );
     printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
     printf( "Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>\n" );

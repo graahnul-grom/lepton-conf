@@ -12,13 +12,13 @@ command-line utility invoked with the `config` command.
 
 Documentation
 ------------
-Information about the configuration system can be found on this [wiki page](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings).
+Information about the configuration system can be found on the [Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings) lepton-eda wiki page.
 
 Dependencies
 ------------
 
 - The [Lepton EDA](https://github.com/lepton-eda/lepton-eda) suite,
-at least [a2d49a8](https://github.com/lepton-eda/lepton-eda/commit/a2d49a816ca527839f0cd312d38ce16b1e15da9b) (Jun 8, 2018).
+at least git [039c08c](https://github.com/lepton-eda/lepton-eda/commit/039c08c6fd106a8402cc690206eeae3ac4d1a7e7) (Dec 19, 2018), or [1.9.8](https://github.com/lepton-eda/lepton-eda/releases/tag/1.9.8-20190928) release.
 
 Installation from source
 ------------------------
@@ -77,16 +77,6 @@ Installation from source
     -d    Do not populate DEFAULT config context on startup.
     -p    Print DEFAULT cfg ctx (in the form of *.conf file) and exit.
 ```
-
-Limitations
------------
-Since [039c08c](https://github.com/lepton-eda/lepton-eda/commit/039c08c6fd106a8402cc690206eeae3ac4d1a7e7) `liblepton` API supports deletion of configuration
-keys and groups. `lepton-conf`, however, does not utilize new functions yet.
-Hence, those operations have to be performed manually, i.e. by editing
-configuration files in text editor.
-<br />
-**Note**: when you modify configuration files in external editor,
-do not forget to press the `Reload` button!
 
 License
 -------
