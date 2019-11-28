@@ -177,7 +177,7 @@ a_delete( cfg_edit_dlg* dlg )
     if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
-    row_data* rdata = row_field_get_data( dlg, &it );
+    const row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 

@@ -605,6 +605,9 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 void
 on_mitem_del( GtkMenuItem* mitem, gpointer p )
 {
+    // NOTE: do not use [mitem], since this function is called
+    //       not only from the context menu event handler
+    //
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
@@ -613,7 +616,7 @@ on_mitem_del( GtkMenuItem* mitem, gpointer p )
     if ( !row_cur_get_iter( dlg, &it ) )
         return;
 
-    row_data* rdata = row_field_get_data( dlg, &it );
+    const row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
 
@@ -624,24 +627,25 @@ on_mitem_del( GtkMenuItem* mitem, gpointer p )
     const gboolean iskey = rdata->rtype_ == RT_KEY;
     const gboolean isgrp = rdata->rtype_ == RT_GRP;
 
-    if ( ! (iskey || isgrp ) )
+    if ( ! ( iskey || isgrp ) )
         return;
 
     const gchar* msg_key =
-        "The following <b>key</b> will be deleted:\n"
-        "[%s]::%s\n"
+        "The following key will be deleted:\n"
+        "\n"
+        "<b>[%s]::%s</b>\n"
         "\n"
         "Are you sure?";
 
     const gchar* msg_grp =
-        "The following <b>group</b> and all its keys will be deleted:\n"
-        "[%s]\n"
+        "The following group and all its keys will be deleted:\n"
+        "\n"
+        "<b>[%s]</b>\n"
         "\n"
         "Are you sure?%s";
 
 
-
-    GtkWidget* mdlg = gtk_message_dialog_new_with_markup(
+    GtkWidget* ddlg = gtk_message_dialog_new_with_markup(
         NULL,
         (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
         GTK_MESSAGE_WARNING,
@@ -649,23 +653,19 @@ on_mitem_del( GtkMenuItem* mitem, gpointer p )
         iskey ? msg_key : msg_grp,
         rdata->group_, iskey ? rdata->key_ : "" );
 
-    gtk_window_set_title( GTK_WINDOW( mdlg ),
-                          "Confirm delete" );
-
-    gtk_dialog_set_alternative_button_order( GTK_DIALOG( mdlg ),
+    gtk_window_set_title( GTK_WINDOW( ddlg ), "Confirm delete" );
+    gtk_dialog_set_alternative_button_order( GTK_DIALOG( ddlg ),
                                              GTK_RESPONSE_YES,
                                              GTK_RESPONSE_NO,
                                              -1 );
+    gtk_dialog_set_default_response( GTK_DIALOG( ddlg ), GTK_RESPONSE_NO );
 
-    gtk_dialog_set_default_response( GTK_DIALOG( mdlg ),
-                                     GTK_RESPONSE_NO );
-
-    if ( gtk_dialog_run( GTK_DIALOG( mdlg ) ) == GTK_RESPONSE_YES )
+    if ( gtk_dialog_run( GTK_DIALOG( ddlg ) ) == GTK_RESPONSE_YES )
     {
         a_delete( dlg );
     }
 
-    gtk_widget_destroy( mdlg );
+    gtk_widget_destroy( ddlg );
 
 } // on_mitem_del()
 
