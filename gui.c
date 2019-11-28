@@ -216,17 +216,18 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     dlg->btn_add_    = gtk_button_new_with_mnemonic( "_Add" );
     dlg->btn_edit_   = gtk_button_new_with_mnemonic( "_Edit" );
     dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_Toggle" );
-    dlg->btn_del_    = gtk_button_new_with_mnemonic( NULL );
+    dlg->btn_del_    = gtk_button_new();
     dlg->btn_tst_    = gtk_button_new_with_mnemonic( "t_st" );
 
 
     // images:
     //
-    GtkWidget* img_add    = gtk_image_new_from_stock( GTK_STOCK_ADD,         GTK_ICON_SIZE_LARGE_TOOLBAR );
-    GtkWidget* img_reload = gtk_image_new_from_stock( GTK_STOCK_REFRESH,     GTK_ICON_SIZE_LARGE_TOOLBAR );
-    GtkWidget* img_edit   = gtk_image_new_from_stock( GTK_STOCK_EDIT,        GTK_ICON_SIZE_LARGE_TOOLBAR );
-    GtkWidget* img_toggle = gtk_image_new_from_stock( GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_LARGE_TOOLBAR );
-    GtkWidget* img_del    = gtk_image_new_from_stock( GTK_STOCK_DELETE,      GTK_ICON_SIZE_LARGE_TOOLBAR );
+    const GtkIconSize size = GTK_ICON_SIZE_LARGE_TOOLBAR;
+    GtkWidget* img_add    = gtk_image_new_from_stock( GTK_STOCK_ADD,         size );
+    GtkWidget* img_reload = gtk_image_new_from_stock( GTK_STOCK_REFRESH,     size );
+    GtkWidget* img_edit   = gtk_image_new_from_stock( GTK_STOCK_EDIT,        size );
+    GtkWidget* img_toggle = gtk_image_new_from_stock( GTK_STOCK_MEDIA_PAUSE, size );
+    GtkWidget* img_del    = gtk_image_new_from_stock( GTK_STOCK_DELETE,      size );
 
     gtk_button_set_image( GTK_BUTTON( dlg->btn_add_ ),    img_add );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_reload_ ), img_reload );
@@ -237,14 +238,14 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
     // tooltips:
     //
-    gtk_widget_set_tooltip_text( dlg->btn_reload_, "Reload configuration from disk." );
-    gtk_widget_set_tooltip_text( dlg->btn_add_, "Add new configuration key." );
-    gtk_widget_set_tooltip_text( dlg->btn_edit_, "Edit current value." );
+    gtk_widget_set_tooltip_text( dlg->btn_reload_, "Reload configuration from disk" );
+    gtk_widget_set_tooltip_text( dlg->btn_add_, "Add new configuration key" );
+    gtk_widget_set_tooltip_text( dlg->btn_edit_, "Edit current value" );
     gtk_widget_set_tooltip_text( dlg->btn_toggle_,
-                                 "Toggle values like true/false, enabled/disabled.\n"
-                                 "The same can be done with double-click."
+                                 "Toggle values like true/false, enabled/disabled"
+                                 " (double-click)"
     );
-    gtk_widget_set_tooltip_text( dlg->btn_del_, "Delete selected item (Del)." );
+    gtk_widget_set_tooltip_text( dlg->btn_del_, "Delete selected item (Del)" );
 
 
     // pack controls:
