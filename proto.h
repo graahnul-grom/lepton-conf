@@ -56,6 +56,7 @@ struct _cfg_edit_dlg
     GtkWidget* btn_add_;
     GtkWidget* btn_edit_;
     GtkWidget* btn_toggle_;
+    GtkWidget* btn_del_;
     GtkWidget* btn_tst_;
 
     GtkTextBuffer* txtbuf_desc_;
