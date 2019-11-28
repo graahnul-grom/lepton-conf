@@ -597,6 +597,68 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
 
 
 void
+on_mitem_del( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+
+    const gchar* msg_key =
+        "The following <b>key</b> will be deleted:\n"
+        "[%s]::%s\n"
+        "\n"
+        "Are you sure?";
+
+    const gchar* msg_grp =
+        "The following <b>group</b> and all its keys will be deleted:\n"
+        "[%s]\n"
+        "\n"
+        "Are you sure?%s";
+
+    const gboolean iskey = rdata->rtype_ == RT_KEY;
+    const gboolean isgrp = rdata->rtype_ == RT_GRP;
+    g_assert( iskey || isgrp );
+
+    GtkWidget* mdlg = gtk_message_dialog_new_with_markup(
+        NULL,
+        (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
+        GTK_MESSAGE_WARNING,
+        GTK_BUTTONS_YES_NO,
+        iskey ? msg_key : msg_grp,
+        rdata->group_, iskey ? rdata->key_ : "" );
+
+    gtk_window_set_title( GTK_WINDOW( mdlg ),
+                          "Confirm delete" );
+
+    gtk_dialog_set_alternative_button_order( GTK_DIALOG( mdlg ),
+                                             GTK_RESPONSE_YES,
+                                             GTK_RESPONSE_NO,
+                                             -1 );
+
+    gtk_dialog_set_default_response( GTK_DIALOG( mdlg ),
+                                     GTK_RESPONSE_NO );
+
+    if ( gtk_dialog_run( GTK_DIALOG( mdlg ) ) == GTK_RESPONSE_YES )
+    {
+        a_delete( dlg );
+    }
+
+    gtk_widget_destroy( mdlg );
+
+} // on_mitem_del()
+
+
+
+void
 on_mitem_rest_dflt( GtkMenuItem* mitem, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
