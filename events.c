@@ -438,7 +438,8 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
     //
     if ( e->key.keyval == GDK_KEY_Delete )
     {
-        a_delete( dlg );
+        on_mitem_del( NULL, (gpointer) dlg );
+//        a_delete( dlg );
         return TRUE;
     }
 
@@ -612,6 +613,15 @@ on_mitem_del( GtkMenuItem* mitem, gpointer p )
         return;
 
 
+    if ( rdata->ro_ || rdata->inh_ )
+        return;
+
+    const gboolean iskey = rdata->rtype_ == RT_KEY;
+    const gboolean isgrp = rdata->rtype_ == RT_GRP;
+
+    if ( ! (iskey || isgrp ) )
+        return;
+
     const gchar* msg_key =
         "The following <b>key</b> will be deleted:\n"
         "[%s]::%s\n"
@@ -624,9 +634,7 @@ on_mitem_del( GtkMenuItem* mitem, gpointer p )
         "\n"
         "Are you sure?%s";
 
-    const gboolean iskey = rdata->rtype_ == RT_KEY;
-    const gboolean isgrp = rdata->rtype_ == RT_GRP;
-    g_assert( iskey || isgrp );
+
 
     GtkWidget* mdlg = gtk_message_dialog_new_with_markup(
         NULL,
