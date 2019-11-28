@@ -107,6 +107,13 @@ gui_update( cfg_edit_dlg* dlg )
         gtk_widget_set_sensitive( dlg->btn_toggle_, FALSE );
     }
 
+    // set sensitivity for delete btn
+    //
+    gboolean enable_del = ( rdata->rtype_ == RT_GRP || rdata->rtype_ == RT_KEY )
+                          && !rdata->ro_
+                          && !rdata->inh_;
+    gtk_widget_set_sensitive( dlg->btn_del_, enable_del );
+
 
     gboolean exist = FALSE;
     gboolean rok   = FALSE;
@@ -209,6 +216,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     dlg->btn_add_    = gtk_button_new_with_mnemonic( "_Add" );
     dlg->btn_edit_   = gtk_button_new_with_mnemonic( "_Edit" );
     dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_Toggle" );
+    dlg->btn_del_    = gtk_button_new_with_mnemonic( NULL );
     dlg->btn_tst_    = gtk_button_new_with_mnemonic( "t_st" );
 
 
@@ -218,11 +226,13 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     GtkWidget* img_reload = gtk_image_new_from_stock( GTK_STOCK_REFRESH,     GTK_ICON_SIZE_LARGE_TOOLBAR );
     GtkWidget* img_edit   = gtk_image_new_from_stock( GTK_STOCK_EDIT,        GTK_ICON_SIZE_LARGE_TOOLBAR );
     GtkWidget* img_toggle = gtk_image_new_from_stock( GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget* img_del    = gtk_image_new_from_stock( GTK_STOCK_DELETE,      GTK_ICON_SIZE_LARGE_TOOLBAR );
 
     gtk_button_set_image( GTK_BUTTON( dlg->btn_add_ ),    img_add );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_reload_ ), img_reload );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_edit_ ),   img_edit );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_toggle_ ), img_toggle );
+    gtk_button_set_image( GTK_BUTTON( dlg->btn_del_ ),    img_del );
 
 
     // tooltips:
@@ -234,6 +244,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
                                  "Toggle values like true/false, enabled/disabled.\n"
                                  "The same can be done with double-click."
     );
+    gtk_widget_set_tooltip_text( dlg->btn_del_, "Delete selected item (Del)." );
 
 
     // pack controls:
@@ -242,6 +253,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_add_,    FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,   FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_del_,    FALSE, FALSE, 0 );
     //
     // TESTING:
     //

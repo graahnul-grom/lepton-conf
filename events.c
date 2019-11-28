@@ -59,6 +59,11 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_toggle ),
                       dlg );
 
+    g_signal_connect( G_OBJECT( dlg->btn_del_ ),
+                      "clicked",
+                      G_CALLBACK( &on_mitem_del ),
+                      dlg );
+
 
 
 
