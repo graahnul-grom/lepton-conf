@@ -240,6 +240,9 @@ void
 conf_chg_val( const row_data* rdata, const gchar* txt );
 
 gboolean
+conf_del_key( const row_data* rdata );
+
+gboolean
 conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 
 
@@ -421,6 +424,9 @@ row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod );
 void
 row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
 
+void
+row_select_parent( cfg_edit_dlg* dlg, GtkTreeIter it );
+
 gchar*
 row_cur_pos_save( cfg_edit_dlg* dlg );
 
@@ -449,6 +455,9 @@ a_chg_val( cfg_edit_dlg*   dlg,
 
 void
 a_toggle( cfg_edit_dlg* dlg );
+
+void
+a_delete( cfg_edit_dlg* dlg );
 
 
 
