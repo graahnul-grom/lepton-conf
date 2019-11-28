@@ -554,6 +554,24 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
     }
 
 
+    if ( rdata->rtype_ == RT_KEY || rdata->rtype_ == RT_GRP )
+    {
+        GtkWidget* mitem_separ = gtk_separator_menu_item_new();
+        gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem_separ );
+        gtk_widget_show( mitem_separ );
+
+        GtkWidget* mitem_del = NULL;
+        mitem_del = gtk_menu_item_new_with_mnemonic( "_delete..." );
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem_del);
+        g_signal_connect( G_OBJECT( mitem_del ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_del ),
+                          dlg );
+        gtk_widget_show( mitem_del );
+        gtk_widget_set_sensitive( mitem_del, !rdata->ro_ && !rdata->inh_ );
+    }
+
+
     return GTK_MENU( menu );
 
 } // gui_mk_popup_menu()
