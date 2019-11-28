@@ -659,6 +659,23 @@ conf_del_key( const row_data* rdata )
 
 
 
+gboolean
+conf_del_grp( const row_data* rdata )
+{
+    GError* err = NULL;
+    gboolean res =
+        eda_config_remove_group( rdata->ctx_,
+                                 rdata->group_,
+                                 &err );
+    g_clear_error( &err );
+
+    printf( " >> eda_config_remove_grp( %s ): [ %d ]\n", rdata->group_, res );
+
+    return res;
+}
+
+
+
 
 gboolean
 conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg )
