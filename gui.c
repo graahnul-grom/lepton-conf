@@ -467,9 +467,17 @@ mk_mitem( GtkWidget* menu,
           const gchar* text,
           void (*callback) (GtkMenuItem*, gpointer),
           gpointer data,
-          gboolean enabled )
+          gboolean enabled,
+          const gchar* stockid )
 {
-    GtkWidget* mitem = gtk_menu_item_new_with_mnemonic( text );
+    GtkWidget* mitem = gtk_image_menu_item_new_with_mnemonic( text );
+
+    if ( stockid != NULL )
+    {
+        GtkWidget* img = gtk_image_new_from_stock( stockid, GTK_ICON_SIZE_MENU );
+        gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( mitem ), img );
+    }
+
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), mitem);
     g_signal_connect( G_OBJECT( mitem ),
                       "activate",
@@ -485,57 +493,93 @@ mk_mitem( GtkWidget* menu,
 GtkMenu*
 gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 {
-//    if ( rdata->rtype_ == RT_CTX )
-//        return NULL;
-
     GtkWidget* menu = gtk_menu_new();
-
 
     if ( rdata->rtype_ == RT_CTX )
     {
-        mk_mitem( menu, "_add", &on_mitem_ctx_add, dlg, !rdata->ro_ );
+        mk_mitem( menu,
+                  "_Add..",
+                  &on_mitem_ctx_add,
+                  dlg,
+                  !rdata->ro_,
+                  GTK_STOCK_ADD );
+    }
+    else
+    if ( rdata->rtype_ == RT_GRP )
+    {
+        mk_mitem( menu,
+                  "_Add...",
+                  &on_mitem_grp_add,
+                  dlg,
+                  !rdata->ro_,
+                  GTK_STOCK_ADD );
     }
     else
     if ( rdata->rtype_ == RT_KEY )
     {
-        mk_mitem( menu, "_edit...", &on_mitem_key_edit, dlg, !rdata->ro_ );
+        mk_mitem( menu,
+                  "_Edit...",
+                  &on_mitem_key_edit,
+                  dlg,
+                  !rdata->ro_,
+                  GTK_STOCK_EDIT );
 
         const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
         gboolean en = dflt != NULL && strcmp( dflt, rdata->val_) != 0;
         en = en && !rdata->ro_ && !rdata->inh_;
-
-        mk_mitem( menu, "_restore default...", &on_mitem_rest_dflt, dlg, en );
+        mk_mitem( menu,
+                  "_Restore Default...",
+                  &on_mitem_rest_dflt,
+                  dlg,
+                  en,
+                  GTK_STOCK_CLEAR );
 
 
         if ( strcmp( rdata->key_, "font" ) == 0 )
         {
             mk_mitem_separ( menu );
-            mk_mitem( menu, "_select font...", &on_mitem_sel_font, dlg, !rdata->ro_ );
+            mk_mitem( menu,
+                      "_Select Font...",
+                      &on_mitem_sel_font,
+                      dlg,
+                      !rdata->ro_,
+                      GTK_STOCK_SELECT_FONT );
         }
         else
         if ( strcmp( rdata->key_, "paper" ) == 0 )
         {
             mk_mitem_separ( menu );
-            mk_mitem( menu, "_select paper size...", &on_mitem_sel_paper_size, dlg, !rdata->ro_ );
+            mk_mitem( menu,
+                      "_Select Paper Size...",
+                      &on_mitem_sel_paper_size,
+                      dlg,
+                      !rdata->ro_,
+                      GTK_STOCK_PAGE_SETUP );
         }
         else
         if ( strcmp( rdata->key_, "status-active-color" ) == 0 )
         {
             mk_mitem_separ( menu );
-            mk_mitem( menu, "_select color...", &on_mitem_sel_color, dlg, !rdata->ro_ );
+            mk_mitem( menu,
+                      "_Select Color...",
+                      &on_mitem_sel_color,
+                      dlg,
+                      !rdata->ro_,
+                      GTK_STOCK_SELECT_COLOR );
         }
-    }
-    else
-    if ( rdata->rtype_ == RT_GRP )
-    {
-        mk_mitem( menu, "_add", &on_mitem_grp_add, dlg, !rdata->ro_ );
-    }
+
+    } // RT_KEY
 
 
     if ( rdata->rtype_ == RT_KEY || rdata->rtype_ == RT_GRP )
     {
         mk_mitem_separ( menu );
-        mk_mitem( menu, "_delete...", &on_mitem_del, dlg, !rdata->ro_ && !rdata->inh_ );
+        mk_mitem( menu,
+                  "_Delete...",
+                  &on_mitem_del,
+                  dlg,
+                  !rdata->ro_ && !rdata->inh_,
+                  GTK_STOCK_DELETE );
     }
 
 
