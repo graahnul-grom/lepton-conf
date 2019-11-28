@@ -181,32 +181,37 @@ a_delete( cfg_edit_dlg* dlg )
     if ( !rdata )
         return;
 
-    if ( rdata->rtype_ != RT_KEY || rdata->ro_ || rdata->inh_ )
+    if ( rdata->ro_ || rdata->inh_ )
         return;
 
 
-    if ( conf_del_key( rdata ) )
+    if ( rdata->rtype_ == RT_KEY && !conf_del_key( rdata ) )
     {
-        if ( conf_save( rdata->ctx_, dlg ) )
-        {
-            row_select_parent( dlg, it );
+        printf( " >> a_delete(): !conf_del_key()\n" );
+        return;
+    }
 
-            // NOTE: do not delete [rdata] here,
-            // it will be freed or reload:
-            // rdata_rm( rdata );
+    if ( rdata->rtype_ == RT_GRP && !conf_del_grp( rdata ) )
+    {
+        printf( " >> a_delete(): !conf_del_grp()\n" );
+        return;
+    }
 
-            // NOTE: conf_reload_child_ctxs()
-            //
-            conf_reload_child_ctxs( rdata->ctx_, dlg );
-        }
-        else
-        {
-            printf( " >> a_delete(): !conf_save()\n" );
-        }
+
+    if ( conf_save( rdata->ctx_, dlg ) )
+    {
+        row_select_parent( dlg, it );
+
+        // NOTE: do not delete [rdata] here
+
+        // NOTE: conf_reload_child_ctxs()
+        //
+        conf_reload_child_ctxs( rdata->ctx_, dlg );
     }
     else
     {
-        printf( " >> a_delete(): !conf_del_key()\n" );
+        printf( " >> a_delete(): !conf_save()\n" );
     }
-}
+
+} // a_delete()
 

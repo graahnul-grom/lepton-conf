@@ -243,6 +243,9 @@ gboolean
 conf_del_key( const row_data* rdata );
 
 gboolean
+conf_del_grp( const row_data* rdata );
+
+gboolean
 conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 
 
