@@ -642,6 +642,25 @@ conf_chg_val( const row_data* rdata, const gchar* txt )
 
 
 gboolean
+conf_del_key( const row_data* rdata )
+{
+    GError* err = NULL;
+    gboolean res =
+        eda_config_remove_key( rdata->ctx_,
+                               rdata->group_,
+                               rdata->key_,
+                               &err );
+    g_clear_error( &err );
+
+    printf( " >> eda_config_remove_key( %s ): [ %d ]\n", rdata->key_, res );
+
+    return res;
+}
+
+
+
+
+gboolean
 conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg )
 {
     GError* err = NULL;

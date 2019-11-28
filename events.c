@@ -434,6 +434,14 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
     }
 
+    // Delete:
+    //
+    if ( e->key.keyval == GDK_KEY_Delete )
+    {
+        a_delete( dlg );
+        return TRUE;
+    }
+
     return FALSE; // propagate event
 
 } // on_key_press()

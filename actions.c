@@ -168,3 +168,45 @@ a_init( cfg_edit_dlg* dlg )
 //    printf( " -- a_init()\n" );
 }
 
+
+
+void
+a_delete( cfg_edit_dlg* dlg )
+{
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+    if ( rdata->rtype_ != RT_KEY || rdata->ro_ || rdata->inh_ )
+        return;
+
+
+    if ( conf_del_key( rdata ) )
+    {
+        if ( conf_save( rdata->ctx_, dlg ) )
+        {
+            row_select_parent( dlg, it );
+
+            // NOTE: do not delete [rdata] here,
+            // it will be freed or reload:
+            // rdata_rm( rdata );
+
+            // NOTE: conf_reload_child_ctxs()
+            //
+            conf_reload_child_ctxs( rdata->ctx_, dlg );
+        }
+        else
+        {
+            printf( " >> a_delete(): !conf_save()\n" );
+        }
+    }
+    else
+    {
+        printf( " >> a_delete(): !conf_del_key()\n" );
+    }
+}
+
