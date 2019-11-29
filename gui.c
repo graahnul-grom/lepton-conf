@@ -75,37 +75,24 @@ gui_update( cfg_edit_dlg* dlg )
 
     // set sensitivity for add btn
     //
-    if ( (rdata->rtype_ == RT_CTX || rdata->rtype_ == RT_GRP) && !rdata->ro_)
-    {
-        gtk_widget_set_sensitive( dlg->btn_add_, TRUE );
-    }
-    else
-    {
-        gtk_widget_set_sensitive( dlg->btn_add_, FALSE );
-    }
+    const gboolean enable_add =
+        ( rdata->rtype_ == RT_CTX || rdata->rtype_ == RT_GRP )
+        && !rdata->ro_;
+    gtk_widget_set_sensitive( dlg->btn_add_, enable_add );
 
     // set sensitivity for edit btn
     //
-    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_)
-    {
-        gtk_widget_set_sensitive( dlg->btn_edit_, TRUE );
-    }
-    else
-    {
-        gtk_widget_set_sensitive( dlg->btn_edit_, FALSE );
-    }
+    const gboolean enable_edit = rdata->rtype_ == RT_KEY && !rdata->ro_;
+    gtk_widget_set_sensitive( dlg->btn_edit_, enable_edit );
 
     // set sensitivity for toggle btn
     //
-    if ( (rdata->rtype_ == RT_KEY) && !rdata->ro_ )
-    {
-        gboolean can_toggle = cfgreg_can_toggle( rdata->val_ );
-        gtk_widget_set_sensitive( dlg->btn_toggle_, can_toggle );
-    }
-    else
-    {
-        gtk_widget_set_sensitive( dlg->btn_toggle_, FALSE );
-    }
+    const gboolean enable_toggle =
+        rdata->rtype_ == RT_KEY
+        && !rdata->ro_
+        && cfgreg_can_toggle( rdata->val_ );
+
+    gtk_widget_set_sensitive( dlg->btn_toggle_, enable_toggle );
 
     // set sensitivity for delete btn
     //
