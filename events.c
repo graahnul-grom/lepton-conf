@@ -754,31 +754,80 @@ on_mitem_sel_font( GtkMenuItem* mitem, gpointer p )
     if ( !rdata )
         return;
 
+
+    // the following keys uses font size:
+    // - [schematic.log-window]::font
+    // - [schematic.macro-widget]::font
+    //
+    const gboolean grp_log_wnd =
+        strcmp( rdata->group_, "schematic.log-window" ) == 0;
+    const gboolean grp_macro_wdgt =
+        strcmp( rdata->group_, "schematic.macro-widget" ) == 0;
+
+    const gboolean use_size = grp_log_wnd || grp_macro_wdgt;
+
+
     GtkWidget* fdlg = gtk_font_selection_dialog_new( "Select Font" );
     GtkWidget* fsdfs = gtk_font_selection_dialog_get_font_selection(
         GTK_FONT_SELECTION_DIALOG( fdlg ) );
     GtkFontSelection* sel =
         GTK_FONT_SELECTION( fsdfs );
 
-    const int preview_size = 18;
-    gchar* fname = g_strdup_printf ("%s %d", rdata->val_, preview_size);
+
+    gint size = 18; // default preview size if font size isn't used
+
+    PangoFontDescription* desc =
+        pango_font_description_from_string( rdata->val_ );
+
+    if ( use_size )
+    {
+        gint sz = pango_font_description_get_size( desc ) / PANGO_SCALE;
+        if ( sz > 0 )
+        {
+            size = sz;
+        }
+    }
+
+    pango_font_description_set_size( desc, size * PANGO_SCALE );
+
+    gchar* fname = pango_font_description_to_string( desc );
+    // printf( " == fname: [%s]\n", fname );
+    pango_font_description_free( desc );
+
+
     gtk_font_selection_set_font_name( sel, fname );
     g_free (fname);
 
     const char preview[] = "refdes=R1 Q23 U45 footprint=TQFN20_4_EP.fp";
     gtk_font_selection_set_preview_text( sel, preview );
 
+
     settings_wnd_geom_restore( GTK_WINDOW( fdlg ), "selfont" );
 
     if ( gtk_dialog_run( GTK_DIALOG( fdlg ) ) == GTK_RESPONSE_OK )
     {
-        PangoFontFamily* family = gtk_font_selection_get_family (sel);
-        const char* family_name = pango_font_family_get_name (family);
+        PangoFontFamily* family = gtk_font_selection_get_family( sel );
+        const char* family_name = pango_font_family_get_name( family );
 
-        PangoFontFace* face = gtk_font_selection_get_face (sel);
-        const char* face_name = pango_font_face_get_face_name (face);
+        PangoFontFace* face = gtk_font_selection_get_face( sel );
+        const char* face_name = pango_font_face_get_face_name( face );
 
-        gchar* txt = g_strdup_printf ("%s %s", family_name, face_name);
+        gchar* txt = g_strdup_printf( "%s %s", family_name, face_name );
+
+
+        if ( use_size )
+        {
+            size = gtk_font_selection_get_size( sel ) / PANGO_SCALE;
+            // printf( " == size: [%d]\n", size );
+            if ( size > 0 )
+            {
+                gchar* prev = txt;
+                txt = g_strdup_printf( "%s %d", txt, size );
+                g_free( prev );
+            }
+        }
+
+
         a_chg_val( dlg, rdata, it, txt );
         g_free( txt );
     }
