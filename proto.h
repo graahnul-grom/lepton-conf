@@ -437,6 +437,12 @@ row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it );
 void
 row_select_parent( cfg_edit_dlg* dlg, GtkTreeIter it );
 
+void
+row_select_by_ctx_grp_key( cfg_edit_dlg* dlg,
+                           const gchar* ctx_name,
+                           const gchar* grp_name,
+                           const gchar* key_name );
+
 gchar*
 row_cur_pos_save( cfg_edit_dlg* dlg );
 

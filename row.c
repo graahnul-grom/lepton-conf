@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2018 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -364,4 +364,81 @@ row_select_parent( cfg_edit_dlg* dlg, GtkTreeIter it )
     }
 
 } // row_select_parent()
+
+
+
+void
+row_select_by_ctx_grp_key( cfg_edit_dlg* dlg,
+                           const gchar* ctx_name,
+                           const gchar* grp_name,
+                           const gchar* key_name )
+{
+    g_return_if_fail( ctx_name && "row_select_ctx_grp_key(): !ctx_name" );
+
+    gchar* ctx = g_strdup( ctx_name );
+    gchar* grp = g_strdup( grp_name );
+    gchar* key = g_strdup( key_name );
+
+
+    // determine ctx path by name:
+    gchar* str_ctx = "";
+    if ( strcmp( ctx, "DEFAULT" ) == 0 )
+        str_ctx = "0";
+    else
+    if ( strcmp( ctx, "SYSTEM" ) == 0 )
+        str_ctx = "1";
+    else
+    if ( strcmp( ctx, "USER" ) == 0 )
+        str_ctx = "2";
+    else
+    if ( strcmp( ctx, "PATH (.)" ) == 0 )
+        str_ctx = "3";
+
+    g_assert( strlen( str_ctx ) > 0 && "row_select_ctx_grp_key(): !pstr" );
+
+
+    // select ctx:
+    GtkTreePath* path_ctx = gtk_tree_path_new_from_string( str_ctx );
+    gtk_tree_view_expand_to_path( dlg->tree_v_, path_ctx );
+    gtk_tree_view_set_cursor( dlg->tree_v_, path_ctx, NULL, FALSE );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path_ctx, NULL, TRUE, 0.5, 0 );
+    gtk_tree_path_free( path_ctx );
+
+
+    // 3: if [grp]: find grp by name under selected ctx, select it if found:
+    if ( grp )
+    {
+        GtkTreeIter it_ctx;
+        row_cur_get_iter( dlg, &it_ctx );
+
+        GtkTreePath* path_grp = row_find_child_by_name( dlg, it_ctx, grp );
+        if ( path_grp != NULL ) // can be NULL if not found
+        {
+            row_select_by_path_mod( dlg, path_grp );
+            gtk_tree_path_free( path_grp );
+        }
+
+
+        // 4: if [key]: find key by name under selected grp, select it if found:
+        if ( key )
+        {
+            GtkTreeIter it_grp;
+            row_cur_get_iter( dlg, &it_grp );
+
+            GtkTreePath* path_key = row_find_child_by_name( dlg, it_grp, key );
+            if ( path_key != NULL ) // can be NULL if not found
+            {
+                row_select_by_path_mod( dlg, path_key );
+                gtk_tree_path_free( path_key );
+            }
+
+        } // if [key]
+
+    } // if [grp]
+
+    g_free( ctx );
+    g_free( grp );
+    g_free( key );
+
+} // row_select_by_ctx_grp_key()
 

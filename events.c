@@ -127,7 +127,47 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
     tree_set_focus( dlg );
 
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+
+    // 1: remember current ctx->grp->key:
+    gchar ctx[ 64 ] = "";
+    gchar grp[ 64 ] = "";
+    gchar key[ 64 ] = "";
+    strcpy( ctx, conf_ctx_name( rdata->ctx_ ) );
+    strcpy( grp, rdata->group_ ? rdata->group_ : "" );
+    strcpy( key, rdata->key_ ? rdata->key_ : "" );
+        printf( " .. rd: [%s:%s:%s]\n", ctx, grp, key );
+
+    // 2: reload tree:
+    a_reload( dlg );
+
+
+    // TESTING:
+    row_select_by_ctx_grp_key( dlg, ctx, grp, key );
+
+
+    // print current path:
+    /*
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    gchar* str = gtk_tree_model_get_string_from_iter( mod, &it );
+    printf( " .. p: [%s]\n", str );
+    GtkTreePath* path = gtk_tree_path_new_from_string( str );
+    g_free( str );
+    gtk_tree_path_free( path );
+    */
+    //
+
+
     return;
+
 
 //    gtk_widget_grab_focus( GTK_WIDGET( dlg->tree_v_ ) );
 
@@ -154,24 +194,24 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     // EdaConfig* ctx        = eda_config_get_context_for_path( "." );
     // conf_reload_child_ctxs( ctx_parent, dlg );
 
-    gchar* path = row_cur_pos_save( dlg );
+//    gchar* path = row_cur_pos_save( dlg );
 
-    gui_update_off();
+//    gui_update_off();
 
 //    GtkAdjustment* adj = gtk_tree_view_get_vadjustment( dlg->tree_v_ );
 //    gtk_tree_view_set_vadjustment( dlg->tree_v_, NULL );
 
-    a_reload( dlg );
+//    a_reload( dlg );
     // conf_reload_ctx( ctx, "3", dlg );
 
 //    gtk_tree_view_set_vadjustment( dlg->tree_v_, adj );
 
-    tree_set_focus( dlg );
+//    tree_set_focus( dlg );
 
-    gui_update_on();
+//    gui_update_on();
 
-    row_cur_pos_restore( dlg, path );
-    g_free( path );
+//    row_cur_pos_restore( dlg, path );
+//    g_free( path );
 
     // char* path_str = row_cur_pos_save( dlg );
     // conf_reload_ctx_path( dlg );
