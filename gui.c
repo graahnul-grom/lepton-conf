@@ -455,9 +455,18 @@ mk_mitem( GtkWidget* menu,
           void (*callback) (GtkMenuItem*, gpointer),
           gpointer data,
           gboolean enabled,
-          const gchar* stockid )
+          const gchar* stockid,
+          gboolean bold )
 {
     GtkWidget* mitem = gtk_image_menu_item_new_with_mnemonic( text );
+
+    if ( bold )
+    {
+        GtkWidget* lab = gtk_bin_get_child( GTK_BIN( mitem ) );
+        gchar* str = g_strdup_printf( "<b>%s</b>", text );
+        gtk_label_set_markup_with_mnemonic( GTK_LABEL( lab ), str );
+        g_free( str );
+    }
 
     if ( stockid != NULL )
     {
@@ -489,7 +498,8 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                   &on_mitem_ctx_add,
                   dlg,
                   !rdata->ro_,
-                  GTK_STOCK_ADD );
+                  GTK_STOCK_ADD,
+                  FALSE );
     }
     else
     if ( rdata->rtype_ == RT_GRP )
@@ -499,26 +509,32 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                   &on_mitem_grp_add,
                   dlg,
                   !rdata->ro_,
-                  GTK_STOCK_ADD );
+                  GTK_STOCK_ADD,
+                  FALSE );
     }
     else
     if ( rdata->rtype_ == RT_KEY )
     {
+        const gboolean can_toggle = cfgreg_can_toggle( rdata->val_ );
+
         mk_mitem( menu,
                   "_Edit...",
                   &on_mitem_key_edit,
                   dlg,
                   !rdata->ro_,
-                  GTK_STOCK_EDIT );
+                  GTK_STOCK_EDIT,
+                  !can_toggle );
 
-        if ( cfgreg_can_toggle( rdata->val_ ) )
+        if ( can_toggle )
         {
+//                    gtk_bin_get_child( GTK_BIN());
             mk_mitem( menu,
                       "_Toggle",
                       &on_mitem_toggle,
                       dlg,
                       !rdata->ro_,
-                      GTK_STOCK_MEDIA_PAUSE );
+                      GTK_STOCK_MEDIA_PAUSE,
+                      TRUE );
         }
 
         const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
@@ -529,7 +545,8 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                   &on_mitem_rest_dflt,
                   dlg,
                   en,
-                  GTK_STOCK_CLEAR );
+                  GTK_STOCK_CLEAR,
+                  FALSE );
 
 
         if ( strcmp( rdata->key_, "font" ) == 0 )
@@ -540,7 +557,8 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                       &on_mitem_sel_font,
                       dlg,
                       !rdata->ro_,
-                      GTK_STOCK_SELECT_FONT );
+                      GTK_STOCK_SELECT_FONT,
+                      FALSE );
         }
         else
         if ( strcmp( rdata->key_, "paper" ) == 0 )
@@ -551,7 +569,8 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                       &on_mitem_sel_paper_size,
                       dlg,
                       !rdata->ro_,
-                      GTK_STOCK_PAGE_SETUP );
+                      GTK_STOCK_PAGE_SETUP,
+                      FALSE );
         }
         else
         if ( strcmp( rdata->key_, "status-active-color" ) == 0 )
@@ -562,7 +581,8 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                       &on_mitem_sel_color,
                       dlg,
                       !rdata->ro_,
-                      GTK_STOCK_SELECT_COLOR );
+                      GTK_STOCK_SELECT_COLOR,
+                      FALSE );
         }
 
     } // RT_KEY
@@ -576,7 +596,8 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                   &on_mitem_del,
                   dlg,
                   !rdata->ro_ && !rdata->inh_,
-                  GTK_STOCK_DELETE );
+                  GTK_STOCK_DELETE,
+                  FALSE );
     }
 
 
