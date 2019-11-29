@@ -337,6 +337,9 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p );
 void
 on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
 
+void
+on_mitem_toggle( GtkMenuItem* mitem, gpointer p );
+
 
 
 

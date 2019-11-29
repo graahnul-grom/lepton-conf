@@ -524,6 +524,16 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
                   !rdata->ro_,
                   GTK_STOCK_EDIT );
 
+        if ( cfgreg_can_toggle( rdata->val_ ) )
+        {
+            mk_mitem( menu,
+                      "_Toggle",
+                      &on_mitem_toggle,
+                      dlg,
+                      !rdata->ro_,
+                      GTK_STOCK_MEDIA_PAUSE );
+        }
+
         const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
         gboolean en = dflt != NULL && strcmp( dflt, rdata->val_) != 0;
         en = en && !rdata->ro_ && !rdata->inh_;

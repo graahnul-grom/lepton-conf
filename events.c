@@ -485,6 +485,21 @@ on_btn_toggle( GtkButton* btn, gpointer* p )
 
 
 void
+on_mitem_toggle( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    tree_set_focus( dlg );
+
+    a_toggle( dlg );
+
+}
+
+
+
+void
 on_btn_reload( GtkButton* btn, gpointer* p )
 {
     // NOTE: do not use [btn], since this function is called
