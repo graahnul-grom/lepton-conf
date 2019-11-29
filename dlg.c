@@ -246,6 +246,23 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
 
 
 
+static gboolean
+on_mouse_click_paper_sizes_list( GtkWidget* w, GdkEvent* e, gpointer p )
+{
+    GtkWidget* sdlg = (GtkWidget*) p;
+    GdkEventButton* ebtn = ( GdkEventButton* ) e;
+
+    if ( ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
+    {
+        g_signal_emit_by_name( sdlg, "response", GTK_RESPONSE_ACCEPT, NULL, NULL );
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+
+
 // {post}: caller must g_free() {ret}
 //
 gchar*
@@ -322,7 +339,6 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
     gtk_dialog_set_default_response (GTK_DIALOG (sdlg),
                                      GTK_RESPONSE_ACCEPT);
     gtk_widget_show_all( sdlg );
-//    gtk_widget_set_size_request( sdlg, 300, -1 );
 
 
     // select current value in the list, scroll to selection:
@@ -337,6 +353,12 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
     }
     //
     //
+
+
+    g_signal_connect( G_OBJECT( tree_w ),
+                      "button-press-event",
+                      G_CALLBACK( &on_mouse_click_paper_sizes_list ),
+                      sdlg );
 
 
     settings_wnd_geom_restore( GTK_WINDOW( sdlg ), "selpapersize" );
