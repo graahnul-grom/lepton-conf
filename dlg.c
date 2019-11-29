@@ -7,6 +7,7 @@
  */
 
 #include "proto.h"
+#include <gdk/gdkkeysyms.h>
 
 
 
@@ -263,6 +264,22 @@ on_mouse_click_paper_sizes_list( GtkWidget* w, GdkEvent* e, gpointer p )
 
 
 
+gboolean
+on_key_press_paper_sizes_list( GtkWidget* w, GdkEvent* e, gpointer p )
+{
+    GtkWidget* sdlg = (GtkWidget*) p;
+
+    if ( e->key.keyval == GDK_KEY_Return || e->key.keyval == GDK_KEY_KP_Enter )
+    {
+        g_signal_emit_by_name( sdlg, "response", GTK_RESPONSE_ACCEPT, NULL, NULL );
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+
+
 // {post}: caller must g_free() {ret}
 //
 gchar*
@@ -358,6 +375,11 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
     g_signal_connect( G_OBJECT( tree_w ),
                       "button-press-event",
                       G_CALLBACK( &on_mouse_click_paper_sizes_list ),
+                      sdlg );
+
+    g_signal_connect( G_OBJECT( tree_w ),
+                      "key-press-event",
+                      G_CALLBACK( &on_key_press_paper_sizes_list ),
                       sdlg );
 
 
