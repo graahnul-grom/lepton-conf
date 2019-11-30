@@ -107,6 +107,46 @@ rdata_rm_func( GtkTreeModel* mod,
 
 /* ******************************************************************
 *
+*  cgk:
+*
+*/
+
+row_cgk*
+cgk_mk( const row_data* rdata )
+{
+    row_cgk* cgk = g_malloc( sizeof( row_cgk ) );
+
+//    const gchar* ctx = conf_ctx_name( rdata->ctx_ );
+//    cgk->ctx_ = g_strdup( ctx );
+//    g_free( ctx );
+
+    cgk->ctx_ = g_strdup( conf_ctx_name( rdata->ctx_ ) );
+    cgk->grp_ = g_strdup( rdata->group_ );
+    cgk->key_ = g_strdup( rdata->key_ );
+
+    return cgk;
+}
+
+
+
+void
+cgk_rm( row_cgk* cgk )
+{
+    if ( cgk == NULL )
+        return;
+
+    g_free( cgk->ctx_ );
+    g_free( cgk->grp_ );
+    g_free( cgk->key_ );
+
+    g_free( cgk );
+}
+
+
+
+
+/* ******************************************************************
+*
 *  tree:
 *
 */

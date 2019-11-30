@@ -96,6 +96,18 @@ typedef struct _row_data row_data;
 
 
 
+struct _row_cgk
+{
+    gchar* ctx_;
+    gchar* grp_;
+    gchar* key_;
+};
+
+typedef struct _row_cgk row_cgk;
+
+
+
+
 // main.c:
 //
 extern gboolean g_close_with_esc;
@@ -365,6 +377,12 @@ rdata_rm_func( GtkTreeModel* mod,
 
 const gchar*
 rdata_get_name( const row_data* rdata );
+
+row_cgk*
+cgk_mk( const row_data* rdata );
+
+void
+cgk_rm( row_cgk* rdata );
 
 int tree_colid_name();
 int tree_colid_val();
