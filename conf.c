@@ -542,16 +542,25 @@ conf_load( cfg_edit_dlg* dlg )
 const gchar*
 conf_ctx_name( EdaConfig* ctx )
 {
-    if ( ctx == eda_config_get_default_context() )
-        return g_strdup( "DEFAULT" );
-    if ( ctx == eda_config_get_system_context() )
-        return g_strdup( "SYSTEM" );
-    if ( ctx == eda_config_get_user_context() )
-        return g_strdup( "USER" );
-    if ( ctx == eda_config_get_context_for_path( "." ) )
-        return g_strdup( "PATH (.)" );
+    static gchar def[]  = "DEFAULT";
+    static gchar sys[]  = "SYSTEM";
+    static gchar user[] = "USER";
+    static gchar path[] = "PATH (.)";
 
-    return g_strdup( "unknown" );
+    gchar* ret = NULL;
+
+    if ( ctx == eda_config_get_default_context() )
+        ret = def;
+    if ( ctx == eda_config_get_system_context() )
+        ret = sys;
+    if ( ctx == eda_config_get_user_context() )
+        ret = user;
+    if ( ctx == eda_config_get_context_for_path( "." ) )
+        ret = path;
+
+    g_assert( ret != NULL && "conf_ctx_name(): ! ctx name" );
+
+    return ret;
 }
 
 

@@ -37,8 +37,6 @@ rdata_get_name( const row_data* rdata )
         if ( rdata->rtype_ == RT_CTX )
         {
             name = conf_ctx_name( rdata->ctx_ );
-            //
-            // TODO: free() name
         }
     }
 
