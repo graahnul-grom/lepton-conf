@@ -461,6 +461,9 @@ row_select_by_ctx_grp_key( cfg_edit_dlg* dlg,
                            const gchar* grp_name,
                            const gchar* key_name );
 
+void
+row_select_by_cgk( cfg_edit_dlg* dlg, const row_cgk* cgk );
+
 gchar*
 row_cur_pos_save( cfg_edit_dlg* dlg );
 

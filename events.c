@@ -138,20 +138,19 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
     // 1: remember current ctx->grp->key:
-    gchar ctx[ 64 ] = "";
-    gchar grp[ 64 ] = "";
-    gchar key[ 64 ] = "";
-    strcpy( ctx, conf_ctx_name( rdata->ctx_ ) );
-    strcpy( grp, rdata->group_ ? rdata->group_ : "" );
-    strcpy( key, rdata->key_ ? rdata->key_ : "" );
-        printf( " .. rd: [%s:%s:%s]\n", ctx, grp, key );
+    row_cgk* cgk = cgk_mk( rdata );
+    printf( " .. cgk: [ %s : %s : %s ]\n", cgk->ctx_, cgk->grp_, cgk->key_ );
+
 
     // 2: reload tree:
     a_reload( dlg );
 
 
     // TESTING:
-    row_select_by_ctx_grp_key( dlg, ctx, grp, key );
+    row_select_by_cgk( dlg, cgk );
+    cgk_rm( cgk );
+
+//    row_select_by_ctx_grp_key( dlg, ctx, grp, key );
 
 
     // print current path:

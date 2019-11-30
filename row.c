@@ -442,3 +442,11 @@ row_select_by_ctx_grp_key( cfg_edit_dlg* dlg,
 
 } // row_select_by_ctx_grp_key()
 
+
+
+void
+row_select_by_cgk( cfg_edit_dlg* dlg, const row_cgk* cgk )
+{
+    row_select_by_ctx_grp_key( dlg, cgk->ctx_, cgk->grp_, cgk->key_);
+}
+
