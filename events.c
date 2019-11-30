@@ -1138,15 +1138,28 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
     //
     row_select_by_iter_tstore( dlg, it_new );
 
-    // NOTE: unset inherited:
+    // NOTE: unset inherited: TODO: do we need it?
     //
     GtkTreeIter it_cur;
     if ( row_cur_get_iter( dlg, &it_cur ) )
         row_key_unset_inh( dlg, it_cur );
 
+
+    // >>>> remember selected item:
+    //
+    const row_data* rd_cur = row_field_get_data( dlg, &it_cur );
+    row_cgk* cgk = cgk_mk( rd_cur );
+
+
     // NOTE: conf_reload_child_ctxs()
     //
     conf_reload_child_ctxs( rdata->ctx_, dlg );
+
+
+    // >>>> restore selected item:
+    //
+    row_select_by_cgk( dlg, cgk );
+    cgk_rm( cgk );
 
 
     g_free( key );
