@@ -33,6 +33,7 @@ gboolean g_populate_default_ctx = TRUE;
 const gchar* g_exted_default = "gvim";
 gboolean g_warn_cfg_file_not_found = TRUE;
 gboolean g_print_default_cfg = FALSE;
+gboolean g_tst_btn_visible = FALSE;
 
 
 
@@ -73,7 +74,7 @@ int main( int argc, char* argv[] )
 
 
     int ch = -1;
-    while ( (ch = getopt( argc, argv, "hvdemp" )) != -1 )
+    while ( (ch = getopt( argc, argv, "hvdempt" )) != -1 )
     {
         if ( ch == 'v' )
             out_version();
@@ -92,6 +93,9 @@ int main( int argc, char* argv[] )
         else
         if ( ch == 'p' )
             g_print_default_cfg = TRUE;
+        else
+        if ( ch == 't' )
+            g_tst_btn_visible = TRUE; // TESTING: show tst btn on toolbar
         else
         if ( ch == '?' )
             out_help( 1 );

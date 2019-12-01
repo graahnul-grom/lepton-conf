@@ -39,10 +39,13 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_reload ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( dlg->btn_tst_ ),
-                      "clicked",
-                      G_CALLBACK( &on_btn_tst ),
-                      dlg );
+    if ( g_tst_btn_visible )
+    {
+        g_signal_connect( G_OBJECT( dlg->btn_tst_ ),
+                          "clicked",
+                          G_CALLBACK( &on_btn_tst ),
+                          dlg );
+    }
 
     g_signal_connect( G_OBJECT( dlg->btn_add_ ),
                       "clicked",

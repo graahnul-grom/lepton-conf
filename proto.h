@@ -116,6 +116,7 @@ extern const gchar* g_exted_default;
 extern gboolean g_warn_cfg_file_not_found;
 // #define g_exted_default "gvim"
 extern gboolean g_print_default_cfg;
+extern gboolean g_tst_btn_visible;
 
 
 
