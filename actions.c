@@ -35,9 +35,22 @@ a_chg_val( cfg_edit_dlg*   dlg,
         //
         row_key_unset_inh( dlg, it );
 
+
+        // >>>> remember selected item:
+        //
+        const row_data* rd_cur = row_field_get_data( dlg, &it );
+        row_cgk* cgk = cgk_mk( rd_cur );
+
+
         // NOTE: conf_reload_child_ctxs()
         //
         conf_reload_child_ctxs( rdata->ctx_, dlg );
+
+
+        // >>>> restore selected item:
+        //
+        row_select_by_cgk( dlg, cgk );
+        cgk_rm( cgk );
     }
 
 } // a_chg_val()
