@@ -497,6 +497,14 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
     }
 
+    // F2:
+    //
+    if ( e->key.keyval == GDK_KEY_F2 )
+    {
+        on_btn_edit( NULL, (gpointer) dlg );
+        return TRUE;
+    }
+
 
     return FALSE; // propagate event
 
