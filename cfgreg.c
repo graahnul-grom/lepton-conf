@@ -123,6 +123,16 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Whether to restore main window's size and position on startup."
     },
+
+
+    {
+        "schematic.gui",
+        "draw-grips",
+        "true",
+        "Controls if the editing grips are drawn when selecting objects."
+    },
+
+
     // tabs: //
     {
         "schematic.tabs",
