@@ -143,6 +143,12 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Controls if the scrollbars are visible or not."
     },
+    {
+        "schematic.gui",
+        "handleboxes",
+        "true",
+        "Controls if the handleboxes for the menu and toolbars are visible or not."
+    },
 
 
     // tabs: //
