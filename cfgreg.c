@@ -131,6 +131,12 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Controls if the editing grips are drawn when selecting objects."
     },
+    {
+        "schematic.gui",
+        "toolbars",
+        "true",
+        "Controls if the toolbars are visible or not."
+    },
 
 
     // tabs: //
