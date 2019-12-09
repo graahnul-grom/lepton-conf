@@ -505,6 +505,14 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
     }
 
+    // space bar:
+    //
+    if ( e->key.keyval == GDK_KEY_space )
+    {
+        on_btn_toggle( NULL, (gpointer) dlg );
+        return TRUE;
+    }
+
 
     return FALSE; // propagate event
 

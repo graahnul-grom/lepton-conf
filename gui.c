@@ -230,7 +230,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     gtk_widget_set_tooltip_text( dlg->btn_edit_, "Edit current value (F2)" );
     gtk_widget_set_tooltip_text( dlg->btn_toggle_,
                                  "Toggle values like true/false, enabled/disabled"
-                                 " (double-click)"
+                                 " (double-click, space bar)"
     );
     gtk_widget_set_tooltip_text( dlg->btn_del_, "Delete selected item (Del)" );
 
