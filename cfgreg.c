@@ -149,6 +149,12 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Controls if the handleboxes for the menu and toolbars are visible or not."
     },
+    {
+        "schematic.gui",
+        "zoom-with-pan",
+        "true",
+        "Sets the zoom functions to pan the display and then zoom."
+    },
 
 
     // tabs: //
