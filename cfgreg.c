@@ -163,6 +163,14 @@ static CfgEntry g_cfg_registry[] =
         " represents the text string) is drawn during mouse pan.  Drawing a simple"
         " line speeds up mousepan a lot for big schematics."
     },
+    {
+        "schematic.gui",
+        "continue-component-place",
+        "true",
+        "Controls the behavior of the \"Select Component...\" dialog.\n"
+        "Allow to place multiple instances of a component"
+        " without having to press the \"Apply\" button each time."
+    },
 
 
     // tabs: //
