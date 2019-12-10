@@ -178,6 +178,16 @@ static CfgEntry g_cfg_registry[] =
         "Controls if the preview area in the File Open/Save As and"
         " Select Component dialog boxes is enabled."
     },
+    {
+        "schematic.gui",
+        "enforce-hierarchy",
+        "true",
+        "Controls if the movement between hierarchy levels of the same"
+        " underlying schematics is allowed or not.\n"
+        "If this is enabled, then the user cannot (without using the page manager)"
+        " move between hierarchy levels."
+        " Otherwise, the user sees all the hierarchy levels as being flat."
+    },
 
 
     // tabs: //
