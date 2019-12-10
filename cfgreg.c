@@ -195,6 +195,12 @@ static CfgEntry g_cfg_registry[] =
         "Controls if the third mouse button cancels draw actions"
         " such as placing of a component or drawing of a primitive."
     },
+    {
+        "schematic.gui",
+        "warp-cursor",
+        "false",
+        "Controls if the cursor is warped (moved) when you zoom in and out."
+    },
 
 
     // tabs: //
