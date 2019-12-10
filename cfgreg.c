@@ -209,6 +209,12 @@ static CfgEntry g_cfg_registry[] =
         " which end of the pin is considered the active port.\n"
         "This option is for backward compatibility with old schematic file format."
     },
+    {
+        "schematic.gui",
+        "net-direction-mode",
+        "true",
+        "Guess the best continuation direction of an L-shape net when adding a net."
+    },
 
 
     // tabs: //
