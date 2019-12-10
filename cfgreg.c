@@ -201,6 +201,14 @@ static CfgEntry g_cfg_registry[] =
         "false",
         "Controls if the cursor is warped (moved) when you zoom in and out."
     },
+    {
+        "schematic.gui",
+        "force-boundingbox",
+        "false",
+        "Controls if the entire bounding box of a symbol is used when figuring out"
+        " which end of the pin is considered the active port.\n"
+        "This option is for backward compatibility with old schematic file format."
+    },
 
 
     // tabs: //
