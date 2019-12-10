@@ -227,6 +227,13 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Maintain net connections when you move a connected component or net."
     },
+    {
+        "schematic.gui",
+        "magnetic-net-mode",
+        "true",
+        "Whether to mark a possible connection that is close to the current"
+        " cursor position when drawing a net."
+    },
 
 
     // tabs: //
