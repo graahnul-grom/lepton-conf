@@ -215,6 +215,12 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Guess the best continuation direction of an L-shape net when adding a net."
     },
+    {
+        "schematic.gui",
+        "embed-components",
+        "false",
+        "Determines if the newly placed components are embedded in the schematic."
+    },
 
 
     // tabs: //
