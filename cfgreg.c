@@ -188,6 +188,13 @@ static CfgEntry g_cfg_registry[] =
         " move between hierarchy levels."
         " Otherwise, the user sees all the hierarchy levels as being flat."
     },
+    {
+        "schematic.gui",
+        "third-button-cancel",
+        "true",
+        "Controls if the third mouse button cancels draw actions"
+        " such as placing of a component or drawing of a primitive."
+    },
 
 
     // tabs: //
