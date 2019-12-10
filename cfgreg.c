@@ -171,6 +171,13 @@ static CfgEntry g_cfg_registry[] =
         "Allow to place multiple instances of a component"
         " without having to press the \"Apply\" button each time."
     },
+    {
+        "schematic.gui",
+        "file-preview",
+        "true",
+        "Controls if the preview area in the File Open/Save As and"
+        " Select Component dialog boxes is enabled."
+    },
 
 
     // tabs: //
