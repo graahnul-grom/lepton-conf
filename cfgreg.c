@@ -155,6 +155,14 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Sets the zoom functions to pan the display and then zoom."
     },
+    {
+        "schematic.gui",
+        "fast-mousepan",
+        "false",
+        "Controls if text is drawn properly or if a simplified version (a line which"
+        " represents the text string) is drawn during mouse pan.  Drawing a simple"
+        " line speeds up mousepan a lot for big schematics."
+    },
 
 
     // tabs: //
