@@ -221,6 +221,12 @@ static CfgEntry g_cfg_registry[] =
         "false",
         "Determines if the newly placed components are embedded in the schematic."
     },
+    {
+        "schematic.gui",
+        "netconn-rubberband",
+        "true",
+        "Maintain net connections when you move a connected component or net."
+    },
 
 
     // tabs: //
