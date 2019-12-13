@@ -255,6 +255,15 @@ static CfgEntry g_cfg_registry[] =
         "Controls how much the display pans when using the keyboard keys.
         " A larger value provides greater pan distance."
     },
+    {
+        "schematic.gui",
+        "select-slack-pixels",
+        "10",
+        "Controls how many pixels around an object can still be clicked"
+        " as part of that object. A larger value gives greater ease in"
+        " selecting small, or narrow objects."
+    },
+
 
 
     // tabs: //
