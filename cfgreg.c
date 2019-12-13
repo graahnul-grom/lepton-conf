@@ -263,6 +263,12 @@ static CfgEntry g_cfg_registry[] =
         " as part of that object. A larger value gives greater ease in"
         " selecting small, or narrow objects."
     },
+    {
+        "schematic.gui",
+        "text-size",
+        "10",
+        "Sets the default text size."
+    },
 
 
 
