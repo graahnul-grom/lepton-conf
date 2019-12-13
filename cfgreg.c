@@ -241,6 +241,13 @@ static CfgEntry g_cfg_registry[] =
         "The percentage size increase/decrease when zooming in/out with the"
         " mouse wheel. Negative values reverses the direction."
     },
+    {
+        "schematic.gui",
+        "mousepan-gain",
+        "1",
+        "Controls how much the display pans. A larger value
+        " provides greater pan distance when moving the mouse."
+    },
 
 
     // tabs: //
