@@ -284,6 +284,12 @@ static CfgEntry g_cfg_registry[] =
         " are required to pan across the viewed area and giving finer"
         " control over positioning."
     },
+    {
+        "schematic.gui",
+        "dots-grid-dot-size",
+        "1",
+        "Controls the size of the grid dots (in pixels) in the dots grid display."
+    },
 
 
 
