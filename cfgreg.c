@@ -269,6 +269,12 @@ static CfgEntry g_cfg_registry[] =
         "10",
         "Sets the default text size."
     },
+    {
+        "schematic.gui",
+        "snap-size",
+        "100",
+        "Sets the default grid spacing."
+    },
 
 
 
