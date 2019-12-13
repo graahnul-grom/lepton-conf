@@ -234,6 +234,13 @@ static CfgEntry g_cfg_registry[] =
         "Whether to mark a possible connection that is close to the current"
         " cursor position when drawing a net."
     },
+    {
+        "schematic.gui",
+        "zoom-gain",
+        "20",
+        "The percentage size increase/decrease when zooming in/out with the"
+        " mouse wheel. Negative values reverses the direction."
+    },
 
 
     // tabs: //
