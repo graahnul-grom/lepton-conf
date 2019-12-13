@@ -245,8 +245,15 @@ static CfgEntry g_cfg_registry[] =
         "schematic.gui",
         "mousepan-gain",
         "1",
-        "Controls how much the display pans. A larger value
+        "Controls how much the display pans when using mouse. A larger value
         " provides greater pan distance when moving the mouse."
+    },
+    {
+        "schematic.gui",
+        "keyboardpan-gain",
+        "20",
+        "Controls how much the display pans when using the keyboard keys.
+        " A larger value provides greater pan distance."
     },
 
 
