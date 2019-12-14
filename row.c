@@ -107,10 +107,10 @@ row_select_non_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
 
 
 
-// {ret}: tree store iter corresponding to model's iter [it]
+// {ret}: tree store iter corresponding to model's iter [it_smod]
 //
 GtkTreeIter
-row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
+row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it_smod )
 {
 //    NOTE: manual impl:
 //
@@ -122,20 +122,55 @@ row_get_tstore_iter( cfg_edit_dlg* dlg, GtkTreeIter it )
 //    gtk_tree_model_get_iter( childModel, &itStore, path );
 //    return itStore;
 
+
     // NOTE: no filter model set:
     //
-    GtkTreeModel* model = gtk_tree_view_get_model( dlg->tree_v_ );
-    GtkTreeModel* modelStore = GTK_TREE_MODEL( dlg->store_ );
-    if ( model == modelStore )
-        return it;
+//    GtkTreeModel* model = gtk_tree_view_get_model( dlg->tree_v_ );
+//    GtkTreeModel* modelStore = GTK_TREE_MODEL( dlg->store_ );
+//    if ( model == modelStore )
+//        return it;
+//
+//    GtkTreeModelFilter* modelFilt = GTK_TREE_MODEL_FILTER( model );
+//    GtkTreeIter itModel = it;
+//    GtkTreeIter itStore;
+//    gtk_tree_model_filter_convert_iter_to_child_iter( modelFilt,
+//                                                      &itStore,
+//                                                      &itModel );
+//    return itStore;
 
-    GtkTreeModelFilter* modelFilt = GTK_TREE_MODEL_FILTER( model );
-    GtkTreeIter itModel = it;
-    GtkTreeIter itStore;
-    gtk_tree_model_filter_convert_iter_to_child_iter( modelFilt,
-                                                      &itStore,
-                                                      &itModel );
-    return itStore;
+
+
+
+    // tree models relationshp:
+    //
+    //         v---------------> "child" model of mods
+    // mods -> modf -> store
+    //                 ^-------> "child" model of modf
+    //
+    GtkTreeIter it_fmod;
+    GtkTreeIter it_stor;
+
+    // mod => mods:
+    //
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModelSort* mods = GTK_TREE_MODEL_SORT( mod );
+
+    // it_smod => it_fmod:
+    //
+    gtk_tree_model_sort_convert_iter_to_child_iter( mods, &it_fmod, &it_smod );
+
+    // mods => modf:
+    //
+    mod = gtk_tree_model_sort_get_model( mods );
+    GtkTreeModelFilter* modf = GTK_TREE_MODEL_FILTER( mod );
+
+    // it_fmod => it_stor:
+    //
+    gtk_tree_model_filter_convert_iter_to_child_iter( modf, &it_stor, &it_fmod );
+
+    return it_stor;
+    //
+    //
 
 } // row_get_tstore_iter()
 
@@ -314,6 +349,9 @@ row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
     row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
+
+    printf( "row_key_unset_inh(): rdata->rtype_ == [%d]\n", rdata->rtype_ );
+    // |=> "1" (RT_GRP)
 
     g_assert( rdata->rtype_ == RT_KEY && " >> row_key_unset_inh(): !key" );
 
