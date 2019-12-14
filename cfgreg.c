@@ -245,14 +245,14 @@ static CfgEntry g_cfg_registry[] =
         "schematic.gui",
         "mousepan-gain",
         "1",
-        "Controls how much the display pans when using mouse. A larger value
+        "Controls how much the display pans when using mouse. A larger value"
         " provides greater pan distance when moving the mouse."
     },
     {
         "schematic.gui",
         "keyboardpan-gain",
         "20",
-        "Controls how much the display pans when using the keyboard keys.
+        "Controls how much the display pans when using the keyboard keys."
         " A larger value provides greater pan distance."
     },
     {
@@ -289,6 +289,15 @@ static CfgEntry g_cfg_registry[] =
         "dots-grid-dot-size",
         "1",
         "Controls the size of the grid dots (in pixels) in the dots grid display."
+    },
+    {
+        "schematic.gui",
+        "dots-grid-fixed-threshold",
+        "10",
+        "Specifies the minimum number of pixels for the grid to be displayed."
+        " Controls the density of the displayed grid (smaller numbers will"
+        " cause the grid to be drawn denser). This option is only effective"
+        " when the dots-grid-mode is set to \"fixed\"."
     },
 
 
