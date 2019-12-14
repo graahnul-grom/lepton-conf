@@ -124,7 +124,6 @@ static CfgEntry g_cfg_registry[] =
         "Whether to restore main window's size and position on startup."
     },
 
-
     {
         "schematic.gui",
         "draw-grips",
@@ -299,8 +298,14 @@ static CfgEntry g_cfg_registry[] =
         " cause the grid to be drawn denser). This option is only effective"
         " when the dots-grid-mode is set to \"fixed\"."
     },
-
-
+    {
+        "schematic.gui",
+        "mesh-grid-display-threshold",
+        "3",
+        "Specifies the minimum line pitch for the grid to be displayed."
+        " Controls the maximum density of the displayed grid before the"
+        " minor, then the major grid lines are switched off."
+    },
 
     // tabs: //
     {
