@@ -193,38 +193,26 @@ tree_set_focus( cfg_edit_dlg* dlg )
 
 
 
-// TODO: figure out how to use it:
-//
 gint
-tree_sort_cmp_fun( GtkTreeModel* model,
+tree_sort_cmp_fun( GtkTreeModel* model, // NOTE: model is GtkTreeModelFilter
                    GtkTreeIter*  a,
                    GtkTreeIter*  b,
                    gpointer      data )
 {
-    printf ( "tree_sort_cmp_fun()\n" );
+    row_data* rdata1 = NULL;
+    row_data* rdata2 = NULL;
+    gtk_tree_model_get( model, a, tree_colid_data(), &rdata1, -1 );
+    gtk_tree_model_get( model, b, tree_colid_data(), &rdata2, -1 );
 
-    GtkTreePath* path_a = gtk_tree_model_get_path( model, a );
-    gint depth = gtk_tree_path_get_depth( path_a );
-    gtk_tree_path_free( path_a );
+    g_return_val_if_fail( rdata1 && "tree_sort_cmp_fun(): !rdata1\n", 0 );
+    g_return_val_if_fail( rdata2 && "tree_sort_cmp_fun(): !rdata2\n", 0 );
 
-    // root node => do not sort:
-    //
-    if ( depth == 1 )
-        return 0;
+    const gchar* name1  = rdata_get_name( rdata1 );
+    const gchar* name2  = rdata_get_name( rdata2 );
 
-    cfg_edit_dlg* dlg = (cfg_edit_dlg*) data;
+    // NOTE: CRASH: row_data* rdata_a = row_field_get_data( dlg, a );
 
-    row_data* rdata_a = row_field_get_data( dlg, a );
-    row_data* rdata_b = row_field_get_data( dlg, b );
-
-    // TODO: free [?] names:
-    //
-    const gchar* name_a = rdata_get_name( rdata_a );
-    const gchar* name_b = rdata_get_name( rdata_b );
-
-    printf ( "sort_cmp_fun( %s, %s )\n", name_a, name_b );
-
-    return g_strcmp0( name_a, name_b );
+    return rdata1->rtype_ == RT_CTX ? 0 : strcmp( name1, name2 );
 
 } // tree_sort_cmp_fun()
 
@@ -268,16 +256,33 @@ tree_filter_setup( cfg_edit_dlg* p )
     if ( !dlg )
         return;
 
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModel* mod = GTK_TREE_MODEL( dlg->store_ );
+
+    // FILTER:
+    //
     GtkTreeModel* modf = gtk_tree_model_filter_new( mod, NULL );
-
     gtk_tree_model_filter_set_visible_func(
-        GTK_TREE_MODEL_FILTER( modf ),
-        &tree_filter,
-        dlg,
-        NULL);
+            GTK_TREE_MODEL_FILTER( modf ),
+            &tree_filter,
+            dlg,
+            NULL );
 
-    gtk_tree_view_set_model( dlg->tree_v_, modf );
+    // SORT:
+    //
+    GtkTreeModel*     sm       = gtk_tree_model_sort_new_with_model( modf );
+    GtkTreeModelSort* mods     = GTK_TREE_MODEL_SORT( sm );
+    GtkTreeSortable*  sortable = GTK_TREE_SORTABLE( mods );
+
+    gtk_tree_sortable_set_sort_column_id( sortable, 0, GTK_SORT_ASCENDING );
+    gtk_tree_sortable_set_sort_func(
+        sortable,
+        0,
+        &tree_sort_cmp_fun,
+        NULL,
+        NULL );
+
+    mod = GTK_TREE_MODEL( mods );
+    gtk_tree_view_set_model( dlg->tree_v_, mod );
 
 } // tree_filter_setup()
 
