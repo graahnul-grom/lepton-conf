@@ -111,9 +111,15 @@ a_showinh( cfg_edit_dlg* dlg, gboolean show )
 {
     dlg->showinh_ = show;
 
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
 
-    gtk_tree_model_filter_refilter( GTK_TREE_MODEL_FILTER( mod ) );
+    GtkTreeModel*       mod  = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModelSort*   mods = GTK_TREE_MODEL_SORT( mod );
+                        mod  = gtk_tree_model_sort_get_model( mods );
+    GtkTreeModelFilter* modf = GTK_TREE_MODEL_FILTER( mod );
+
+    gtk_tree_model_filter_refilter( modf );
+
+
     tree_set_focus( dlg );
 
 } // a_showinh()
