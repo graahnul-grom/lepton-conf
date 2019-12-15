@@ -49,15 +49,37 @@ row_select_by_path_tstore( cfg_edit_dlg* dlg, GtkTreePath* path_tstore )
 void
 row_select_by_iter_tstore( cfg_edit_dlg* dlg, GtkTreeIter it_tstore )
 {
-    // path within tstore:
-    GtkTreePath* path_tstore =
-        gtk_tree_model_get_path( GTK_TREE_MODEL( dlg->store_ ), &it_tstore );
+    GtkTreeModel* mod = NULL;
 
-    g_return_if_fail( path_tstore != 0 && "row_select_by_iter_tstore()" );
+    mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeModelSort* mods = GTK_TREE_MODEL_SORT( mod );
 
-    row_select_by_path_tstore( dlg, path_tstore );
+    mod = gtk_tree_model_sort_get_model( mods );
+    GtkTreeModelFilter* modf = GTK_TREE_MODEL_FILTER( mod );
 
-    gtk_tree_path_free( path_tstore );
+    GtkTreeIter it_f;
+    gtk_tree_model_filter_convert_child_iter_to_iter( modf, &it_f, &it_tstore );
+
+    GtkTreeIter it_s;
+    gtk_tree_model_sort_convert_child_iter_to_iter( mods, &it_s, &it_f );
+
+
+    // NOTE: exactly this call sequence:
+    //       (expand to path -> set sursor -> scroll to cell)
+    //
+    mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it_s );
+    gtk_tree_view_expand_to_path( dlg->tree_v_, path );
+    gtk_tree_view_set_cursor( dlg->tree_v_, path, NULL, FALSE );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+    gtk_tree_path_free( path );
+
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    gtk_tree_selection_select_iter( sel, &it_s );
+//    GtkTreeIter i;
+//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, &i );
+//    printf( " >> RES: [%d]\n", res );
 
 } // row_select_by_iter_tstore()
 
