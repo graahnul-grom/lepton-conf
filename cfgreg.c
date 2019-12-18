@@ -351,6 +351,13 @@ static CfgEntry g_cfg_registry[] =
         "- gtk: vertical scroll,"
         " with Shift - horizontal scroll, with Ctrl - zoom in/out"
     },
+    {
+        "schematic.gui",
+        "grid-mode",
+        "mesh",
+        "Either \"mesh\", \"dots\" or \"none\"."
+    },
+
 
 
 
