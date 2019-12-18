@@ -306,6 +306,19 @@ static CfgEntry g_cfg_registry[] =
         " Controls the maximum density of the displayed grid before the"
         " minor, then the major grid lines are switched off."
     },
+    {
+        "schematic.gui",
+        "action-feedback-mode",
+        "outline",
+        "Sets the default action feedback mode for copy, move, and component place"
+        " operations. Either \"outline\" or \"boundingbox\".\n"
+        "When set to \"boundingbox\", just a box surrounding objects"
+        " is drawn, which is much faster. It may help with slow hardware."
+    },
+
+
+
+
 
     // tabs: //
     {
