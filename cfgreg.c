@@ -443,7 +443,16 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Controls if the undo is enabled or not."
     },
-
+    {
+        "schematic.undo",
+        "undo-type",
+        "disk",
+        "Controls what kind of medium is used for storing undo data.\n"
+        "Either \"disk\" or \"memory\".\n"
+        "The disk mechanism is nice because you get undo-level number of"
+        " backups of the schematic written to disk as backups so you"
+        " should never lose a schematic due to a crash."
+    },
 
 
 
