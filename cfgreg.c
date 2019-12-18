@@ -437,6 +437,17 @@ static CfgEntry g_cfg_registry[] =
         "false",
         "Allow undo/redo operations to change pan and zoom."
     },
+    {
+        "schematic.undo",
+        "undo-control",
+        "true",
+        "Controls if the undo is enabled or not."
+    },
+
+
+
+
+
     // log-window: //
     {
         "schematic.log-window",
