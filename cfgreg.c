@@ -322,6 +322,17 @@ static CfgEntry g_cfg_registry[] =
         "Sets the default caps style used for the input of text.\n"
         "Either \"both\", \"lower\" or \"upper\"."
     },
+    {
+        "schematic.gui",
+        "middle-button",
+        "mousepan",
+        "Controls what the middle mouse button does:\n"
+        "- mousepan: mouse panning\n"
+        "- popup: display the popup menu\n"
+        "- action: perform an action on a single object\n"
+        "- stroke: draw strokes\n"
+        "- repeat: repeat the last command"
+    },
 
 
 
