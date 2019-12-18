@@ -315,7 +315,13 @@ static CfgEntry g_cfg_registry[] =
         "When set to \"boundingbox\", just a box surrounding objects"
         " is drawn, which is much faster. It may help with slow hardware."
     },
-
+    {
+        "schematic.gui",
+        "text-caps-style",
+        "both",
+        "Sets the default caps style used for the input of text.\n"
+        "Either \"both\", \"lower\" or \"upper\"."
+    },
 
 
 
