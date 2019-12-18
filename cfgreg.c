@@ -491,6 +491,15 @@ static CfgEntry g_cfg_registry[] =
         "For example:\n"
         "font=Monospace 12"
     },
+    // schematic: //
+    {
+        "schematic",
+        "bus-ripper-size",
+        "200",
+        "Sets the size of the auto bus rippers."
+    },
+
+
 
     //
     // lepton-netlist:
