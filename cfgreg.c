@@ -498,7 +498,12 @@ static CfgEntry g_cfg_registry[] =
         "200",
         "Sets the size of the auto bus rippers."
     },
-
+    {
+        "schematic",
+        "bus-ripper-type",
+        "component",
+        "Sets the bus ripper type, either a \"component\" or plain \"net\"."
+    },
 
 
     //
