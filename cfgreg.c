@@ -453,7 +453,12 @@ static CfgEntry g_cfg_registry[] =
         " backups of the schematic written to disk as backups so you"
         " should never lose a schematic due to a crash."
     },
-
+    {
+        "schematic.undo",
+        "undo-levels",
+        "20",
+        "Determines the number of levels of undo."
+    },
 
 
 
