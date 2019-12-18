@@ -341,6 +341,16 @@ static CfgEntry g_cfg_registry[] =
         "- popup: display the popup menu\n"
         "- mousepan: mouse panning"
     },
+    {
+        "schematic.gui",
+        "scroll-wheel",
+        "classic",
+        "Controls the binding of the mouse scroll wheel:\n"
+        "- classic: zoom in/out,"
+        " with Ctrl - horizontal scroll, with Shift - vertical scroll\n"
+        "- gtk: vertical scroll,"
+        " with Shift - horizontal scroll, with Ctrl - zoom in/out"
+    },
 
 
 
