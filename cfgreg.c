@@ -333,7 +333,14 @@ static CfgEntry g_cfg_registry[] =
         "- stroke: draw strokes\n"
         "- repeat: repeat the last command"
     },
-
+    {
+        "schematic.gui",
+        "third-button",
+        "popup",
+        "Controls what the third mouse button does:\n"
+        "- popup: display the popup menu\n"
+        "- mousepan: mouse panning"
+    },
 
 
 
