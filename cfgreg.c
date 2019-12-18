@@ -459,8 +459,14 @@ static CfgEntry g_cfg_registry[] =
         "20",
         "Determines the number of levels of undo."
     },
-
-
+    {
+        "schematic.undo",
+        "undo-panzoom",
+        "false",
+        "Controls if pan or zoom commands are saved in the undo list.\n"
+        "If this is enabled, then a pan or zoom will be considered"
+        " a command and can be undone."
+    },
 
     // log-window: //
     {
