@@ -209,8 +209,11 @@ row_cur_get_iter( cfg_edit_dlg* dlg, GtkTreeIter* it )
     GtkTreeModel* model = NULL;
     gboolean res = gtk_tree_selection_get_selected( sel, &model, it );
 
-//    gboolean res = gtk_tree_selection_get_selected( sel, NULL, it );
-    g_return_val_if_fail( res && "row_cur_get_iter(): !sel\n", res );
+#ifdef DEBUG
+    if ( !res )
+        printf( " ** ** ** row_cur_get_iter(): !sel\n" );
+    // g_return_val_if_fail( res && "row_cur_get_iter(): !sel\n", res );
+#endif
 
     return res;
 
