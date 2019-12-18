@@ -367,9 +367,22 @@ static CfgEntry g_cfg_registry[] =
         " represents the same number of units as the snap-spacing. You can"
         " control the density of the grid using the dots-grid-fixed-threshold option."
     },
-
-
-
+    {
+        "schematic.gui",
+        "net-selection-mode",
+        "enabled_net",
+        "Controls how many net segments are selected when you click at a net.\n"
+        "Either \"enabled_all\", \"enabled_net\" or \"disabled\".\n"
+        "- enabled_all:\n"
+        "  - first click selects the net itself\n"
+        "  - second click selects all nets directly connected to the selected one\n"
+        "  - third click in addition selects all nets with equal \"netname\" attributes\n"
+        "- enabled_net:\n"
+        "  - first click selects the net itself\n"
+        "  - second click selects all nets directly connected to the selected one\n"
+        "- disabled:\n"
+        "  - mouse clicks just selects the clicked net\n"
+    },
 
     // tabs: //
     {
