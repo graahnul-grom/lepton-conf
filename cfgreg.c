@@ -357,6 +357,16 @@ static CfgEntry g_cfg_registry[] =
         "mesh",
         "Either \"mesh\", \"dots\" or \"none\"."
     },
+    {
+        "schematic.gui",
+        "dots-grid-mode",
+        "variable",
+        "Controls the mode of the dotted grid, either \"variable\" or \"fixed\".\n"
+        "In the variable mode, the grid spacing changes"
+        " depending on the zoom factor. In the fixed mode, the grid always"
+        " represents the same number of units as the snap-spacing. You can"
+        " control the density of the grid using the dots-grid-fixed-threshold option."
+    },
 
 
 
