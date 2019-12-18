@@ -504,7 +504,13 @@ static CfgEntry g_cfg_registry[] =
         "component",
         "Sets the bus ripper type, either a \"component\" or plain \"net\"."
     },
-
+    {
+        "schematic",
+        "bus-ripper-rotation",
+        "non-symmetric",
+        "Either \"symmetric\" or \"non-symmetric\". This deals with how the"
+        " bus ripper symbol is rotated when it is auto added to a schematic."
+    },
 
     //
     // lepton-netlist:
