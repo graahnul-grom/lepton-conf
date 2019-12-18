@@ -1104,6 +1104,22 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
             {
                 row_field_set_val( dlg, it_child, val );
 
+
+
+
+                // XXX:  fixes crash in subsequent calls to row_field_get_data()
+                // NOTE: crashes only if sort model is used
+                // TODO: does gtk_tree_store_set() invalidate iterators??
+                //
+                row_cur_get_iter( dlg, &it_child );
+                //
+                //
+                //
+                //
+
+
+
+
                 // NOTE: unset inherited:
                 //
                 row_key_unset_inh( dlg, it_child );
