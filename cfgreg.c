@@ -511,6 +511,15 @@ static CfgEntry g_cfg_registry[] =
         "Either \"symmetric\" or \"non-symmetric\". This deals with how the"
         " bus ripper symbol is rotated when it is auto added to a schematic."
     },
+    {
+        "schematic",
+        "net-consolidate",
+        "true",
+        "Controls if the net consolidation code is used when schematics are read"
+        " in, written to disk, and when nets are being drawn (does not consolidate"
+        " when things are being copied or moved yet). Net consolidation is the"
+        " connection of nets which can be combined into one."
+    },
 
     //
     // lepton-netlist:
