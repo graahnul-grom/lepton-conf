@@ -48,5 +48,5 @@ clean:
 	cc $(CFLAGS) $(OPT_GTK_OBJ) $(OPT_LIBLEPTON_OBJ) -c $< -o $@
 
 $(EXE): $(OBJ)
-	cc $(CFLAGS) $(OPT_GTK) $(OPT_LIBLEPTON) -o $(EXE) $(OBJ)
+	cc -o $(EXE) $(OBJ) $(CFLAGS) $(OPT_GTK) $(OPT_LIBLEPTON)
 
