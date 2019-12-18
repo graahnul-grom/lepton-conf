@@ -535,6 +535,13 @@ static CfgEntry g_cfg_registry[] =
         " and there were more than \"interval\" seconds from the last autosave.\n"
         "Autosaving will not be allowed if setting it to zero."
     },
+    {
+        "schematic",
+        "log-window",
+        "later",
+        "Controls if the log window is shown when lepton-schematic is started up"
+        " (\"startup\"), or not (\"later\")."
+    },
 
     //
     // lepton-netlist:
