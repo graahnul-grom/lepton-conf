@@ -526,6 +526,15 @@ static CfgEntry g_cfg_registry[] =
         "true",
         "Determines if the logging mechanism is enabled."
     },
+    {
+        "schematic",
+        "auto-save-interval",
+        "120",
+        "Controls how often a backup copy is made, in seconds.\n"
+        "The backup copy is made when you make some change to the schematic,"
+        " and there were more than \"interval\" seconds from the last autosave.\n"
+        "Autosaving will not be allowed if setting it to zero."
+    },
 
     //
     // lepton-netlist:
