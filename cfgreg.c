@@ -520,6 +520,12 @@ static CfgEntry g_cfg_registry[] =
         " when things are being copied or moved yet). Net consolidation is the"
         " connection of nets which can be combined into one."
     },
+    {
+        "schematic",
+        "logging",
+        "true",
+        "Determines if the logging mechanism is enabled."
+    },
 
     //
     // lepton-netlist:
