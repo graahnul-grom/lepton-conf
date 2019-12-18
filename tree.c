@@ -219,7 +219,7 @@ tree_sort_cmp_fun( GtkTreeModel* model, // NOTE: model is GtkTreeModelFilter
 
 
 static gboolean
-tree_filter( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
+tree_filter_fun( GtkTreeModel* model, GtkTreeIter* it, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
@@ -263,7 +263,7 @@ tree_filter_setup( cfg_edit_dlg* p )
     GtkTreeModel* modf = gtk_tree_model_filter_new( mod, NULL );
     gtk_tree_model_filter_set_visible_func(
             GTK_TREE_MODEL_FILTER( modf ),
-            &tree_filter,
+            &tree_filter_fun,
             dlg,
             NULL );
 
