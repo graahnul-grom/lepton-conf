@@ -783,15 +783,11 @@ gboolean
 cfgreg_can_toggle( const row_data* rdata )
 {
     const gchar* val = rdata->val_;
-    gboolean can_toggle = FALSE;
 
-    can_toggle |= g_strcmp0( val, "true"     ) == 0;
-    can_toggle |= g_strcmp0( val, "false"    ) == 0;
-    can_toggle |= g_strcmp0( val, "enabled"  ) == 0;
-    can_toggle |= g_strcmp0( val, "disabled" ) == 0;
-
-    can_toggle |= g_strcmp0( val, "net-attribute" )     == 0;
-    can_toggle |= g_strcmp0( val, "netname-attribute" ) == 0;
+    const gboolean can_toggle =
+        strcmp( val, "true" )  == 0 ||
+        strcmp( val, "false" ) == 0 ||
+        find_cee( rdata->group_, rdata->key_ );
 
     return can_toggle;
 }
