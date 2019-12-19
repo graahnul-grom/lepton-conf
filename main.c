@@ -118,6 +118,8 @@ int main( int argc, char* argv[] )
 #endif
 
 
+    cfgreg_init();
+
     GtkWidget* wnd = cfg_edit_dlg_new();
 
 //    gtk_widget_set_size_request( wnd, 800, 650 );
