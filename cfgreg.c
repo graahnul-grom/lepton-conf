@@ -952,17 +952,17 @@ cfgreg_init()
     add_cee( "schematic.gui", "third-button", sg_tb );
 
 #ifdef DEBUG
-    const gchar* v = NULL;
-    v = cee_next_val( "schematic.gui", "text-caps-style", "both" );
-    printf( " .. .. [%s]\n", v );
-    v = cee_next_val( "schematic.gui", "text-caps-style", "lower" );
-    printf( " .. .. [%s]\n", v );
-    v = cee_next_val( "schematic.gui", "text-caps-style", "upper" );
-    printf( " .. .. [%s]\n", v );
-    v = cee_next_val( "schematic.gui", "text-caps-style", "XXX" );
-    printf( " .. .. [%s]\n", v );
-    v = cee_next_val( "XXX", "XXX", "XXX" );
-    printf( " .. .. [%s]\n", v );
+//    const gchar* v = NULL;
+//    v = cee_next_val( "schematic.gui", "text-caps-style", "both" );
+//    printf( " .. .. [%s]\n", v );
+//    v = cee_next_val( "schematic.gui", "text-caps-style", "lower" );
+//    printf( " .. .. [%s]\n", v );
+//    v = cee_next_val( "schematic.gui", "text-caps-style", "upper" );
+//    printf( " .. .. [%s]\n", v );
+//    v = cee_next_val( "schematic.gui", "text-caps-style", "XXX" );
+//    printf( " .. .. [%s]\n", v );
+//    v = cee_next_val( "XXX", "XXX", "XXX" );
+//    printf( " .. .. [%s]\n", v );
 //    dbg_print_cees();
 #endif
 

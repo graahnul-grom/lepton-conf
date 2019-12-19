@@ -375,9 +375,6 @@ row_key_unset_inh( cfg_edit_dlg* dlg, GtkTreeIter it )
     if ( !rdata )
         return;
 
-    printf( "row_key_unset_inh(): rdata->rtype_ == [%d]\n", rdata->rtype_ );
-    // |=> "1" (RT_GRP)
-
     g_assert( rdata->rtype_ == RT_KEY && " >> row_key_unset_inh(): !key" );
 
     rdata->inh_ = FALSE;
