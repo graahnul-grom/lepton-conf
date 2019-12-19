@@ -912,14 +912,44 @@ cee_next_val( const gchar* grp, const gchar* key, const gchar* current )
 void
 cfgreg_init()
 {
-    const gchar* sw[] = { "classic", "gtk", NULL };
-    add_cee( "schematic.gui", "scroll-wheel", sw );
+    const gchar* e_l[] = { "auto", "landscape", "portrait", NULL };
+    add_cee( "export", "layout", e_l );
 
-    const gchar* tb[] = { "mousepan", "popup", NULL };
-    add_cee( "schematic.gui", "third-button", tb );
+    const gchar* gp_l[] = { "auto", "landscape", "portrait", NULL };
+    add_cee( "gschem.printing", "layout", gp_l );
 
-    const gchar* tcs[] = { "both", "lower", "upper", NULL };
-    add_cee( "schematic.gui", "text-caps-style", tcs );
+    const gchar* s_brr[] = { "non-symmetric", "symmetric", NULL };
+    add_cee( "schematic", "bus-ripper-rotation", s_brr );
+
+    const gchar* s_brt[] = { "component", "net", NULL };
+    add_cee( "schematic", "bus-ripper-type", s_brt );
+
+    const gchar* s_lw[] = { "later", "startup", NULL };
+    add_cee( "schematic", "log-window", s_lw );
+
+    const gchar* sg_afm[] = { "outline", "boundingbox", NULL };
+    add_cee( "schematic.gui", "action-feedback-mode", sg_afm );
+
+    const gchar* sg_dgm[] = { "variable", "fixed", NULL };
+    add_cee( "schematic.gui", "dots-grid-mode", sg_dgm );
+
+    const gchar* sg_gm[] = { "mesh", "dots", "none", NULL };
+    add_cee( "schematic.gui", "grid-mode", sg_gm );
+
+    const gchar* sg_mb[] = { "mousepan", "popup", "action", "stroke", "repeat", NULL };
+    add_cee( "schematic.gui", "middle-button", sg_mb );
+
+    const gchar* sg_nsm[] = { "enabled_net", "enabled_all", "disabled", NULL };
+    add_cee( "schematic.gui", "net-selection-mode", sg_nsm );
+
+    const gchar* sg_sw[] = { "classic", "gtk", NULL };
+    add_cee( "schematic.gui", "scroll-wheel", sg_sw );
+
+    const gchar* sg_tcs[] = { "both", "lower", "upper", NULL };
+    add_cee( "schematic.gui", "text-caps-style", sg_tcs );
+
+    const gchar* sg_tb[] = { "mousepan", "popup", NULL };
+    add_cee( "schematic.gui", "third-button", sg_tb );
 
 #ifdef DEBUG
     const gchar* v = NULL;
