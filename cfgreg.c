@@ -11,6 +11,11 @@
 
 
 
+CfgEntryEnum*
+find_cee( const gchar* grp, const gchar* key );
+
+
+
 static CfgEntry g_cfg_registry[] =
 {
     //
@@ -813,19 +818,6 @@ cfgreg_populate_ctx( EdaConfig* ctx )
 
 
 
-// cfg key with predefined set of values
-//
-struct _CfgEntryEnum
-{
-    gchar* grp_;
-    gchar* key_;
-    GList* vals_; // possible values of grp::key (list of strings)
-};
-
-typedef struct _CfgEntryEnum CfgEntryEnum;
-
-
-
 static GList* g_cees = NULL;
 
 
@@ -880,7 +872,7 @@ add_cee( const gchar* grp, const gchar* key, const gchar** vals )
 
 
 
-static CfgEntryEnum*
+CfgEntryEnum*
 find_cee( const gchar* grp, const gchar* key )
 {
     CfgEntryEnum* data = mk_cee( grp, key, NULL );

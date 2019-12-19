@@ -514,6 +514,17 @@ struct _CfgEntry
 
 typedef struct _CfgEntry CfgEntry;
 
+// cfg key with predefined set of values
+//
+struct _CfgEntryEnum
+{
+    gchar* grp_;
+    gchar* key_;
+    GList* vals_; // possible values of grp::key (list of strings)
+};
+
+typedef struct _CfgEntryEnum CfgEntryEnum;
+
 
 const CfgEntry*
 cfgreg_lookup( const gchar* grp, const gchar* key );
