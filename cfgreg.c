@@ -868,14 +868,14 @@ cee_cmp_fun( gconstpointer a, gconstpointer b )
 
 
 static void
-add_cee( GList** entries, const gchar* grp, const gchar* key, const gchar** vals )
+add_cee( const gchar* grp, const gchar* key, const gchar** vals )
 {
     GList* gl = NULL;
     for ( const gchar** p = vals; *p != NULL; ++p )
         gl = g_list_append( gl, (gpointer) *p );
 
     CfgEntryEnum* e = mk_cee( grp, key, gl );
-    *entries = g_list_append( *entries, (gpointer) e );
+    g_cees = g_list_append( g_cees, (gpointer) e );
 }
 
 
@@ -925,13 +925,13 @@ void
 cfgreg_init()
 {
     const gchar* sw[] = { "classic", "gtk", NULL };
-    add_cee( &g_cees, "schematic.gui", "scroll-wheel", sw );
+    add_cee( "schematic.gui", "scroll-wheel", sw );
 
     const gchar* tb[] = { "mousepan", "popup", NULL };
-    add_cee( &g_cees, "schematic.gui", "third-button", tb );
+    add_cee( "schematic.gui", "third-button", tb );
 
     const gchar* tcs[] = { "both", "lower", "upper", NULL };
-    add_cee( &g_cees, "schematic.gui", "text-caps-style", tcs );
+    add_cee( "schematic.gui", "text-caps-style", tcs );
 
 #ifdef DEBUG
     const gchar* v = NULL;
