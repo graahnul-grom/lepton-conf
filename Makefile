@@ -26,7 +26,7 @@ OBJ=main.o \
     tree.o \
     row.o \
     actions.o
-HDR=proto.h cfgreg.h
+HDR=proto.h
 
 CFLAGS=-Wall -std=c99 -pthread $(DBG)
 CFLAGS_OBJ=-Wall -ansi -std=c99 -pthread $(DBG)

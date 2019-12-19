@@ -6,7 +6,7 @@
  * https://github.com/lepton-eda/lepton-eda
  */
 
-#include "cfgreg.h"
+#include "proto.h"
 
 
 

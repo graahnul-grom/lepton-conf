@@ -11,7 +11,6 @@
 
 #include <gtk/gtk.h>
 #include <liblepton/liblepton.h>
-#include "cfgreg.h"
 
 
 
@@ -496,6 +495,44 @@ a_toggle( cfg_edit_dlg* dlg );
 
 void
 a_delete( cfg_edit_dlg* dlg );
+
+
+
+
+// cfgreg.c:
+//
+// struct represents a configuration key:
+// NOTE: unique( grp, key )
+//
+struct _CfgEntry
+{
+    const gchar* grp_;
+    const gchar* key_;
+    const gchar* def_val_; // default value
+    const gchar* desc_;
+};
+
+typedef struct _CfgEntry CfgEntry;
+
+
+const CfgEntry*
+cfgreg_lookup( const gchar* grp, const gchar* key );
+
+// convenience func:
+// find CfgEntry in global cfg registry by group name and key name,
+//   and if found, return description for that entry
+//
+const gchar*
+cfgreg_lookup_descr( const gchar* grp, const gchar* key );
+
+const gchar*
+cfgreg_lookup_dflt_val( const gchar* grp, const gchar* key );
+
+gboolean
+cfgreg_can_toggle( const gchar* val );
+
+void
+cfgreg_populate_ctx( EdaConfig* ctx );
 
 
 
