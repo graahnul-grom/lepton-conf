@@ -99,8 +99,15 @@ a_toggle( cfg_edit_dlg* dlg )
     {
         val = "true";
     }
+    else
+    {
+        val = cee_next_val( rdata->group_, rdata->key_, rdata->val_ );
+    }
 
-    a_chg_val( dlg, rdata, it, val );
+    if ( val != NULL )
+    {
+        a_chg_val( dlg, rdata, it, val );
+    }
 
 } // a_toggle()
 
