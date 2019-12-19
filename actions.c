@@ -88,35 +88,19 @@ a_toggle( cfg_edit_dlg* dlg )
         return;
 
 
-    if ( g_strcmp0( rdata->val_, "true" ) == 0 )
+    const gchar* val = NULL;
+
+    if ( strcmp( rdata->val_, "true" ) == 0 )
     {
-        a_chg_val( dlg, rdata, it, "false" );
+        val = "false";
     }
     else
-    if ( g_strcmp0( rdata->val_, "false" ) == 0 )
+    if ( strcmp( rdata->val_, "false" ) == 0 )
     {
-        a_chg_val( dlg, rdata, it, "true" );
+        val = "true";
     }
-    else
-    if ( g_strcmp0( rdata->val_, "enabled" ) == 0 )
-    {
-        a_chg_val( dlg, rdata, it, "disabled" );
-    }
-    else
-    if ( g_strcmp0( rdata->val_, "disabled" ) == 0 )
-    {
-        a_chg_val( dlg, rdata, it, "enabled" );
-    }
-    else
-    if ( g_strcmp0( rdata->val_, "net-attribute" ) == 0 )
-    {
-        a_chg_val( dlg, rdata, it, "netname-attribute" );
-    }
-    else
-    if ( g_strcmp0( rdata->val_, "netname-attribute" ) == 0 )
-    {
-        a_chg_val( dlg, rdata, it, "net-attribute" );
-    }
+
+    a_chg_val( dlg, rdata, it, val );
 
 } // a_toggle()
 
