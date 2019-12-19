@@ -880,8 +880,8 @@ find_cee( const gchar* grp, const gchar* key )
 
 
 
-static const gchar*
-cee_next_val( GList* entries, const gchar* grp, const gchar* key, const gchar* current )
+const gchar*
+cee_next_val( const gchar* grp, const gchar* key, const gchar* current )
 {
     CfgEntryEnum* e = find_cee( grp, key );
     if ( !e )
@@ -923,15 +923,15 @@ cfgreg_init()
 
 #ifdef DEBUG
     const gchar* v = NULL;
-    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "both" );
+    v = cee_next_val( "schematic.gui", "text-caps-style", "both" );
     printf( " .. .. [%s]\n", v );
-    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "lower" );
+    v = cee_next_val( "schematic.gui", "text-caps-style", "lower" );
     printf( " .. .. [%s]\n", v );
-    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "upper" );
+    v = cee_next_val( "schematic.gui", "text-caps-style", "upper" );
     printf( " .. .. [%s]\n", v );
-    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "XXX" );
+    v = cee_next_val( "schematic.gui", "text-caps-style", "XXX" );
     printf( " .. .. [%s]\n", v );
-    v = cee_next_val( g_cees, "XXX", "XXX", "XXX" );
+    v = cee_next_val( "XXX", "XXX", "XXX" );
     printf( " .. .. [%s]\n", v );
 //    dbg_print_cees();
 #endif

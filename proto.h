@@ -548,6 +548,9 @@ cfgreg_populate_ctx( EdaConfig* ctx );
 void
 cfgreg_init();
 
+const gchar*
+cee_next_val( const gchar* grp, const gchar* key, const gchar* current );
+
 
 
 #endif /* LEPTON_CONF_PROTO_H_ */
