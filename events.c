@@ -388,7 +388,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
     //
     if ( !rdata->ro_ && ebtn->type == GDK_2BUTTON_PRESS && ebtn->button == 1 )
     {
-        if ( cfgreg_can_toggle( rdata->val_ ) )
+        if ( cfgreg_can_toggle( rdata ) )
         {
             a_toggle( dlg );
         }

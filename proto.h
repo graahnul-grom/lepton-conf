@@ -529,7 +529,7 @@ const gchar*
 cfgreg_lookup_dflt_val( const gchar* grp, const gchar* key );
 
 gboolean
-cfgreg_can_toggle( const gchar* val );
+cfgreg_can_toggle( const row_data* rdata );
 
 void
 cfgreg_populate_ctx( EdaConfig* ctx );

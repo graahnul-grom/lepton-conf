@@ -90,7 +90,7 @@ gui_update( cfg_edit_dlg* dlg )
     const gboolean enable_toggle =
         rdata->rtype_ == RT_KEY
         && !rdata->ro_
-        && cfgreg_can_toggle( rdata->val_ );
+        && cfgreg_can_toggle( rdata );
 
     gtk_widget_set_sensitive( dlg->btn_toggle_, enable_toggle );
 
@@ -518,7 +518,7 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
     else
     if ( rdata->rtype_ == RT_KEY )
     {
-        const gboolean can_toggle = cfgreg_can_toggle( rdata->val_ );
+        const gboolean can_toggle = cfgreg_can_toggle( rdata );
 
         mk_mitem( menu,
                   "_Edit...",
