@@ -810,3 +810,155 @@ cfgreg_populate_ctx( EdaConfig* ctx )
     }
 }
 
+
+
+
+// cfg key with predefined set of values
+//
+struct _CfgEntryEnum
+{
+    gchar* grp_;
+    gchar* key_;
+    GList* vals_; // possible values of grp::key (list of strings)
+};
+
+typedef struct _CfgEntryEnum CfgEntryEnum;
+
+
+
+static GList* g_cees = NULL;
+
+
+
+static CfgEntryEnum*
+mk_cee( const gchar* grp, const gchar* key, GList* vals )
+{
+    CfgEntryEnum* e = g_malloc( sizeof( CfgEntryEnum ) );
+    e->grp_  = g_strdup( grp );
+    e->key_  = g_strdup( key );
+    e->vals_ = vals;
+    return e;
+}
+
+
+
+static void
+rm_cee( CfgEntryEnum* e )
+{
+    g_free( e->grp_ );
+    g_free( e->key_ );
+    if ( e->vals_ != NULL )
+        g_list_free( e->vals_ );
+    g_free( e );
+}
+
+
+
+static int
+cee_cmp_fun( gconstpointer a, gconstpointer b )
+{
+    CfgEntryEnum* e1 = (CfgEntryEnum*) a;
+    CfgEntryEnum* e2 = (CfgEntryEnum*) b;
+    gboolean gmatch = strcmp( e1->grp_, e2->grp_) == 0;
+    gboolean kmatch = strcmp( e1->key_, e2->key_) == 0;
+
+    return gmatch && kmatch ? 0 : 1;
+}
+
+
+
+static void
+add_cee( GList** entries, const gchar* grp, const gchar* key, const gchar** vals )
+{
+    GList* gl = NULL;
+    for ( const gchar** p = vals; *p != NULL; ++p )
+        gl = g_list_append( gl, (gpointer) *p );
+
+    CfgEntryEnum* e = mk_cee( grp, key, gl );
+    *entries = g_list_append( *entries, (gpointer) e );
+}
+
+
+
+static const gchar*
+cee_next_val( GList* entries, const gchar* grp, const gchar* key, const gchar* current )
+{
+    CfgEntryEnum* data = mk_cee( grp, key, NULL );
+    GList* found = g_list_find_custom( entries, (gconstpointer) data, &cee_cmp_fun );
+    rm_cee( data );
+
+    if ( !found )
+        return NULL;
+
+    CfgEntryEnum* e = (CfgEntryEnum*) found->data;
+
+    for ( GList* gl = e->vals_; gl != NULL; gl = g_list_next (gl) )
+    {
+        const gchar* val = (const gchar*) gl->data;
+        if ( strcmp( val, current ) != 0 )
+            continue;
+
+        GList* next  = g_list_next( gl );
+        GList* first = g_list_first( gl );
+
+        if ( next != NULL )
+            return (const gchar*) next->data;
+
+        if ( first != NULL )
+            return (const gchar*) first->data;
+    }
+
+    return NULL;
+
+} // cee_next_val()
+
+
+
+void
+cfgreg_init()
+{
+    const gchar* sw[] = { "classic", "gtk", NULL };
+    add_cee( &g_cees, "schematic.gui", "scroll-wheel", sw );
+
+    const gchar* tb[] = { "mousepan", "popup", NULL };
+    add_cee( &g_cees, "schematic.gui", "third-button", tb );
+
+    const gchar* tcs[] = { "both", "lower", "upper", NULL };
+    add_cee( &g_cees, "schematic.gui", "text-caps-style", tcs );
+
+#ifdef DEBUG
+    const gchar* v = NULL;
+    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "both" );
+    printf( " .. .. [%s]\n", v );
+    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "lower" );
+    printf( " .. .. [%s]\n", v );
+    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "upper" );
+    printf( " .. .. [%s]\n", v );
+    v = cee_next_val( g_cees, "schematic.gui", "text-caps-style", "XXX" );
+    printf( " .. .. [%s]\n", v );
+    v = cee_next_val( g_cees, "XXX", "XXX", "XXX" );
+    printf( " .. .. [%s]\n", v );
+//    dbg_print_cees();
+#endif
+
+} // cfgreg_init()
+
+
+
+//#ifdef DEBUG
+//static void
+//dbg_print_cees()
+//{
+//    for ( GList* g = g_cees; g != NULL; g = g_list_next( g ) )
+//    {
+//        CfgEntryEnum* v = (CfgEntryEnum*) g->data;
+//        printf( " >> >> d: [%s]::%s\n", v->grp_, v->key_ );
+//
+//        for ( GList* gg = v->vals_; gg != NULL; gg = g_list_next (gg) )
+//        {
+//            printf( "  <%s>\n", (const gchar*) gg->data );
+//        }
+//    }
+//}
+//#endif
+

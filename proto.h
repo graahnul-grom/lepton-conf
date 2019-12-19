@@ -534,6 +534,9 @@ cfgreg_can_toggle( const row_data* rdata );
 void
 cfgreg_populate_ctx( EdaConfig* ctx );
 
+void
+cfgreg_init();
+
 
 
 #endif /* LEPTON_CONF_PROTO_H_ */
