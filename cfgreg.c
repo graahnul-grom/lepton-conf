@@ -880,17 +880,24 @@ add_cee( GList** entries, const gchar* grp, const gchar* key, const gchar** vals
 
 
 
+static CfgEntryEnum*
+find_cee( const gchar* grp, const gchar* key )
+{
+    CfgEntryEnum* data = mk_cee( grp, key, NULL );
+    GList* found = g_list_find_custom( g_cees, (gconstpointer) data, &cee_cmp_fun );
+    rm_cee( data );
+
+    return found ? (CfgEntryEnum*) found->data : NULL;
+}
+
+
+
 static const gchar*
 cee_next_val( GList* entries, const gchar* grp, const gchar* key, const gchar* current )
 {
-    CfgEntryEnum* data = mk_cee( grp, key, NULL );
-    GList* found = g_list_find_custom( entries, (gconstpointer) data, &cee_cmp_fun );
-    rm_cee( data );
-
-    if ( !found )
+    CfgEntryEnum* e = find_cee( grp, key );
+    if ( !e )
         return NULL;
-
-    CfgEntryEnum* e = (CfgEntryEnum*) found->data;
 
     for ( GList* gl = e->vals_; gl != NULL; gl = g_list_next (gl) )
     {
