@@ -20,6 +20,9 @@ row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod )
 
     gtk_tree_view_expand_to_path( dlg->tree_v_, path_mod );
     gtk_tree_view_set_cursor( dlg->tree_v_, path_mod, NULL, FALSE );
+
+    // WIP:
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path_mod, NULL, TRUE, 0.5, 0 );
 }
 
 
