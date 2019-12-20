@@ -951,6 +951,9 @@ cfgreg_init()
     const gchar* sg_tb[] = { "mousepan", "popup", NULL };
     add_cee( "schematic.gui", "third-button", sg_tb );
 
+    const gchar* nl_nnp[] = { "net-attribute", "netname-attribute", NULL };
+    add_cee( "gnetlist", "net-naming-priority", nl_nnp );
+
 #ifdef DEBUG
 //    const gchar* v = NULL;
 //    v = cee_next_val( "schematic.gui", "text-caps-style", "both" );
