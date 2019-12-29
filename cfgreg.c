@@ -164,7 +164,7 @@ static CfgEntry g_cfg_registry[] =
         "fast-mousepan",
         "false",
         "Controls if text is drawn properly or if a simplified version (a line which"
-        " represents the text string) is drawn during mouse pan.  Drawing a simple"
+        " represents the text string) is drawn during mouse pan. Drawing a simple"
         " line speeds up mousepan a lot for big schematics."
     },
     {
@@ -172,15 +172,15 @@ static CfgEntry g_cfg_registry[] =
         "continue-component-place",
         "true",
         "Controls the behavior of the \"Select Component...\" dialog.\n"
-        "Allow to place multiple instances of a component"
+        "Allows to place multiple instances of a component"
         " without having to press the \"Apply\" button each time."
     },
     {
         "schematic.gui",
         "file-preview",
         "true",
-        "Controls if the preview area in the File Open/Save As and"
-        " Select Component dialog boxes is enabled."
+        "Controls if the preview area in the File Open/Save As"
+        " dialog boxes is enabled."
     },
     {
         "schematic.gui",
