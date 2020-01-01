@@ -25,6 +25,31 @@ settings_save_last_dir()
 
 
 void
+settings_restore_last_dir()
+{
+    EdaConfig* ctx = eda_config_get_cache_context();
+
+    eda_config_load( ctx, NULL );
+
+    gchar* path =
+        eda_config_get_string( ctx, "lepton-conf", "lastdir", NULL );
+
+    if ( path != NULL )
+    {
+        gboolean exists = g_file_test( path, G_FILE_TEST_EXISTS );
+        if ( exists )
+        {
+            chdir( path );
+        }
+
+        g_free( path );
+    }
+
+} // settings_restore_last_dir()
+
+
+
+void
 settings_restore_showinh( cfg_edit_dlg* dlg )
 {
     EdaConfig* ctx = eda_config_get_cache_context();
