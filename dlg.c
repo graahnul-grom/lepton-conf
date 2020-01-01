@@ -110,6 +110,7 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
     GtkWidget* ent_val = gtk_entry_new();
     gtk_entry_set_text( GTK_ENTRY( ent_val ), "newValue" );
 
+
     GtkWidget* tbl = gtk_table_new( 2, 2, FALSE );
     gtk_table_set_row_spacings( GTK_TABLE( tbl ), 10 );
     gtk_table_set_col_spacings( GTK_TABLE( tbl ), 10 );
@@ -215,16 +216,46 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
 
 
 
+    GtkWidget* lab_grp = gtk_label_new( "Group:" );
+    gtk_misc_set_alignment( GTK_MISC( lab_grp ), 0, 0.5 );
+
+    GtkWidget* lab_key = gtk_label_new( "Key:" );
+    gtk_misc_set_alignment( GTK_MISC( lab_key ), 0, 0.5 );
+
+    GtkWidget* lab_val = gtk_label_new( "Value:" );
+    gtk_misc_set_alignment( GTK_MISC( lab_val ), 0, 0.5 );
+
     GtkWidget* ent_key = gtk_entry_new();
     gtk_entry_set_text( GTK_ENTRY( ent_key ), "newKey" );
 
     GtkWidget* ent_val = gtk_entry_new();
     gtk_entry_set_text( GTK_ENTRY( ent_val ), "newValue" );
 
-    GtkWidget* vbox = gtk_vbox_new( TRUE, 5 );
-    gtk_box_pack_start( GTK_BOX( vbox ), cb_grp,  TRUE, TRUE, 5 );
-    gtk_box_pack_start( GTK_BOX( vbox ), ent_key, TRUE, TRUE, 5 );
-    gtk_box_pack_start( GTK_BOX( vbox ), ent_val, TRUE, TRUE, 5 );
+
+    GtkWidget* tbl = gtk_table_new( 3, 2, FALSE );
+    gtk_table_set_row_spacings( GTK_TABLE( tbl ), 10 );
+    gtk_table_set_col_spacings( GTK_TABLE( tbl ), 10 );
+
+    gtk_table_attach( GTK_TABLE( tbl ), lab_grp,
+                      0, 1, 0, 1,
+                      GTK_FILL, GTK_FILL, 0, 0 );
+    gtk_table_attach( GTK_TABLE( tbl ), cb_grp,
+                      1, 2, 0, 1,
+                      GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0 );
+
+    gtk_table_attach( GTK_TABLE( tbl ), lab_key,
+                      0, 1, 1, 2,
+                      GTK_FILL, GTK_FILL, 0, 0 );
+    gtk_table_attach( GTK_TABLE( tbl ), ent_key,
+                      1, 2, 1, 2,
+                      GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0 );
+
+    gtk_table_attach( GTK_TABLE( tbl ), lab_val,
+                      0, 1, 2, 3,
+                      GTK_FILL, GTK_FILL, 0, 0 );
+    gtk_table_attach( GTK_TABLE( tbl ), ent_val,
+                      1, 2, 2, 3,
+                      GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0 );
 
 
     gtk_dialog_set_alternative_button_order(GTK_DIALOG(vdlg),
@@ -241,7 +272,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
 
 
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( vdlg ) );
-    gtk_box_pack_start( GTK_BOX( ca ), vbox, TRUE, TRUE, 10 );
+    gtk_box_pack_start( GTK_BOX( ca ), tbl, TRUE, TRUE, 10 );
 
     gtk_widget_show_all( vdlg );
     gtk_widget_set_size_request( vdlg, 350, -1 );
