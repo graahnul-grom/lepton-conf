@@ -782,6 +782,12 @@ cfgreg_lookup_dflt_val( const gchar* grp, const gchar* key )
 gboolean
 cfgreg_can_toggle( const row_data* rdata )
 {
+    if ( !rdata )
+        return FALSE;
+
+    if ( rdata->rtype_ != RT_KEY )
+        return FALSE;
+
     const gchar* val = rdata->val_;
 
     const gboolean can_toggle =
