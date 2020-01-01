@@ -434,7 +434,7 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
                       sdlg );
 
 
-    settings_wnd_geom_restore( GTK_WINDOW( sdlg ), "selpapersize" );
+    settings_restore_wnd_geom( GTK_WINDOW( sdlg ), "selpapersize" );
 
     gint res = gtk_dialog_run( GTK_DIALOG( sdlg ) );
     gchar* ret = NULL;
@@ -448,7 +448,7 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
         gtk_tree_model_get( model, &it_new, 0, &ret, -1 );
     }
 
-    settings_wnd_geom_save( GTK_WINDOW( sdlg ), "selpapersize" );
+    settings_save_wnd_geom( GTK_WINDOW( sdlg ), "selpapersize" );
 
     gtk_widget_destroy( sdlg );
 

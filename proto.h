@@ -4,7 +4,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -276,10 +276,10 @@ void
 settings_save( cfg_edit_dlg* dlg );
 
 void
-settings_wnd_geom_save( GtkWindow* wnd, const gchar* name );
+settings_save_wnd_geom( GtkWindow* wnd, const gchar* name );
 
 void
-settings_wnd_geom_restore( GtkWindow* wnd, const gchar* name );
+settings_restore_wnd_geom( GtkWindow* wnd, const gchar* name );
 
 
 

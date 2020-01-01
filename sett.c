@@ -84,7 +84,7 @@ settings_save( cfg_edit_dlg* dlg )
 
     // geometry:
     //
-    settings_wnd_geom_save( GTK_WINDOW( dlg ), NULL );
+    settings_save_wnd_geom( GTK_WINDOW( dlg ), NULL );
 
     // tree path:
     //
@@ -107,7 +107,7 @@ settings_save( cfg_edit_dlg* dlg )
 
 
 void
-settings_wnd_geom_save( GtkWindow* wnd, const gchar* name )
+settings_save_wnd_geom( GtkWindow* wnd, const gchar* name )
 {
     gint x = 0;
     gint y = 0;
@@ -137,7 +137,7 @@ settings_wnd_geom_save( GtkWindow* wnd, const gchar* name )
 
 
 void
-settings_wnd_geom_restore( GtkWindow* wnd, const gchar* name )
+settings_restore_wnd_geom( GtkWindow* wnd, const gchar* name )
 {
     EdaConfig* ctx = eda_config_get_cache_context();
     eda_config_load( ctx, NULL );

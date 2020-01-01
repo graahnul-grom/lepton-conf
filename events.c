@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -875,7 +875,7 @@ on_mitem_sel_font( GtkMenuItem* mitem, gpointer p )
     gtk_font_selection_set_preview_text( sel, preview );
 
 
-    settings_wnd_geom_restore( GTK_WINDOW( fdlg ), "selfont" );
+    settings_restore_wnd_geom( GTK_WINDOW( fdlg ), "selfont" );
 
     if ( gtk_dialog_run( GTK_DIALOG( fdlg ) ) == GTK_RESPONSE_OK )
     {
@@ -905,7 +905,7 @@ on_mitem_sel_font( GtkMenuItem* mitem, gpointer p )
         g_free( txt );
     }
 
-    settings_wnd_geom_save( GTK_WINDOW( fdlg ), "selfont" );
+    settings_save_wnd_geom( GTK_WINDOW( fdlg ), "selfont" );
     gtk_widget_destroy( fdlg );
 
 } // on_mitem_font_edit()
@@ -991,7 +991,7 @@ on_mitem_sel_color( GtkMenuItem* mitem, gpointer p )
     }
 
 
-    settings_wnd_geom_restore( GTK_WINDOW( cdlg ), "selcolor" );
+    settings_restore_wnd_geom( GTK_WINDOW( cdlg ), "selcolor" );
 
     if ( gtk_dialog_run( GTK_DIALOG( cdlg ) ) == GTK_RESPONSE_OK )
     {
@@ -1006,7 +1006,7 @@ on_mitem_sel_color( GtkMenuItem* mitem, gpointer p )
         a_chg_val( dlg, rdata, it, txt );
     }
 
-    settings_wnd_geom_save( GTK_WINDOW( cdlg ), "selcolor" );
+    settings_save_wnd_geom( GTK_WINDOW( cdlg ), "selcolor" );
     gtk_widget_destroy( cdlg );
 
     gdk_colormap_free_colors( cmap, &color, 1 );
