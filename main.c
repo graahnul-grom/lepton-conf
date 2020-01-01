@@ -34,6 +34,7 @@ const gchar* g_exted_default = "gvim";
 gboolean g_warn_cfg_file_not_found = TRUE;
 gboolean g_print_default_cfg = FALSE;
 gboolean g_tst_btn_visible = FALSE;
+gboolean g_restore_last_dir = FALSE;
 
 
 
@@ -74,7 +75,7 @@ int main( int argc, char* argv[] )
 
 
     int ch = -1;
-    while ( (ch = getopt( argc, argv, "hvdempt" )) != -1 )
+    while ( (ch = getopt( argc, argv, "hvdemprt" )) != -1 )
     {
         if ( ch == 'v' )
             out_version();
@@ -93,6 +94,9 @@ int main( int argc, char* argv[] )
         else
         if ( ch == 'p' )
             g_print_default_cfg = TRUE;
+        else
+        if ( ch == 'r' )
+            g_restore_last_dir = TRUE;
         else
         if ( ch == 't' )
             g_tst_btn_visible = TRUE; // TESTING: show tst btn on toolbar
@@ -113,6 +117,7 @@ int main( int argc, char* argv[] )
         chdir( dir );
     }
     else
+    if ( g_restore_last_dir )
     {
         settings_restore_last_dir();
     }

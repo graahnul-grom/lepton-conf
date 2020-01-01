@@ -15,5 +15,6 @@ export GTK2_RC_FILES=${HOME}/.gtkrc-2.0
 export LD_LIBRARY_PATH=${LIB}:$LD_LIBRARY_PATH
 
 $EXE -e -m -t "$@"
+# $EXE -e -m -t -r "$@"
 # $EXE -e -m "$@"
 
