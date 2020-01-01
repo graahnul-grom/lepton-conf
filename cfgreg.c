@@ -163,9 +163,9 @@ static CfgEntry g_cfg_registry[] =
         "schematic.gui",
         "fast-mousepan",
         "false",
-        "Controls if text is drawn properly or if a simplified version (a line which"
-        " represents the text string) is drawn during mouse pan. Drawing a simple"
-        " line speeds up mousepan a lot for big schematics."
+        "Controls if text is drawn properly or if a simplified version (a text"
+        " string bounding box) is drawn during mouse pan. Drawing a simple"
+        " box speeds up mousepan a lot for big schematics."
     },
     {
         "schematic.gui",
