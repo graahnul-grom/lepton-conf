@@ -112,6 +112,10 @@ int main( int argc, char* argv[] )
     {
         chdir( dir );
     }
+    else
+    {
+        settings_restore_last_dir();
+    }
 
 #ifdef DEBUG
     printf( " >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
