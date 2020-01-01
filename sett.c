@@ -1,13 +1,26 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
 
 #include "proto.h"
 
+
+
+
+static void
+settings_save_last_dir()
+{
+    gchar* cwd = g_get_current_dir();
+
+    EdaConfig* ctx = eda_config_get_cache_context();
+    eda_config_set_string( ctx, "lepton-conf", "lastdir", cwd );
+
+    g_free( cwd );
+}
 
 
 
@@ -79,6 +92,10 @@ settings_save( cfg_edit_dlg* dlg )
     if ( path != NULL )
         eda_config_set_string( ctx, "lepton-conf", "path", path );
     g_free( path );
+
+    // last working dir:
+    //
+    settings_save_last_dir();
 
 
     // save config:
