@@ -281,6 +281,9 @@ settings_save_wnd_geom( GtkWindow* wnd, const gchar* name );
 void
 settings_restore_wnd_geom( GtkWindow* wnd, const gchar* name );
 
+void
+settings_restore_last_dir();
+
 
 
 
