@@ -82,5 +82,5 @@ License
 -------
 The same as Lepton EDA: GNU Public License (GPL) version 2.0 or (at your option) any later version.
 <br />
-Copyright (C) 2017-2019 [dmn](https://github.com/graahnul-grom)
+Copyright (C) 2017-2020 [dmn](https://github.com/graahnul-grom)
 

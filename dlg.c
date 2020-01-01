@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -20,7 +20,7 @@ run_dlg_edit_val( cfg_edit_dlg* dlg,
                   const gchar* title )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
-        title ? title : "Edit value:",
+        title ? title : "Edit value",
         GTK_WINDOW( dlg ),
         GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
 //        GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -88,7 +88,7 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
                  gchar** val )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
-        title ? title : "Add key/value:",
+        title ? title : "Add key",
         GTK_WINDOW( dlg ),
         GTK_DIALOG_MODAL,
         GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
@@ -178,7 +178,7 @@ run_dlg_add_val_2( cfg_edit_dlg* dlg,
                  gchar** val )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
-        title ? title : "Add group/key/value:",
+        title ? title : "Add group/key",
         GTK_WINDOW( dlg ),
         GTK_DIALOG_MODAL,
         GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,
