@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -401,6 +401,12 @@ static CfgEntry g_cfg_registry[] =
         "show-up-button",
         "true",
         "Whether to show \"hierarchy up\" button on each tab."
+    },
+    {
+        "schematic.tabs",
+        "show-tooltips",
+        "true",
+        "Whether to show tabs tooltips in tabbed GUI."
     },
     // status-bar: //
     {
