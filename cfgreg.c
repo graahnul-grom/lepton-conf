@@ -388,6 +388,12 @@ static CfgEntry g_cfg_registry[] =
         "- disabled:\n"
         "  - mouse clicks just selects the clicked net\n"
     },
+    {
+        "schematic.gui",
+        "default-titleblock",
+        "title-B.sym",
+        "Symbol to be automatically added when a new page is created."
+    },
 
     // tabs: //
     {
