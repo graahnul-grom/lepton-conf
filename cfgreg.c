@@ -590,6 +590,13 @@ static CfgEntry g_cfg_registry[] =
         "true",
         ""
     },
+    // schematic.backup: //
+    {
+        "schematic.backup",
+        "create-files",
+        "true",
+        ""
+    },
 
     //
     // lepton-netlist:
