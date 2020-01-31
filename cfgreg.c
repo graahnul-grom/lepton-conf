@@ -588,7 +588,8 @@ static CfgEntry g_cfg_registry[] =
         "schematic.attrib",
         "promote-invisible",
         "false",
-        ""
+        "Set if invisible floating attributes are promoted when a component"
+        " is instantiated."
     },
     {
         "schematic.attrib",
