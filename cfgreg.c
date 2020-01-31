@@ -572,7 +572,8 @@ static CfgEntry g_cfg_registry[] =
         "schematic.attrib",
         "always-promote",
         "footprint;device;value;model-name",
-        ""
+        "The list of attributes that are always promoted"
+        " regardless of their visibility."
     },
     {
         "schematic.attrib",
