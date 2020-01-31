@@ -608,7 +608,7 @@ static CfgEntry g_cfg_registry[] =
         "schematic.backup",
         "create-files",
         "true",
-        ""
+        "Enable the creation of backup files (name.sch~) when saving a schematic."
     },
 
     //
