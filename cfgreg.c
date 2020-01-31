@@ -532,7 +532,9 @@ static CfgEntry g_cfg_registry[] =
         "schematic",
         "bus-ripper-symname",
         "busripper-1.sym",
-        ""
+        "The default bus ripper symbol, used when the schematic::bus-ripper-type"
+        " configuration key is set to \"component\". The symbol must exist"
+        " in a component library."
     },
     {
         "schematic",
