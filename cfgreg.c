@@ -595,7 +595,13 @@ static CfgEntry g_cfg_registry[] =
         "schematic.attrib",
         "keep-invisible",
         "true",
-        ""
+        "If both attribute-promotion and promote-invisible are enabled, then this"
+        " controls if invisible floating attributes are kept around in memory and"
+        " NOT deleted.  Having this enabled will keeps component slotting working."
+        " If attribute-promotion and promote-invisible are enabled and this"
+        " keyword is disabled, then component slotting will NOT work (and maybe"
+        " other functions which depend on hidden attributes, since those attributes"
+        " are deleted from memory)."
     },
     // schematic.backup: //
     {
