@@ -565,6 +565,13 @@ static CfgEntry g_cfg_registry[] =
         "Controls if the log window is shown when lepton-schematic is started up"
         " (\"startup\"), or not (\"later\")."
     },
+    // schematic.attrib: //
+    {
+        "schematic.attrib",
+        "always-promote",
+        "footprint;device;value;model-name",
+        ""
+    },
 
     //
     // lepton-netlist:
