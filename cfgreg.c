@@ -572,6 +572,12 @@ static CfgEntry g_cfg_registry[] =
         "footprint;device;value;model-name",
         ""
     },
+    {
+        "schematic.attrib",
+        "promote",
+        "true",
+        ""
+    },
 
     //
     // lepton-netlist:
