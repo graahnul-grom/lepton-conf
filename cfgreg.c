@@ -530,6 +530,12 @@ static CfgEntry g_cfg_registry[] =
     },
     {
         "schematic",
+        "bus-ripper-symname",
+        "busripper-1.sym",
+        ""
+    },
+    {
+        "schematic",
         "net-consolidate",
         "true",
         "Controls if the net consolidation code is used when schematics are read"
