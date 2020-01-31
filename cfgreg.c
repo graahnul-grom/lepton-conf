@@ -579,7 +579,10 @@ static CfgEntry g_cfg_registry[] =
         "schematic.attrib",
         "promote",
         "true",
-        ""
+        "Set if attribute promotion occurs when you instantiate a component.\n"
+        "Attribute promotion means that any floating (unattached)"
+        " attribute which is inside a symbol gets attached to the newly"
+        " inserted component when it is instantiated."
     },
     {
         "schematic.attrib",
