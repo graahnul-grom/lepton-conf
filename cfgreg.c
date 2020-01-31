@@ -578,6 +578,12 @@ static CfgEntry g_cfg_registry[] =
         "true",
         ""
     },
+    {
+        "schematic.attrib",
+        "promote-invisible",
+        "false",
+        ""
+    },
 
     //
     // lepton-netlist:
