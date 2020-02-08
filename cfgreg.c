@@ -392,7 +392,9 @@ static CfgEntry g_cfg_registry[] =
         "schematic.gui",
         "default-titleblock",
         "title-B.sym",
-        "Symbol to be automatically added when a new page is created."
+        "Symbol (usually, a title block) to be automatically added"
+        " when a new page is created. If you do not want to use a "
+        "title block, set this option to an empty string."
     },
 
     // tabs: //
