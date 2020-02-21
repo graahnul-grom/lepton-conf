@@ -144,6 +144,9 @@ void
 gui_update( cfg_edit_dlg* dlg );
 
 void
+gui_off( cfg_edit_dlg* dlg );
+
+void
 gui_mk_labels_line_separ( GtkWidget* parent_box );
 
 void

@@ -140,6 +140,9 @@ on_btn_tst( GtkButton* btn, gpointer* p )
         return;
 
 
+
+    /*
+
     // 1: remember current ctx->grp->key:
     row_cgk* cgk = cgk_mk( rdata );
     printf( " .. cgk: [ %s : %s : %s ]\n", cgk->ctx_, cgk->grp_, cgk->key_ );
@@ -150,21 +153,24 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
     // TESTING:
+    // row_select_by_ctx_grp_key( dlg, ctx, grp, key );
     row_select_by_cgk( dlg, cgk );
     cgk_rm( cgk );
 
-//    row_select_by_ctx_grp_key( dlg, ctx, grp, key );
+    */
+
+
 
 
     // print current path:
-    /*
+//    /*
     GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
     gchar* str = gtk_tree_model_get_string_from_iter( mod, &it );
     printf( " .. p: [%s]\n", str );
     GtkTreePath* path = gtk_tree_path_new_from_string( str );
     g_free( str );
     gtk_tree_path_free( path );
-    */
+//    */
     //
 
 
@@ -235,18 +241,33 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 // testing:
 //
+// GtkTreeSelection "changed" signal handler
+//
 void
 on_tree_sel_changed( GtkTreeSelection* sel, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     g_return_if_fail( dlg != NULL );
 
-//    if ( !dlg )
-//        return;
+
+    GtkTreeModel* mod = NULL;
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, &mod, &it );
+
+#ifdef DEBUG
+    printf( " .. on_tree_sel_changed(): res: [%d]\n", res );
+#endif
+
+    if ( !res ) // NOTE: tree selection is lost
+    {
+        gui_off( dlg );
+    }
 }
 
 
 
+// GtkTreeView "cursor-changed" signal handler
+//
 void
 on_row_sel( GtkTreeView* tree, gpointer* p )
 {
