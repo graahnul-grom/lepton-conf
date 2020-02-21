@@ -42,6 +42,11 @@ gui_update( cfg_edit_dlg* dlg )
         return;
 
 
+    // eneble showinh chk box, in case it was disabled in gui_off():
+    //
+    gtk_widget_set_sensitive( dlg->btn_showinh_, TRUE );
+
+
     gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
 
     if ( rdata->rtype_ == RT_GRP || rdata->rtype_ == RT_KEY )
@@ -138,6 +143,32 @@ gui_update( cfg_edit_dlg* dlg )
 //    printf( " >> on_row_sel(): name: [%s], val: [%s]\n", name, val );
 
 } // gui_update()
+
+
+
+// disable GUI controls (except Reload btn), clear labels.
+// call it when tree selection is lost
+//
+void
+gui_off( cfg_edit_dlg* dlg )
+{
+    gtk_widget_set_sensitive( dlg->btn_showinh_, FALSE );
+    // gtk_widget_set_sensitive( dlg->btn_reload_,  FALSE );
+    gtk_widget_set_sensitive( dlg->btn_add_,     FALSE );
+    gtk_widget_set_sensitive( dlg->btn_edit_,    FALSE );
+    gtk_widget_set_sensitive( dlg->btn_toggle_,  FALSE );
+    gtk_widget_set_sensitive( dlg->btn_del_,     FALSE );
+
+    gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_),   NULL );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_fname_), NULL );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_grp_ ),  NULL );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_key_ ),  NULL );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
+    gtk_label_set_text( GTK_LABEL( dlg->lab_dflt_ ), NULL );
+
+    gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
+
+} // gui_off()
 
 
 
