@@ -57,14 +57,14 @@ void out_help( int exit_code )
 {
     printf( "Usage: lepton-conf [OPTIONS] [PATH]\n" );
     printf( "Options:\n" );
-    printf( "  -h    Show usage information.\n" );
-    printf( "  -v    Show version information.\n" );
-    printf( "  -e    Close window with 'Escape' key.\n" );
-    printf( "  -r    Restore last working directory.\n" );
-    printf( "  -m    Do not warn about missing configuration files.\n" );
-    printf( "  -d    Do not populate the DEFAULT configuration context on startup.\n" );
-    printf( "  -p    Print the DEFAULT context in the *.conf file format and exit.\n" );
-    printf( "  -l    Legacy config mode: use geda*.conf configuration files.\n" );
+    printf( "  -l    Legacy config mode: use geda*.conf configuration files\n" );
+    printf( "  -e    Close window with 'Escape' key\n" );
+    printf( "  -r    Restore last working directory\n" );
+    printf( "  -m    Do not warn about missing configuration files\n" );
+    printf( "  -d    Do not populate the DEFAULT configuration context on startup\n" );
+    printf( "  -p    Print the DEFAULT context in the *.conf file format and exit\n" );
+    printf( "  -h    Show usage information\n" );
+    printf( "  -v    Show version information\n" );
 
     exit( exit_code );
 }
