@@ -261,7 +261,15 @@ on_tree_sel_changed( GtkTreeSelection* sel, gpointer p )
     if ( !res ) // NOTE: tree selection is lost
     {
         gui_off( dlg );
+        return;
     }
+
+
+    // TESTING: GtkTreeView::cursor-changed => => GtkTreeSelection::changed
+    //
+    gui_update( dlg );
+    //
+    //
 }
 
 
@@ -275,7 +283,11 @@ on_row_sel( GtkTreeView* tree, gpointer* p )
     if ( !dlg )
         return;
 
-    gui_update( dlg );
+    // TESTING: GtkTreeView::cursor-changed => => GtkTreeSelection::changed
+    //
+    // gui_update( dlg );
+    //
+    //
 }
 
 
