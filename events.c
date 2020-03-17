@@ -321,7 +321,7 @@ on_lab_fname( GtkLabel* lab, gchar* uri, gpointer* p )
     if ( !dlg )
         return;
 
-    const gchar* fname = gtk_label_get_current_uri( lab );
+    const gchar* fname = gtk_label_get_text( lab );
 
     // external editor [read config]:
     //
