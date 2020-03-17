@@ -32,7 +32,7 @@ static CfgEntry g_cfg_registry[] =
     // lepton-schematic:
     //
     {
-        "gschem",
+        "schematic",
         "default-filename",
         "untitled",
         "Default file name for any new schematic files.\n"
@@ -40,7 +40,7 @@ static CfgEntry g_cfg_registry[] =
     },
     // library: //
     {
-        "gschem.library",
+        "schematic.library",
         "component-attributes",
         "*",
         "List of attribute names (semicolon-separated) that are displayed in the component select dialog.\n"
@@ -48,7 +48,7 @@ static CfgEntry g_cfg_registry[] =
         "If the first list element is an asterisk \"*\", all attributes will be displayed in the alphabetical order."
     },
     {
-        "gschem.library",
+        "schematic.library",
         "sort",
         "false",
         "If \"true\", the component libraries are sorted alphabetically.\n"
@@ -56,7 +56,7 @@ static CfgEntry g_cfg_registry[] =
     },
     // printing: //
     {
-        "gschem.printing",
+        "schematic.printing",
         "layout",
         "auto",
         "When using a paper size, set the orientation of the output.\n"
@@ -64,13 +64,13 @@ static CfgEntry g_cfg_registry[] =
         "Possible values: \"portrait\", \"landscape\", or \"auto\""
     },
     {
-        "gschem.printing",
+        "schematic.printing",
         "monochrome",
         "false",
         "Toggle monochrome (\"true\") or color (\"false\") output."
     },
     {
-        "gschem.printing",
+        "schematic.printing",
         "paper",
         "iso_a4",
         "Size the output for a particular paper size.\n"
@@ -617,21 +617,21 @@ static CfgEntry g_cfg_registry[] =
     // lepton-netlist:
     //
     {
-        "gnetlist",
+        "netlist",
         "default-net-name",
         "unnamed_net",
         "Default name used for nets for which the user has set\n"
         "no explicit name via the netname= or net= attributes."
     },
     {
-        "gnetlist",
+        "netlist",
         "default-bus-name",
         "unnamed_bus",
         "Default name used for buses for which the user has set\n"
         "no explicit name via the netname= or net= attributes."
     },
     {
-        "gnetlist",
+        "netlist",
         "net-naming-priority",
         "net-attribute",
         "Specify which attribute, net (\"net-attribute\") or netname (\"netname-attribute\"),"
@@ -639,67 +639,67 @@ static CfgEntry g_cfg_registry[] =
         " conflict will be resolved using the chosen attribute."
     },
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "traverse-hierarchy",
         "true",
         "Turn on/off hierarchy processing."
     },
     // attribute: //
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "mangle-refdes-attribute",
         "true",
         "Whether to mangle sub-schematic's 'refdes' attributes."
     },
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "refdes-attribute-order",
         "false",
         "While mangling 'refdes' attributes, whether to append (false)\n"
         "or prepend (true) sub-schematic's ones."
     },
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "refdes-attribute-separator",
         "/",
         "Separator string used to form mangled 'refdes' attribute names."
     },
     // netname: //
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "mangle-netname-attribute",
         "true",
         "Whether to mangle sub-schematic's 'netname' attributes."
     },
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "netname-attribute-order",
         "false",
         "While mangling 'netname' attributes, whether to append (false)\n"
         "or prepend (true) sub-schematic's ones."
     },
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "netname-attribute-separator",
         "/",
         "Separator string used to form mangled 'netname' attribute names."
     },
     // net: //
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "mangle-net-attribute",
         "true",
         "Whether to mangle sub-schematic's 'net' attributes."
     },
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "net-attribute-order",
         "false",
         "While mangling 'net' attributes, whether to append (false)\n"
         "or prepend (true) sub-schematic's ones."
     },
     {
-        "gnetlist.hierarchy",
+        "netlist.hierarchy",
         "net-attribute-separator",
         "/",
         "Separator string used to form mangled 'net' attribute names."
