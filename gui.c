@@ -419,10 +419,15 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 {
 //    printf( " ++ gui_mk()\n" );
 
-    // window's title:
+    // main window's title:
     //
-    gtk_window_set_title( GTK_WINDOW( dlg ),
-                          g_strdup_printf( "%s - lepton-conf", cwd ) );
+    const gchar* title =
+        g_strdup_printf(
+            "%s - lepton-conf%s",
+            cwd,
+            g_cfg_legacy_mode ? " ( legacy config mode )" : "" );
+
+    gtk_window_set_title( GTK_WINDOW( dlg ), title );
 
     gtk_window_set_default_icon_name( GTK_STOCK_PREFERENCES );
 
