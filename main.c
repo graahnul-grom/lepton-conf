@@ -123,7 +123,7 @@ int main( int argc, char* argv[] )
 
 
 #ifdef DEBUG
-    printf( " >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
+    fprintf( stderr, " >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
 #endif
 
     const gchar* dir = argv[ optind ];
@@ -138,7 +138,7 @@ int main( int argc, char* argv[] )
     }
 
 #ifdef DEBUG
-    printf( " >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
+    fprintf( stderr," >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
 #endif
 
 
