@@ -308,7 +308,7 @@ void
 on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p );
 
 void
-on_lab_fname( GtkLabel* lab, gpointer* p );
+on_lab_fname( GtkLabel* lab, gchar* uri, gpointer* p );
 
 gboolean
 on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p );

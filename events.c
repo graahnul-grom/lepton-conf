@@ -25,12 +25,17 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_showinh ),
                       dlg );
 
+    // NOTE: GtkLabel "activate-link" signal emitted when:
+    //       1) mouse clicked
+    //       2) Enter pressed when label's text is NOT selected
+    //
     g_signal_connect( G_OBJECT( dlg->lab_fname_ ),
-                      "activate-link",             // mouse click
+                      "activate-link",
                       G_CALLBACK( &on_lab_fname ),
                       dlg );
+
     g_signal_connect( G_OBJECT( dlg->lab_fname_ ),
-                      "activate-current-link",     // press Enter key
+                      "activate-current-link",
                       G_CALLBACK( &on_lab_fname ),
                       dlg );
 
@@ -307,8 +312,10 @@ on_delete_event( cfg_edit_dlg* dlg, GdkEvent* e, gpointer* p )
 
 
 
+// GtkLabel "activate-link" signal handler
+//
 void
-on_lab_fname( GtkLabel* lab, gpointer* p )
+on_lab_fname( GtkLabel* lab, gchar* uri, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
