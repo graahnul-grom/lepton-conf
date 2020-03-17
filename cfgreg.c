@@ -987,7 +987,8 @@ cfgreg_init()
     add_cee( "export", "layout", e_l );
 
     const gchar* gp_l[] = { "auto", "landscape", "portrait", NULL };
-    add_cee( "gschem.printing", "layout", gp_l );
+    add_cee( "gschem.printing",    "layout", gp_l );
+    add_cee( "schematic.printing", "layout", gp_l );
 
     const gchar* s_brr[] = { "non-symmetric", "symmetric", NULL };
     add_cee( "schematic", "bus-ripper-rotation", s_brr );
@@ -1024,6 +1025,7 @@ cfgreg_init()
 
     const gchar* nl_nnp[] = { "net-attribute", "netname-attribute", NULL };
     add_cee( "gnetlist", "net-naming-priority", nl_nnp );
+    add_cee( "netlist",  "net-naming-priority", nl_nnp );
 
 #ifdef DEBUG
 //    const gchar* v = NULL;
