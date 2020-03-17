@@ -508,6 +508,19 @@ a_delete( cfg_edit_dlg* dlg );
 
 // cfgreg.c:
 //
+
+// struct represents a legacy gEDA configuration key:
+//
+struct _CfgEntryLegacy
+{
+    const gchar* grp_;
+    const gchar* key_;
+    const gchar* def_val_; // default value
+    const gchar* desc_;
+};
+
+typedef struct _CfgEntryLegacy CfgEntryLegacy;
+
 // struct represents a configuration key:
 // NOTE: unique( grp, key )
 //
@@ -517,6 +530,7 @@ struct _CfgEntry
     const gchar* key_;
     const gchar* def_val_; // default value
     const gchar* desc_;
+    const CfgEntryLegacy legacy_;
 };
 
 typedef struct _CfgEntry CfgEntry;
