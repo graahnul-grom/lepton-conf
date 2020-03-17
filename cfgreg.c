@@ -11,7 +11,7 @@
 
 
 
-CfgEntryEnum*
+static CfgEntryEnum*
 find_cee( const gchar* grp, const gchar* key );
 
 
