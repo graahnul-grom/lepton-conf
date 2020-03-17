@@ -785,6 +785,43 @@ static CfgEntry g_cfg_registry[] =
 
 
 
+// CfgEntry fields accessor functions:
+//
+static const gchar*
+cfg_entry_get_grp( const CfgEntry* entry )
+{
+    if ( g_cfg_legacy_mode && entry->legacy_.grp_ )
+        return entry->legacy_.grp_;
+    return entry->grp_;
+}
+
+static const gchar*
+cfg_entry_get_key( const CfgEntry* entry )
+{
+    if ( g_cfg_legacy_mode && entry->legacy_.key_ )
+        return entry->legacy_.key_;
+    return entry->key_;
+}
+
+static const gchar*
+cfg_entry_get_dflt_val( const CfgEntry* entry )
+{
+    if ( g_cfg_legacy_mode && entry->legacy_.def_val_ )
+        return entry->legacy_.def_val_;
+    return entry->def_val_;
+}
+
+static const gchar*
+cfg_entry_get_descr( const CfgEntry* entry )
+{
+    if ( g_cfg_legacy_mode && entry->legacy_.desc_ )
+        return entry->legacy_.desc_;
+    return entry->desc_;
+}
+
+
+
+
 // private:
 // find CfgEntry in global cfg registry by group name and key name
 //
@@ -794,10 +831,10 @@ cfgreg_lookup( const gchar* grp, const gchar* key )
     const CfgEntry* entry = g_cfg_registry;
     const CfgEntry* ret   = NULL;
 
-    for ( ; entry->grp_ != NULL; ++entry )
+    for ( ; cfg_entry_get_grp( entry ) != NULL; ++entry )
     {
-        gboolean cond1 = g_strcmp0( entry->grp_, grp ) == 0;
-        gboolean cond2 = g_strcmp0( entry->key_, key ) == 0;
+        gboolean cond1 = g_strcmp0( cfg_entry_get_grp( entry ), grp ) == 0;
+        gboolean cond2 = g_strcmp0( cfg_entry_get_key( entry ), key ) == 0;
 
         if ( cond1 && cond2 )
         {
@@ -822,7 +859,7 @@ cfgreg_lookup_descr( const gchar* grp, const gchar* key )
     const CfgEntry* entry = cfgreg_lookup( grp, key );
 
     if ( entry != NULL )
-        return entry->desc_;
+        return cfg_entry_get_descr( entry );
 
     return NULL;
 }
@@ -835,7 +872,7 @@ cfgreg_lookup_dflt_val( const gchar* grp, const gchar* key )
     const CfgEntry* entry = cfgreg_lookup( grp, key );
 
     if ( entry != NULL )
-        return entry->def_val_;
+        return cfg_entry_get_dflt_val( entry );
 
     return NULL;
 }
@@ -872,11 +909,11 @@ cfgreg_populate_ctx( EdaConfig* ctx )
 {
     const CfgEntry* entry = g_cfg_registry;
 
-    for ( ; entry->grp_ != NULL; ++entry )
+    for ( ; cfg_entry_get_grp( entry ) != NULL; ++entry )
     {
-        const gchar* grp     = entry->grp_;
-        const gchar* key     = entry->key_;
-        const gchar* def_val = entry->def_val_;
+        const gchar* grp     = cfg_entry_get_grp( entry );
+        const gchar* key     = cfg_entry_get_key( entry );
+        const gchar* def_val = cfg_entry_get_dflt_val( entry );
 
         eda_config_set_string( ctx, grp, key, def_val );
     }
