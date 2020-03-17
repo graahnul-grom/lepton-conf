@@ -109,6 +109,7 @@ typedef struct _row_cgk row_cgk;
 
 // main.c:
 //
+extern gboolean g_cfg_legacy_mode;
 extern gboolean g_close_with_esc;
 extern gboolean g_populate_default_ctx;
 extern const gchar* g_exted_default;

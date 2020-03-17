@@ -28,6 +28,7 @@
 
 
 
+gboolean g_cfg_legacy_mode = FALSE;
 gboolean g_close_with_esc = FALSE;
 gboolean g_populate_default_ctx = TRUE;
 const gchar* g_exted_default = "gvim";
@@ -63,6 +64,7 @@ void out_help( int exit_code )
     printf( "  -m    Do not warn about missing configuration files.\n" );
     printf( "  -d    Do not populate the DEFAULT configuration context on startup.\n" );
     printf( "  -p    Print the DEFAULT context in the *.conf file format and exit.\n" );
+    printf( "  -l    Legacy config mode: use geda*.conf configuration files.\n" );
 
     exit( exit_code );
 }
@@ -78,7 +80,7 @@ int main( int argc, char* argv[] )
 
 
     int ch = -1;
-    while ( (ch = getopt( argc, argv, "hvdemprt" )) != -1 )
+    while ( (ch = getopt( argc, argv, "hvdemprtl" )) != -1 )
     {
         if ( ch == 'v' )
             out_version();
@@ -104,11 +106,21 @@ int main( int argc, char* argv[] )
         if ( ch == 't' )
             g_tst_btn_visible = TRUE; // TESTING: show tst btn on toolbar
         else
+        if ( ch == 'l' )
+            g_cfg_legacy_mode = TRUE;
+        else
         if ( ch == '?' )
             out_help( 1 );
         else
             out_help( 1 );
     }
+
+
+    // NOTE:  legacy mode: use geda*.conf   cfg files
+    // NOTE: !legacy mode: use lepton*.conf cfg files
+    //
+    config_set_legacy_mode( g_cfg_legacy_mode );
+
 
 #ifdef DEBUG
     printf( " >> g_get_current_dir(): [%s]\n", g_get_current_dir() );
