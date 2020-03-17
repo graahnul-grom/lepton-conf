@@ -692,6 +692,9 @@ on_btn_edit( GtkButton* btn, gpointer* p )
     if ( !rdata )
         return;
 
+    if ( rdata->rtype_ != RT_KEY || rdata->ro_ )
+        return;
+
     gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
 
     a_chg_val( dlg, rdata, it, txt );
