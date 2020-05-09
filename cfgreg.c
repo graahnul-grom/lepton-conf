@@ -501,6 +501,15 @@ static CfgEntry g_cfg_registry[] =
         "- Color scheme editor",
         { NULL, NULL, NULL, NULL }
     },
+    {
+        "schematic.gui",
+        "small-placeholders",
+        "true",
+        "Draw either new (smaller) placeholders for missing schematic symbols"
+        " (`true`), or classic ones (giant red triangles with an exclamation"
+        " mark and two lines of text) if this option is set to `false`.",
+        { NULL, NULL, NULL, NULL }
+    },
 
     // tabs: //
     {
