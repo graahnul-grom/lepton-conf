@@ -485,6 +485,22 @@ static CfgEntry g_cfg_registry[] =
         "title block, set this option to an empty string.",
         { NULL, NULL, NULL, NULL }
     },
+    {
+        "schematic.gui",
+        "use-toplevel-windows",
+        "false",
+        "When docking windows GUI is off, allow the following widgets to act\n"
+        "as top-level windows (do not stay on top of the main window):\n"
+        "- Object properties\n"
+        "- Text properties\n"
+        "- Options\n"
+        "- Log\n"
+        "- Find text results\n"
+        "- Page manager\n"
+        "- Font selector\n"
+        "- Color scheme editor",
+        { NULL, NULL, NULL, NULL }
+    },
 
     // tabs: //
     {
