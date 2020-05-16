@@ -135,7 +135,7 @@ cfg_edit_dlg_new();
 
 // gui.c:
 //
-gboolean g_gui_update_enabled;
+extern gboolean g_gui_update_enabled;
 
 gboolean gui_update_enabled();
 void     gui_update_on();
