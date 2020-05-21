@@ -27,6 +27,8 @@ row_select_by_path_mod( cfg_edit_dlg* dlg, GtkTreePath* path_mod )
 
 
 
+/*
+
 // [path_tstore]: tstore path
 //
 static void
@@ -46,6 +48,8 @@ row_select_by_path_tstore( cfg_edit_dlg* dlg, GtkTreePath* path_tstore )
     gtk_tree_path_free( path_mod );
 
 } // row_select_by_path_tstore()
+
+*/
 
 
 
