@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -711,22 +711,30 @@ conf_del_grp( const row_data* rdata )
 gboolean
 conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg )
 {
-    GError* err = NULL;
-
+    GError*  err = NULL;
     gboolean res = eda_config_save( ctx, &err );
 
     if ( !res )
     {
+#ifdef DEBUG
         printf( " >> conf_save(): !eda_config_save(): [%s]\n",
                 err ? err->message : "" );
+#endif
 
         GtkWidget* msgdlg =
         gtk_message_dialog_new( GTK_WINDOW( dlg ),
                                 GTK_DIALOG_MODAL,
                                 GTK_MESSAGE_ERROR,
                                 GTK_BUTTONS_OK,
-                                "!eda_config_save()\nerrmsg: [%s]",
-                                err ? err->message : "" );
+                                "An error occurred while trying to"
+                                " access the configuration file.\n"
+                                "The error message:"
+                                "\n\n"
+                                "conf_save() => eda_config_save():\n"
+                                "%s",
+                                err ? err->message : "No error message available." );
+
+        gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
 
         gtk_dialog_run( GTK_DIALOG( msgdlg ) );
         gtk_widget_destroy( msgdlg );
