@@ -492,9 +492,29 @@ conf_load( cfg_edit_dlg* dlg )
 
 
     // 3: USER ctx:
-    // TODO: USER ctx cfg dir may not exist. create it (?!)
     //
-    gboolean wok_user = conf_ctx_file_writable( ctx_user );
+    gboolean exist_user = FALSE;
+    gboolean wok_user = FALSE;
+    // DEBUG: const gchar* fname =
+        conf_ctx_fname( ctx_user, &exist_user, NULL, NULL );
+
+    if ( !exist_user )
+    {
+        // creates ~/.config/lepton-eda/ if it doesn't exist
+        // and writes empty lepton-user.conf there:
+        //
+        if ( conf_save( ctx_user, dlg ) )
+            wok_user = TRUE;
+    }
+    else
+    {
+        wok_user = conf_ctx_file_writable( ctx_user );
+    }
+
+    // DEBUG: printf( " .. fname:      [%s]\n", fname );
+    // DEBUG: printf( " .. exist_user: [%d]\n", exist_user );
+    // DEBUG: printf( " .. wok_user:   [%d]\n", wok_user );
+
     GtkTreeIter it_user = conf_mk_ctx_node( ctx_user, wok_user, name_user, dlg );
     g_free( name_user );
     conf_load_ctx( ctx_user );
