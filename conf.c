@@ -465,43 +465,49 @@ conf_load( cfg_edit_dlg* dlg )
     gchar* name_path = g_strdup_printf( "4: %s", conf_ctx_name( ctx_path ) );
 
 
-    // load:
+    // 1: DEFAULT ctx:
     //
-    GtkTreeIter it;
-    gboolean wok = FALSE;
-
-    wok = conf_ctx_file_writable( ctx_dflt );
-    it = conf_mk_ctx_node( ctx_dflt, wok, name_dflt, dlg );
-    // conf_load_ctx( ctx_dflt );
+    gboolean wok_dflt = FALSE;
+    GtkTreeIter it_dflt = conf_mk_ctx_node( ctx_dflt, wok_dflt, name_dflt, dlg );
+    g_free( name_dflt );
     if ( g_populate_default_ctx )
     {
         cfgreg_populate_ctx( ctx_dflt );
     }
-    conf_load_groups( ctx_dflt, wok, dlg, it, g_print_default_cfg );
+    conf_load_groups( ctx_dflt, wok_dflt, dlg, it_dflt, g_print_default_cfg );
 
-    if ( g_print_default_cfg )
+    if ( g_print_default_cfg ) // TODO: what if g_populate_default_ctx == FALSE?
+    {
         exit( 0 );
-
-    wok = conf_ctx_file_writable( ctx_sys );
-    it = conf_mk_ctx_node( ctx_sys, wok, name_sys, dlg );
-    conf_load_ctx( ctx_sys );
-    conf_load_groups( ctx_sys, wok, dlg, it, FALSE );
-
-    wok = conf_ctx_file_writable( ctx_user );
-    it = conf_mk_ctx_node( ctx_user, wok, name_user, dlg );
-    conf_load_ctx( ctx_user );
-    conf_load_groups( ctx_user, wok, dlg, it, FALSE );
-
-    wok = conf_ctx_file_writable( ctx_path );
-    it = conf_mk_ctx_node( ctx_path, wok, name_path, dlg );
-    conf_load_ctx( ctx_path );
-    conf_load_groups( ctx_path, wok, dlg, it, FALSE );
+    }
 
 
-    g_free( name_dflt );
+    // 2: SYSTEM ctx:
+    //
+    gboolean wok_sys = conf_ctx_file_writable( ctx_sys );
+    GtkTreeIter it_sys = conf_mk_ctx_node( ctx_sys, wok_sys, name_sys, dlg );
     g_free( name_sys );
+    conf_load_ctx( ctx_sys );
+    conf_load_groups( ctx_sys, wok_sys, dlg, it_sys, FALSE );
+
+
+    // 3: USER ctx:
+    // TODO: USER ctx cfg dir may not exist. create it (?!)
+    //
+    gboolean wok_user = conf_ctx_file_writable( ctx_user );
+    GtkTreeIter it_user = conf_mk_ctx_node( ctx_user, wok_user, name_user, dlg );
     g_free( name_user );
+    conf_load_ctx( ctx_user );
+    conf_load_groups( ctx_user, wok_user, dlg, it_user, FALSE );
+
+
+    // 4: PATH ctx:
+    //
+    gboolean wok_path = conf_ctx_file_writable( ctx_path );
+    GtkTreeIter it_path = conf_mk_ctx_node( ctx_path, wok_path, name_path, dlg );
     g_free( name_path );
+    conf_load_ctx( ctx_path );
+    conf_load_groups( ctx_path, wok_path, dlg, it_path, FALSE );
 
 
     // setup "config-changed" handlers:
