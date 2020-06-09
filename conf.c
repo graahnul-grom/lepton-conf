@@ -478,6 +478,10 @@ conf_load( cfg_edit_dlg* dlg )
 
     if ( g_print_default_cfg ) // TODO: what if g_populate_default_ctx == FALSE?
     {
+        if ( !g_populate_default_ctx )
+            fprintf( stderr,
+                     "nothing to do: you have passed -d,"
+                     " hence the DEFAULT config context is empty.\n" );
         exit( 0 );
     }
 
