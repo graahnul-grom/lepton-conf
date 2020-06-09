@@ -259,41 +259,33 @@ conf_load_groups( EdaConfig*    ctx,
 gboolean
 conf_load_ctx( EdaConfig* ctx )
 {
-    gboolean res = TRUE;
-
     const gchar* fname = conf_ctx_fname( ctx, NULL, NULL, NULL );
 
+    // TODO: this is for DEFAULT ctx. could it be loaded by this func?
+    //
     if ( fname == NULL )
+    {
+        printf( ".. DEBUG WARNING: conf_load_ctx() called with [fname] == NULL\n" );
         return TRUE;
+    }
 
-    GError* err = NULL;
-    res = eda_config_load( ctx, &err );
-
-    if ( res )
-        return TRUE;
+    GError*  err = NULL;
+    gboolean res = eda_config_load( ctx, &err );
 
     if ( err != NULL )
     {
-        gboolean file_found = !g_error_matches( err, G_IO_ERROR,
-                                                     G_IO_ERROR_NOT_FOUND );
+        gboolean file_not_found =
+            g_error_matches( err,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND );
 
-        gboolean do_warn = FALSE;
-
-        if ( file_found )
-            do_warn = TRUE;
-
-        if ( !file_found && g_warn_cfg_file_not_found )
-            do_warn = TRUE;
-
-        if ( do_warn )
+        if ( file_not_found && g_warn_cfg_file_not_found )
         {
-            printf( "conf_load_ctx(): !eda_config_load( \"%s\" )\n", fname );
-            printf( "    err msg: [%s]\n", err->message );
+            printf( "warning: cfg file doesn't exist: %s\n", fname );
         }
     }
 
     g_clear_error( &err );
-
     return res;
 
 } // conf_load_ctx()
