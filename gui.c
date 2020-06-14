@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -421,13 +421,14 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 
     // main window's title:
     //
-    const gchar* title =
+    gchar* title =
         g_strdup_printf(
             "%s - lepton-conf%s",
             cwd,
-            g_cfg_legacy_mode ? " ( legacy config mode )" : "" );
+            g_cfg_legacy_mode ? " ( legacy mode: use geda*.conf )" : "" );
 
     gtk_window_set_title( GTK_WINDOW( dlg ), title );
+    g_free( title );
 
     gtk_window_set_default_icon_name( GTK_STOCK_PREFERENCES );
 
