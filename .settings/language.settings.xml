@@ -5,11 +5,11 @@
 			<provider copy-of="extension" id="org.eclipse.cdt.ui.UserLanguageSettingsProvider"/>
 			<provider-reference id="org.eclipse.cdt.core.ReferencedProjectsLanguageSettingsProvider" ref="shared-provider"/>
 			<provider-reference id="org.eclipse.cdt.managedbuilder.core.MBSLanguageSettingsProvider" ref="shared-provider"/>
-			<provider class="org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector" console="true" env-hash="606426327750872072" id="org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector" keep-relative-paths="false" name="CDT GCC Built-in Compiler Settings" parameter="cc ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" store-entries-with-project="true">
+			<provider class="org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector" console="true" env-hash="607355613658737800" id="org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector" keep-relative-paths="false" name="CDT GCC Built-in Compiler Settings" parameter="cc ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" store-entries-with-project="true">
 				<language-scope id="org.eclipse.cdt.core.gcc"/>
 				<language-scope id="org.eclipse.cdt.core.g++"/>
 				<language id="org.eclipse.cdt.core.gcc">
-					<entry kind="includePath" name="/usr/lib/clang/8.0.1/include">
+					<entry kind="includePath" name="/usr/lib/clang/10.0.1/include">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="includePath" name="/usr/include">
@@ -135,48 +135,6 @@
 					<entry kind="macro" name="__FINITE_MATH_ONLY__" value="0">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__FLT16_DECIMAL_DIG__" value="5">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_DENORM_MIN__" value="5.9604644775390625e-8F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_DIG__" value="3">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_EPSILON__" value="9.765625e-4F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_HAS_DENORM__" value="1">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_HAS_INFINITY__" value="1">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_HAS_QUIET_NAN__" value="1">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MANT_DIG__" value="11">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MAX_10_EXP__" value="4">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MAX_EXP__" value="15">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MAX__" value="6.5504e+4F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MIN_10_EXP__" value="(-13)">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MIN_EXP__" value="(-14)">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MIN__" value="6.103515625e-5F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__FLT_DECIMAL_DIG__" value="9">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -231,7 +189,10 @@
 					<entry kind="macro" name="__FreeBSD__" value="11">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__FreeBSD_cc_version" value="1100513">
+					<entry kind="macro" name="__FreeBSD_cc_version" value="1100517">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__GCC_ASM_FLAG_OUTPUTS__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__GCC_ATOMIC_BOOL_LOCK_FREE" value="2">
@@ -604,6 +565,12 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__SCHAR_MAX__" value="127">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__SEG_FS" value="1">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__SEG_GS" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__SHRT_MAX__" value="32767">
@@ -981,7 +948,7 @@
 					<entry kind="macro" name="__USER_LABEL_PREFIX__" value="">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__VERSION__" value="&quot;4.2.1 Compatible FreeBSD Clang 8.0.1 (tags/RELEASE_801/final 366581)&quot;">
+					<entry kind="macro" name="__VERSION__" value="&quot;FreeBSD Clang 10.0.1 (git@github.com:llvm/llvm-project.git llvmorg-10.0.1-0-gef32c611aa2)&quot;">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__WCHAR_MAX__" value="2147483647">
@@ -1011,7 +978,7 @@
 					<entry kind="macro" name="__clang__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_major__" value="8">
+					<entry kind="macro" name="__clang_major__" value="10">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__clang_minor__" value="0">
@@ -1020,7 +987,7 @@
 					<entry kind="macro" name="__clang_patchlevel__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_version__" value="&quot;8.0.1 (tags/RELEASE_801/final 366581)&quot;">
+					<entry kind="macro" name="__clang_version__" value="&quot;10.0.1 (git@github.com:llvm/llvm-project.git llvmorg-10.0.1-0-gef32c611aa2)&quot;">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__code_model_small_" value="1">
@@ -1033,6 +1000,12 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__llvm__" value="1">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__seg_fs" value="__attribute__((address_space(257)))">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__seg_gs" value="__attribute__((address_space(256)))">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__tune_k8__" value="1">
@@ -1058,7 +1031,7 @@
 					<entry kind="includePath" name="/usr/include/c++/v1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="includePath" name="/usr/lib/clang/8.0.1/include">
+					<entry kind="includePath" name="/usr/lib/clang/10.0.1/include">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="includePath" name="/usr/include">
@@ -1190,48 +1163,6 @@
 					<entry kind="macro" name="__FINITE_MATH_ONLY__" value="0">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__FLT16_DECIMAL_DIG__" value="5">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_DENORM_MIN__" value="5.9604644775390625e-8F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_DIG__" value="3">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_EPSILON__" value="9.765625e-4F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_HAS_DENORM__" value="1">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_HAS_INFINITY__" value="1">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_HAS_QUIET_NAN__" value="1">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MANT_DIG__" value="11">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MAX_10_EXP__" value="4">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MAX_EXP__" value="15">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MAX__" value="6.5504e+4F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MIN_10_EXP__" value="(-13)">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MIN_EXP__" value="(-14)">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__FLT16_MIN__" value="6.103515625e-5F16">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__FLT_DECIMAL_DIG__" value="9">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -1286,7 +1217,10 @@
 					<entry kind="macro" name="__FreeBSD__" value="11">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__FreeBSD_cc_version" value="1100513">
+					<entry kind="macro" name="__FreeBSD_cc_version" value="1100517">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__GCC_ASM_FLAG_OUTPUTS__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__GCC_ATOMIC_BOOL_LOCK_FREE" value="2">
@@ -1679,6 +1613,12 @@
 					<entry kind="macro" name="__SCHAR_MAX__" value="127">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
+					<entry kind="macro" name="__SEG_FS" value="1">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__SEG_GS" value="1">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
 					<entry kind="macro" name="__SHRT_MAX__" value="32767">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -2054,7 +1994,7 @@
 					<entry kind="macro" name="__USER_LABEL_PREFIX__" value="">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__VERSION__" value="&quot;4.2.1 Compatible FreeBSD Clang 8.0.1 (tags/RELEASE_801/final 366581)&quot;">
+					<entry kind="macro" name="__VERSION__" value="&quot;FreeBSD Clang 10.0.1 (git@github.com:llvm/llvm-project.git llvmorg-10.0.1-0-gef32c611aa2)&quot;">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__WCHAR_MAX__" value="2147483647">
@@ -2084,7 +2024,7 @@
 					<entry kind="macro" name="__clang__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_major__" value="8">
+					<entry kind="macro" name="__clang_major__" value="10">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__clang_minor__" value="0">
@@ -2093,7 +2033,7 @@
 					<entry kind="macro" name="__clang_patchlevel__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__clang_version__" value="&quot;8.0.1 (tags/RELEASE_801/final 366581)&quot;">
+					<entry kind="macro" name="__clang_version__" value="&quot;10.0.1 (git@github.com:llvm/llvm-project.git llvmorg-10.0.1-0-gef32c611aa2)&quot;">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__code_model_small_" value="1">
@@ -2115,6 +2055,9 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__cpp_constexpr" value="201304L">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__cpp_constexpr_in_decltype" value="201711L">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__cpp_decltype" value="200707L">
@@ -2202,6 +2145,12 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__private_extern__" value="extern">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__seg_fs" value="__attribute__((address_space(257)))">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__seg_gs" value="__attribute__((address_space(256)))">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__tune_k8__" value="1">
