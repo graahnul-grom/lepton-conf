@@ -757,6 +757,16 @@ static CfgEntry g_cfg_registry[] =
         " names in the list determines the order they are displayed.",
         { NULL, NULL, NULL, NULL }
     },
+    {
+        "schematic.attrib",
+        "symbol-attribs",
+        "netname;footprint;value;refdes;source;model-name;model;net;device;numslots;slot;slotdef;graphical;description;documentation;symversion;comment;author;dist-license;use-license;file",
+        "Attributes presented in the \"Add Attribute\" and \"Edit Attribute\""
+        " dialogs for symbols and nets.\n"
+        "The attribute names are case sensitive. The order of the"
+        " names in the list determines the order they are displayed.",
+        { NULL, NULL, NULL, NULL }
+    },
     // schematic.backup: //
     {
         "schematic.backup",
