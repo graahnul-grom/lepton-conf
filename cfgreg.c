@@ -747,6 +747,16 @@ static CfgEntry g_cfg_registry[] =
         " are deleted from memory).",
         { NULL, NULL, NULL, NULL }
     },
+    {
+        "schematic.attrib",
+        "pin-attribs",
+        "pinnumber;pinseq;pintype;pinlabel",
+        "Attributes presented in the \"Add Attribute\" and \"Edit Attribute\""
+        " dialogs for pins.\n"
+        "The attribute names are case sensitive. The order of the"
+        " names in the list determines the order they are displayed.",
+        { NULL, NULL, NULL, NULL }
+    },
     // schematic.backup: //
     {
         "schematic.backup",
