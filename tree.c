@@ -387,6 +387,8 @@ tree_add_column_2( cfg_edit_dlg* dlg )
     gtk_tree_view_column_pack_start( col, ren, TRUE );
     gtk_tree_view_column_add_attribute( col, ren, "text", tree_colid_val() );
 
+    g_object_set( ren, "ellipsize", PANGO_ELLIPSIZE_END, NULL );
+
     gtk_tree_view_column_set_cell_data_func( col,
                                              ren,
                                              &tree_cell_draw,
