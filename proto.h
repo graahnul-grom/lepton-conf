@@ -398,13 +398,6 @@ int tree_cols_cnt();
 void
 tree_set_focus( cfg_edit_dlg* dlg );
 
-void
-tree_add_col( cfg_edit_dlg*    dlg,
-              GtkCellRenderer* ren,
-              const gchar*     prop,
-              gint             col_id,
-              const gchar*     title );
-
 void tree_add_column_1( cfg_edit_dlg* dlg );
 void tree_add_column_2( cfg_edit_dlg* dlg );
 
