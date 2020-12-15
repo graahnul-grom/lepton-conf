@@ -311,9 +311,6 @@ tree_cell_draw( GtkTreeViewColumn* col,
     if ( !dlg )
         return;
 
-    if ( ren != dlg->ren_txt_ )
-        return;
-
 
     const row_data* rdata = row_field_get_data( dlg, it );
     if ( !rdata )

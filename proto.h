@@ -41,7 +41,6 @@ struct _cfg_edit_dlg
 
     GtkTreeStore*    store_;
     GtkTreeView*     tree_v_;
-    GtkCellRenderer* ren_txt_;
 
     GtkWidget* lab_ctx_;
     GtkWidget* lab_fname_;
