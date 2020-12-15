@@ -359,6 +359,48 @@ tree_add_col( cfg_edit_dlg*    dlg,
 
 
 
+void
+tree_add_column_1( cfg_edit_dlg* dlg )
+{
+    GtkTreeViewColumn* col = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title( col, "name" );
+
+    GtkCellRenderer* ren = gtk_cell_renderer_text_new();
+    gtk_tree_view_column_pack_start( col, ren, TRUE );
+    gtk_tree_view_column_add_attribute( col, ren, "text", tree_colid_name() );
+
+    gtk_tree_view_column_set_cell_data_func( col,
+                                             ren,
+                                             &tree_cell_draw,
+                                             dlg,
+                                             NULL );
+
+    gtk_tree_view_append_column( dlg->tree_v_, col );
+}
+
+
+
+void
+tree_add_column_2( cfg_edit_dlg* dlg )
+{
+    GtkTreeViewColumn* col = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title( col, "value" );
+
+    GtkCellRenderer* ren = gtk_cell_renderer_text_new();
+    gtk_tree_view_column_pack_start( col, ren, TRUE );
+    gtk_tree_view_column_add_attribute( col, ren, "text", tree_colid_val() );
+
+    gtk_tree_view_column_set_cell_data_func( col,
+                                             ren,
+                                             &tree_cell_draw,
+                                             dlg,
+                                             NULL );
+
+    gtk_tree_view_append_column( dlg->tree_v_, col );
+}
+
+
+
 GtkTreeIter
 tree_add_row( cfg_edit_dlg* dlg,
               const gchar*  name,

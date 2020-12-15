@@ -406,6 +406,9 @@ tree_add_col( cfg_edit_dlg*    dlg,
               gint             col_id,
               const gchar*     title );
 
+void tree_add_column_1( cfg_edit_dlg* dlg );
+void tree_add_column_2( cfg_edit_dlg* dlg );
+
 GtkTreeIter
 tree_add_row( cfg_edit_dlg* dlg,
               const gchar*  name,

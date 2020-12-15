@@ -400,8 +400,8 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
     //
     dlg->ren_txt_ = gtk_cell_renderer_text_new();
 
-    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_name(), "name" );
-    tree_add_col( dlg, dlg->ren_txt_, "text", tree_colid_val(),  "value" );
+    tree_add_column_1( dlg );
+    tree_add_column_2( dlg );
 
     // scrolled window for tree view:
     //
