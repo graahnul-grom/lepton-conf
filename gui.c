@@ -188,10 +188,13 @@ gui_mk_labels_line( const gchar* left_txt,
 
     GtkWidget* left_label = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( left_label ), left_txt );
+
     gtk_label_set_selectable( GTK_LABEL( right_label ), TRUE );
+    gtk_label_set_ellipsize( GTK_LABEL( right_label ), PANGO_ELLIPSIZE_END );
+    gtk_misc_set_alignment( GTK_MISC( right_label ), 0, 0.5 );
 
     gtk_box_pack_start( GTK_BOX( hbox ), left_label, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( hbox ), right_label, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( hbox ), right_label, TRUE, TRUE, 0 );
 
     gtk_box_pack_start( GTK_BOX( parent_box ), hbox, FALSE, FALSE, 0 );
 }
