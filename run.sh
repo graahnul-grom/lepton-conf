@@ -1,6 +1,8 @@
 #!/bin/sh
 
-LIB="${lepton}/bin.master/lib"
+export GU3=/tmp/DMN/gu3
+
+LIB="${GU3}/lib:${lepton}/bin.master/lib"
 # LIB="${lepton}/bin.tb/lib"
 EXE="./lepton-conf"
 # EXE="./builddir/lepton-conf"
