@@ -1116,7 +1116,7 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
     gchar* key = NULL;
     gchar* val = NULL;
 
-    if ( !run_dlg_add_val( dlg, NULL, &key, &val ) )
+    if ( !run_dlg_add_key_val( dlg, NULL, &key, &val ) )
         return;
 
     GtkTreePath* path1 = row_find_child_by_name( dlg, it, key );
@@ -1269,7 +1269,7 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     gchar* key = NULL;
     gchar* val = NULL;
 
-    if ( !run_dlg_add_val_2( dlg, NULL, &grp, &key, &val ) )
+    if ( !run_dlg_add_grp_key_val( dlg, NULL, &grp, &key, &val ) )
         return;
 
     printf( "on_mitem_ctx_add( %s ): [%s] [%s] [%s]\n",

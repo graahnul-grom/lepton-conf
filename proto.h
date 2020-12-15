@@ -176,27 +176,27 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
 //
 gchar*
 run_dlg_edit_val( cfg_edit_dlg* dlg,
-                  const gchar* txt,
-                  const gchar* title );
+                  const gchar*  txt,
+                  const gchar*  title );
 
 gboolean
-run_dlg_add_val( cfg_edit_dlg* dlg,
-                 const gchar* title,
-                 gchar** key,
-                 gchar** val );
+run_dlg_add_key_val( cfg_edit_dlg* dlg,
+                     const gchar*  title,
+                     gchar**       key,
+                     gchar**       val );
 
 gboolean
-run_dlg_add_val_2( cfg_edit_dlg* dlg,
-                 const gchar* title,
-                 gchar** grp,
-                 gchar** key,
-                 gchar** val );
+run_dlg_add_grp_key_val( cfg_edit_dlg* dlg,
+                         const gchar*  title,
+                         gchar**       grp,
+                         gchar**       key,
+                         gchar**       val );
 
 gchar*
 run_dlg_list_sel( cfg_edit_dlg* dlg,
-                  GList* names,
-                  const gchar* txt,
-                  const gchar* title );
+                  GList*        names,
+                  const gchar*  txt,
+                  const gchar*  title );
 
 
 

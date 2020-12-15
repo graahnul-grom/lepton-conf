@@ -82,10 +82,10 @@ run_dlg_edit_val( cfg_edit_dlg* dlg,
 // {post}: caller must g_free() [key], [val]
 //
 gboolean
-run_dlg_add_val( cfg_edit_dlg* dlg,
-                 const gchar* title,
-                 gchar** key,
-                 gchar** val )
+run_dlg_add_key_val( cfg_edit_dlg* dlg,
+                     const gchar*  title,
+                     gchar**       key,
+                     gchar**       val )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
         title ? title : "Add key",
@@ -171,11 +171,11 @@ run_dlg_add_val( cfg_edit_dlg* dlg,
 // {post}: caller must g_free() [grp], [key], [val]
 //
 gboolean
-run_dlg_add_val_2( cfg_edit_dlg* dlg,
-                 const gchar* title,
-                 gchar** grp,
-                 gchar** key,
-                 gchar** val )
+run_dlg_add_grp_key_val( cfg_edit_dlg* dlg,
+                         const gchar*  title,
+                         gchar**       grp,
+                         gchar**       key,
+                         gchar**       val )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
         title ? title : "Add group/key",
@@ -335,9 +335,9 @@ on_key_press_paper_sizes_list( GtkWidget* w, GdkEvent* e, gpointer p )
 //
 gchar*
 run_dlg_list_sel( cfg_edit_dlg* dlg,
-                  GList* items,
-                  const gchar* current_item,
-                  const gchar* title )
+                  GList*        items,
+                  const gchar*  current_item,
+                  const gchar*  title )
 {
     GtkWidget* sdlg = gtk_dialog_new_with_buttons(
         title ? title : "Select:",
