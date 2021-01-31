@@ -1,6 +1,14 @@
 #ifndef LEPTON_CONF_DLG_ATTRS_H_
 #define LEPTON_CONF_DLG_ATTRS_H_
 
+/*
+ * lepton-conf - Lepton EDA configuration utility.
+ * https://github.com/graahnul-grom/lepton-conf
+ * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
+ * License: GPL2 - same as Lepton EDA, see
+ * https://github.com/lepton-eda/lepton-eda
+ */
+
 #include <gtk/gtk.h>
 
 
@@ -20,7 +28,7 @@ struct _attrs_dlg
 {
     GtkDialog parent;
 
-    GtkTreeStore* store_;
+    GtkListStore* store_;
     GtkTreeView*  tree_v_;
 };
 
