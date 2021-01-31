@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -974,7 +974,7 @@ on_mitem_sel_paper_size( GtkMenuItem* mitem, gpointer p )
     GList* lst = gtk_paper_size_get_paper_sizes (TRUE); // TRUE: include custom
     GList* names = NULL;
 
-    for (GList* p = lst; p != NULL; p = p->next)
+    for ( GList* p = lst; p != NULL; p = p->next )
     {
         const gchar* name = gtk_paper_size_get_name ((GtkPaperSize*) p->data);
         names = g_list_append( names, (gpointer) name );
@@ -983,18 +983,24 @@ on_mitem_sel_paper_size( GtkMenuItem* mitem, gpointer p )
 
     gchar* txt = run_dlg_list_sel( dlg, names, rdata->val_, "Select Paper Size" );
 
-    if ( txt && strcmp( txt, rdata->val_ ) != 0 )
+    if ( txt != NULL )
     {
-        a_chg_val( dlg, rdata, it, txt );
+        if ( strcmp( txt, rdata->val_ ) != 0 )
+        {
+            a_chg_val( dlg, rdata, it, txt );
+        }
+
         g_free( txt );
     }
 
-    g_list_free (names);
+    g_list_free( names );
 
-    for (GList* p = lst; p != NULL; p = p->next)
-      gtk_paper_size_free ((GtkPaperSize*) p->data);
+    for ( GList* p = lst; p != NULL; p = p->next )
+    {
+        gtk_paper_size_free( (GtkPaperSize*) p->data );
+    }
 
-    g_list_free (lst);
+    g_list_free( lst );
 
 } // on_mitem_sel_paper_size()
 
