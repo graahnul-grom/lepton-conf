@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -356,12 +356,14 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
     //
     GtkCellRenderer* ren = gtk_cell_renderer_text_new();
     GtkTreeViewColumn* col = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title( col, "title" );
+    gtk_tree_view_column_set_title( col, "Media Name" );
     gtk_tree_view_column_pack_start( col, ren, TRUE );
 
     gtk_tree_view_column_add_attribute( col, ren, "text", 0 );
 
     gtk_tree_view_append_column( tree_v, col );
+
+    gtk_tree_view_set_headers_visible( tree_v, FALSE );
     //
     //
 
