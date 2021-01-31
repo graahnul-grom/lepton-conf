@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -45,7 +45,7 @@ void out_version()
     printf( "lepton-conf version 1.0 delta\n" );
     printf( "Configuration utility for Lepton EDA " );
     printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
-    printf( "Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>\n" );
+    printf( "Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>\n" );
     printf( "WWW: https://github.com/graahnul-grom/lepton-conf\n" );
 
     exit( 0 );

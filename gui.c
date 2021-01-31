@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -61,10 +61,13 @@ gui_update( cfg_edit_dlg* dlg )
     if ( rdata->rtype_ == RT_KEY )
     {
         gtk_label_set_text( GTK_LABEL( dlg->lab_key_ ), rdata->key_ );
+
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  rdata->val_ );
+        gtk_widget_set_tooltip_text( dlg->lab_val_, rdata->val_ );
 
         const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
         gtk_label_set_text( GTK_LABEL( dlg->lab_dflt_ ), dflt ? dflt : "" );
+        gtk_widget_set_tooltip_text( dlg->lab_dflt_, dflt ? dflt : "");
 
         const gchar* desc = cfgreg_lookup_descr( rdata->group_, rdata->key_ );
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, desc ? desc : "", -1 );
@@ -74,6 +77,9 @@ gui_update( cfg_edit_dlg* dlg )
         gtk_label_set_text( GTK_LABEL( dlg->lab_key_ ), NULL );
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  NULL );
         gtk_label_set_text( GTK_LABEL( dlg->lab_dflt_ ), NULL );
+
+        gtk_widget_set_tooltip_text( dlg->lab_val_, "" );
+        gtk_widget_set_tooltip_text( dlg->lab_dflt_, "" );
 
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, "", -1 );
     }
@@ -135,6 +141,8 @@ gui_update( cfg_edit_dlg* dlg )
     }
 
     gtk_label_set_markup( GTK_LABEL( dlg->lab_fname_ ), str_markup ? str_markup : "" );
+
+    gtk_widget_set_tooltip_text( dlg->lab_fname_, fname ? fname : "" );
 
     g_free( str_access );
     g_free( str_markup );
