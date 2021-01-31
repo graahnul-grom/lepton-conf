@@ -7,6 +7,7 @@
  */
 
 #include "proto.h"
+#include "attrs_dlg.h"
 #include <gdk/gdkkeysyms.h>
 
 
@@ -143,6 +144,14 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     row_data* rdata = row_field_get_data( dlg, &it );
     if ( !rdata )
         return;
+
+
+
+
+    GtkWidget* adlg = attrs_dlg_new();
+    gtk_dialog_run( GTK_DIALOG( adlg ) );
+
+    return;
 
 
 

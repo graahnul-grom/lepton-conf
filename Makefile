@@ -4,6 +4,7 @@ PACKAGE_NAME_LIBLEPTON=liblepton
 
 
 EXE=lepton-conf
+
 SRC=main.c \
     gobj.c \
     gui.c \
@@ -14,7 +15,9 @@ SRC=main.c \
     events.c \
     tree.c \
     row.c \
-    actions.c
+    actions.c \
+    attrs_dlg.c
+
 OBJ=main.o \
     gobj.o \
     gui.o \
@@ -25,8 +28,10 @@ OBJ=main.o \
     events.o \
     tree.o \
     row.o \
-    actions.o
-HDR=proto.h
+    actions.o \
+    attrs_dlg.o
+
+HDR=proto.h attrs_dlg.h
 
 CFLAGS=-Wall -std=c99 -pthread $(DBG)
 CFLAGS_OBJ=-Wall -ansi -std=c99 -pthread $(DBG)
