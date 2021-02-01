@@ -9,10 +9,10 @@
 #include "attrs_dlg.h"
 
 static void
-attrs_dlg_create( attrs_dlg* dlg );
+attrs_dlg_create( AttrsDlg* dlg );
 
 
-G_DEFINE_TYPE(attrs_dlg, attrs_dlg, GTK_TYPE_DIALOG);
+G_DEFINE_TYPE(AttrsDlg, attrs_dlg, GTK_TYPE_DIALOG);
 
 
 GtkWidget* attrs_dlg_new()
@@ -24,14 +24,14 @@ GtkWidget* attrs_dlg_new()
 
 
 static void
-attrs_dlg_class_init( attrs_dlgClass* cls )
+attrs_dlg_class_init( AttrsDlgClass* cls )
 {
 }
 
 
 
 static void
-attrs_dlg_init( attrs_dlg* dlg )
+attrs_dlg_init( AttrsDlg* dlg )
 {
     printf( " ++ attrs_dlg_init()\n" );
     attrs_dlg_create( dlg );
@@ -40,8 +40,30 @@ attrs_dlg_init( attrs_dlg* dlg )
 
 
 
+    static void
+    on_ok( GtkWidget* btn, gpointer p )
+    {
+        printf( " .. on_ok()\n" );
+
+        AttrsDlg* dlg = (AttrsDlg*) p;
+        gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_ACCEPT );
+
+        gtk_widget_destroy( GTK_WIDGET( dlg ) );
+    }
+
+    static void
+    on_cancel( GtkWidget* btn, gpointer p )
+    {
+        printf( " .. on_cancel()\n" );
+
+        AttrsDlg* dlg = (AttrsDlg*) p;
+        gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_REJECT );
+
+        gtk_widget_destroy( GTK_WIDGET( dlg ) );
+    }
+
 static void
-attrs_dlg_create( attrs_dlg* dlg )
+attrs_dlg_create( AttrsDlg* dlg )
 {
     // list store:
     //
@@ -85,6 +107,30 @@ attrs_dlg_create( attrs_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( ca ), hbox, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( hbox ), wscroll, TRUE, TRUE, 0 );
 
+
+    // action area:
+    //
+    GtkWidget* btn_ok = gtk_button_new_with_mnemonic( "_OK" );
+    GtkWidget* btn_cancel = gtk_button_new_with_mnemonic( "_Cancel" );
+
+    GtkWidget* aa = gtk_dialog_get_action_area( GTK_DIALOG( dlg ) );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_ok, TRUE, TRUE, 0 );
+    gtk_box_pack_start( GTK_BOX( aa ), btn_cancel, TRUE, TRUE, 0 );
+
+//    g_signal_connect( G_OBJECT( btn_ok ),
+//                      "clicked",
+//                      G_CALLBACK( &on_ok ),
+//                      dlg );
+//
+//    g_signal_connect( G_OBJECT( btn_cancel ),
+//                      "clicked",
+//                      G_CALLBACK( &on_cancel ),
+//                      dlg );
+
+//    g_signal_connect (G_OBJECT (dlg),
+//                      "response",
+//                      G_CALLBACK (&gtk_widget_destroy),
+//                      NULL);
 
     // show:
     //
