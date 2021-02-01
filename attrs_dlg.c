@@ -47,8 +47,6 @@ attrs_dlg_init( AttrsDlg* dlg )
 
         AttrsDlg* dlg = (AttrsDlg*) p;
         gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_ACCEPT );
-
-        gtk_widget_destroy( GTK_WIDGET( dlg ) );
     }
 
     static void
@@ -58,8 +56,6 @@ attrs_dlg_init( AttrsDlg* dlg )
 
         AttrsDlg* dlg = (AttrsDlg*) p;
         gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_REJECT );
-
-        gtk_widget_destroy( GTK_WIDGET( dlg ) );
     }
 
 static void
@@ -117,15 +113,15 @@ attrs_dlg_create( AttrsDlg* dlg )
     gtk_box_pack_start( GTK_BOX( aa ), btn_ok, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( aa ), btn_cancel, TRUE, TRUE, 0 );
 
-//    g_signal_connect( G_OBJECT( btn_ok ),
-//                      "clicked",
-//                      G_CALLBACK( &on_ok ),
-//                      dlg );
-//
-//    g_signal_connect( G_OBJECT( btn_cancel ),
-//                      "clicked",
-//                      G_CALLBACK( &on_cancel ),
-//                      dlg );
+    g_signal_connect( G_OBJECT( btn_ok ),
+                      "clicked",
+                      G_CALLBACK( &on_ok ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( btn_cancel ),
+                      "clicked",
+                      G_CALLBACK( &on_cancel ),
+                      dlg );
 
 //    g_signal_connect (G_OBJECT (dlg),
 //                      "response",
