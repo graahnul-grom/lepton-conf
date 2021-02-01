@@ -19,12 +19,12 @@
 #define ATTRS_DLG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ATTRS_DLG_TYPE, attrs_dlgClass))
 
 
-struct _attrs_dlgClass
+struct _AttrsDlgClass
 {
     GtkDialogClass parent_class;
 };
 
-struct _attrs_dlg
+struct _AttrsDlg
 {
     GtkDialog parent;
 
@@ -32,8 +32,8 @@ struct _attrs_dlg
     GtkTreeView*  tree_v_;
 };
 
-typedef struct _attrs_dlgClass attrs_dlgClass;
-typedef struct _attrs_dlg      attrs_dlg;
+typedef struct _AttrsDlgClass AttrsDlgClass;
+typedef struct _AttrsDlg      AttrsDlg;
 
 
 GType
