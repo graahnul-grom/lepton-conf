@@ -11,8 +11,13 @@
 static void
 attrs_dlg_create( AttrsDlg* dlg );
 
+static void
+items_add( AttrsDlg* dlg );
+
+
 
 G_DEFINE_TYPE(AttrsDlg, attrs_dlg, GTK_TYPE_DIALOG);
+
 
 
 GtkWidget* attrs_dlg_new()
@@ -30,6 +35,7 @@ attrs_dlg_run( GList* items )
     AttrsDlg* adlg = ATTRS_DLG( dlg );
 
     adlg->items_ = items;
+    items_add( adlg );
 
     gtk_dialog_run( GTK_DIALOG( dlg ) );
     gtk_widget_destroy( dlg );
@@ -164,4 +170,32 @@ attrs_dlg_create( AttrsDlg* dlg )
 
 
 } // attrs_dlg_create()
+
+
+
+static void
+items_add( AttrsDlg* dlg )
+{
+    if ( dlg->items_ == NULL )
+    {
+        printf( " >>         NOP 1\n" );
+        return;
+    }
+
+    if ( g_list_length( dlg->items_ ) == 0 )
+    {
+        printf( " >>         NOP 2\n" );
+        return;
+    }
+
+    for ( GList* p = dlg->items_; p != NULL; p = p->next )
+    {
+        const gchar* str = (const gchar*) p->data;
+        printf( " >>         str: [%s]\n", str );
+
+        GtkTreeIter it;
+        gtk_list_store_append( dlg->store_, &it );
+        gtk_list_store_set( dlg->store_, &it, 0, str, -1 );
+    }
+}
 
