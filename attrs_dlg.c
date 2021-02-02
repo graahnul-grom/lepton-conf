@@ -26,9 +26,13 @@ GtkWidget* attrs_dlg_new()
 GList*
 attrs_dlg_run( GList* items )
 {
-    GtkWidget* adlg = attrs_dlg_new();
-    gtk_dialog_run( GTK_DIALOG( adlg ) );
-    gtk_widget_destroy( adlg );
+    GtkWidget* dlg = attrs_dlg_new();
+    AttrsDlg* adlg = ATTRS_DLG( dlg );
+
+    adlg->items_ = items;
+
+    gtk_dialog_run( GTK_DIALOG( dlg ) );
+    gtk_widget_destroy( dlg );
 
     return NULL;
 }

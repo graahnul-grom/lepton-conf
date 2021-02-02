@@ -153,7 +153,12 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 //    gtk_widget_destroy( adlg );
 //    printf( " >>     resp: [%d]\n", resp );
 
-    attrs_dlg_run( NULL );
+    GList* items = NULL;
+    items = g_list_append( items, "refdes" );
+    items = g_list_append( items, "value" );
+    items = g_list_append( items, "footprint" );
+
+    attrs_dlg_run( items );
 
 
     return;

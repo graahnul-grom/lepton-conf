@@ -30,6 +30,7 @@ struct _AttrsDlg
 
     GtkListStore* store_;
     GtkTreeView*  tree_v_;
+    GList*        items_;
 };
 
 typedef struct _AttrsDlgClass AttrsDlgClass;
