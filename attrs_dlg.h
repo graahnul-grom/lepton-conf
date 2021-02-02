@@ -13,10 +13,10 @@
 
 
 #define ATTRS_DLG_TYPE           (attrs_dlg_get_type())
-#define ATTRS_DLG(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), ATTRS_DLG_TYPE, attrs_dlg))
-#define ATTRS_DLG_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST ((cls), ATTRS_DLG_TYPE, attrs_dlgClass))
+#define ATTRS_DLG(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), ATTRS_DLG_TYPE, AttrsDlg))
+#define ATTRS_DLG_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST ((cls), ATTRS_DLG_TYPE, AttrsDlgClass))
 #define IS_ATTRS_DLG(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ATTRS_DLG_TYPE))
-#define ATTRS_DLG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ATTRS_DLG_TYPE, attrs_dlgClass))
+#define ATTRS_DLG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ATTRS_DLG_TYPE, AttrsDlgClass))
 
 
 struct _AttrsDlgClass
