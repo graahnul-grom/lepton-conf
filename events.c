@@ -148,11 +148,12 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
-    GtkWidget* adlg = attrs_dlg_new();
-    gint resp = gtk_dialog_run( GTK_DIALOG( adlg ) );
-    gtk_widget_destroy( adlg );
+//    GtkWidget* adlg = attrs_dlg_new();
+//    gint resp = gtk_dialog_run( GTK_DIALOG( adlg ) );
+//    gtk_widget_destroy( adlg );
+//    printf( " >>     resp: [%d]\n", resp );
 
-    printf( " >>     resp: [%d]\n", resp );
+    attrs_dlg_run( NULL );
 
 
     return;
