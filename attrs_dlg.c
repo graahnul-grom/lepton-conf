@@ -123,10 +123,24 @@ attrs_dlg_create( AttrsDlg* dlg )
                       G_CALLBACK( &on_cancel ),
                       dlg );
 
-//    g_signal_connect (G_OBJECT (dlg),
-//                      "response",
-//                      G_CALLBACK (&gtk_widget_destroy),
-//                      NULL);
+
+    // buttons:
+    //
+    GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
+    gtk_box_pack_start( GTK_BOX( hbox ), vbox, TRUE, TRUE, 0 );
+
+    GtkWidget* btn_edit      = gtk_button_new_with_mnemonic( "_Edit" );
+    GtkWidget* btn_add       = gtk_button_new_with_mnemonic( "_Add" );
+    GtkWidget* btn_remove    = gtk_button_new_with_mnemonic( "_Remove" );
+    GtkWidget* btn_move_up   = gtk_button_new_with_mnemonic( "Move _Up" );
+    GtkWidget* btn_move_down = gtk_button_new_with_mnemonic( "Move _Down" );
+
+    gtk_box_pack_start( GTK_BOX( vbox ), btn_edit,      FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), btn_add,       FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), btn_remove,    FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), btn_move_up,   FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), btn_move_down, FALSE, FALSE, 3 );
+
 
     // show:
     //
