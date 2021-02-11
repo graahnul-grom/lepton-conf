@@ -37,10 +37,17 @@ attrs_dlg_run( GList* items )
     adlg->items_ = items;
     items_add( adlg );
 
-    gtk_dialog_run( GTK_DIALOG( dlg ) );
+    gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
+    GList* res = NULL;
+
+    if ( resp == GTK_RESPONSE_ACCEPT )
+    {
+        res = adlg->items_;
+    }
+
     gtk_widget_destroy( dlg );
 
-    return NULL;
+    return res;
 }
 
 
@@ -197,5 +204,33 @@ items_add( AttrsDlg* dlg )
         gtk_list_store_append( dlg->store_, &it );
         gtk_list_store_set( dlg->store_, &it, 0, str, -1 );
     }
-}
+
+} // items_add()
+
+
+
+void
+attrs_dlg_dbg_print_items( GList* items )
+{
+    if ( items == NULL )
+    {
+        printf( " .. items: NULL\n" );
+        return;
+    }
+
+    if ( g_list_length( items ) == 0 )
+    {
+        printf( " .. items: 0\n" );
+        return;
+    }
+
+    printf( " .. items:\n" );
+
+    for ( GList* p = items; p != NULL; p = p->next )
+    {
+        const gchar* str = (const gchar*) p->data;
+        printf( " .. .. [ %s ]\n", str );
+    }
+
+} // attrs_dlg_dbg_print_items()
 

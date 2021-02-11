@@ -46,5 +46,8 @@ attrs_dlg_new();
 GList*
 attrs_dlg_run( GList* items );
 
+void
+attrs_dlg_dbg_print_items( GList* items );
+
 #endif
 
