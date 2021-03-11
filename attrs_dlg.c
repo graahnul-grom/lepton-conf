@@ -136,19 +136,18 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
     GtkTreeIter it;
     gboolean res = gtk_tree_selection_get_selected( sel, &mod, &it );
 
-    if ( ! res )
+    if ( !res )
     {
         printf( " .. on_btn_remove(): !sel\n" );
+        return;
     }
-    else
-    {
-        gchar* str = NULL;
-        gtk_tree_model_get( mod, &it, 0, &str, -1 );
-        printf( " .. on_btn_remove(): str: [%s]\n", str );
 
-        gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
-        printf( " .. .. on_btn_remove(): removed: [%d]\n", removed );
-    }
+    gchar* str = NULL;
+    gtk_tree_model_get( mod, &it, 0, &str, -1 );
+    printf( " .. on_btn_remove(): str: [%s]\n", str );
+
+    gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
+    printf( " .. .. on_btn_remove(): removed: [%d]\n", removed );
 }
 
 
@@ -167,6 +166,42 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
         GtkTreeIter it;
         gtk_list_store_append( dlg->store_, &it );
         gtk_list_store_set( dlg->store_, &it, 0, str, -1 );
+    }
+}
+
+
+
+static void
+attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
+{
+    printf( " .. attrs_dlg_on_btn_move_down()\n" );
+    AttrsDlg* dlg = (AttrsDlg*) p;
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeModel* mod = NULL;
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, &mod, &it );
+
+    if ( !res )
+    {
+        printf( " .. attrs_dlg_on_btn_move_down(): !sel\n" );
+        return;
+    }
+
+    gchar* str = NULL;
+    gtk_tree_model_get( mod, &it, 0, &str, -1 );
+    printf( " .. attrs_dlg_on_btn_move_down(): str: [%s]\n", str );
+
+    GtkTreeIter* it_old = gtk_tree_iter_copy( &it );
+    gboolean has_next = gtk_tree_model_iter_next( mod, &it );
+
+    if ( has_next )
+    {
+        gtk_list_store_move_after( dlg->store_, it_old, &it );
+    }
+    else
+    {
+        gtk_list_store_move_after( dlg->store_, it_old, NULL );
     }
 }
 
@@ -266,6 +301,11 @@ attrs_dlg_create( AttrsDlg* dlg )
     g_signal_connect( G_OBJECT( btn_add ),
                       "clicked",
                       G_CALLBACK( &attrs_dlg_on_btn_add ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( btn_move_down ),
+                      "clicked",
+                      G_CALLBACK( &attrs_dlg_on_btn_move_down ),
                       dlg );
 
     // show:
