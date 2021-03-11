@@ -160,7 +160,14 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
     AttrsDlg* dlg = (AttrsDlg*) p;
 
     gchar* str = run_dlg_edit_val( NULL, "txt", "title" );
-    printf( " .. attrs_dlg_on_btn_add(): str: [%s]\n", str );
+    if ( str != NULL )
+    {
+        printf( " .. attrs_dlg_on_btn_add(): str: [%s]\n", str );
+
+        GtkTreeIter it;
+        gtk_list_store_append( dlg->store_, &it );
+        gtk_list_store_set( dlg->store_, &it, 0, str, -1 );
+    }
 }
 
 
