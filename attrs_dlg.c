@@ -7,6 +7,7 @@
  */
 
 #include "attrs_dlg.h"
+#include "proto.h"
 
 static void
 attrs_dlg_create( AttrsDlg* dlg );
@@ -103,7 +104,7 @@ attrs_dlg_init( AttrsDlg* dlg )
 
 
 static void
-on_btn_ok( GtkWidget* btn, gpointer p )
+attrs_dlg_on_btn_ok( GtkWidget* btn, gpointer p )
 {
     printf( " .. on_ok()\n" );
 
@@ -114,7 +115,7 @@ on_btn_ok( GtkWidget* btn, gpointer p )
 
 
 static void
-on_btn_cancel( GtkWidget* btn, gpointer p )
+attrs_dlg_on_btn_cancel( GtkWidget* btn, gpointer p )
 {
     printf( " .. on_cancel()\n" );
 
@@ -125,7 +126,7 @@ on_btn_cancel( GtkWidget* btn, gpointer p )
 
 
 static void
-on_btn_remove( GtkWidget* btn, gpointer p )
+attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
 {
     printf( " .. on_btn_remove()\n" );
     AttrsDlg* dlg = (AttrsDlg*) p;
@@ -148,6 +149,16 @@ on_btn_remove( GtkWidget* btn, gpointer p )
         gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
         printf( " .. .. on_btn_remove(): removed: [%d]\n", removed );
     }
+}
+
+
+
+static void
+attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
+{
+    printf( " .. on_btn_add()\n" );
+    AttrsDlg* dlg = (AttrsDlg*) p;
+
 }
 
 
@@ -212,12 +223,12 @@ attrs_dlg_create( AttrsDlg* dlg )
 
     g_signal_connect( G_OBJECT( btn_ok ),
                       "clicked",
-                      G_CALLBACK( &on_btn_ok ),
+                      G_CALLBACK( &attrs_dlg_on_btn_ok ),
                       dlg );
 
     g_signal_connect( G_OBJECT( btn_cancel ),
                       "clicked",
-                      G_CALLBACK( &on_btn_cancel ),
+                      G_CALLBACK( &attrs_dlg_on_btn_cancel ),
                       dlg );
 
 
@@ -240,7 +251,12 @@ attrs_dlg_create( AttrsDlg* dlg )
 
     g_signal_connect( G_OBJECT( btn_remove ),
                       "clicked",
-                      G_CALLBACK( &on_btn_remove ),
+                      G_CALLBACK( &attrs_dlg_on_btn_remove ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( btn_add ),
+                      "clicked",
+                      G_CALLBACK( &attrs_dlg_on_btn_add ),
                       dlg );
 
     // show:
