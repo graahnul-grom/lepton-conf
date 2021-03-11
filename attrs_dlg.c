@@ -159,6 +159,8 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
     printf( " .. on_btn_add()\n" );
     AttrsDlg* dlg = (AttrsDlg*) p;
 
+    gchar* str = run_dlg_edit_val( NULL, "txt", "title" );
+    printf( " .. attrs_dlg_on_btn_add(): str: [%s]\n", str );
 }
 
 
