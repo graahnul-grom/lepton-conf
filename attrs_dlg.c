@@ -21,7 +21,39 @@ G_DEFINE_TYPE(AttrsDlg, attrs_dlg, GTK_TYPE_DIALOG);
 
 
 
-gboolean
+// {ret}: attrs list as a string; NULL if attrs list is empty
+//
+static gchar*
+attrs_dlg_result_to_string( AttrsDlg* dlg )
+{
+    GList* items = dlg->items_result_;
+
+    if ( items == NULL )
+        return NULL;
+
+    if ( g_list_length( items ) == 0 )
+        return NULL;
+
+
+    // to avoid leading ';' in the result string:
+    //
+    gchar* res = (gchar*) items->data;
+
+    for ( GList* p = items->next; p != NULL; p = p->next )
+    {
+        const gchar* str = (const gchar*) p->data;
+        printf( " .. attrs_dlg_result_to_string(): str [%s]\n", str );
+
+        res = g_strdup_printf( "%s;%s", res, str );
+    }
+
+    return res;
+
+} // attrs_dlg_result_to_string()
+
+
+
+static gboolean
 attrs_dlg_add_to_result( GtkTreeModel* mod,
                          GtkTreePath*  path,
                          GtkTreeIter*  it,
@@ -50,7 +82,7 @@ attrs_dlg_new()
 
 
 
-GList*
+gchar*
 attrs_dlg_run( GList* items )
 {
     GtkWidget* dlg = attrs_dlg_new();
@@ -74,13 +106,15 @@ attrs_dlg_run( GList* items )
 
 
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
-    if ( resp == GTK_RESPONSE_ACCEPT )
+    if ( resp != GTK_RESPONSE_ACCEPT )
     {
-        GtkTreeModel* mod_res = gtk_tree_view_get_model( adlg->tree_v_ );
-        gtk_tree_model_foreach( mod_res, &attrs_dlg_add_to_result, dlg );
+        return NULL;
     }
 
-    GList* ret = adlg->items_result_;
+    GtkTreeModel* mod_res = gtk_tree_view_get_model( adlg->tree_v_ );
+    gtk_tree_model_foreach( mod_res, &attrs_dlg_add_to_result, dlg );
+
+    gchar* ret = attrs_dlg_result_to_string( adlg );
 
     gtk_widget_destroy( dlg );
 
