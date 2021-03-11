@@ -1086,14 +1086,26 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
         return;
 
 
+    gchar** attrs = g_strsplit( rdata->val_, ";", 0 );
+    printf( " .. on_mitem_edit_attrs(): attrs: [%p]\n", attrs );
+
+    g_return_if_fail( attrs != NULL && "on_mitem_edit_attrs(): !str split" );
+
+
     GList* items = NULL;
-    items = g_list_append( items, "refdes" );
-    items = g_list_append( items, "value" );
-    items = g_list_append( items, "footprint" );
+
+    while ( *attrs != NULL )
+    {
+        printf( " .. on_mitem_edit_attrs(): *attrs: [%s]\n", *attrs );
+
+        items = g_list_append( items, *attrs );
+        ++ attrs ;
+    }
+
 
     GList* res = attrs_dlg_run( items );
-    printf( " >> res: [%p]\n", res );
 
+    printf( " >> res: [%p]\n", res );
     attrs_dlg_dbg_print_items( res );
 
 } // on_mitem_edit_attrs()
