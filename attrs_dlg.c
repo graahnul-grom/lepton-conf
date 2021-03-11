@@ -38,15 +38,14 @@ attrs_dlg_run( GList* items )
     items_add( adlg );
 
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
-    GList* res = NULL;
 
+    GList* res = NULL;
     if ( resp == GTK_RESPONSE_ACCEPT )
     {
         res = adlg->items_;
     }
 
     gtk_widget_destroy( dlg );
-
     return res;
 }
 
@@ -87,6 +86,33 @@ attrs_dlg_init( AttrsDlg* dlg )
         gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_REJECT );
     }
 
+
+
+
+static void
+on_btn_remove( GtkWidget* btn, gpointer p )
+{
+    printf( " .. on_btn_remove()\n" );
+    AttrsDlg* dlg = (AttrsDlg*) p;
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeModel* mod = NULL;
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, &mod, &it );
+
+    if ( ! res )
+    {
+        printf( " .. on_btn_remove(): !sel\n" );
+    }
+    else
+    {
+        gchar* str = NULL;
+        gtk_tree_model_get( mod, &it, 0, &str, -1 );
+    }
+}
+
+
+
 static void
 attrs_dlg_create( AttrsDlg* dlg )
 {
@@ -100,6 +126,9 @@ attrs_dlg_create( AttrsDlg* dlg )
     //
     GtkWidget* tree_w = gtk_tree_view_new_with_model( model );
     dlg->tree_v_ = GTK_TREE_VIEW( tree_w );
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    gtk_tree_selection_set_mode( sel, GTK_SELECTION_BROWSE );
 
 
     // column:
@@ -170,6 +199,10 @@ attrs_dlg_create( AttrsDlg* dlg )
     gtk_box_pack_start( GTK_BOX( vbox ), btn_move_up,   FALSE, FALSE, 3 );
     gtk_box_pack_start( GTK_BOX( vbox ), btn_move_down, FALSE, FALSE, 3 );
 
+    g_signal_connect( G_OBJECT( btn_remove ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_remove ),
+                      dlg );
 
     // show:
     //
