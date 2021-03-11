@@ -160,6 +160,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
     GList* res = attrs_dlg_run( items );
     printf( " >> res: [%p]\n", res );
+
     attrs_dlg_dbg_print_items( res );
 
 
