@@ -347,6 +347,9 @@ void
 on_mitem_sel_color( GtkMenuItem* mitem, gpointer p );
 
 void
+on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p );
+
+void
 on_btn_add( GtkButton* btn, gpointer* p );
 
 void

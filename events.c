@@ -148,23 +148,6 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
-//    GtkWidget* adlg = attrs_dlg_new();
-//    gint resp = gtk_dialog_run( GTK_DIALOG( adlg ) );
-//    gtk_widget_destroy( adlg );
-//    printf( " >>     resp: [%d]\n", resp );
-
-    GList* items = NULL;
-    items = g_list_append( items, "refdes" );
-    items = g_list_append( items, "value" );
-    items = g_list_append( items, "footprint" );
-
-//    GList* res = attrs_dlg_run( NULL );
-    GList* res = attrs_dlg_run( items );
-    printf( " >> res: [%p]\n", res );
-
-    attrs_dlg_dbg_print_items( res );
-
-
     return;
 
 
@@ -1084,6 +1067,36 @@ on_mitem_sel_color( GtkMenuItem* mitem, gpointer p )
     gdk_colormap_free_colors( cmap, &color, 1 );
 
 } // on_mitem_sel_color()
+
+
+
+void
+on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+
+    GList* items = NULL;
+    items = g_list_append( items, "refdes" );
+    items = g_list_append( items, "value" );
+    items = g_list_append( items, "footprint" );
+
+    GList* res = attrs_dlg_run( items );
+    printf( " >> res: [%p]\n", res );
+
+    attrs_dlg_dbg_print_items( res );
+
+} // on_mitem_edit_attrs()
 
 
 
