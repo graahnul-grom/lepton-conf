@@ -20,6 +20,25 @@ G_DEFINE_TYPE(AttrsDlg, attrs_dlg, GTK_TYPE_DIALOG);
 
 
 
+gboolean
+add_to_result( GtkTreeModel* mod,
+               GtkTreePath*  path,
+               GtkTreeIter*  it,
+               gpointer      p )
+{
+    AttrsDlg* dlg = (AttrsDlg*) p;
+
+    gchar* str = NULL;
+    gtk_tree_model_get( mod, it, 0, &str, -1 );
+    dlg->items_result_ = g_list_append( dlg->items_result_, str );
+
+    printf( " .. add_to_result(): str: [%s]\n", str );
+
+    return FALSE; // FALSE => continue gtk_tree_model_foreach()
+}
+
+
+
 GtkWidget* attrs_dlg_new()
 {
   gpointer obj = g_object_new( ATTRS_DLG_TYPE, NULL );
@@ -34,13 +53,13 @@ attrs_dlg_run( GList* items )
     GtkWidget* dlg = attrs_dlg_new();
     AttrsDlg* adlg = ATTRS_DLG( dlg );
 
+    adlg->items_result_ = NULL;
     adlg->items_ = items;
     items_add( adlg );
 
 
-
-
-
+    // select 1st elem in the tree view:
+    //
     GtkTreeModel* mod = gtk_tree_view_get_model( adlg->tree_v_ );
     GtkTreeIter it;
     gboolean is_iter_set = gtk_tree_model_get_iter_first( mod, &it );
@@ -51,19 +70,18 @@ attrs_dlg_run( GList* items )
     }
 
 
-
-
-
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
-
-    GList* res = NULL;
     if ( resp == GTK_RESPONSE_ACCEPT )
     {
-        res = adlg->items_;
+        GtkTreeModel* mod_res = gtk_tree_view_get_model( adlg->tree_v_ );
+        gtk_tree_model_foreach( mod_res, &add_to_result, dlg );
     }
 
+    GList* ret = adlg->items_result_;
+
     gtk_widget_destroy( dlg );
-    return res;
+
+    return ret;
 }
 
 
@@ -127,9 +145,8 @@ on_btn_remove( GtkWidget* btn, gpointer p )
         gtk_tree_model_get( mod, &it, 0, &str, -1 );
         printf( " .. on_btn_remove(): str: [%s]\n", str );
 
-//        gboolean removed = gtk_list_store_remove( dlg->store_, &it );
         gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
-        printf( " .. on_btn_remove(): removed: [%d]\n", removed );
+        printf( " .. .. on_btn_remove(): removed: [%d]\n", removed );
     }
 }
 
@@ -267,6 +284,8 @@ items_add( AttrsDlg* dlg )
 void
 attrs_dlg_dbg_print_items( GList* items )
 {
+    printf( " .. attrs_dlg_dbg_print_items()\n" );
+
     if ( items == NULL )
     {
         printf( " .. items: NULL\n" );
