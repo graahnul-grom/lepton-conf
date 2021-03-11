@@ -158,6 +158,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     items = g_list_append( items, "value" );
     items = g_list_append( items, "footprint" );
 
+//    GList* res = attrs_dlg_run( NULL );
     GList* res = attrs_dlg_run( items );
     printf( " >> res: [%p]\n", res );
 
