@@ -41,7 +41,7 @@ attrs_dlg_add_to_result( GtkTreeModel* mod,
 
 
 
-GtkWidget*
+static GtkWidget*
 attrs_dlg_new()
 {
   gpointer obj = g_object_new( ATTRS_DLG_TYPE, NULL );

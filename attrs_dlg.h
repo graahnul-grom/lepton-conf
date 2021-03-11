@@ -41,9 +41,6 @@ typedef struct _AttrsDlg      AttrsDlg;
 GType
 attrs_dlg_get_type();
 
-GtkWidget*
-attrs_dlg_new();
-
 GList*
 attrs_dlg_run( GList* items );
 
