@@ -1092,21 +1092,22 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
     g_return_if_fail( attrs != NULL && "on_mitem_edit_attrs(): !str split" );
 
 
-    GList* items = NULL;
+    GList* attrs_list = NULL;
 
     while ( *attrs != NULL )
     {
         printf( " .. on_mitem_edit_attrs(): *attrs: [%s]\n", *attrs );
 
-        items = g_list_append( items, *attrs );
+        attrs_list = g_list_append( attrs_list, *attrs );
         ++ attrs ;
     }
 
 
-    GList* attrs_new = attrs_dlg_run( items );
+    gchar* attrs_new_as_string = attrs_dlg_run( attrs_list );
 
-    printf( " >> attrs_new: [%p]\n", attrs_new );
-    attrs_dlg_dbg_print_items( attrs_new );
+    printf( " >> attrs_new_as_string: [%s]\n", attrs_new_as_string );
+
+    g_free( attrs_new_as_string );
 
 } // on_mitem_edit_attrs()
 
