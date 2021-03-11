@@ -126,8 +126,36 @@ attrs_dlg_run( GList* items )
 
 
 static void
+attrs_dlg_on_show( GtkWidget* widget )
+{
+    AttrsDlg* dlg = ATTRS_DLG( widget );
+
+    settings_restore_wnd_geom( GTK_WINDOW( dlg ), "attrs" );
+
+    GTK_WIDGET_CLASS(attrs_dlg_parent_class)->show(widget);
+}
+
+
+
+static void
+attrs_dlg_on_unmap( GtkWidget* widget )
+{
+    AttrsDlg* dlg = ATTRS_DLG( widget );
+
+    settings_save_wnd_geom( GTK_WINDOW( dlg ), "attrs" );
+
+    GTK_WIDGET_CLASS(attrs_dlg_parent_class)->unmap(widget);
+}
+
+
+
+static void
 attrs_dlg_class_init( AttrsDlgClass* cls )
 {
+    GtkWidgetClass* wcls = GTK_WIDGET_CLASS( cls );
+
+    wcls->show =  &attrs_dlg_on_show;
+    wcls->unmap = &attrs_dlg_on_unmap;
 }
 
 
