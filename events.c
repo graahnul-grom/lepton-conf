@@ -1103,10 +1103,10 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
     }
 
 
-    GList* res = attrs_dlg_run( items );
+    GList* attrs_new = attrs_dlg_run( items );
 
-    printf( " >> res: [%p]\n", res );
-    attrs_dlg_dbg_print_items( res );
+    printf( " >> attrs_new: [%p]\n", attrs_new );
+    attrs_dlg_dbg_print_items( attrs_new );
 
 } // on_mitem_edit_attrs()
 
