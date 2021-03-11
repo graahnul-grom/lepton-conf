@@ -37,6 +37,23 @@ attrs_dlg_run( GList* items )
     adlg->items_ = items;
     items_add( adlg );
 
+
+
+
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( adlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean is_iter_set = gtk_tree_model_get_iter_first( mod, &it );
+    if ( is_iter_set )
+    {
+        GtkTreeSelection* sel = gtk_tree_view_get_selection( adlg->tree_v_ );
+        gtk_tree_selection_select_iter( sel, &it );
+    }
+
+
+
+
+
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
 
     GList* res = NULL;
