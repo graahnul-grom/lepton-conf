@@ -33,6 +33,7 @@ OBJ=main.o \
 
 HDR=proto.h attrs_dlg.h
 
+CPPFLAGS=-DGLIB_DISABLE_DEPRECATION_WARNINGS=1
 CFLAGS=-Wall -std=c99 -pthread $(DBG)
 CFLAGS_OBJ=-Wall -ansi -std=c99 -pthread $(DBG)
 
@@ -50,7 +51,7 @@ clean:
 	@echo "done."
 
 .c.o: $(HDR)
-	cc $(CFLAGS) $(OPT_GTK_OBJ) $(OPT_LIBLEPTON_OBJ) -c $< -o $@
+	cc $(CPPFLAGS) $(CFLAGS) $(OPT_GTK_OBJ) $(OPT_LIBLEPTON_OBJ) -c $< -o $@
 
 $(EXE): $(OBJ)
 	cc -o $(EXE) $(OBJ) $(CFLAGS) $(OPT_GTK) $(OPT_LIBLEPTON)
