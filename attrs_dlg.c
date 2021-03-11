@@ -102,25 +102,25 @@ attrs_dlg_init( AttrsDlg* dlg )
 
 
 
+static void
+on_btn_ok( GtkWidget* btn, gpointer p )
+{
+    printf( " .. on_ok()\n" );
 
-    static void
-    on_ok( GtkWidget* btn, gpointer p )
-    {
-        printf( " .. on_ok()\n" );
+    AttrsDlg* dlg = (AttrsDlg*) p;
+    gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_ACCEPT );
+}
 
-        AttrsDlg* dlg = (AttrsDlg*) p;
-        gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_ACCEPT );
-    }
 
-    static void
-    on_cancel( GtkWidget* btn, gpointer p )
-    {
-        printf( " .. on_cancel()\n" );
 
-        AttrsDlg* dlg = (AttrsDlg*) p;
-        gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_REJECT );
-    }
+static void
+on_btn_cancel( GtkWidget* btn, gpointer p )
+{
+    printf( " .. on_cancel()\n" );
 
+    AttrsDlg* dlg = (AttrsDlg*) p;
+    gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_REJECT );
+}
 
 
 
@@ -212,12 +212,12 @@ attrs_dlg_create( AttrsDlg* dlg )
 
     g_signal_connect( G_OBJECT( btn_ok ),
                       "clicked",
-                      G_CALLBACK( &on_ok ),
+                      G_CALLBACK( &on_btn_ok ),
                       dlg );
 
     g_signal_connect( G_OBJECT( btn_cancel ),
                       "clicked",
-                      G_CALLBACK( &on_cancel ),
+                      G_CALLBACK( &on_btn_cancel ),
                       dlg );
 
 
