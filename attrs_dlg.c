@@ -13,7 +13,7 @@ static void
 attrs_dlg_create( AttrsDlg* dlg );
 
 static void
-items_add( AttrsDlg* dlg );
+attrs_dlg_items_add( AttrsDlg* dlg );
 
 
 
@@ -22,10 +22,10 @@ G_DEFINE_TYPE(AttrsDlg, attrs_dlg, GTK_TYPE_DIALOG);
 
 
 gboolean
-add_to_result( GtkTreeModel* mod,
-               GtkTreePath*  path,
-               GtkTreeIter*  it,
-               gpointer      p )
+attrs_dlg_add_to_result( GtkTreeModel* mod,
+                         GtkTreePath*  path,
+                         GtkTreeIter*  it,
+                         gpointer      p )
 {
     AttrsDlg* dlg = (AttrsDlg*) p;
 
@@ -36,11 +36,13 @@ add_to_result( GtkTreeModel* mod,
     printf( " .. add_to_result(): str: [%s]\n", str );
 
     return FALSE; // FALSE => continue gtk_tree_model_foreach()
-}
+
+} // attrs_dlg_add_to_result()
 
 
 
-GtkWidget* attrs_dlg_new()
+GtkWidget*
+attrs_dlg_new()
 {
   gpointer obj = g_object_new( ATTRS_DLG_TYPE, NULL );
   return GTK_WIDGET( obj );
@@ -56,7 +58,7 @@ attrs_dlg_run( GList* items )
 
     adlg->items_result_ = NULL;
     adlg->items_ = items;
-    items_add( adlg );
+    attrs_dlg_items_add( adlg );
 
 
     // select 1st elem in the tree view:
@@ -75,7 +77,7 @@ attrs_dlg_run( GList* items )
     if ( resp == GTK_RESPONSE_ACCEPT )
     {
         GtkTreeModel* mod_res = gtk_tree_view_get_model( adlg->tree_v_ );
-        gtk_tree_model_foreach( mod_res, &add_to_result, dlg );
+        gtk_tree_model_foreach( mod_res, &attrs_dlg_add_to_result, dlg );
     }
 
     GList* ret = adlg->items_result_;
@@ -83,7 +85,8 @@ attrs_dlg_run( GList* items )
     gtk_widget_destroy( dlg );
 
     return ret;
-}
+
+} // attrs_dlg_run()
 
 
 
@@ -106,7 +109,7 @@ attrs_dlg_init( AttrsDlg* dlg )
 static void
 attrs_dlg_on_btn_ok( GtkWidget* btn, gpointer p )
 {
-    printf( " .. on_ok()\n" );
+    printf( " .. attrs_dlg_on_btn_ok()\n" );
 
     AttrsDlg* dlg = (AttrsDlg*) p;
     gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_ACCEPT );
@@ -117,7 +120,7 @@ attrs_dlg_on_btn_ok( GtkWidget* btn, gpointer p )
 static void
 attrs_dlg_on_btn_cancel( GtkWidget* btn, gpointer p )
 {
-    printf( " .. on_cancel()\n" );
+    printf( " .. attrs_dlg_on_btn_cancel()\n" );
 
     AttrsDlg* dlg = (AttrsDlg*) p;
     gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_REJECT );
@@ -128,7 +131,7 @@ attrs_dlg_on_btn_cancel( GtkWidget* btn, gpointer p )
 static void
 attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
 {
-    printf( " .. on_btn_remove()\n" );
+    printf( " .. attrs_dlg_on_btn_remove()\n" );
     AttrsDlg* dlg = (AttrsDlg*) p;
 
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
@@ -138,17 +141,18 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
 
     if ( !res )
     {
-        printf( " .. on_btn_remove(): !sel\n" );
+        printf( " .. attrs_dlg_on_btn_remove(): !sel\n" );
         return;
     }
 
     gchar* str = NULL;
     gtk_tree_model_get( mod, &it, 0, &str, -1 );
-    printf( " .. on_btn_remove(): str: [%s]\n", str );
+    printf( " .. attrs_dlg_on_btn_remove(): str: [%s]\n", str );
 
     gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
-    printf( " .. .. on_btn_remove(): removed: [%d]\n", removed );
-}
+    printf( " .. .. attrs_dlg_on_btn_remove(): removed: [%d]\n", removed );
+
+} // attrs_dlg_on_btn_remove()
 
 
 
@@ -167,7 +171,8 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
         gtk_list_store_append( dlg->store_, &it );
         gtk_list_store_set( dlg->store_, &it, 0, str, -1 );
     }
-}
+
+} // attrs_dlg_on_btn_add()
 
 
 
@@ -205,7 +210,8 @@ attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
     {
         gtk_list_store_move_after( dlg->store_, it_old, NULL );
     }
-}
+
+} // attrs_dlg_on_btn_move_down()
 
 
 
@@ -249,7 +255,8 @@ attrs_dlg_on_btn_move_up( GtkWidget* btn, gpointer p )
     {
         gtk_list_store_move_before( dlg->store_, &it, NULL );
     }
-}
+
+} // attrs_dlg_on_btn_move_up()
 
 
 
@@ -302,7 +309,7 @@ attrs_dlg_create( AttrsDlg* dlg )
     gtk_box_pack_start( GTK_BOX( hbox ), wscroll, TRUE, TRUE, 0 );
 
 
-    // action area:
+    // action area, OK, Cancel buttons:
     //
     GtkWidget* btn_ok = gtk_button_new_with_mnemonic( "_OK" );
     GtkWidget* btn_cancel = gtk_button_new_with_mnemonic( "_Cancel" );
@@ -359,41 +366,38 @@ attrs_dlg_create( AttrsDlg* dlg )
                       G_CALLBACK( &attrs_dlg_on_btn_move_up ),
                       dlg );
 
-    // show:
-    //
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
-
 
 } // attrs_dlg_create()
 
 
 
 static void
-items_add( AttrsDlg* dlg )
+attrs_dlg_items_add( AttrsDlg* dlg )
 {
     if ( dlg->items_ == NULL )
     {
-        printf( " >>         NOP 1\n" );
+        printf( " >> attrs_dlg_items_add(): NOP 1\n" );
         return;
     }
 
     if ( g_list_length( dlg->items_ ) == 0 )
     {
-        printf( " >>         NOP 2\n" );
+        printf( " >> attrs_dlg_items_add(): NOP 2\n" );
         return;
     }
 
     for ( GList* p = dlg->items_; p != NULL; p = p->next )
     {
         const gchar* str = (const gchar*) p->data;
-        printf( " >>         str: [%s]\n", str );
+        printf( " >> attrs_dlg_items_add(): str: [%s]\n", str );
 
         GtkTreeIter it;
         gtk_list_store_append( dlg->store_, &it );
         gtk_list_store_set( dlg->store_, &it, 0, str, -1 );
     }
 
-} // items_add()
+} // attrs_dlg_items_add()
 
 
 
