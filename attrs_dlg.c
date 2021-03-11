@@ -21,18 +21,16 @@ G_DEFINE_TYPE(AttrsDlg, attrs_dlg, GTK_TYPE_DIALOG);
 
 
 
-// {ret}: attrs list as a string; NULL if attrs list is empty
-//
 static gchar*
 attrs_dlg_result_to_string( AttrsDlg* dlg )
 {
     GList* items = dlg->items_result_;
 
     if ( items == NULL )
-        return NULL;
+        return g_strdup( "" );
 
     if ( g_list_length( items ) == 0 )
-        return NULL;
+        return g_strdup( "" );
 
 
     // to avoid leading ';' in the result string:
