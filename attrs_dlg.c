@@ -108,6 +108,7 @@ attrs_dlg_run( GList* items )
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
     if ( resp != GTK_RESPONSE_ACCEPT )
     {
+        gtk_widget_destroy( dlg );
         return NULL;
     }
 
