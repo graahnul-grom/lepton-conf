@@ -15,13 +15,13 @@
 // {post}: caller must g_free() {ret}
 //
 gchar*
-run_dlg_edit_val( cfg_edit_dlg* dlg,
+run_dlg_edit_val( GtkWindow* parent,
                   const gchar* txt,
                   const gchar* title )
 {
     GtkWidget* vdlg = gtk_dialog_new_with_buttons(
         title ? title : "Edit value",
-        GTK_WINDOW( dlg ),
+        parent,
         GTK_DIALOG_MODAL, // | GTK_DIALOG_DESTROY_WITH_PARENT,
 //        GTK_DIALOG_DESTROY_WITH_PARENT,
         GTK_STOCK_OK,     GTK_RESPONSE_ACCEPT,

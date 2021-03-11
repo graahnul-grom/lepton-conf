@@ -441,7 +441,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
         else
         if ( rdata->rtype_ == RT_KEY )
         {
-            gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+            gchar* txt = run_dlg_edit_val( GTK_WINDOW( dlg ), rdata->val_, NULL );
             a_chg_val( dlg, rdata, it, txt );
             g_free( txt );
         }
@@ -701,7 +701,7 @@ on_btn_edit( GtkButton* btn, gpointer* p )
     if ( rdata->rtype_ != RT_KEY || rdata->ro_ )
         return;
 
-    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+    gchar* txt = run_dlg_edit_val( GTK_WINDOW( dlg ), rdata->val_, NULL );
 
     a_chg_val( dlg, rdata, it, txt );
 
@@ -726,7 +726,7 @@ on_mitem_key_edit( GtkMenuItem* mitem, gpointer p )
     if ( !rdata )
         return;
 
-    gchar* txt = run_dlg_edit_val( dlg, rdata->val_, NULL );
+    gchar* txt = run_dlg_edit_val( GTK_WINDOW( dlg ), rdata->val_, NULL );
 
     a_chg_val( dlg, rdata, it, txt );
 

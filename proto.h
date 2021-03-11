@@ -175,7 +175,7 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
 // dlg.c:
 //
 gchar*
-run_dlg_edit_val( cfg_edit_dlg* dlg,
+run_dlg_edit_val( GtkWindow* parent,
                   const gchar*  txt,
                   const gchar*  title );
 
