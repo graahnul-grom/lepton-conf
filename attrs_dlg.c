@@ -171,6 +171,8 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
 
 
 
+// TODO: attrs_dlg_on_btn_move_down(): rewrite using GtkTreePath
+//
 static void
 attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
 {
@@ -202,6 +204,50 @@ attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
     else
     {
         gtk_list_store_move_after( dlg->store_, it_old, NULL );
+    }
+}
+
+
+
+static void
+attrs_dlg_on_btn_move_up( GtkWidget* btn, gpointer p )
+{
+    printf( " .. attrs_dlg_on_btn_move_up()\n" );
+    AttrsDlg* dlg = (AttrsDlg*) p;
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeModel* mod = NULL;
+    GtkTreeIter it;
+    gboolean res = gtk_tree_selection_get_selected( sel, &mod, &it );
+
+    if ( !res )
+    {
+        printf( " .. attrs_dlg_on_btn_move_up(): !sel\n" );
+        return;
+    }
+
+    gchar* str = NULL;
+    gtk_tree_model_get( mod, &it, 0, &str, -1 );
+    printf( " .. attrs_dlg_on_btn_move_up(): str: [%s]\n", str );
+
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+    gboolean move_ok = gtk_tree_path_prev( path );
+    printf( " .. .. attrs_dlg_on_btn_move_up(): moved_ok: [%d]\n", move_ok );
+
+    if ( move_ok )
+    {
+        GtkTreeIter it_prev;
+        gboolean iter_ok = gtk_tree_model_get_iter( mod, &it_prev, path );
+        printf( " .. .. attrs_dlg_on_btn_move_up(): iter_ok: [%d]\n", iter_ok );
+
+        if ( iter_ok )
+        {
+            gtk_list_store_move_before( dlg->store_, &it, &it_prev );
+        }
+    }
+    else
+    {
+        gtk_list_store_move_before( dlg->store_, &it, NULL );
     }
 }
 
@@ -306,6 +352,11 @@ attrs_dlg_create( AttrsDlg* dlg )
     g_signal_connect( G_OBJECT( btn_move_down ),
                       "clicked",
                       G_CALLBACK( &attrs_dlg_on_btn_move_down ),
+                      dlg );
+
+    g_signal_connect( G_OBJECT( btn_move_up ),
+                      "clicked",
+                      G_CALLBACK( &attrs_dlg_on_btn_move_up ),
                       dlg );
 
     // show:
