@@ -217,6 +217,39 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
 
 
 
+
+
+static gboolean
+empty_string_check_and_warn( AttrsDlg* dlg, gchar* str )
+{
+    gchar* stripped = g_strstrip( str );
+
+    if ( strlen( stripped ) > 0 )
+    {
+        return TRUE;
+    }
+
+
+    GtkWidget* msgdlg =
+    gtk_message_dialog_new( GTK_WINDOW( dlg ),
+                            GTK_DIALOG_MODAL,
+                            GTK_MESSAGE_ERROR,
+                            GTK_BUTTONS_OK,
+                            "Please enter a non-empty string." );
+
+    gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
+
+    gtk_dialog_run( GTK_DIALOG( msgdlg ) );
+    gtk_widget_destroy( msgdlg );
+
+    return FALSE;
+
+} // empty_string_check_and_warn()
+
+
+
+
+
 static void
 attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
 {
@@ -257,9 +290,20 @@ attrs_dlg_on_btn_edit( GtkWidget* btn, gpointer p )
 
 
     gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ), str, NULL );
+
     if ( str_new != NULL )
     {
-        gtk_list_store_set( dlg->store_, &it, 0, str_new, -1 );
+        printf( " .. attrs_dlg_on_btn_edit(): str_new: [%s]\n", str_new );
+
+        // NOTE: empty_string_check_and_warn() strips leading and trailing spaces:
+        //
+        if ( empty_string_check_and_warn( dlg, str_new ) )
+        {
+            printf( " .. attrs_dlg_on_btn_edit(): str_new: [%s]\n", str_new );
+
+            gtk_list_store_set( dlg->store_, &it, 0, str_new, -1 );
+        }
+
         g_free( str_new );
     }
 
