@@ -125,6 +125,11 @@ on_btn_remove( GtkWidget* btn, gpointer p )
     {
         gchar* str = NULL;
         gtk_tree_model_get( mod, &it, 0, &str, -1 );
+        printf( " .. on_btn_remove(): str: [%s]\n", str );
+
+//        gboolean removed = gtk_list_store_remove( dlg->store_, &it );
+        gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
+        printf( " .. on_btn_remove(): removed: [%d]\n", removed );
     }
 }
 
