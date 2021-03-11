@@ -255,14 +255,20 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
 {
     AttrsDlg* dlg = (AttrsDlg*) p;
 
-    gchar* str = run_dlg_edit_val( GTK_WINDOW( dlg ), "my-attr", "Add attribute" );
-    if ( str != NULL )
-    {
-        printf( " .. attrs_dlg_on_btn_add(): str: [%s]\n", str );
+    gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ), "my-attr", "Add attribute" );
 
-        GtkTreeIter it;
-        gtk_list_store_append( dlg->store_, &it );
-        gtk_list_store_set( dlg->store_, &it, 0, str, -1 );
+    if ( str_new != NULL )
+    {
+        printf( " .. attrs_dlg_on_btn_add(): str: [%s]\n", str_new );
+
+        if ( empty_string_check_and_warn( dlg, str_new ) )
+        {
+            GtkTreeIter it;
+            gtk_list_store_append( dlg->store_, &it );
+            gtk_list_store_set( dlg->store_, &it, 0, str_new, -1 );
+        }
+
+        g_free( str_new );
     }
 
 } // attrs_dlg_on_btn_add()
