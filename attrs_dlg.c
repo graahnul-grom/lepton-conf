@@ -199,11 +199,18 @@ attrs_dlg_run_impl( GList* items, const gchar* title )
     g_list_free( adlg->items_result_ );
     adlg->items_result_ = NULL;
 
+
+    // NOTE: free items_ here, not in attrs_dlg_run():
+    //
+    g_list_free_full( adlg->items_, &g_free );
+    adlg->items_ = NULL;
+
+
     gtk_widget_destroy( dlg );
 
     return ret;
 
-} // attrs_dlg_run()
+} // attrs_dlg_run_impl()
 
 
 
@@ -230,9 +237,6 @@ attrs_dlg_run( const gchar* value, const gchar* title )
 
 
     gchar* attrs_new_as_string = attrs_dlg_run_impl( attrs_list, title );
-
-    g_list_free( attrs_list );
-    g_strfreev( attrs );
 
     return attrs_new_as_string;
 
