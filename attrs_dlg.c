@@ -156,8 +156,8 @@ attrs_dlg_new()
 
 
 
-gchar*
-attrs_dlg_run( GList* items, const gchar* title )
+static gchar*
+attrs_dlg_run_impl( GList* items, const gchar* title )
 {
     GtkWidget* dlg = attrs_dlg_new();
     AttrsDlg* adlg = ATTRS_DLG( dlg );
@@ -205,6 +205,38 @@ attrs_dlg_run( GList* items, const gchar* title )
 
 } // attrs_dlg_run()
 
+
+
+// [value]: semicolon-separated string
+//
+gchar*
+attrs_dlg_run( const gchar* value, const gchar* title )
+{
+    gchar** attrs = g_strsplit( value, ";", 0 );
+    printf( " .. attrs_dlg_run(): attrs: [%p]\n", attrs );
+
+    g_return_val_if_fail( attrs != NULL && "attrs_dlg_run(): !str split", NULL );
+
+
+    GList* attrs_list = NULL;
+
+    while ( *attrs != NULL )
+    {
+        printf( " .. attrs_dlg_run(): *attrs: [%s]\n", *attrs );
+
+        attrs_list = g_list_append( attrs_list, *attrs );
+        ++ attrs ;
+    }
+
+
+    gchar* attrs_new_as_string = attrs_dlg_run_impl( attrs_list, title );
+
+    g_list_free( attrs_list );
+    g_strfreev( attrs );
+
+    return attrs_new_as_string;
+
+} // attrs_dlg_run()
 
 
 static void
