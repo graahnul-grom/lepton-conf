@@ -632,7 +632,8 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
         }
         else
         if ( strcmp( rdata->key_, "symbol-attribs" ) == 0 ||
-             strcmp( rdata->key_, "pin-attribs" ) == 0 )
+             strcmp( rdata->key_, "pin-attribs" )    == 0 ||
+             strcmp( rdata->key_, "always-promote" ) == 0 )
         {
             mk_mitem_separ( menu );
             mk_mitem( menu,
