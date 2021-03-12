@@ -463,8 +463,17 @@ attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
     }
     else
     {
+        // move to the beginning of the list:
+        //
         gtk_list_store_move_after( dlg->store_, it_old, NULL );
     }
+
+
+    // select moved node and scroll to it:
+    //
+    gtk_tree_selection_select_iter( sel, it_old );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, it_old );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
 
 } // attrs_dlg_on_btn_move_down()
 
@@ -508,8 +517,17 @@ attrs_dlg_on_btn_move_up( GtkWidget* btn, gpointer p )
     }
     else
     {
+        // move to the end of the list:
+        //
         gtk_list_store_move_before( dlg->store_, &it, NULL );
     }
+
+
+    // select moved node and scroll to it:
+    //
+    gtk_tree_selection_select_iter( sel, &it );
+    path = gtk_tree_model_get_path( mod, &it );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
 
 } // attrs_dlg_on_btn_move_up()
 
