@@ -1108,7 +1108,7 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
     }
 
 
-    gchar* attrs_new_as_string = attrs_dlg_run( attrs_list );
+    gchar* attrs_new_as_string = attrs_dlg_run( attrs_list, rdata->key_ );
     printf( " >> attrs_new_as_string: [%s]\n", attrs_new_as_string );
 
 

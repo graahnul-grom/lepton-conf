@@ -97,7 +97,7 @@ attrs_dlg_new()
 
 
 gchar*
-attrs_dlg_run( GList* items )
+attrs_dlg_run( GList* items, const gchar* title )
 {
     GtkWidget* dlg = attrs_dlg_new();
     AttrsDlg* adlg = ATTRS_DLG( dlg );
@@ -120,6 +120,9 @@ attrs_dlg_run( GList* items )
 
 
     attrs_dlg_update_ui( adlg );
+
+    if ( title != NULL )
+        gtk_window_set_title( GTK_WINDOW( dlg ), title );
 
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
     if ( resp != GTK_RESPONSE_ACCEPT )
@@ -498,7 +501,7 @@ attrs_dlg_create( AttrsDlg* dlg )
     gtk_container_add( GTK_CONTAINER( wscroll ), tree_w );
 
 
-    // pack:
+    // content area:
     //
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( dlg ) );
     GtkWidget* hbox = gtk_hbox_new (FALSE, 0);
@@ -507,7 +510,7 @@ attrs_dlg_create( AttrsDlg* dlg )
     gtk_box_pack_start( GTK_BOX( hbox ), wscroll, TRUE, TRUE, 0 );
 
 
-    // action area, OK, Cancel buttons:
+    // action area: OK, Cancel buttons:
     //
     GtkWidget* btn_ok = gtk_button_new_with_mnemonic( "_OK" );
     GtkWidget* btn_cancel = gtk_button_new_with_mnemonic( "_Cancel" );
@@ -604,6 +607,7 @@ attrs_dlg_items_add( AttrsDlg* dlg )
 
 
 
+#ifdef DEBUG
 void
 attrs_dlg_dbg_print_items( GList* items )
 {
@@ -630,4 +634,5 @@ attrs_dlg_dbg_print_items( GList* items )
     }
 
 } // attrs_dlg_dbg_print_items()
+#endif
 
