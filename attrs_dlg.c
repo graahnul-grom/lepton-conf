@@ -61,6 +61,7 @@ attrs_dlg_add_to_result( GtkTreeModel* mod,
 
     gchar* str = NULL;
     gtk_tree_model_get( mod, it, 0, &str, -1 );
+
     dlg->items_result_ = g_list_append( dlg->items_result_, str );
 
     printf( " .. add_to_result(): str: [%s]\n", str );
@@ -173,12 +174,12 @@ attrs_dlg_run( GList* items, const gchar* title )
     }
 
 
-    attrs_dlg_update_ui( adlg );
-
     if ( title != NULL )
         gtk_window_set_title( GTK_WINDOW( dlg ), title );
 
+    attrs_dlg_update_ui( adlg );
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
+
     if ( resp != GTK_RESPONSE_ACCEPT )
     {
         gtk_widget_destroy( dlg );
@@ -189,6 +190,9 @@ attrs_dlg_run( GList* items, const gchar* title )
     gtk_tree_model_foreach( mod_res, &attrs_dlg_add_to_result, dlg );
 
     gchar* ret = attrs_dlg_result_to_string( adlg );
+
+    g_list_free( adlg->items_result_ );
+    adlg->items_result_ = NULL;
 
     gtk_widget_destroy( dlg );
 
