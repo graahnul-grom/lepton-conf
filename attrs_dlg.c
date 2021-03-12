@@ -119,6 +119,8 @@ attrs_dlg_run( GList* items )
     }
 
 
+    attrs_dlg_update_ui( adlg );
+
     gint resp = gtk_dialog_run( GTK_DIALOG( dlg ) );
     if ( resp != GTK_RESPONSE_ACCEPT )
     {
@@ -563,7 +565,6 @@ attrs_dlg_create( AttrsDlg* dlg )
                       dlg );
 
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
-//    attrs_dlg_update_ui( dlg );
 
 } // attrs_dlg_create()
 
