@@ -1119,6 +1119,8 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
 
 
     g_free( attrs_new_as_string );
+    g_list_free( attrs_list );
+    g_strfreev( attrs );
 
 } // on_mitem_edit_attrs()
 
