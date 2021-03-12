@@ -148,6 +148,11 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
+    on_mitem_edit_attrs( NULL, dlg );
+
+
+
+
     return;
 
 
