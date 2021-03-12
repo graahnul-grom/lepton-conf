@@ -192,7 +192,6 @@ attrs_dlg_on_btn_cancel( GtkWidget* btn, gpointer p )
 static void
 attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
 {
-    printf( " .. attrs_dlg_on_btn_remove()\n" );
     AttrsDlg* dlg = (AttrsDlg*) p;
 
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
@@ -210,12 +209,43 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
     gtk_tree_model_get( mod, &it, 0, &str, -1 );
     printf( " .. attrs_dlg_on_btn_remove(): str: [%s]\n", str );
 
+
+    GtkTreeIter* it_next = gtk_tree_iter_copy( &it );
+    gboolean has_next = gtk_tree_model_iter_next( mod, it_next );
+
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+    gboolean has_prev = gtk_tree_path_prev( path );
+
+
+    // remove:
+    //
     gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
-    printf( " .. .. attrs_dlg_on_btn_remove(): removed: [%d]\n", removed );
+    printf( " .. .. >> attrs_dlg_on_btn_remove(): removed: [ %d ]\n", removed );
+    //
+    //
+
+
+    if ( has_next )
+    {
+        gtk_tree_selection_select_iter( sel, it_next );
+    }
+    else
+    if ( has_prev )
+    {
+        GtkTreeIter it_prev;
+        gboolean prev_ok = gtk_tree_model_get_iter( mod, &it_prev, path );
+
+        if ( prev_ok )
+            gtk_tree_selection_select_iter( sel, &it_prev );
+        else
+            printf( " .. .. attrs_dlg_on_btn_remove(): ! prev_ok !\n" );
+    }
+    else
+    {
+        printf( " .. .. attrs_dlg_on_btn_remove(): LIST E M P T Y\n" );
+    }
 
 } // attrs_dlg_on_btn_remove()
-
-
 
 
 
