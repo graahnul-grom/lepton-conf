@@ -605,13 +605,38 @@ attrs_dlg_create( AttrsDlg* dlg )
     // buttons:
     //
     GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
-    gtk_box_pack_start( GTK_BOX( hbox ), vbox, TRUE, TRUE, 0 );
+    gtk_box_pack_start( GTK_BOX( hbox ), vbox, FALSE, FALSE, 0 );
 
-    dlg->btn_edit_      = gtk_button_new_with_mnemonic( "_Edit" );
-    dlg->btn_add_       = gtk_button_new_with_mnemonic( "_Add" );
-    dlg->btn_remove_    = gtk_button_new_with_mnemonic( "_Remove" );
-    dlg->btn_move_up_   = gtk_button_new_with_mnemonic( "Move _Up" );
-    dlg->btn_move_down_ = gtk_button_new_with_mnemonic( "Move _Down" );
+    dlg->btn_edit_      = gtk_button_new();
+    dlg->btn_add_       = gtk_button_new();
+    dlg->btn_remove_    = gtk_button_new();
+    dlg->btn_move_up_   = gtk_button_new();
+    dlg->btn_move_down_ = gtk_button_new();
+
+    GtkWidget* img_edit = gtk_image_new_from_stock(
+        GTK_STOCK_EDIT, GTK_ICON_SIZE_LARGE_TOOLBAR );
+    gtk_container_add( GTK_CONTAINER( dlg->btn_edit_ ), img_edit );
+    gtk_widget_set_tooltip_text( dlg->btn_edit_, "Edit" );
+
+    GtkWidget* img_add = gtk_image_new_from_stock(
+        GTK_STOCK_ADD, GTK_ICON_SIZE_LARGE_TOOLBAR );
+    gtk_container_add( GTK_CONTAINER( dlg->btn_add_ ), img_add );
+    gtk_widget_set_tooltip_text( dlg->btn_add_, "Add" );
+
+    GtkWidget* img_remove = gtk_image_new_from_stock(
+        GTK_STOCK_REMOVE, GTK_ICON_SIZE_LARGE_TOOLBAR );
+    gtk_container_add( GTK_CONTAINER( dlg->btn_remove_ ), img_remove );
+    gtk_widget_set_tooltip_text( dlg->btn_remove_, "Remove" );
+
+    GtkWidget* img_move_up = gtk_image_new_from_stock(
+        GTK_STOCK_GO_UP, GTK_ICON_SIZE_LARGE_TOOLBAR );
+    gtk_container_add( GTK_CONTAINER( dlg->btn_move_up_ ), img_move_up );
+    gtk_widget_set_tooltip_text( dlg->btn_move_up_, "Move up" );
+
+    GtkWidget* img_move_down = gtk_image_new_from_stock(
+        GTK_STOCK_GO_DOWN, GTK_ICON_SIZE_LARGE_TOOLBAR );
+    gtk_container_add( GTK_CONTAINER( dlg->btn_move_down_ ), img_move_down );
+    gtk_widget_set_tooltip_text( dlg->btn_move_down_, "Move down" );
 
     gtk_box_pack_start( GTK_BOX( vbox ), dlg->btn_edit_,      FALSE, FALSE, 3 );
     gtk_box_pack_start( GTK_BOX( vbox ), dlg->btn_add_,       FALSE, FALSE, 3 );
