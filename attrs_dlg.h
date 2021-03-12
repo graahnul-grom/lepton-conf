@@ -48,7 +48,7 @@ GType
 attrs_dlg_get_type();
 
 gchar*
-attrs_dlg_run( GList* items );
+attrs_dlg_run( GList* items, const gchar* title );
 
 void
 attrs_dlg_dbg_print_items( GList* items );
