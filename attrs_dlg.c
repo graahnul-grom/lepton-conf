@@ -71,6 +71,22 @@ attrs_dlg_add_to_result( GtkTreeModel* mod,
 
 
 
+static void
+attrs_dlg_update_ui( AttrsDlg* dlg )
+{
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeModel* mod = NULL;
+    GtkTreeIter it;
+    const gboolean selected = gtk_tree_selection_get_selected( sel, &mod, &it );
+
+    gtk_widget_set_sensitive( dlg->btn_edit_,      selected );
+    gtk_widget_set_sensitive( dlg->btn_remove_,    selected );
+    gtk_widget_set_sensitive( dlg->btn_move_down_, selected );
+    gtk_widget_set_sensitive( dlg->btn_move_up_,   selected );
+}
+
+
+
 static GtkWidget*
 attrs_dlg_new()
 {
@@ -245,6 +261,8 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
         printf( " .. .. attrs_dlg_on_btn_remove(): LIST E M P T Y\n" );
     }
 
+    attrs_dlg_update_ui( dlg );
+
 } // attrs_dlg_on_btn_remove()
 
 
@@ -300,6 +318,8 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
 
         g_free( str_new );
     }
+
+    attrs_dlg_update_ui( dlg );
 
 } // attrs_dlg_on_btn_add()
 
@@ -543,6 +563,7 @@ attrs_dlg_create( AttrsDlg* dlg )
                       dlg );
 
     gtk_widget_show_all( GTK_WIDGET( dlg ) );
+//    attrs_dlg_update_ui( dlg );
 
 } // attrs_dlg_create()
 
