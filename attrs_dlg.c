@@ -87,6 +87,57 @@ attrs_dlg_update_ui( AttrsDlg* dlg )
 
 
 
+static gboolean
+duplicate_attr_check_and_warn( AttrsDlg* dlg, gchar* str )
+{
+    gchar* stripped = g_strstrip( str );
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreeIter it;
+    gboolean next = gtk_tree_model_get_iter_first( mod, &it );
+
+    gboolean found = FALSE;
+    for ( ; next; next = gtk_tree_model_iter_next( mod, &it ) )
+    {
+        gchar* str = NULL;
+        gtk_tree_model_get( mod, &it, 0, &str, -1 );
+        // printf( " .. duplicate_attr_check_and_warn(): str: [%s]\n", str );
+
+        if ( g_strcmp0( str, stripped ) == 0 )
+        {
+            found = TRUE;
+
+            GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+            gtk_tree_selection_select_iter( sel, &it );
+            GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+            gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+
+            break;
+        }
+    }
+
+
+    if ( found )
+    {
+        GtkWidget* msgdlg =
+        gtk_message_dialog_new( GTK_WINDOW( dlg ),
+                                GTK_DIALOG_MODAL,
+                                GTK_MESSAGE_WARNING,
+                                GTK_BUTTONS_OK,
+                                "Attribute already exists." );
+
+        gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
+
+        gtk_dialog_run( GTK_DIALOG( msgdlg ) );
+        gtk_widget_destroy( msgdlg );
+    }
+
+    return !found;
+
+} // duplicate_attr_check_and_warn()
+
+
+
 static GtkWidget*
 attrs_dlg_new()
 {
@@ -308,13 +359,16 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
 {
     AttrsDlg* dlg = (AttrsDlg*) p;
 
-    gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ), "my-attr", "Add attribute" );
+    gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ),
+                                       "my-attr",
+                                       "Add attribute" );
 
     if ( str_new != NULL )
     {
-        printf( " .. attrs_dlg_on_btn_add(): str: [%s]\n", str_new );
+        printf( " .. attrs_dlg_on_btn_add(): str_new: [%s]\n", str_new );
 
-        if ( empty_string_check_and_warn( dlg, str_new ) )
+        if ( empty_string_check_and_warn( dlg, str_new ) &&
+             duplicate_attr_check_and_warn( dlg, str_new ) )
         {
             GtkTreeIter it;
             gtk_list_store_append( dlg->store_, &it );
