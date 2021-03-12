@@ -77,13 +77,16 @@ attrs_dlg_update_ui( AttrsDlg* dlg )
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
     GtkTreeModel* mod = NULL;
     GtkTreeIter it;
+
     const gboolean selected = gtk_tree_selection_get_selected( sel, &mod, &it );
+    gint count = gtk_tree_model_iter_n_children( mod, NULL );
 
     gtk_widget_set_sensitive( dlg->btn_edit_,      selected );
     gtk_widget_set_sensitive( dlg->btn_remove_,    selected );
-    gtk_widget_set_sensitive( dlg->btn_move_down_, selected );
-    gtk_widget_set_sensitive( dlg->btn_move_up_,   selected );
-}
+    gtk_widget_set_sensitive( dlg->btn_move_down_, selected && count > 1 );
+    gtk_widget_set_sensitive( dlg->btn_move_up_,   selected && count > 1 );
+
+} // attrs_dlg_update_ui()
 
 
 
