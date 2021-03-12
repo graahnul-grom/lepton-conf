@@ -32,6 +32,12 @@ struct _AttrsDlg
     GtkTreeView*  tree_v_;
     GList*        items_;
     GList*        items_result_;
+
+    GtkWidget* btn_edit_;
+    GtkWidget* btn_add_;
+    GtkWidget* btn_remove_;
+    GtkWidget* btn_move_up_;
+    GtkWidget* btn_move_down_;
 };
 
 typedef struct _AttrsDlgClass AttrsDlgClass;
