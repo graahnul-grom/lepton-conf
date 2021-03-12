@@ -48,10 +48,12 @@ GType
 attrs_dlg_get_type();
 
 gchar*
-attrs_dlg_run( GList* items, const gchar* title );
+attrs_dlg_run( const gchar* value, const gchar* title );
 
+#ifdef DEBUG
 void
 attrs_dlg_dbg_print_items( GList* items );
+#endif
 
 #endif
 
