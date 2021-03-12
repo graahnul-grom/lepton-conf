@@ -42,7 +42,12 @@ attrs_dlg_result_to_string( AttrsDlg* dlg )
         const gchar* str = (const gchar*) p->data;
         printf( " .. attrs_dlg_result_to_string(): str [%s]\n", str );
 
+        gchar* res_prev = res;
+
         res = g_strdup_printf( "%s;%s", res, str );
+
+        if ( p->next != NULL )
+            g_free( res_prev );
     }
 
     return res;
