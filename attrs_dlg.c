@@ -505,39 +505,39 @@ attrs_dlg_create( AttrsDlg* dlg )
     GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
     gtk_box_pack_start( GTK_BOX( hbox ), vbox, TRUE, TRUE, 0 );
 
-    GtkWidget* btn_edit      = gtk_button_new_with_mnemonic( "_Edit" );
-    GtkWidget* btn_add       = gtk_button_new_with_mnemonic( "_Add" );
-    GtkWidget* btn_remove    = gtk_button_new_with_mnemonic( "_Remove" );
-    GtkWidget* btn_move_up   = gtk_button_new_with_mnemonic( "Move _Up" );
-    GtkWidget* btn_move_down = gtk_button_new_with_mnemonic( "Move _Down" );
+    dlg->btn_edit_      = gtk_button_new_with_mnemonic( "_Edit" );
+    dlg->btn_add_       = gtk_button_new_with_mnemonic( "_Add" );
+    dlg->btn_remove_    = gtk_button_new_with_mnemonic( "_Remove" );
+    dlg->btn_move_up_   = gtk_button_new_with_mnemonic( "Move _Up" );
+    dlg->btn_move_down_ = gtk_button_new_with_mnemonic( "Move _Down" );
 
-    gtk_box_pack_start( GTK_BOX( vbox ), btn_edit,      FALSE, FALSE, 3 );
-    gtk_box_pack_start( GTK_BOX( vbox ), btn_add,       FALSE, FALSE, 3 );
-    gtk_box_pack_start( GTK_BOX( vbox ), btn_remove,    FALSE, FALSE, 3 );
-    gtk_box_pack_start( GTK_BOX( vbox ), btn_move_up,   FALSE, FALSE, 3 );
-    gtk_box_pack_start( GTK_BOX( vbox ), btn_move_down, FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), dlg->btn_edit_,      FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), dlg->btn_add_,       FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), dlg->btn_remove_,    FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), dlg->btn_move_up_,   FALSE, FALSE, 3 );
+    gtk_box_pack_start( GTK_BOX( vbox ), dlg->btn_move_down_, FALSE, FALSE, 3 );
 
-    g_signal_connect( G_OBJECT( btn_remove ),
+    g_signal_connect( G_OBJECT( dlg->btn_remove_ ),
                       "clicked",
                       G_CALLBACK( &attrs_dlg_on_btn_remove ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_add ),
+    g_signal_connect( G_OBJECT( dlg->btn_add_ ),
                       "clicked",
                       G_CALLBACK( &attrs_dlg_on_btn_add ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_edit ),
+    g_signal_connect( G_OBJECT( dlg->btn_edit_ ),
                       "clicked",
                       G_CALLBACK( &attrs_dlg_on_btn_edit ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_move_down ),
+    g_signal_connect( G_OBJECT( dlg->btn_move_down_ ),
                       "clicked",
                       G_CALLBACK( &attrs_dlg_on_btn_move_down ),
                       dlg );
 
-    g_signal_connect( G_OBJECT( btn_move_up ),
+    g_signal_connect( G_OBJECT( dlg->btn_move_up_ ),
                       "clicked",
                       G_CALLBACK( &attrs_dlg_on_btn_move_up ),
                       dlg );
