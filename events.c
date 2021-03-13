@@ -1095,7 +1095,8 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
 
     printf( " >> attrs_new_as_string: [%s]\n", attrs_new_as_string );
 
-    if ( attrs_new_as_string != NULL)
+    if ( attrs_new_as_string != NULL &&
+         g_strcmp0( attrs_new_as_string, rdata->val_ ) != 0 )
     {
         a_chg_val( dlg, rdata, it, attrs_new_as_string );
 
