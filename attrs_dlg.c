@@ -69,7 +69,7 @@ attrs_dlg_add_to_result( GtkTreeModel* mod,
 
     dlg->items_result_ = g_list_append( dlg->items_result_, str );
 
-    printf( " .. add_to_result(): str: [%s]\n", str );
+    printf( " .. attrs_dlg_add_to_result(): str: [%s]\n", str );
 
     return FALSE; // FALSE => continue gtk_tree_model_foreach()
 
@@ -120,6 +120,7 @@ duplicate_attr_check_and_warn( AttrsDlg* dlg, gchar* str )
             gtk_tree_selection_select_iter( sel, &it );
             GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
             gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+            gtk_tree_path_free( path );
 
             break;
         }
@@ -366,6 +367,8 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
         printf( " .. .. attrs_dlg_on_btn_remove(): LIST E M P T Y\n" );
     }
 
+    gtk_tree_path_free( path );
+
     attrs_dlg_update_ui( dlg );
 
 } // attrs_dlg_on_btn_remove()
@@ -452,6 +455,7 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
     gtk_tree_selection_select_iter( sel, &it );
     GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
     gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+    gtk_tree_path_free( path );
 
 
     g_free( str_new );
@@ -547,6 +551,7 @@ attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
     gtk_tree_selection_select_iter( sel, it_old );
     GtkTreePath* path = gtk_tree_model_get_path( mod, it_old );
     gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+    gtk_tree_path_free( path );
 
 } // attrs_dlg_on_btn_move_down()
 
@@ -595,12 +600,15 @@ attrs_dlg_on_btn_move_up( GtkWidget* btn, gpointer p )
         gtk_list_store_move_before( dlg->store_, &it, NULL );
     }
 
+    gtk_tree_path_free( path );
+
 
     // select moved node and scroll to it:
     //
     gtk_tree_selection_select_iter( sel, &it );
     path = gtk_tree_model_get_path( mod, &it );
     gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+    gtk_tree_path_free( path );
 
 } // attrs_dlg_on_btn_move_up()
 
