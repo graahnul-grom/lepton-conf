@@ -1099,9 +1099,9 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
          g_strcmp0( attrs_new_as_string, rdata->val_ ) != 0 )
     {
         a_chg_val( dlg, rdata, it, attrs_new_as_string );
-
-        g_free( attrs_new_as_string );
     }
+
+    g_free( attrs_new_as_string );
 
 } // on_mitem_edit_attrs()
 
