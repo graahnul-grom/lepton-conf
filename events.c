@@ -116,6 +116,12 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_key_press ),
                       dlg );
 
+
+    g_signal_connect( G_OBJECT( dlg->tree_v_ ),
+                      "popup-menu",
+                      G_CALLBACK( &on_popup_menu ),
+                      dlg );
+
 } // events_setup()
 
 
@@ -500,7 +506,7 @@ on_mouse_click( GtkWidget* w, GdkEvent* e, gpointer p )
 
     return TRUE;
 
-} // on_rmb()
+} // on_mouse_click()
 
 
 
@@ -1492,4 +1498,30 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     g_free( val );
 
 } // on_mitem_ctx_add()
+
+
+
+gboolean
+on_popup_menu( GtkWidget* widget, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return FALSE;
+
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return FALSE;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return FALSE;
+
+
+    GtkMenu* menu = gui_mk_popup_menu( dlg, rdata );
+    gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
+                    0, gdk_event_get_time( NULL ) );
+
+    return TRUE;
+}
 
