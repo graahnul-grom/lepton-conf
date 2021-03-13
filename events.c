@@ -1501,6 +1501,53 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
 
 
 
+// TODO: popup_position_func(): convert coords
+//
+void
+popup_position_func( GtkMenu*  menu,
+                     gint*     x,
+                     gint*     y,
+                     gboolean* push_in, // ?
+                     gpointer  p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+
+    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+
+    GdkRectangle rect;
+
+    gtk_tree_view_get_cell_area(
+        dlg->tree_v_,
+        path,
+        gtk_tree_view_get_column( dlg->tree_v_, 0 ),
+        &rect );
+
+    gtk_tree_path_free( path );
+
+
+    gint tx = rect.x;
+    gint ty = rect.y;
+
+    gint wx = 0;
+    gint wy = 0;
+
+    gtk_window_get_position( GTK_WINDOW( dlg ), &wx, &wy );
+
+    *x = tx + wx;
+    *y = ty + wy;
+
+} // popup_position_func()
+
+
+
 gboolean
 on_popup_menu( GtkWidget* widget, gpointer p )
 {
@@ -1519,9 +1566,15 @@ on_popup_menu( GtkWidget* widget, gpointer p )
 
 
     GtkMenu* menu = gui_mk_popup_menu( dlg, rdata );
-    gtk_menu_popup( menu, NULL, NULL, NULL, NULL,
-                    0, gdk_event_get_time( NULL ) );
+    gtk_menu_popup( menu,
+                    NULL,
+                    NULL,
+                    &popup_position_func,
+                    dlg,
+                    0,
+                    gdk_event_get_time( NULL ) );
 
-    return TRUE;
-}
+    return TRUE; // TRUE => menu was activated
+
+} // on_popup_menu()
 
