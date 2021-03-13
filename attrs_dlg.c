@@ -243,6 +243,7 @@ attrs_dlg_run( const gchar* value, const gchar* title )
 } // attrs_dlg_run()
 
 
+
 static void
 attrs_dlg_on_show( GtkWidget* widget )
 {
@@ -411,30 +412,49 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
                                        "my-attr",
                                        "Add attribute" );
 
-    if ( str_new != NULL )
+    if ( str_new == NULL )
     {
-        printf( " .. attrs_dlg_on_btn_add(): str_new: [%s]\n", str_new );
-
-        if ( empty_string_check_and_warn( dlg, str_new ) &&
-             duplicate_attr_check_and_warn( dlg, str_new ) )
-        {
-            GtkTreeIter it;
-            gtk_list_store_append( dlg->store_, &it );
-            gtk_list_store_set( dlg->store_, &it, 0, str_new, -1 );
-
-
-            // select added and scroll to it:
-            //
-            GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
-            gtk_tree_selection_select_iter( sel, &it );
-
-            GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-            GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
-            gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
-        }
-
-        g_free( str_new );
+        return;
     }
+
+    printf( " .. attrs_dlg_on_btn_add(): str_new: [%s]\n", str_new );
+
+    if ( !empty_string_check_and_warn( dlg, str_new ) ||
+         !duplicate_attr_check_and_warn( dlg, str_new ) )
+    {
+        return;
+    }
+
+
+    GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
+    GtkTreeModel* mod = NULL;
+    GtkTreeIter it_current;
+    gboolean has_current =
+        gtk_tree_selection_get_selected( sel, &mod, &it_current );
+
+
+    GtkTreeIter it;
+
+    if ( has_current )
+    {
+        gtk_list_store_insert_after( dlg->store_, &it, &it_current );
+    }
+    else
+    {
+        gtk_list_store_append( dlg->store_, &it );
+    }
+
+    gtk_list_store_set( dlg->store_, &it, 0, str_new, -1 );
+
+
+    // select added and scroll to it:
+    //
+    gtk_tree_selection_select_iter( sel, &it );
+    GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
+    gtk_tree_view_scroll_to_cell( dlg->tree_v_, path, NULL, FALSE, 0, 0 );
+
+
+    g_free( str_new );
 
     attrs_dlg_update_ui( dlg );
 
