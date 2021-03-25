@@ -339,74 +339,7 @@ on_lab_fname( GtkLabel* lab, gchar* uri, gpointer* p )
         return;
 
     const gchar* fname = gtk_label_get_text( lab );
-
-    // external editor [read config]:
-    //
-    EdaConfig* ctx = eda_config_get_context_for_path( "." );
-
-    GError* err = NULL;
-    gchar* exted = eda_config_get_string( ctx,
-                                          "lepton-conf",
-                                          "editor",
-                                          &err );
-    g_clear_error( &err );
-
-    if (!exted)
-        exted = g_strdup( g_exted_default );
-
-
-    GAppInfo* ai =
-    g_app_info_create_from_commandline( exted,
-                                        NULL,
-                                        G_APP_INFO_CREATE_NONE,
-                                        &err );
-    if ( err )
-    {
-        printf( " >> on_lab_fname(): GAppInfo err: [%d], msg: [%s]\n",
-                err->code, err->message );
-        g_clear_error( &err );
-    }
-
-    if ( ai )
-    {
-        GFile* gfile = g_file_new_for_path( fname );
-        GList* args = g_list_append( NULL, gfile );
-
-        if ( !g_app_info_launch( ai, args, NULL, &err ) )
-        {
-            printf( " >> on_lab_fname(): LAUNCH err: [%d], msg: [%s]\n",
-                    err->code, err->message );
-
-            GtkWidget* mdlg = gtk_message_dialog_new(
-                NULL,
-                // GTK_WINDOW( dlg ), // TODO: => SIGBUS
-                (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
-                GTK_MESSAGE_ERROR,
-                GTK_BUTTONS_OK,
-                "Could not launch external editor [%s].\n"
-                "Please set it via [lepton-conf]::editor config key."
-                , exted );
-
-            gtk_dialog_run( GTK_DIALOG( mdlg ) );
-            gtk_widget_destroy( mdlg );
-        }
-
-        g_clear_error( &err );
-        g_list_free( args );
-    }
-
-
-    // external editor [write config]: TODO: reload config here?
-    //
-    eda_config_set_string( eda_config_get_user_context(),
-                           "lepton-conf",
-                           "editor",
-                           exted );
-
-    eda_config_save( eda_config_get_user_context(), &err );
-    g_clear_error( &err );
-
-    g_free( exted );
+    a_run_editor( dlg, fname );
 
 } // on_lab_fname()
 
