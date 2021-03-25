@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2019 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -240,4 +240,55 @@ a_delete( cfg_edit_dlg* dlg )
     }
 
 } // a_delete()
+
+
+
+void
+a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
+{
+    EdaConfig* ctx    = eda_config_get_context_for_path( "." );
+    GError*    err1   = NULL;
+    gchar*     editor = eda_config_get_string( ctx,
+                                               "lepton-conf",
+                                               "editor",
+                                               &err1 );
+    g_clear_error( &err1 );
+
+    if ( editor == NULL )
+    {
+        editor = g_strdup( g_exted_default );
+    }
+
+    gchar*   cmd  = g_strdup_printf( "%s %s", editor, fname_to_edit );
+    GError*  err2 = NULL;
+    gboolean res  = g_spawn_command_line_async( cmd, &err2 );
+
+    if ( !res )
+    {
+#ifdef DEBUG
+        printf( " .. a_run_editor(): [%d]:\n [%s]\n", err2->code, err2->message );
+#endif
+        GtkWidget* msgdlg = gtk_message_dialog_new_with_markup(
+            GTK_WINDOW( dlg ),
+            (GtkDialogFlags) GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_OK,
+            "Could not launch external editor:\n"
+            "<b>%s</b>\n"
+            "\n"
+            "Please specify it by setting the <b>editor</b>\n"
+            "configuration key in the <b>lepton-conf</b> group.",
+            editor );
+
+        gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
+
+        gtk_dialog_run( GTK_DIALOG( msgdlg ) );
+        gtk_widget_destroy( msgdlg );
+    }
+
+    g_clear_error( &err2 );
+    g_free( cmd );
+    g_free( editor );
+
+} // a_run_editor()
 
