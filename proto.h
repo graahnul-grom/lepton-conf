@@ -15,7 +15,7 @@
 
 
 
-#define CFG_EDIT_DLG_TYPE           (cfg_edit_dlg_get_type())
+#define CFG_EDIT_DLG_TYPE (cfg_edit_dlg_get_type())
 
 // cast [obj] to cfg_edit_dlg*:
 //
@@ -23,7 +23,7 @@
 
 // cast [cls] to cfg_edit_dlgClass*:
 //
-#define CFG_EDIT_DLG_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST ((cls), CFG_EDIT_DLG_TYPE, cfg_edit_dlgClass))
+#define CFG_EDIT_DLG_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST ((cls), CFG_EDIT_DLG_TYPE, cfg_edit_dlgClass))
 #define IS_CFG_EDIT_DLG(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CFG_EDIT_DLG_TYPE))
 #define CFG_EDIT_DLG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), CFG_EDIT_DLG_TYPE, cfg_edit_dlgClass))
 
@@ -109,14 +109,13 @@ typedef struct _row_cgk row_cgk;
 
 // main.c:
 //
-extern gboolean g_cfg_legacy_mode;
-extern gboolean g_close_with_esc;
-extern gboolean g_populate_default_ctx;
+extern gboolean     g_cfg_legacy_mode;
+extern gboolean     g_close_with_esc;
+extern gboolean     g_populate_default_ctx;
 extern const gchar* g_exted_default;
-extern gboolean g_warn_cfg_file_not_found;
-// #define g_exted_default "gvim"
-extern gboolean g_print_default_cfg;
-extern gboolean g_tst_btn_visible;
+extern gboolean     g_warn_cfg_file_not_found;
+extern gboolean     g_print_default_cfg;
+extern gboolean     g_tst_btn_visible;
 
 
 

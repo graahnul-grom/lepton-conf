@@ -42,11 +42,12 @@ gboolean     g_restore_last_dir        = FALSE;
 
 void out_version()
 {
-    printf( "lepton-conf version 1.0 epsilon\n" );
-    printf( "Lepton EDA configuration utility" );
-    printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
+    printf( "lepton-conf 1.0 epsilon\n" );
+    printf( "Lepton EDA configuration utility\n" );
+    printf( "License: GPLv2+\n" );
     printf( "Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>\n" );
     printf( "WWW: https://github.com/graahnul-grom/lepton-conf\n" );
+    printf( "Lepton EDA homepage: https://github.com/lepton-eda/lepton-eda\n" );
 
     exit( 0 );
 }
