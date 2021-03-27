@@ -21,6 +21,26 @@ G_DEFINE_TYPE(AttrsDlg, attrs_dlg, GTK_TYPE_DIALOG);
 
 
 
+// TODO: dbg_printf(): move
+//
+static int
+dbg_printf( const char* fmt, ... )
+{
+#ifdef DEBUG
+    va_list args;
+    va_start( args, fmt );
+
+    int ret = vprintf( fmt, args );
+
+    va_end( args );
+    return ret;
+#else
+    return 0;
+#endif
+}
+
+
+
 static gchar*
 attrs_dlg_result_to_string( AttrsDlg* dlg )
 {
@@ -40,7 +60,7 @@ attrs_dlg_result_to_string( AttrsDlg* dlg )
     for ( GList* p = items->next; p != NULL; p = p->next )
     {
         const gchar* str = (const gchar*) p->data;
-        printf( " .. attrs_dlg_result_to_string(): str [%s]\n", str );
+        dbg_printf( " .. attrs_dlg_result_to_string(): str [%s]\n", str );
 
         gchar* res_prev = res;
 
@@ -69,7 +89,7 @@ attrs_dlg_add_to_result( GtkTreeModel* mod,
 
     dlg->items_result_ = g_list_append( dlg->items_result_, str );
 
-    printf( " .. attrs_dlg_add_to_result(): str: [%s]\n", str );
+    dbg_printf( " .. attrs_dlg_add_to_result(): str: [%s]\n", str );
 
     return FALSE; // FALSE => continue gtk_tree_model_foreach()
 
@@ -110,7 +130,8 @@ duplicate_attr_check_and_warn( AttrsDlg* dlg, gchar* str )
     {
         gchar* str = NULL;
         gtk_tree_model_get( mod, &it, 0, &str, -1 );
-        // printf( " .. duplicate_attr_check_and_warn(): str: [%s]\n", str );
+
+        dbg_printf( " .. duplicate_attr_check_and_warn(): str: [%s]\n", str );
 
         if ( g_strcmp0( str, stripped ) == 0 )
         {
@@ -221,7 +242,7 @@ gchar*
 attrs_dlg_run( const gchar* value, const gchar* title )
 {
     gchar** attrs = g_strsplit( value, ";", 0 );
-    printf( " .. attrs_dlg_run(): attrs: [%p]\n", attrs );
+    dbg_printf( " .. attrs_dlg_run(): attrs: [%p]\n", attrs );
 
     g_return_val_if_fail( attrs != NULL && "attrs_dlg_run(): !str split", NULL );
 
@@ -230,7 +251,7 @@ attrs_dlg_run( const gchar* value, const gchar* title )
 
     while ( *attrs != NULL )
     {
-        printf( " .. attrs_dlg_run(): *attrs: [%s]\n", *attrs );
+        dbg_printf( " .. attrs_dlg_run(): *attrs: [%s]\n", *attrs );
 
         attrs_list = g_list_append( attrs_list, *attrs );
         ++ attrs ;
@@ -283,7 +304,6 @@ attrs_dlg_class_init( AttrsDlgClass* cls )
 static void
 attrs_dlg_init( AttrsDlg* dlg )
 {
-    printf( " ++ attrs_dlg_init()\n" );
     attrs_dlg_create( dlg );
 }
 
@@ -292,8 +312,6 @@ attrs_dlg_init( AttrsDlg* dlg )
 static void
 attrs_dlg_on_btn_ok( GtkWidget* btn, gpointer p )
 {
-    printf( " .. attrs_dlg_on_btn_ok()\n" );
-
     AttrsDlg* dlg = (AttrsDlg*) p;
     gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_ACCEPT );
 }
@@ -303,8 +321,6 @@ attrs_dlg_on_btn_ok( GtkWidget* btn, gpointer p )
 static void
 attrs_dlg_on_btn_cancel( GtkWidget* btn, gpointer p )
 {
-    printf( " .. attrs_dlg_on_btn_cancel()\n" );
-
     AttrsDlg* dlg = (AttrsDlg*) p;
     gtk_dialog_response( GTK_DIALOG( dlg ), GTK_RESPONSE_REJECT );
 }
@@ -323,13 +339,13 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
 
     if ( !res )
     {
-        printf( " .. attrs_dlg_on_btn_remove(): !sel\n" );
+        dbg_printf( " .. attrs_dlg_on_btn_remove(): !sel\n" );
         return;
     }
 
     gchar* str = NULL;
     gtk_tree_model_get( mod, &it, 0, &str, -1 );
-    printf( " .. attrs_dlg_on_btn_remove(): str: [%s]\n", str );
+    dbg_printf( " .. attrs_dlg_on_btn_remove(): str: [%s]\n", str );
 
 
     GtkTreeIter* it_next = gtk_tree_iter_copy( &it );
@@ -342,7 +358,7 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
     // remove:
     //
     gboolean removed = gtk_list_store_remove( GTK_LIST_STORE( mod ), &it );
-    printf( " .. .. >> attrs_dlg_on_btn_remove(): removed: [ %d ]\n", removed );
+    dbg_printf( " .. .. >> attrs_dlg_on_btn_remove(): removed: [ %d ]\n", removed );
     //
     //
 
@@ -360,11 +376,11 @@ attrs_dlg_on_btn_remove( GtkWidget* btn, gpointer p )
         if ( prev_ok )
             gtk_tree_selection_select_iter( sel, &it_prev );
         else
-            printf( " .. .. attrs_dlg_on_btn_remove(): ! prev_ok !\n" );
+            dbg_printf( " .. .. attrs_dlg_on_btn_remove(): ! prev_ok !\n" );
     }
     else
     {
-        printf( " .. .. attrs_dlg_on_btn_remove(): LIST E M P T Y\n" );
+        dbg_printf( " .. .. attrs_dlg_on_btn_remove(): LIST E M P T Y\n" );
     }
 
     gtk_tree_path_free( path );
@@ -404,8 +420,6 @@ empty_string_check_and_warn( AttrsDlg* dlg, gchar* str )
 
 
 
-
-
 static void
 attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
 {
@@ -420,7 +434,7 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
         return;
     }
 
-    printf( " .. attrs_dlg_on_btn_add(): str_new: [%s]\n", str_new );
+    dbg_printf( " .. attrs_dlg_on_btn_add(): str_new: [%s]\n", str_new );
 
     if ( !empty_string_check_and_warn( dlg, str_new ) ||
          !duplicate_attr_check_and_warn( dlg, str_new ) )
@@ -478,7 +492,7 @@ attrs_dlg_on_btn_edit( GtkWidget* btn, gpointer p )
 
     if ( !res )
     {
-        printf( " .. attrs_dlg_on_btn_edit(): !sel\n" );
+        dbg_printf( " .. attrs_dlg_on_btn_edit(): !sel\n" );
         return;
     }
 
@@ -490,13 +504,13 @@ attrs_dlg_on_btn_edit( GtkWidget* btn, gpointer p )
 
     if ( str_new != NULL )
     {
-        printf( " .. attrs_dlg_on_btn_edit(): str_new: [%s]\n", str_new );
+        dbg_printf( " .. attrs_dlg_on_btn_edit(): str_new: [%s]\n", str_new );
 
         // NOTE: empty_string_check_and_warn() strips leading and trailing spaces:
         //
         if ( empty_string_check_and_warn( dlg, str_new ) )
         {
-            printf( " .. attrs_dlg_on_btn_edit(): str_new: [%s]\n", str_new );
+            dbg_printf( " .. attrs_dlg_on_btn_edit(): str_new: [%s]\n", str_new );
 
             gtk_list_store_set( dlg->store_, &it, 0, str_new, -1 );
         }
@@ -513,7 +527,6 @@ attrs_dlg_on_btn_edit( GtkWidget* btn, gpointer p )
 static void
 attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
 {
-    printf( " .. attrs_dlg_on_btn_move_down()\n" );
     AttrsDlg* dlg = (AttrsDlg*) p;
 
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
@@ -523,13 +536,13 @@ attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
 
     if ( !res )
     {
-        printf( " .. attrs_dlg_on_btn_move_down(): !sel\n" );
+        dbg_printf( " .. attrs_dlg_on_btn_move_down(): !sel\n" );
         return;
     }
 
     gchar* str = NULL;
     gtk_tree_model_get( mod, &it, 0, &str, -1 );
-    printf( " .. attrs_dlg_on_btn_move_down(): str: [%s]\n", str );
+    dbg_printf( " .. attrs_dlg_on_btn_move_down(): str: [%s]\n", str );
 
     GtkTreeIter* it_old = gtk_tree_iter_copy( &it );
     gboolean has_next = gtk_tree_model_iter_next( mod, &it );
@@ -560,7 +573,6 @@ attrs_dlg_on_btn_move_down( GtkWidget* btn, gpointer p )
 static void
 attrs_dlg_on_btn_move_up( GtkWidget* btn, gpointer p )
 {
-    printf( " .. attrs_dlg_on_btn_move_up()\n" );
     AttrsDlg* dlg = (AttrsDlg*) p;
 
     GtkTreeSelection* sel = gtk_tree_view_get_selection( dlg->tree_v_ );
@@ -570,23 +582,23 @@ attrs_dlg_on_btn_move_up( GtkWidget* btn, gpointer p )
 
     if ( !res )
     {
-        printf( " .. attrs_dlg_on_btn_move_up(): !sel\n" );
+        dbg_printf( " .. attrs_dlg_on_btn_move_up(): !sel\n" );
         return;
     }
 
     gchar* str = NULL;
     gtk_tree_model_get( mod, &it, 0, &str, -1 );
-    printf( " .. attrs_dlg_on_btn_move_up(): str: [%s]\n", str );
+    dbg_printf( " .. attrs_dlg_on_btn_move_up(): str: [%s]\n", str );
 
     GtkTreePath* path = gtk_tree_model_get_path( mod, &it );
     gboolean move_ok = gtk_tree_path_prev( path );
-    printf( " .. .. attrs_dlg_on_btn_move_up(): moved_ok: [%d]\n", move_ok );
+    dbg_printf( " .. .. attrs_dlg_on_btn_move_up(): moved_ok: [%d]\n", move_ok );
 
     if ( move_ok )
     {
         GtkTreeIter it_prev;
         gboolean iter_ok = gtk_tree_model_get_iter( mod, &it_prev, path );
-        printf( " .. .. attrs_dlg_on_btn_move_up(): iter_ok: [%d]\n", iter_ok );
+        dbg_printf( " .. .. attrs_dlg_on_btn_move_up(): iter_ok: [%d]\n", iter_ok );
 
         if ( iter_ok )
         {
@@ -762,20 +774,20 @@ attrs_dlg_items_add( AttrsDlg* dlg )
 {
     if ( dlg->items_ == NULL )
     {
-        printf( " >> attrs_dlg_items_add(): NOP 1\n" );
+        dbg_printf( " >> attrs_dlg_items_add(): NOP 1\n" );
         return;
     }
 
     if ( g_list_length( dlg->items_ ) == 0 )
     {
-        printf( " >> attrs_dlg_items_add(): NOP 2\n" );
+        dbg_printf( " >> attrs_dlg_items_add(): NOP 2\n" );
         return;
     }
 
     for ( GList* p = dlg->items_; p != NULL; p = p->next )
     {
         const gchar* str = (const gchar*) p->data;
-        printf( " >> attrs_dlg_items_add(): str: [%s]\n", str );
+        dbg_printf( " >> attrs_dlg_items_add(): str: [%s]\n", str );
 
         GtkTreeIter it;
         gtk_list_store_append( dlg->store_, &it );
