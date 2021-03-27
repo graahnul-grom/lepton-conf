@@ -22,6 +22,40 @@ void     gui_update_off()     { g_gui_update_enabled = FALSE; }
 
 
 
+// [value]: one;two;three
+// {ret}:   one\ntwo\nthree
+//
+static gchar*
+semicol_list_to_newline_list( const gchar* value )
+{
+    gchar** strs = g_strsplit( value, ";", 0 );
+    gchar** pp = strs;
+
+    gchar* res = NULL;
+
+    while ( *strs != NULL )
+    {
+        gchar* prev = res;
+
+        res = g_strdup_printf( "%s%s%s",
+                               res ? res : "",
+                               res ? "\n" : "",
+                               *strs );
+
+        ++ strs ;
+
+        if ( *strs != NULL )
+            g_free( prev );
+    }
+
+    g_strfreev( pp );
+
+    return res;
+
+} // mk_list_tooltip()
+
+
+
 // update labels, disable/enable controls
 // {pre}: tree has focus, row selected
 //
@@ -63,11 +97,34 @@ gui_update( cfg_edit_dlg* dlg )
         gtk_label_set_text( GTK_LABEL( dlg->lab_key_ ), rdata->key_ );
 
         gtk_label_set_text( GTK_LABEL( dlg->lab_val_ ),  rdata->val_ );
-        gtk_widget_set_tooltip_text( dlg->lab_val_, rdata->val_ );
 
         const gchar* dflt = cfgreg_lookup_dflt_val( rdata->group_, rdata->key_ );
         gtk_label_set_text( GTK_LABEL( dlg->lab_dflt_ ), dflt ? dflt : "" );
-        gtk_widget_set_tooltip_text( dlg->lab_dflt_, dflt ? dflt : "");
+
+
+        if ( strcmp( rdata->key_, "symbol-attribs" ) == 0 ||
+             strcmp( rdata->key_, "pin-attribs" )    == 0 ||
+             strcmp( rdata->key_, "always-promote" ) == 0 )
+        {
+            gchar* strings_val = semicol_list_to_newline_list( rdata->val_ );
+            if ( strings_val != NULL )
+                gtk_widget_set_tooltip_text( dlg->lab_val_, strings_val );
+            g_free( strings_val );
+
+            if ( dflt != NULL )
+            {
+                gchar* strings_dflt = semicol_list_to_newline_list( dflt );
+                if ( strings_dflt != NULL )
+                    gtk_widget_set_tooltip_text( dlg->lab_dflt_, strings_dflt );
+                g_free( strings_dflt );
+            }
+        }
+        else
+        {
+            gtk_widget_set_tooltip_text( dlg->lab_val_, rdata->val_ );
+            gtk_widget_set_tooltip_text( dlg->lab_dflt_, dflt ? dflt : "");
+        }
+
 
         const gchar* desc = cfgreg_lookup_descr( rdata->group_, rdata->key_ );
         gtk_text_buffer_set_text( dlg->txtbuf_desc_, desc ? desc : "", -1 );
