@@ -28,22 +28,22 @@
 
 
 
-gboolean g_cfg_legacy_mode = FALSE;
-gboolean g_close_with_esc = FALSE;
-gboolean g_populate_default_ctx = TRUE;
-const gchar* g_exted_default = "gvim";
-gboolean g_warn_cfg_file_not_found = TRUE;
-gboolean g_print_default_cfg = FALSE;
-gboolean g_tst_btn_visible = FALSE;
-gboolean g_restore_last_dir = FALSE;
+gboolean     g_cfg_legacy_mode         = FALSE;
+gboolean     g_close_with_esc          = FALSE;
+gboolean     g_populate_default_ctx    = TRUE;
+const gchar* g_exted_default           = "gvim";
+gboolean     g_warn_cfg_file_not_found = TRUE;
+gboolean     g_print_default_cfg       = FALSE;
+gboolean     g_tst_btn_visible         = FALSE;
+gboolean     g_restore_last_dir        = FALSE;
 
 
 
 
 void out_version()
 {
-    printf( "lepton-conf version 1.0 delta\n" );
-    printf( "Configuration utility for Lepton EDA " );
+    printf( "lepton-conf version 1.0 epsilon\n" );
+    printf( "Lepton EDA configuration utility" );
     printf( "(https://github.com/lepton-eda/lepton-eda)\n" );
     printf( "Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>\n" );
     printf( "WWW: https://github.com/graahnul-grom/lepton-conf\n" );
