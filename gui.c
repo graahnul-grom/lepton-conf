@@ -304,6 +304,9 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     dlg->btn_toggle_ = gtk_button_new_with_mnemonic( "_Toggle" );
     dlg->btn_del_    = gtk_button_new();
     dlg->btn_tst_    = gtk_button_new_with_mnemonic( "t_st" );
+    dlg->btn_hlp_    = gtk_button_new();
+
+    gtk_button_set_focus_on_click (GTK_BUTTON (dlg->btn_hlp_), FALSE);
 
 
     // images:
@@ -314,21 +317,30 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     GtkWidget* img_edit   = gtk_image_new_from_stock( GTK_STOCK_EDIT,        size );
     GtkWidget* img_toggle = gtk_image_new_from_stock( GTK_STOCK_MEDIA_PAUSE, size );
     GtkWidget* img_del    = gtk_image_new_from_stock( GTK_STOCK_DELETE,      size );
+    GtkWidget* img_hlp    = gtk_image_new_from_stock( GTK_STOCK_ABOUT,       size );
 
     gtk_button_set_image( GTK_BUTTON( dlg->btn_add_ ),    img_add );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_reload_ ), img_reload );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_edit_ ),   img_edit );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_toggle_ ), img_toggle );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_del_ ),    img_del );
+    gtk_button_set_image( GTK_BUTTON( dlg->btn_hlp_ ),    img_hlp );
 
 
     // tooltips:
     //
-    gtk_widget_set_tooltip_text( dlg->btn_reload_, "Reload configuration from disk (F5)" );
-    gtk_widget_set_tooltip_text( dlg->btn_add_, "Add new configuration key" );
-    gtk_widget_set_tooltip_text( dlg->btn_edit_, "Edit current value (F2)" );
-    gtk_widget_set_tooltip_text( dlg->btn_toggle_, "Toggle between possible values (space bar)" );
-    gtk_widget_set_tooltip_text( dlg->btn_del_, "Delete selected item (Del)" );
+    gtk_widget_set_tooltip_text( dlg->btn_reload_,
+                                 "Reload configuration from disk (F5)" );
+    gtk_widget_set_tooltip_text( dlg->btn_add_,
+                                 "Add new configuration key" );
+    gtk_widget_set_tooltip_text( dlg->btn_edit_,
+                                 "Edit current value (F2)" );
+    gtk_widget_set_tooltip_text( dlg->btn_toggle_,
+                                 "Toggle between possible values (space bar)" );
+    gtk_widget_set_tooltip_text( dlg->btn_del_,
+                                 "Delete selected item (Del)" );
+    gtk_widget_set_tooltip_text( dlg->btn_hlp_,
+                                 "Help/About" );
 
 
     // pack controls:
@@ -338,6 +350,8 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,   FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_del_,    FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), gtk_hseparator_new(), FALSE, FALSE, 4 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_hlp_,    FALSE, FALSE, 0 );
     //
     // TESTING:
     //

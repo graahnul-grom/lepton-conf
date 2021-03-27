@@ -73,6 +73,11 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_mitem_del ),
                       dlg );
 
+    g_signal_connect( G_OBJECT( dlg->btn_hlp_ ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_hlp ),
+                      dlg );
+
 
 
 
@@ -615,6 +620,18 @@ on_btn_showinh( GtkToggleButton* btn, gpointer* p )
     }
 
 } // on_btn_showinh()
+
+
+
+void
+on_btn_hlp( GtkToggleButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+    printf( " .. on_btn_hlp()\n" );
+}
 
 
 

@@ -56,6 +56,7 @@ struct _cfg_edit_dlg
     GtkWidget* btn_toggle_;
     GtkWidget* btn_del_;
     GtkWidget* btn_tst_;
+    GtkWidget* btn_hlp_;
 
     GtkTextBuffer* txtbuf_desc_;
 
@@ -324,6 +325,9 @@ on_btn_reload( GtkButton* btn, gpointer* p );
 
 void
 on_btn_showinh( GtkToggleButton* btn, gpointer* p );
+
+void
+on_btn_hlp( GtkToggleButton* btn, gpointer* p );
 
 void
 on_btn_edit( GtkButton* btn, gpointer* p );
