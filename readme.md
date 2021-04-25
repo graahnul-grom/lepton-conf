@@ -23,22 +23,28 @@ Dependencies
 Installation from source
 ------------------------
 
-* Checkout:
+* Checkout source code:
 
 ```sh
   $ git clone https://github.com/graahnul-grom/lepton-conf.git
   $ cd lepton-conf
 ```
 
+* Run `autogen.sh` to generate the configuration script:
+
+```sh
+  $ ./autogen.sh
+```
+
 * Run the configuration script. You can pass it the `--prefix` option
-if you want to install lepton-conf to custom location, e.g.
+if you want to install `lepton-conf` to custom location, e.g.
 `./configure --prefix=$HOME/lepton-conf`:
 
 ```sh
   $ ./configure
 ```
 
-  If Lepton EDA is installed in non-standard location, adjust the `$PKG_CONFIG_PATH`
+  If `Lepton EDA` is installed in non-standard location, adjust the `$PKG_CONFIG_PATH`
   environment variable when running the `configure` script:
 
 ```sh
@@ -63,8 +69,8 @@ if you want to install lepton-conf to custom location, e.g.
   $ lepton-conf
 ```
 
-  If Lepton EDA is installed in non-standard location, set the
-  `$LD_LIBRARY_PATH` environment variable when running lepton-conf:
+  If `Lepton EDA` is installed in non-standard location, set the
+  `$LD_LIBRARY_PATH` environment variable when running `lepton-conf`:
 
 ```sh
   $ LD_LIBRARY_PATH=/path/to/lepton-eda/lib lepton-conf
