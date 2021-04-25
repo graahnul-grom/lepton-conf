@@ -36,17 +36,17 @@ Installation from source
   $ ./configure
 ```
 
+If Lepton EDA is installed in non-standard location, adjust the `$PKG_CONFIG_PATH`
+environment variable:
+
+```sh
+  $ PKG_CONFIG_PATH=/path/to/lepton-eda/lib/pkgconfig ./configure
+```
+
 * Build:
 
 ```sh
   $ make
-```
-
-  If Lepton EDA is installed in non-standard location, adjust the `$PKG_CONFIG_PATH`
-  environment variable when running `make`, e.g.:
-
-```sh
-  $ PKG_CONFIG_PATH=/path/to/lepton-eda/lib/pkgconfig make
 ```
 
 * Install:
