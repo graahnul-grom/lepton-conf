@@ -38,8 +38,8 @@ if you want to install lepton-conf to custom location, e.g.
   $ ./configure
 ```
 
-If Lepton EDA is installed in non-standard location, adjust the `$PKG_CONFIG_PATH`
-environment variable:
+  If Lepton EDA is installed in non-standard location, adjust the `$PKG_CONFIG_PATH`
+  environment variable when running the `configure` script:
 
 ```sh
   $ PKG_CONFIG_PATH=/path/to/lepton-eda/lib/pkgconfig ./configure
@@ -57,14 +57,14 @@ environment variable:
   $ make install
 ```
 
-* Run:
+* Run the application:
 
 ```sh
   $ lepton-conf
 ```
 
-  If Lepton EDA is installed in non-standard location, you may have to set the
-  `$LD_LIBRARY_PATH` environment variable, so that `liblepton.so` can be found, e.g.:
+  If Lepton EDA is installed in non-standard location, set the
+  `$LD_LIBRARY_PATH` environment variable when running lepton-conf:
 
 ```sh
   $ LD_LIBRARY_PATH=/path/to/lepton-eda/lib lepton-conf
