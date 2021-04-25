@@ -43,9 +43,6 @@ Installation from source
   $ PKG_CONFIG_PATH=/path/to/lepton-eda/lib/pkgconfig make
 ```
 
-  If GTK `pkgconfig` package (`gtk+-2.0`) has different name on your system, edit it
-  at the top of the `Makefile`.
-
 * Install:
 
   Copy `lepton-conf` executable file anywhere in your `$PATH`
