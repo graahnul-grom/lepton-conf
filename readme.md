@@ -30,6 +30,12 @@ Installation from source
   $ cd lepton-conf
 ```
 
+* Run the configuration script:
+
+```sh
+  $ ./configure
+```
+
 * Build:
 
 ```sh
