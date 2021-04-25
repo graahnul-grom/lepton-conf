@@ -30,7 +30,9 @@ Installation from source
   $ cd lepton-conf
 ```
 
-* Run the configuration script:
+* Run the configuration script. You can pass it the `--prefix` option
+if you want to install lepton-conf to custom location, e.g.
+`./configure --prefix=$HOME/lepton-conf`:
 
 ```sh
   $ ./configure
