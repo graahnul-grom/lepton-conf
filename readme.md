@@ -51,7 +51,9 @@ environment variable:
 
 * Install:
 
-  Copy `lepton-conf` executable file anywhere in your `$PATH`
+```sh
+  $ make install
+```
 
 * Run:
 
