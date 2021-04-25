@@ -16,5 +16,5 @@ lepton_conf_SOURCES = \
 	attrs_dlg.h \
 	proto.h
 
-lepton_conf_CFLAGS = $(LIBLEPTON_CFLAGS)
-lepton_conf_LDFLAGS = $(LIBLEPTON_LIBS)
+lepton_conf_CFLAGS = $(GTK_CFLAGS) $(LIBLEPTON_CFLAGS)
+lepton_conf_LDFLAGS = $(GTK_LIBS) $(LIBLEPTON_LIBS)
