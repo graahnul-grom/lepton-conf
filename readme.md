@@ -12,7 +12,8 @@ command-line utility invoked with the `config` command.
 
 Documentation
 ------------
-Information about the configuration system can be found on the [Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings) lepton-eda wiki page.
+Information about the configuration system can be found on the [Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings)
+wiki page and in the [Lepton EDA Reference Manual](https://lepton-eda.github.io/lepton-manual.html/index.html).
 
 Dependencies
 ------------
