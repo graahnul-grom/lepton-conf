@@ -494,6 +494,29 @@ gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store )
 
 
 
+static GtkWidget*
+gui_mk_legacy_mode_box()
+{
+    GtkWidget* ebox = gtk_event_box_new();
+    GtkWidget* lab = gtk_label_new(
+        "Legacy mode: using geda*.conf configuration files" );
+
+    gtk_container_add( GTK_CONTAINER( ebox ), lab );
+
+    GdkColor color_bg;
+    gdk_color_parse( "steelblue", &color_bg );
+    gtk_widget_modify_bg( ebox, GTK_STATE_NORMAL, &color_bg );
+
+    GdkColor color_fg;
+    gdk_color_parse( "whitesmoke",  &color_fg );
+    gtk_widget_modify_fg( lab, GTK_STATE_NORMAL, &color_fg );
+
+    return ebox;
+
+} // gui_mk_legacy_mode_box()
+
+
+
 void
 gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 {
@@ -539,7 +562,15 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
     // pack to content area:
     //
     GtkWidget* ca = gtk_dialog_get_content_area( GTK_DIALOG( dlg ) );
+
     gtk_box_pack_start( GTK_BOX( ca ), toolbar, FALSE, FALSE, 0 );
+
+    if ( g_cfg_legacy_mode )
+    {
+        gtk_box_pack_start( GTK_BOX( ca ), gui_mk_legacy_mode_box(),
+                            FALSE, FALSE, 0 );
+    }
+
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
 
