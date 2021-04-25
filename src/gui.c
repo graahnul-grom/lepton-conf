@@ -528,7 +528,7 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
         g_strdup_printf(
             "%s - lepton-conf%s",
             cwd,
-            g_cfg_legacy_mode ? " ( legacy mode: use geda*.conf )" : "" );
+            g_cfg_legacy_mode ? ": legacy mode" : "" );
 
     gtk_window_set_title( GTK_WINDOW( dlg ), title );
     g_free( title );
