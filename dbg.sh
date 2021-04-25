@@ -1,11 +1,15 @@
 #!/bin/sh
 
 LIB="${lepton}/bin.master/lib"
+# LIB="${lepton}/bin.tb/lib"
+export LD_LIBRARY_PATH="${LIB}"
 GDB="gdb"
 
-if [ "`uname -s`" = "FreeBSD" ]; then
+if [ "`uname -s`" = "FreeBSD" ]
+then
     GDB="/usr/local/bin/gdb"
 fi
 
-LD_LIBRARY_PATH="${LIB}" $GDB ./lepton-conf -t "$@"
+$GDB ./src/lepton-conf "$@"
+# $GDB ./src/lepton-conf -t "$@"
 
