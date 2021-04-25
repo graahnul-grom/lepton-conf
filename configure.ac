@@ -31,6 +31,11 @@ PKG_CHECK_MODULES(LIBLEPTON,
                   , # no action if found
                   AC_MSG_ERROR([liblepton 4.0.0 or later is required.]))
 
+PKG_CHECK_MODULES(GTK,
+                  [gtk+-2.0 >= 2.24.0],
+                  , # no action if found
+                  AC_MSG_ERROR([GTK+ 2.24.0 or later is required.]))
+
 # AC_OUTPUT should be the last statement:
 #
 AC_OUTPUT
