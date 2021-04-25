@@ -49,7 +49,7 @@ environment variable:
   $ make
 ```
 
-* Install:
+* Install (you may need to run this as root):
 
 ```sh
   $ make install
