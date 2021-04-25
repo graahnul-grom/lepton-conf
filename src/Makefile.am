@@ -1,6 +1,6 @@
 bin_PROGRAMS = lepton-conf
 
-lepton_conf_SOURCES =
+lepton_conf_SOURCES = \
 	actions.c \
 	attrs_dlg.c \
 	cfgreg.c \
