@@ -374,13 +374,15 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
     // pack controls:
     //
-    gtk_box_pack_start( GTK_BOX( box_left ),  dlg->btn_open_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_left ),  dlg->btn_open_,       FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_reload_,     FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), gtk_hseparator_new(), FALSE, FALSE, 3 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_add_,        FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_edit_,       FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_toggle_,     FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), gtk_hseparator_new(), FALSE, FALSE, 3 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_del_,        FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box_right ), gtk_hseparator_new(), FALSE, FALSE, 4 );
+    gtk_box_pack_start( GTK_BOX( box_right ), gtk_hseparator_new(), FALSE, FALSE, 3 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_hlp_,        FALSE, FALSE, 0 );
     //
     // TESTING:
