@@ -612,7 +612,13 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
     }
 
     gtk_box_pack_start( GTK_BOX( ca ), wscroll_tree, TRUE, TRUE, 0 );
-    gtk_box_pack_start( GTK_BOX( ca ), box_bot, FALSE, FALSE, 0 );
+
+
+    GtkWidget* expander = gtk_expander_new( NULL );
+    gtk_container_add( GTK_CONTAINER( expander ), box_bot );
+    gtk_expander_set_expanded( GTK_EXPANDER( expander ), TRUE );
+
+    gtk_box_pack_start( GTK_BOX( ca ), expander, FALSE, FALSE, 0 );
 
 //    printf( " -- gui_mk()\n" );
 
