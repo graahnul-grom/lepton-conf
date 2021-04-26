@@ -1587,12 +1587,80 @@ on_popup_menu( GtkWidget* widget, gpointer p )
 
 
 
+static gboolean
+try_chdir( const gchar* path )
+{
+    if ( path == NULL )
+        return FALSE;
+
+    if ( !g_file_test( path, G_FILE_TEST_EXISTS ) )
+        return FALSE;
+
+    if ( !g_file_test( path, G_FILE_TEST_IS_DIR ) )
+        return FALSE;
+
+    return chdir( path ) == 0;
+}
+
+
+
 void
 on_btn_open( GtkButton* btn, gpointer* p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
     if ( !dlg )
         return;
+
+    GtkWidget* odlg = gtk_file_chooser_dialog_new(
+        "Choose a folder",
+        GTK_WINDOW( dlg ),
+        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+        GTK_STOCK_OPEN,   GTK_RESPONSE_ACCEPT,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+        NULL );
+
+    GtkFileChooser* chooser = GTK_FILE_CHOOSER( odlg );
+
+    gtk_file_chooser_set_local_only( chooser, TRUE );
+    gtk_file_chooser_set_create_folders( chooser, TRUE );
+
+    gint response = gtk_dialog_run( GTK_DIALOG( odlg ) );
+    if ( response != GTK_RESPONSE_ACCEPT )
+    {
+        gtk_widget_destroy( odlg );
+        return;
+    }
+
+    gchar* path = gtk_file_chooser_get_filename( chooser );
+    gtk_widget_destroy( odlg );
+
+    gboolean chdir_ok = try_chdir( path );
+    g_free( path );
+
+
+    if ( chdir_ok )
+    {
+        tree_set_focus( dlg );
+
+        a_reload( dlg );
+
+        tree_set_focus( dlg );
+        gui_update( dlg );
+    }
+    else
+    {
+        GtkWidget* msgdlg =
+        gtk_message_dialog_new( GTK_WINDOW( dlg ),
+                                GTK_DIALOG_MODAL,
+                                GTK_MESSAGE_ERROR,
+                                GTK_BUTTONS_OK,
+                                "Unable to open directory." );
+
+        gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
+
+        gtk_dialog_run( GTK_DIALOG( msgdlg ) );
+        gtk_widget_destroy( msgdlg );
+    }
 
 } // on_btn_open()
 
