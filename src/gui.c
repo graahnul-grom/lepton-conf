@@ -92,6 +92,7 @@ gui_update( cfg_edit_dlg* dlg )
 
     gchar* cwd = g_get_current_dir();
     gtk_label_set_text( GTK_LABEL( dlg->lab_cwd_ ), cwd );
+    gtk_widget_set_tooltip_text( dlg->lab_cwd_, cwd );
     g_free( cwd );
 
     gtk_label_set_text( GTK_LABEL( dlg->lab_ctx_ ), conf_ctx_name( rdata->ctx_ ) );
