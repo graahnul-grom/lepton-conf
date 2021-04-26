@@ -375,7 +375,8 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
 
     // cwd label:
     //
-    gui_mk_labels_line( "<b>working directory: </b>", gtk_label_new( cwd ), box_bot );
+    dlg->lab_cwd_ = gtk_label_new( NULL );
+    gui_mk_labels_line( "<b>working directory: </b>", dlg->lab_cwd_, box_bot );
 
     gui_mk_labels_line_separ( box_bot );
 

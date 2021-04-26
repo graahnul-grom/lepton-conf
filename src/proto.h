@@ -42,6 +42,7 @@ struct _cfg_edit_dlg
     GtkTreeStore*    store_;
     GtkTreeView*     tree_v_;
 
+    GtkWidget* lab_cwd_;
     GtkWidget* lab_ctx_;
     GtkWidget* lab_fname_;
     GtkWidget* lab_grp_;
