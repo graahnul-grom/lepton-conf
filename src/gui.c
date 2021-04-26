@@ -358,7 +358,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     // tooltips:
     //
     gtk_widget_set_tooltip_text( dlg->btn_open_,
-                                 "Open a directory" );
+                                 "Open a directory (Ctrl+O)" );
     gtk_widget_set_tooltip_text( dlg->btn_reload_,
                                  "Reload configuration from disk (F5)" );
     gtk_widget_set_tooltip_text( dlg->btn_add_,

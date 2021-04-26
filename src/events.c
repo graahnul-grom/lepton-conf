@@ -534,6 +534,16 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
     }
 
+    // Ctrl + O:
+    //
+    // NOTE: 4 => control is pressed:
+    //
+    if ( e->key.keyval == GDK_KEY_o && (e->key.state & 4) )
+    {
+        on_btn_open( NULL, (gpointer) dlg );
+        return TRUE;
+    }
+
 
     return FALSE; // propagate event
 
