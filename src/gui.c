@@ -319,12 +319,13 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     dlg->btn_tst_    = gtk_button_new_with_mnemonic( "t_st" );
     dlg->btn_hlp_    = gtk_button_new();
 
-    gtk_button_set_focus_on_click (GTK_BUTTON (dlg->btn_hlp_), FALSE);
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_hlp_ ), FALSE );
 
 
     // images:
     //
     const GtkIconSize size = GTK_ICON_SIZE_LARGE_TOOLBAR;
+
     GtkWidget* img_add    = gtk_image_new_from_stock( GTK_STOCK_ADD,         size );
     GtkWidget* img_reload = gtk_image_new_from_stock( GTK_STOCK_REFRESH,     size );
     GtkWidget* img_edit   = gtk_image_new_from_stock( GTK_STOCK_EDIT,        size );
@@ -358,19 +359,19 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
     // pack controls:
     //
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_reload_, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_add_,    FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,   FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_del_,    FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_reload_,     FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_add_,        FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,       FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_,     FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_del_,        FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box1 ), gtk_hseparator_new(), FALSE, FALSE, 4 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_hlp_,    FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_hlp_,        FALSE, FALSE, 0 );
     //
     // TESTING:
     //
     if ( g_tst_btn_visible )
     {
-        gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_,    FALSE, FALSE, 0 );
+        gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_, FALSE, FALSE, 0 );
     }
 
     gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
