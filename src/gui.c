@@ -319,7 +319,13 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     dlg->btn_tst_    = gtk_button_new_with_mnemonic( "t_st" );
     dlg->btn_hlp_    = gtk_button_new();
 
-    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_hlp_ ), FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_reload_ ), FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_add_ ),    FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_edit_ ),   FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_toggle_ ), FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_del_ ),    FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_tst_ ),    FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_hlp_ ),    FALSE );
 
 
     // images:
