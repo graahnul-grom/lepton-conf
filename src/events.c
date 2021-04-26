@@ -78,6 +78,11 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_hlp ),
                       dlg );
 
+    g_signal_connect( G_OBJECT( dlg->btn_open_ ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_open ),
+                      dlg );
+
 
 
 
@@ -159,7 +164,16 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
-    on_btn_hlp( NULL, NULL );
+    chdir( "/home/dmn/lepton/TST/lepton-conf_open_dir/2" );
+
+    tree_set_focus( dlg );
+
+    a_reload( dlg );
+
+    tree_set_focus( dlg );
+    gui_update( dlg );
+
+//    on_btn_hlp( NULL, NULL );
 
 //    on_mitem_edit_attrs( NULL, dlg );
 
@@ -1570,4 +1584,15 @@ on_popup_menu( GtkWidget* widget, gpointer p )
     return TRUE; // TRUE => menu was activated
 
 } // on_popup_menu()
+
+
+
+void
+on_btn_open( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+    if ( !dlg )
+        return;
+
+} // on_btn_open()
 

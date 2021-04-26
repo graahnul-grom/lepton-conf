@@ -50,6 +50,7 @@ struct _cfg_edit_dlg
     GtkWidget* lab_dflt_;
     GtkWidget* lab_val_;
 
+    GtkWidget* btn_open_;
     GtkWidget* btn_showinh_;
     GtkWidget* btn_reload_;
     GtkWidget* btn_add_;
@@ -331,6 +332,9 @@ on_btn_hlp( GtkToggleButton* btn, gpointer* p );
 
 void
 on_btn_edit( GtkButton* btn, gpointer* p );
+
+void
+on_btn_open( GtkButton* btn, gpointer* p );
 
 void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
