@@ -362,7 +362,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     gtk_widget_set_tooltip_text( dlg->btn_reload_,
                                  "Reload configuration from disk (F5)" );
     gtk_widget_set_tooltip_text( dlg->btn_add_,
-                                 "Add new configuration key" );
+                                 "Add new configuration key (Ctrl+A)" );
     gtk_widget_set_tooltip_text( dlg->btn_edit_,
                                  "Edit current value (F2)" );
     gtk_widget_set_tooltip_text( dlg->btn_toggle_,
