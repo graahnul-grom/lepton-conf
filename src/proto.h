@@ -159,7 +159,7 @@ GtkWidget*
 gui_mk_toolbar( cfg_edit_dlg* dlg );
 
 GtkWidget*
-gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd );
+gui_mk_bottom_box( cfg_edit_dlg* dlg );
 
 GtkWidget*
 gui_mk_tree_view( cfg_edit_dlg* dlg, GtkTreeStore* store );

@@ -373,7 +373,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
 
 GtkWidget*
-gui_mk_bottom_box( cfg_edit_dlg* dlg, const gchar* cwd )
+gui_mk_bottom_box( cfg_edit_dlg* dlg )
 {
     GtkWidget* box_bot = gtk_vbox_new( FALSE, 5 );
 
@@ -561,7 +561,7 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
 
     // bottom box:
     //
-    GtkWidget* box_bot = gui_mk_bottom_box( dlg, cwd );
+    GtkWidget* box_bot = gui_mk_bottom_box( dlg );
 
 
     // pack to content area:
