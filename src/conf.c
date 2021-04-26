@@ -564,10 +564,10 @@ conf_load( cfg_edit_dlg* dlg )
 const gchar*
 conf_ctx_name( EdaConfig* ctx )
 {
-    static gchar def[]  = "Default values";
-    static gchar sys[]  = "System configuration";
-    static gchar user[] = "User configuration";
-    static gchar path[] = "Configuration for current directory";
+    static gchar def[]  = "default values";
+    static gchar sys[]  = "system configuration";
+    static gchar user[] = "user configuration";
+    static gchar path[] = "configuration for current directory";
 //    static gchar def[]  = "DEFAULT";
 //    static gchar sys[]  = "SYSTEM";
 //    static gchar user[] = "USER";
