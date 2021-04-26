@@ -11,6 +11,12 @@
 
 
 
+static void
+gui_set_main_wnd_title( cfg_edit_dlg* dlg );
+
+
+
+
 gboolean g_gui_update_enabled = FALSE;
 
 
@@ -79,6 +85,9 @@ gui_update( cfg_edit_dlg* dlg )
     // eneble showinh chk box, in case it was disabled in gui_off():
     //
     gtk_widget_set_sensitive( dlg->btn_showinh_, TRUE );
+
+
+    gui_set_main_wnd_title( dlg );
 
 
     gchar* cwd = g_get_current_dir();
