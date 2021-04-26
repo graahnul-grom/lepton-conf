@@ -522,21 +522,30 @@ gui_mk_legacy_mode_box()
 
 
 
-void
-gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
+static void
+gui_set_main_wnd_title( cfg_edit_dlg* dlg )
 {
-//    printf( " ++ gui_mk()\n" );
+    gchar* cwd = g_get_current_dir();
 
-    // main window's title:
-    //
     gchar* title =
         g_strdup_printf(
             "%s - lepton-conf%s",
             cwd,
             g_cfg_legacy_mode ? ": legacy mode" : "" );
 
+    g_free( cwd );
+
     gtk_window_set_title( GTK_WINDOW( dlg ), title );
+
     g_free( title );
+}
+
+
+
+void
+gui_mk( cfg_edit_dlg* dlg, const gchar* cwd )
+{
+    gui_set_main_wnd_title( dlg );
 
     gtk_window_set_default_icon_name( GTK_STOCK_PREFERENCES );
 
