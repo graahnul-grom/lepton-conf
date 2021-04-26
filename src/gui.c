@@ -295,11 +295,11 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
     // boxes:
     //
-    GtkWidget* box1 = gtk_hbox_new( FALSE, 3 );
+    GtkWidget* box_right = gtk_hbox_new( FALSE, 3 );
     GtkWidget* box2 = gtk_hbox_new( FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box_tbar ), box2, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box_tbar ), box1, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_tbar ), box_right, FALSE, FALSE, 0 );
 
 
     // create controls:
@@ -365,19 +365,19 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
     // pack controls:
     //
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_reload_,     FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_add_,        FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_edit_,       FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_toggle_,     FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_del_,        FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box1 ), gtk_hseparator_new(), FALSE, FALSE, 4 );
-    gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_hlp_,        FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_reload_,     FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_add_,        FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_edit_,       FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_toggle_,     FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_del_,        FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_right ), gtk_hseparator_new(), FALSE, FALSE, 4 );
+    gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_hlp_,        FALSE, FALSE, 0 );
     //
     // TESTING:
     //
     if ( g_tst_btn_visible )
     {
-        gtk_box_pack_start( GTK_BOX( box1 ), dlg->btn_tst_, FALSE, FALSE, 0 );
+        gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_tst_, FALSE, FALSE, 0 );
     }
 
     gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
