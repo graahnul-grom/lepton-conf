@@ -3,7 +3,7 @@
 # debug:
 #
 export CFLAGS="-O0 -ggdb"
-export CPPFLAGS="-DDEBUG"
+export CPPFLAGS="-DDEBUG -DGLIB_DISABLE_DEPRECATION_WARNINGS=1"
 
 # release:
 #
