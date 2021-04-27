@@ -414,7 +414,7 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg )
     gui_mk_labels_line_separ( box_bot );
 
     dlg->lab_ctx_ = gtk_label_new( NULL );
-    gui_mk_labels_line( "<b>config context: </b>", dlg->lab_ctx_, box_bot );
+    gui_mk_labels_line( "<b>context: </b>", dlg->lab_ctx_, box_bot );
 
     dlg->lab_fname_ = gtk_label_new( NULL );
     gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
