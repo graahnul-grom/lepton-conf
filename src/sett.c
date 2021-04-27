@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -219,8 +219,8 @@ settings_load_bookmarks()
 
 
 
-void
-settings_save_bookmarks()
+gchar*
+settings_bookmarks_to_string()
 {
     GString* gstr = g_string_new( NULL );
 
@@ -234,7 +234,16 @@ settings_save_bookmarks()
 
     gchar* str = g_string_free( gstr, FALSE );
 
-    printf( ".. str: [%s]\n", str );
+    return str;
+
+} // settings_bookmarks_to_string()
+
+
+
+void
+settings_save_bookmarks()
+{
+    gchar* str = settings_bookmarks_to_string();
 
     EdaConfig* ctx = eda_config_get_cache_context();
     eda_config_set_string( ctx, "lepton-conf", "bookmarks", str );

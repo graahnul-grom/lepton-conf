@@ -172,15 +172,9 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
-    GtkMenu* menu = gui_mk_bookmarks_menu( dlg );
-
-    gtk_menu_popup( menu,
-                    NULL,
-                    NULL,
-                    NULL,
-                    NULL,
-                    0,                              // 0 => not a mouse event
-                    gtk_get_current_event_time() );
+    gchar* str = settings_bookmarks_to_string();
+    gchar* res = attrs_dlg_run( str, "Manage Bookmarks" );
+    printf( " >>     res: [%s]\n", res );
 
 
 
@@ -190,14 +184,14 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
-    chdir( "/home/dmn/lepton/TST/lepton-conf_open_dir/2" );
-
-    tree_set_focus( dlg );
-
-    a_reload( dlg );
-
-    tree_set_focus( dlg );
-    gui_update( dlg );
+//    chdir( "/home/dmn/lepton/TST/lepton-conf_open_dir/2" );
+//
+//    tree_set_focus( dlg );
+//
+//    a_reload( dlg );
+//
+//    tree_set_focus( dlg );
+//    gui_update( dlg );
 
 //    on_btn_hlp( NULL, NULL );
 
@@ -233,12 +227,12 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
     // print current path:
 //    /*
-    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
-    gchar* str = gtk_tree_model_get_string_from_iter( mod, &it );
-    printf( " .. p: [%s]\n", str );
-    GtkTreePath* path = gtk_tree_path_new_from_string( str );
-    g_free( str );
-    gtk_tree_path_free( path );
+//    GtkTreeModel* mod = gtk_tree_view_get_model( dlg->tree_v_ );
+//    gchar* str = gtk_tree_model_get_string_from_iter( mod, &it );
+//    printf( " .. p: [%s]\n", str );
+//    GtkTreePath* path = gtk_tree_path_new_from_string( str );
+//    g_free( str );
+//    gtk_tree_path_free( path );
 //    */
     //
 

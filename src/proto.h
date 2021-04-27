@@ -302,6 +302,9 @@ settings_bookmark_add( gchar* path );
 void
 settings_load_bookmarks();
 
+gchar*
+settings_bookmarks_to_string();
+
 void
 settings_save_bookmarks();
 
