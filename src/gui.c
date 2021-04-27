@@ -434,7 +434,7 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg )
     dlg->lab_dflt_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>default: </b>", dlg->lab_dflt_, box_bot );
 
-    gui_mk_labels_line_separ( box_bot, 0 );
+    gui_mk_labels_line_separ( box_bot, 5 );
 
 
     // description text view:
