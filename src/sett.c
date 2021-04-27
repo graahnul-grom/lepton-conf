@@ -192,7 +192,34 @@ settings_restore_wnd_geom( GtkWindow* wnd, const gchar* name )
 
 
 
-static void
+void
+settings_bookmarks_load()
+{
+    EdaConfig* ctx = eda_config_get_cache_context();
+
+    gsize len = 0;
+    GError* err = NULL;
+    gchar** strs = eda_config_get_string_list( ctx,
+                                               "lepton-conf",
+                                               "bookmarks",
+                                               &len,
+                                               &err );
+    if ( len > 0 && err == NULL )
+    {
+        for ( int i = 0; i < len; ++i )
+        {
+            gchar* path = strs[ i ];
+            settings_bookmark_add( g_strdup( path ) );
+        }
+    }
+
+    g_strfreev( strs );
+
+} // settings_bookmarks_load()
+
+
+
+void
 settings_bookmarks_save()
 {
     GString* gstr = g_string_new( NULL );
@@ -209,9 +236,9 @@ settings_bookmarks_save()
 
     printf( ".. str: [%s]\n", str );
 
-//    EdaConfig* ctx = eda_config_get_cache_context();
-//    eda_config_set_string( ctx, "lepton-conf", "bookmarks", str );
-//    eda_config_save( ctx, NULL );
+    EdaConfig* ctx = eda_config_get_cache_context();
+    eda_config_set_string( ctx, "lepton-conf", "bookmarks", str );
+    eda_config_save( ctx, NULL );
 
     g_free( str );
 

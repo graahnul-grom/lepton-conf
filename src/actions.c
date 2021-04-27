@@ -183,6 +183,7 @@ a_init( cfg_edit_dlg* dlg )
 
     settings_restore_showinh( dlg );
     settings_restore_path( dlg );
+    settings_bookmarks_load();
 
     events_setup( dlg );
 
