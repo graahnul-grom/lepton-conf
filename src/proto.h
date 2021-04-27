@@ -149,7 +149,7 @@ void
 gui_off( cfg_edit_dlg* dlg );
 
 void
-gui_mk_labels_line_separ( GtkWidget* parent_box );
+gui_mk_labels_line_separ( GtkWidget* parent_box, gint padding );
 
 void
 gui_mk_labels_line( const gchar* left_txt,

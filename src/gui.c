@@ -281,10 +281,10 @@ gui_mk_labels_line( const gchar* left_txt,
 
 
 void
-gui_mk_labels_line_separ( GtkWidget* parent_box )
+gui_mk_labels_line_separ( GtkWidget* parent_box, gint padding )
 {
     gtk_box_pack_start( GTK_BOX( parent_box ),
-                        gtk_hseparator_new(), FALSE, FALSE, 0 );
+                        gtk_hseparator_new(), FALSE, FALSE, padding );
 }
 
 
@@ -411,7 +411,7 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg )
     dlg->lab_cwd_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>working directory: </b>", dlg->lab_cwd_, box_bot );
 
-    gui_mk_labels_line_separ( box_bot );
+    gui_mk_labels_line_separ( box_bot, 0 );
 
     dlg->lab_ctx_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>context: </b>", dlg->lab_ctx_, box_bot );
@@ -420,7 +420,7 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg )
     gtk_label_set_track_visited_links( GTK_LABEL( dlg->lab_fname_ ), FALSE );
     gui_mk_labels_line( "<b>config file: </b>", dlg->lab_fname_, box_bot );
 
-    gui_mk_labels_line_separ( box_bot );
+    gui_mk_labels_line_separ( box_bot, 0 );
 
     dlg->lab_grp_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>group: </b>", dlg->lab_grp_, box_bot );
@@ -434,7 +434,7 @@ gui_mk_bottom_box( cfg_edit_dlg* dlg )
     dlg->lab_dflt_ = gtk_label_new( NULL );
     gui_mk_labels_line( "<b>default: </b>", dlg->lab_dflt_, box_bot );
 
-    gui_mk_labels_line_separ( box_bot );
+    gui_mk_labels_line_separ( box_bot, 0 );
 
 
     // description text view:
