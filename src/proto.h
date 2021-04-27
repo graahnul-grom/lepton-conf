@@ -299,6 +299,12 @@ settings_restore_last_dir();
 void
 settings_bookmark_add( gchar* path );
 
+void
+settings_bookmarks_load();
+
+void
+settings_bookmarks_save();
+
 
 
 
