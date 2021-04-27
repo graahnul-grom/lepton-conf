@@ -300,10 +300,10 @@ void
 settings_bookmark_add( gchar* path );
 
 void
-settings_bookmarks_load();
+settings_load_bookmarks();
 
 void
-settings_bookmarks_save();
+settings_save_bookmarks();
 
 
 

@@ -161,7 +161,7 @@ settings_save_wnd_geom( GtkWindow* wnd, const gchar* name )
 
     eda_config_save( ctx, NULL );
 
-} // settings_wnd_geom_save()
+} // settings_save_wnd_geom()
 
 
 
@@ -188,12 +188,12 @@ settings_restore_wnd_geom( GtkWindow* wnd, const gchar* name )
         gtk_window_resize( wnd, width, height );
     }
 
-} // settings_wnd_geom_restore()
+} // settings_restore_wnd_geom()
 
 
 
 void
-settings_bookmarks_load()
+settings_load_bookmarks()
 {
     EdaConfig* ctx = eda_config_get_cache_context();
 
@@ -215,12 +215,12 @@ settings_bookmarks_load()
 
     g_strfreev( strs );
 
-} // settings_bookmarks_load()
+} // settings_load_bookmarks()
 
 
 
 void
-settings_bookmarks_save()
+settings_save_bookmarks()
 {
     GString* gstr = g_string_new( NULL );
 
@@ -242,7 +242,7 @@ settings_bookmarks_save()
 
     g_free( str );
 
-} // settings_bookmarks_save()
+} // settings_save_bookmarks()
 
 
 
@@ -251,6 +251,6 @@ settings_bookmark_add( gchar* path )
 {
     g_bookmarks = g_list_append( g_bookmarks, path );
 
-    settings_bookmarks_save();
+    settings_save_bookmarks();
 }
 
