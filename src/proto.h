@@ -522,6 +522,9 @@ void
 a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit );
 
 gboolean
+a_open_dir( cfg_edit_dlg* dlg, const char* path );
+
+gboolean
 try_chdir( const gchar* path );
 
 

@@ -1694,20 +1694,7 @@ on_btn_open( GtkButton* btn, gpointer* p )
     gchar* path = gtk_file_chooser_get_filename( chooser );
     gtk_widget_destroy( odlg );
 
-    gboolean chdir_ok = try_chdir( path );
-    g_free( path );
-
-
-    if ( chdir_ok )
-    {
-        tree_set_focus( dlg );
-
-        a_reload( dlg );
-
-        tree_set_focus( dlg );
-        gui_update( dlg );
-    }
-    else
+    if ( !a_open_dir( dlg, path ) )
     {
         GtkWidget* msgdlg =
         gtk_message_dialog_new( GTK_WINDOW( dlg ),
@@ -1721,6 +1708,8 @@ on_btn_open( GtkButton* btn, gpointer* p )
         gtk_dialog_run( GTK_DIALOG( msgdlg ) );
         gtk_widget_destroy( msgdlg );
     }
+
+    g_free( path );
 
 } // on_btn_open()
 
