@@ -295,6 +295,26 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 
 
 gboolean
+a_open_dir( cfg_edit_dlg* dlg, const char* path )
+{
+    gboolean chdir_ok = try_chdir( path );
+
+    if ( chdir_ok )
+    {
+        tree_set_focus( dlg );
+
+        a_reload( dlg );
+
+        tree_set_focus( dlg );
+        gui_update( dlg );
+    }
+
+    return chdir_ok;
+}
+
+
+
+gboolean
 try_chdir( const gchar* path )
 {
     if ( path == NULL )
