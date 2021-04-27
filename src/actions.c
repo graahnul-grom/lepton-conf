@@ -292,3 +292,20 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 
 } // a_run_editor()
 
+
+
+gboolean
+try_chdir( const gchar* path )
+{
+    if ( path == NULL )
+        return FALSE;
+
+    if ( !g_file_test( path, G_FILE_TEST_EXISTS ) )
+        return FALSE;
+
+    if ( !g_file_test( path, G_FILE_TEST_IS_DIR ) )
+        return FALSE;
+
+    return chdir( path ) == 0;
+}
+

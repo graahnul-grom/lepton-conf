@@ -521,6 +521,9 @@ a_delete( cfg_edit_dlg* dlg );
 void
 a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit );
 
+gboolean
+try_chdir( const gchar* path );
+
 
 
 

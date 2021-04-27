@@ -143,6 +143,20 @@ events_setup( cfg_edit_dlg* dlg )
 *
 */
 
+    static void
+    on_mitem_bookmark_add( GtkMenuItem* mitem, gpointer p )
+    {
+        gchar* cwd = g_get_current_dir();
+        g_bookmarks = g_list_append( g_bookmarks, cwd );
+        g_free( cwd );
+    }
+
+    static void
+    on_mitem_bookmark_goto( GtkMenuItem* mitem, gpointer p )
+    {
+        const gchar* path = (gchar*) p;
+    }
+
 void
 on_btn_tst( GtkButton* btn, gpointer* p )
 {
@@ -161,6 +175,49 @@ on_btn_tst( GtkButton* btn, gpointer* p )
     if ( !rdata )
         return;
 
+
+
+
+
+    for ( GList* p = g_bookmarks; p != NULL; p = p->next )
+    {
+        gchar* path = (gchar*) p->data;
+        printf( " >>         path: [%s]\n",         path);
+    }
+
+    GtkWidget* menu = gtk_menu_new();
+
+    GtkWidget* mitem = gtk_menu_item_new_with_label( "add current dir" );
+    gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem );
+    g_signal_connect( G_OBJECT( mitem ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_bookmark_add ),
+                          NULL );
+
+
+    for ( GList* p = g_bookmarks; p != NULL; p = p->next )
+    {
+        gchar* path = (gchar*) p->data;
+        printf( " >>         path: [%s]\n",         path);
+
+        GtkWidget* i = gtk_menu_item_new_with_label( path );
+        gtk_menu_shell_append( GTK_MENU_SHELL( menu ), i );
+        g_signal_connect( G_OBJECT( mitem ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_bookmark_goto ),
+                          path );
+    }
+
+
+
+
+    gtk_widget_show( mitem );
+    gtk_menu_popup( GTK_MENU( menu ), NULL, NULL, NULL, NULL,
+                    0, gtk_get_current_event_time() );
+
+
+
+    return;
 
 
 
@@ -1604,23 +1661,6 @@ on_popup_menu( GtkWidget* widget, gpointer p )
     return TRUE; // TRUE => menu was activated
 
 } // on_popup_menu()
-
-
-
-static gboolean
-try_chdir( const gchar* path )
-{
-    if ( path == NULL )
-        return FALSE;
-
-    if ( !g_file_test( path, G_FILE_TEST_EXISTS ) )
-        return FALSE;
-
-    if ( !g_file_test( path, G_FILE_TEST_IS_DIR ) )
-        return FALSE;
-
-    return chdir( path ) == 0;
-}
 
 
 
