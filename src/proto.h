@@ -271,6 +271,9 @@ conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 
 // sett.c:
 //
+
+extern GList* g_bookmarks;
+
 void
 settings_restore_showinh( cfg_edit_dlg* dlg );
 
@@ -288,6 +291,9 @@ settings_restore_wnd_geom( GtkWindow* wnd, const gchar* name );
 
 void
 settings_restore_last_dir();
+
+void
+settings_bookmark_add( gchar* path );
 
 
 
