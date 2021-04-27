@@ -436,32 +436,28 @@ row_select_parent( cfg_edit_dlg* dlg, GtkTreeIter it )
 
 void
 row_select_by_ctx_grp_key( cfg_edit_dlg* dlg,
-                           const gchar* ctx_name,
+                           EdaConfig*   ctx,
                            const gchar* grp_name,
                            const gchar* key_name )
 {
-    g_return_if_fail( ctx_name && "row_select_ctx_grp_key(): !ctx_name" );
+    g_return_if_fail( ctx != NULL && "row_select_ctx_grp_key(): !ctx" );
 
-    gchar* ctx = g_strdup( ctx_name );
     gchar* grp = g_strdup( grp_name );
     gchar* key = g_strdup( key_name );
 
 
-    // determine ctx path by name:
     gchar* str_ctx = "";
-    if ( strcmp( ctx, "DEFAULT" ) == 0 )
+
+    if ( ctx == eda_config_get_default_context() )
         str_ctx = "0";
     else
-    if ( strcmp( ctx, "SYSTEM" ) == 0 )
+    if ( ctx == eda_config_get_system_context() )
         str_ctx = "1";
     else
-    if ( strcmp( ctx, "USER" ) == 0 )
+    if ( ctx == eda_config_get_user_context() )
         str_ctx = "2";
     else
-    if ( strcmp( ctx, "PATH (.)" ) == 0 )
-        str_ctx = "3";
-
-    g_assert( strlen( str_ctx ) > 0 && "row_select_ctx_grp_key(): !pstr" );
+        str_ctx = "3"; // path context
 
 
     // select ctx:
@@ -503,7 +499,6 @@ row_select_by_ctx_grp_key( cfg_edit_dlg* dlg,
 
     } // if [grp]
 
-    g_free( ctx );
     g_free( grp );
     g_free( key );
 

@@ -99,7 +99,7 @@ typedef struct _row_data row_data;
 
 struct _row_cgk
 {
-    gchar* ctx_;
+    EdaConfig* ctx_;
     gchar* grp_;
     gchar* key_;
 };
@@ -473,7 +473,7 @@ row_select_parent( cfg_edit_dlg* dlg, GtkTreeIter it );
 
 void
 row_select_by_ctx_grp_key( cfg_edit_dlg* dlg,
-                           const gchar* ctx_name,
+                           EdaConfig*   ctx,
                            const gchar* grp_name,
                            const gchar* key_name );
 

@@ -118,7 +118,7 @@ cgk_mk( const row_data* rdata )
 //    cgk->ctx_ = g_strdup( ctx );
 //    g_free( ctx );
 
-    cgk->ctx_ = g_strdup( conf_ctx_name( rdata->ctx_ ) );
+    cgk->ctx_ = rdata->ctx_;
     cgk->grp_ = g_strdup( rdata->group_ );
     cgk->key_ = g_strdup( rdata->key_ );
 
@@ -133,7 +133,6 @@ cgk_rm( row_cgk* cgk )
     if ( cgk == NULL )
         return;
 
-    g_free( cgk->ctx_ );
     g_free( cgk->grp_ );
     g_free( cgk->key_ );
 
