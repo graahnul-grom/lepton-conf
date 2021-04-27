@@ -11,6 +11,10 @@
 
 
 
+GList* g_bookmarks = NULL;
+
+
+
 static void
 settings_save_last_dir()
 {
@@ -185,4 +189,12 @@ settings_restore_wnd_geom( GtkWindow* wnd, const gchar* name )
     }
 
 } // settings_wnd_geom_restore()
+
+
+
+void
+settings_bookmark_add( gchar* path )
+{
+    g_bookmarks = g_list_append( g_bookmarks, path );
+}
 
