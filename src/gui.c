@@ -316,6 +316,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
 
     dlg->btn_open_   = gtk_button_new();
+    dlg->btn_bmks_   = gtk_button_new();
     dlg->btn_reload_ = gtk_button_new();
     dlg->btn_add_    = gtk_button_new();
     dlg->btn_edit_   = gtk_button_new();
@@ -325,6 +326,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     dlg->btn_hlp_    = gtk_button_new();
 
     gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_open_ ),   FALSE );
+    gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_bmks_ ),   FALSE );
     gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_reload_ ), FALSE );
     gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_add_ ),    FALSE );
     gtk_button_set_focus_on_click( GTK_BUTTON( dlg->btn_edit_ ),   FALSE );
@@ -339,6 +341,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     const GtkIconSize size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 
     GtkWidget* img_open   = gtk_image_new_from_stock( GTK_STOCK_OPEN,        size );
+    GtkWidget* img_bmks   = gtk_image_new_from_stock( GTK_STOCK_DIRECTORY,   size );
     GtkWidget* img_add    = gtk_image_new_from_stock( GTK_STOCK_ADD,         size );
     GtkWidget* img_reload = gtk_image_new_from_stock( GTK_STOCK_REFRESH,     size );
     GtkWidget* img_edit   = gtk_image_new_from_stock( GTK_STOCK_EDIT,        size );
@@ -347,6 +350,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     GtkWidget* img_hlp    = gtk_image_new_from_stock( GTK_STOCK_ABOUT,       size );
 
     gtk_button_set_image( GTK_BUTTON( dlg->btn_open_ ),   img_open );
+    gtk_button_set_image( GTK_BUTTON( dlg->btn_bmks_ ),   img_bmks );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_add_ ),    img_add );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_reload_ ), img_reload );
     gtk_button_set_image( GTK_BUTTON( dlg->btn_edit_ ),   img_edit );
@@ -359,6 +363,8 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     //
     gtk_widget_set_tooltip_text( dlg->btn_open_,
                                  "Open a directory (Ctrl+O)" );
+    gtk_widget_set_tooltip_text( dlg->btn_bmks_,
+                                 "Bookmarks" );
     gtk_widget_set_tooltip_text( dlg->btn_reload_,
                                  "Reload configuration from disk (F5)" );
     gtk_widget_set_tooltip_text( dlg->btn_add_,
@@ -376,6 +382,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     // pack controls:
     //
     gtk_box_pack_start( GTK_BOX( box_left ),  dlg->btn_open_,       FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_left ),  dlg->btn_bmks_,       FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_reload_,     FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_right ), gtk_hseparator_new(), FALSE, FALSE, 3 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_add_,        FALSE, FALSE, 0 );

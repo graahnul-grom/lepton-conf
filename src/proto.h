@@ -51,6 +51,7 @@ struct _cfg_edit_dlg
     GtkWidget* lab_val_;
 
     GtkWidget* btn_open_;
+    GtkWidget* btn_bmks_;
     GtkWidget* btn_showinh_;
     GtkWidget* btn_reload_;
     GtkWidget* btn_add_;
