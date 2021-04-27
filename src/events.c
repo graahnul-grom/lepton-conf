@@ -83,6 +83,11 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_open ),
                       dlg );
 
+    g_signal_connect( G_OBJECT( dlg->btn_bmks_ ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_bookmarks ),
+                      dlg );
+
 
 
 
@@ -1683,7 +1688,6 @@ void
 on_mitem_bookmark_add( GtkMenuItem* mitem, gpointer p )
 {
     gchar* cwd = g_get_current_dir();
-    printf( ".. on_mitem_bookmark_add(): [%s]\n", cwd );
     settings_bookmark_add( cwd );
 }
 
@@ -1693,10 +1697,25 @@ void
 on_mitem_bookmark_goto( GtkMenuItem* mitem, gpointer p )
 {
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+
     const gchar* path = gtk_menu_item_get_label( mitem );
-
-    printf( ".. on_mitem_bookmark_goto(): [%s]\n", path );
-
     a_open_dir( dlg, path );
+}
+
+
+
+void
+on_btn_bookmarks( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+
+    GtkMenu* menu = gui_mk_bookmarks_menu( dlg );
+    gtk_menu_popup( menu,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    0,                              // 0 => not a mouse event
+                    gtk_get_current_event_time() );
 }
 

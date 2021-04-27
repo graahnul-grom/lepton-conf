@@ -347,6 +347,9 @@ void
 on_btn_open( GtkButton* btn, gpointer* p );
 
 void
+on_btn_bookmarks( GtkButton* btn, gpointer* p );
+
+void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
 void
