@@ -171,6 +171,9 @@ gui_mk( cfg_edit_dlg* dlg, const gchar* cwd );
 GtkMenu*
 gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
 
+GtkMenu*
+gui_mk_bookmarks_menu( cfg_edit_dlg* dlg );
+
 
 
 
@@ -374,6 +377,12 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p );
 
 void
 on_mitem_toggle( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_bookmark_add( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_bookmark_goto( GtkMenuItem* mitem, gpointer p );
 
 gboolean
 on_popup_menu( GtkWidget* widget, gpointer p );
