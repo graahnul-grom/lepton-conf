@@ -816,3 +816,40 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata )
 
 } // gui_mk_popup_menu()
 
+
+
+GtkMenu*
+gui_mk_bookmarks_menu( cfg_edit_dlg* dlg )
+{
+    GtkWidget* menu = gtk_menu_new();
+
+    GtkWidget* mitem = gtk_menu_item_new_with_label( "Bookmark current directory" );
+    gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem );
+    gtk_widget_show( mitem );
+
+    g_signal_connect( G_OBJECT( mitem ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_bookmark_add ),
+                          NULL );
+
+    mk_mitem_separ( menu );
+
+
+    for ( GList* p = g_bookmarks; p != NULL; p = p->next )
+    {
+        gchar* path = (gchar*) p->data;
+
+        mitem = gtk_menu_item_new_with_label( path );
+        gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem );
+        gtk_widget_show( mitem );
+
+        g_signal_connect( G_OBJECT( mitem ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_bookmark_goto ),
+                          dlg );
+    }
+
+    return GTK_MENU( menu );
+
+} // gui_mk_bookmarks_menu()
+
