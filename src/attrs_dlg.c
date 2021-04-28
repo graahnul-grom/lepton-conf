@@ -433,7 +433,7 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
 
     gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ),
                                        NULL,
-                                       "Add attribute" );
+                                       "Add" );
 
     if ( str_new == NULL )
     {
@@ -506,7 +506,7 @@ attrs_dlg_on_btn_edit( GtkWidget* btn, gpointer p )
     gtk_tree_model_get( mod, &it, 0, &str, -1 );
 
 
-    gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ), str, NULL );
+    gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ), str, "Edit" );
 
     if ( str_new != NULL )
     {
