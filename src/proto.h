@@ -311,6 +311,9 @@ settings_save_bookmarks_string( const gchar* str );
 void
 settings_save_bookmarks();
 
+void
+settings_bookmarks_clear();
+
 
 
 
