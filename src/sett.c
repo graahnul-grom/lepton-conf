@@ -270,3 +270,13 @@ settings_bookmark_add( gchar* path )
     settings_save_bookmarks();
 }
 
+
+
+void
+settings_bookmarks_clear()
+{
+    g_list_free_full( g_bookmarks, &g_free );
+
+    g_bookmarks = NULL;
+}
+
