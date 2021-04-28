@@ -765,7 +765,7 @@ attrs_dlg_create( AttrsDlg* dlg )
                       dlg );
 
 
-    gtk_widget_show_all( GTK_WIDGET( dlg ) );
+    gtk_widget_show_all( ca );
 
 } // attrs_dlg_create()
 
