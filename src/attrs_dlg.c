@@ -255,7 +255,11 @@ attrs_dlg_run( const gchar* value, const gchar* title, const gchar* dlg_name )
     {
         dbg_printf( " .. attrs_dlg_run(): *attrs: [%s]\n", *attrs );
 
-        attrs_list = g_list_append( attrs_list, *attrs );
+        if ( strlen( *attrs ) > 0 )
+        {
+            attrs_list = g_list_append( attrs_list, *attrs );
+        }
+
         ++ attrs ;
     }
 
