@@ -1693,6 +1693,12 @@ on_mitem_bookmark_manage( GtkMenuItem* mitem, gpointer p )
     gchar* str = settings_bookmarks_to_string();
     gchar* res = attrs_dlg_run( str, "Manage Bookmarks", "bookmarks" );
     printf( " >>     res: [%s]\n", res );
+
+    if ( res != NULL )
+    {
+        settings_save_bookmarks_string( res );
+        g_free( res );
+    }
 }
 
 
