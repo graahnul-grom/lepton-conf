@@ -1698,6 +1698,10 @@ on_mitem_bookmark_manage( GtkMenuItem* mitem, gpointer p )
     {
         settings_save_bookmarks_string( res );
         g_free( res );
+
+        settings_bookmarks_clear();
+
+        settings_load_bookmarks();
     }
 }
 
