@@ -839,6 +839,15 @@ gui_mk_bookmarks_menu( cfg_edit_dlg* dlg )
                           G_CALLBACK( &on_mitem_bookmark_add ),
                           NULL );
 
+    mitem = gtk_menu_item_new_with_label( "Manage bookmarks..." );
+    gtk_menu_shell_append( GTK_MENU_SHELL( menu ), mitem );
+    gtk_widget_show( mitem );
+
+    g_signal_connect( G_OBJECT( mitem ),
+                          "activate",
+                          G_CALLBACK( &on_mitem_bookmark_manage ),
+                          NULL );
+
     mk_mitem_separ( menu );
 
 

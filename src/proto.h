@@ -395,6 +395,9 @@ void
 on_mitem_bookmark_add( GtkMenuItem* mitem, gpointer p );
 
 void
+on_mitem_bookmark_manage( GtkMenuItem* mitem, gpointer p );
+
+void
 on_mitem_bookmark_goto( GtkMenuItem* mitem, gpointer p );
 
 gboolean
