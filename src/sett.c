@@ -265,9 +265,15 @@ settings_save_bookmarks()
 void
 settings_bookmark_add( gchar* path )
 {
-    g_bookmarks = g_list_append( g_bookmarks, path );
+    GList* found = g_list_find_custom( g_bookmarks,
+                                       path,
+                                       (GCompareFunc) &g_strcmp0 );
 
-    settings_save_bookmarks();
+    if ( found == NULL )
+    {
+        g_bookmarks = g_list_append( g_bookmarks, path );
+        settings_save_bookmarks();
+    }
 }
 
 
