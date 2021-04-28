@@ -1698,11 +1698,10 @@ on_mitem_bookmark_add( GtkMenuItem* mitem, gpointer p )
 
 
 void
-on_mitem_bookmark_manage( GtkMenuItem* mitem, gpointer p )
+on_mitem_bookmarks_manage( GtkMenuItem* mitem, gpointer p )
 {
     gchar* str = settings_bookmarks_to_string();
     gchar* res = attrs_dlg_run( str, "Bookmarks", "bookmarks" );
-    printf( " >>     res: [%s]\n", res );
 
     if ( res != NULL )
     {

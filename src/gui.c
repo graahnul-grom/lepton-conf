@@ -845,7 +845,7 @@ gui_mk_bookmarks_menu( cfg_edit_dlg* dlg )
 
     g_signal_connect( G_OBJECT( mitem ),
                           "activate",
-                          G_CALLBACK( &on_mitem_bookmark_manage ),
+                          G_CALLBACK( &on_mitem_bookmarks_manage ),
                           NULL );
 
     mk_mitem_separ( menu );
