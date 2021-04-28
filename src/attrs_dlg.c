@@ -172,8 +172,8 @@ duplicate_attr_check_and_warn( AttrsDlg* dlg, gchar* str )
 static GtkWidget*
 attrs_dlg_new()
 {
-  gpointer obj = g_object_new( ATTRS_DLG_TYPE, NULL );
-  return GTK_WIDGET( obj );
+    gpointer obj = g_object_new( ATTRS_DLG_TYPE, NULL );
+    return GTK_WIDGET( obj );
 }
 
 
@@ -273,7 +273,7 @@ attrs_dlg_on_show( GtkWidget* widget )
 {
     AttrsDlg* dlg = ATTRS_DLG( widget );
 
-    settings_restore_wnd_geom( GTK_WINDOW( dlg ), "attrs" );
+    settings_restore_wnd_geom( GTK_WINDOW( dlg ), dlg->dlg_name_ );
 
     GTK_WIDGET_CLASS(attrs_dlg_parent_class)->show(widget);
 }
@@ -285,7 +285,7 @@ attrs_dlg_on_unmap( GtkWidget* widget )
 {
     AttrsDlg* dlg = ATTRS_DLG( widget );
 
-    settings_save_wnd_geom( GTK_WINDOW( dlg ), "attrs" );
+    settings_save_wnd_geom( GTK_WINDOW( dlg ), dlg->dlg_name_ );
 
     GTK_WIDGET_CLASS(attrs_dlg_parent_class)->unmap(widget);
 }
