@@ -38,6 +38,8 @@ struct _AttrsDlg
     GtkWidget* btn_remove_;
     GtkWidget* btn_move_up_;
     GtkWidget* btn_move_down_;
+
+    gchar* dlg_name_;
 };
 
 typedef struct _AttrsDlgClass AttrsDlgClass;
@@ -48,7 +50,7 @@ GType
 attrs_dlg_get_type();
 
 gchar*
-attrs_dlg_run( const gchar* value, const gchar* title );
+attrs_dlg_run( const gchar* value, const gchar* title, const gchar* dlg_name );
 
 #ifdef DEBUG
 void

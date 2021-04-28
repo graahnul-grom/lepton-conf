@@ -173,7 +173,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
     gchar* str = settings_bookmarks_to_string();
-    gchar* res = attrs_dlg_run( str, "Manage Bookmarks" );
+    gchar* res = attrs_dlg_run( str, "Manage Bookmarks", "bookmarks" );
     printf( " >>     res: [%s]\n", res );
 
 
@@ -1144,7 +1144,7 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
         return;
 
 
-    gchar* attrs_new_as_string = attrs_dlg_run( rdata->val_, rdata->key_ );
+    gchar* attrs_new_as_string = attrs_dlg_run( rdata->val_, rdata->key_, "attrs" );
 
     printf( " >> attrs_new_as_string: [%s]\n", attrs_new_as_string );
 
