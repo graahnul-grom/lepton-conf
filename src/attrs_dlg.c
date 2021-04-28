@@ -432,7 +432,7 @@ attrs_dlg_on_btn_add( GtkWidget* btn, gpointer p )
     AttrsDlg* dlg = (AttrsDlg*) p;
 
     gchar* str_new = run_dlg_edit_val( GTK_WINDOW( dlg ),
-                                       "my-attr",
+                                       NULL,
                                        "Add attribute" );
 
     if ( str_new == NULL )
