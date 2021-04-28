@@ -564,6 +564,16 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
         return TRUE;
     }
 
+    // Ctrl + B:
+    //
+    // NOTE: 4 => control is pressed:
+    //
+    if ( e->key.keyval == GDK_KEY_b && (e->key.state & 4) )
+    {
+        on_btn_bookmarks( NULL, (gpointer) dlg );
+        return TRUE;
+    }
+
 
     return FALSE; // propagate event
 
