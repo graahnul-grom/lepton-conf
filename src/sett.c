@@ -241,17 +241,24 @@ settings_bookmarks_to_string()
 
 
 void
+settings_save_bookmarks_string( const gchar* str )
+{
+    EdaConfig* ctx = eda_config_get_cache_context();
+    eda_config_set_string( ctx, "lepton-conf", "bookmarks", str );
+    eda_config_save( ctx, NULL );
+}
+
+
+
+void
 settings_save_bookmarks()
 {
     gchar* str = settings_bookmarks_to_string();
 
-    EdaConfig* ctx = eda_config_get_cache_context();
-    eda_config_set_string( ctx, "lepton-conf", "bookmarks", str );
-    eda_config_save( ctx, NULL );
+    settings_save_bookmarks_string( str );
 
     g_free( str );
-
-} // settings_save_bookmarks()
+}
 
 
 

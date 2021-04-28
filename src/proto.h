@@ -306,6 +306,9 @@ gchar*
 settings_bookmarks_to_string();
 
 void
+settings_save_bookmarks_string( const gchar* str );
+
+void
 settings_save_bookmarks();
 
 
