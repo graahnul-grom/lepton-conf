@@ -483,22 +483,29 @@ run_dlg_hlp()
 
     GtkWidget* label_leda = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( label_leda ),
-        "<a href='http://github.com/lepton-eda/lepton-eda'>Lepton Electronic Design Automation</a>" );
+        "<a href='http://github.com/lepton-eda/lepton-eda'>"
+        "Lepton EDA home page"
+        "</a>" );
 
     GtkWidget* label_lconf = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( label_lconf ),
-        "<a href='https://github.com/graahnul-grom/lepton-conf'>lepton-conf</a>" );
+        "<a href='https://github.com/graahnul-grom/lepton-conf'>"
+        "github.com/graahnul-grom/lepton-conf"
+        "</a>" );
 
     GtkWidget* label_docs = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( label_docs ),
-        "Documentation: <a href='https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings'>configuration settings</a> wiki page" );
+        "<a href='https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings'>"
+        "Configuration settings documentation"
+        "</a>" );
 
-    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 5 );
-    gtk_box_pack_start( GTK_BOX( ca ), label_docs, FALSE, FALSE, 0 );
+//    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 5 );
     gtk_box_pack_start( GTK_BOX( ca ), label_lconf, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 10 );
+    gtk_box_pack_start( GTK_BOX( ca ), label_docs, FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( ca ), label_leda, FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 5 );
+    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 10 );
 
     gtk_widget_show_all( dlg );
     gtk_dialog_run( GTK_DIALOG( dlg ) );
