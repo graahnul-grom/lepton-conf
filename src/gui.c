@@ -298,10 +298,10 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     //
     GtkWidget* box_left  = gtk_hbox_new( FALSE, 0 );
     GtkWidget* box_right = gtk_hbox_new( FALSE, 0 );
-    GtkWidget* box2      = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* box_middle      = gtk_hbox_new( FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box_tbar ), box_left,  FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box_tbar ), box2,      FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_tbar ), box_middle,      FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_tbar ), box_right, FALSE, FALSE, 0 );
 
 
@@ -381,8 +381,11 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
 
     // pack controls:
     //
-    gtk_box_pack_start( GTK_BOX( box_left ),  dlg->btn_open_,       FALSE, FALSE, 0 );
-    gtk_box_pack_start( GTK_BOX( box_left ),  dlg->btn_bmks_,       FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_left ), dlg->btn_open_, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( box_left ), dlg->btn_bmks_, FALSE, FALSE, 0 );
+
+    gtk_box_pack_start( GTK_BOX( box_middle ), dlg->btn_showinh_, FALSE, FALSE, 0 );
+
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_reload_,     FALSE, FALSE, 0 );
     gtk_box_pack_start( GTK_BOX( box_right ), gtk_hseparator_new(), FALSE, FALSE, 3 );
     gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_add_,        FALSE, FALSE, 0 );
@@ -399,8 +402,6 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     {
         gtk_box_pack_start( GTK_BOX( box_right ), dlg->btn_tst_, FALSE, FALSE, 0 );
     }
-
-    gtk_box_pack_start( GTK_BOX( box2 ), dlg->btn_showinh_, FALSE, FALSE, 0 );
 
     return box_tbar;
 
