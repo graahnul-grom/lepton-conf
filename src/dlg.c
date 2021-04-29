@@ -458,3 +458,51 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
 
 } // run_dlg_list_sel()
 
+
+
+void
+run_dlg_hlp()
+{
+    GtkWidget* dlg = gtk_about_dialog_new();
+    GtkAboutDialog* adlg = GTK_ABOUT_DIALOG( dlg );
+
+    gtk_about_dialog_set_program_name( adlg, "lepton-conf" );
+    gtk_about_dialog_set_version( adlg, "1.0 epsilon" );
+    gtk_about_dialog_set_comments( adlg, "Lepton EDA Configuration Utility" );
+
+    gtk_about_dialog_set_copyright( adlg,
+        "Copyright © 2017-2021 dmn <graahnul.grom@gmail.com>" );
+
+    gtk_about_dialog_set_license( adlg,
+        "lepton-conf is freely distributable under\n"
+        "the GNU Public License (GPL) version 2.0\n"
+        "or (at your option) any later version.\n"
+        "See the COPYING file for the full text of the license." );
+
+    GtkWidget* ca = gtk_dialog_get_content_area (GTK_DIALOG (dlg));
+
+    GtkWidget* label_leda = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( label_leda ),
+        "<a href='http://github.com/lepton-eda/lepton-eda'>Lepton Electronic Design Automation</a>" );
+
+    GtkWidget* label_lconf = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( label_lconf ),
+        "<a href='https://github.com/graahnul-grom/lepton-conf'>lepton-conf</a>" );
+
+    GtkWidget* label_docs = gtk_label_new( NULL );
+    gtk_label_set_markup( GTK_LABEL( label_docs ),
+        "Documentation: <a href='https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings'>configuration settings</a> wiki page" );
+
+    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 5 );
+    gtk_box_pack_start( GTK_BOX( ca ), label_docs, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 5 );
+    gtk_box_pack_start( GTK_BOX( ca ), label_lconf, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ), label_leda, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX( ca ), gtk_hseparator_new(), FALSE, FALSE, 5 );
+
+    gtk_widget_show_all( dlg );
+    gtk_dialog_run( GTK_DIALOG( dlg ) );
+    gtk_widget_destroy( dlg );
+
+} // run_dlg_hlp()
+

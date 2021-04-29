@@ -204,6 +204,9 @@ run_dlg_list_sel( cfg_edit_dlg* dlg,
                   const gchar*  txt,
                   const gchar*  title );
 
+void
+run_dlg_hlp();
+
 
 
 
