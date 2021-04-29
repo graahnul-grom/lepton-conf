@@ -297,7 +297,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     // boxes:
     //
     GtkWidget* box_left  = gtk_hbox_new( FALSE, 0 );
-    GtkWidget* box_right = gtk_hbox_new( FALSE, 3 );
+    GtkWidget* box_right = gtk_hbox_new( FALSE, 0 );
     GtkWidget* box2      = gtk_hbox_new( FALSE, 0 );
 
     gtk_box_pack_start( GTK_BOX( box_tbar ), box_left,  FALSE, FALSE, 0 );
