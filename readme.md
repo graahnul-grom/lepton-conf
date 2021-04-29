@@ -1,25 +1,35 @@
 Lepton EDA configuration utility
 ================================
 
-lepton-conf is designed to ease the process of editing [Lepton EDA](https://github.com/lepton-eda/lepton-eda)
+lepton-conf is designed to ease the process of editing
+[Lepton EDA](https://github.com/lepton-eda/lepton-eda)
 (Lepton Electronic Design Automation)
-configuration that is stored in ini-like files (`*.conf`) - that is, new-style configuration, as opposed
-to settings stored in `Guile` source code files. It is a graphical user interface application
-(using GTK 2.x, see [screenshots](https://graahnul-grom.github.io/lepton-conf)) that does
-essentially the same as [`lepton-cli(1)`](https://graahnul-grom.github.io/ref-man/lepton-cli.html)
+configuration that is stored in ini-like files (`*.conf`) - that is,
+new-style configuration, as opposed to settings stored in `Guile`
+source code files.
+<br />
+It is a graphical user interface application (using GTK 2.x, see
+[screenshots](https://graahnul-grom.github.io/lepton-conf))
+that does essentially the same as
+[lepton-cli(1)](https://graahnul-grom.github.io/ref-man/lepton-cli.html)
 command-line utility invoked with the `config` command.
 <br />
 
 Documentation
 ------------
-Information about the configuration system can be found on the [Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings)
-wiki page and in the [Lepton EDA Reference Manual](https://lepton-eda.github.io/lepton-manual.html/index.html).
+Information about the configuration system can be found on the
+[Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings)
+wiki page and in the
+[Lepton EDA Reference Manual](https://lepton-eda.github.io/lepton-manual.html/index.html).
 
 Dependencies
 ------------
 
-- The [Lepton EDA](https://github.com/lepton-eda/lepton-eda) suite, version [1.9.8](https://github.com/lepton-eda/lepton-eda/releases/tag/1.9.8-20190928) or later
-(at least git [039c08c](https://github.com/lepton-eda/lepton-eda/commit/039c08c6fd106a8402cc690206eeae3ac4d1a7e7), Dec 19, 2018).
+- The [Lepton EDA](https://github.com/lepton-eda/lepton-eda) suite, version
+[1.9.8](https://github.com/lepton-eda/lepton-eda/releases/tag/1.9.8-20190928)
+or later (at least git
+[039c08c](https://github.com/lepton-eda/lepton-eda/commit/039c08c6fd106a8402cc690206eeae3ac4d1a7e7),
+Dec 19, 2018).
 
 - A C compiler.
 
