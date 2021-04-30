@@ -81,6 +81,7 @@ int main( int argc, char* argv[] )
 
 
     settings_read_close_with_esc();
+    settings_read_restore_last_dir();
 
 
     int ch = -1;

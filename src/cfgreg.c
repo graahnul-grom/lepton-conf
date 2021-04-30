@@ -35,6 +35,13 @@ static CfgEntry g_cfg_registry[] =
         "Exit lepton-conf with the Escape key.",
         { NULL, NULL, NULL, NULL }
     },
+    {
+        "lepton-conf",
+        "restore-last-dir",
+        "false",
+        "Restore last working directory on startup.",
+        { NULL, NULL, NULL, NULL }
+    },
 
     //
     // lepton-schematic:

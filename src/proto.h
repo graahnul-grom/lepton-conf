@@ -119,6 +119,7 @@ extern const gchar* g_exted_default;
 extern gboolean     g_warn_cfg_file_not_found;
 extern gboolean     g_print_default_cfg;
 extern gboolean     g_tst_btn_visible;
+extern gboolean     g_restore_last_dir;
 
 
 
@@ -319,6 +320,9 @@ settings_bookmarks_clear();
 
 void
 settings_read_close_with_esc();
+
+void
+settings_read_restore_last_dir();
 
 
 

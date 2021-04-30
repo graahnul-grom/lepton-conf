@@ -310,3 +310,27 @@ settings_read_close_with_esc()
 
 } // settings_read_close_with_esc()
 
+
+
+void
+settings_read_restore_last_dir()
+{
+    EdaConfig* ctx = eda_config_get_context_for_path( "." );
+
+    eda_config_load( ctx, NULL );
+
+    GError*  err = NULL;
+    gboolean val = eda_config_get_boolean( ctx,
+                                           "lepton-conf",
+                                           "restore-last-dir",
+                                           &err );
+
+    if ( err == NULL )
+    {
+        g_restore_last_dir = val;
+    }
+
+    g_clear_error( &err );
+
+} // settings_read_restore_last_dir()
+
