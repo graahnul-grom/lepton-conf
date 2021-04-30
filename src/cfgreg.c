@@ -28,6 +28,13 @@ static CfgEntry g_cfg_registry[] =
         "External text editor for configuration files used by lepton-conf (this program).",
         { NULL, NULL, NULL, NULL }
     },
+    {
+        "lepton-conf",
+        "close-with-escape-key",
+        "false",
+        "Exit lepton-conf with the Escape key.",
+        { NULL, NULL, NULL, NULL }
+    },
 
     //
     // lepton-schematic:

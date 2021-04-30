@@ -317,6 +317,9 @@ settings_save_bookmarks();
 void
 settings_bookmarks_clear();
 
+void
+settings_read_close_with_esc();
+
 
 
 

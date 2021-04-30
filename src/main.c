@@ -80,6 +80,9 @@ int main( int argc, char* argv[] )
     gtk_init( &argc, &argv );
 
 
+    settings_read_close_with_esc();
+
+
     int ch = -1;
     while ( (ch = getopt( argc, argv, "hvdemprtl" )) != -1 )
     {

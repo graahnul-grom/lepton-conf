@@ -286,3 +286,27 @@ settings_bookmarks_clear()
     g_bookmarks = NULL;
 }
 
+
+
+void
+settings_read_close_with_esc()
+{
+    EdaConfig* ctx = eda_config_get_context_for_path( "." );
+
+    eda_config_load( ctx, NULL );
+
+    GError*  err = NULL;
+    gboolean val = eda_config_get_boolean( ctx,
+                                           "lepton-conf",
+                                           "close-with-escape-key",
+                                           &err );
+
+    if ( err == NULL )
+    {
+        g_close_with_esc = val;
+    }
+
+    g_clear_error( &err );
+
+} // settings_read_close_with_esc()
+
