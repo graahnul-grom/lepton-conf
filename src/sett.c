@@ -291,8 +291,7 @@ settings_bookmarks_clear()
 void
 settings_read_close_with_esc()
 {
-    EdaConfig* ctx = eda_config_get_context_for_path( "." );
-
+    EdaConfig* ctx = eda_config_get_user_context();
     eda_config_load( ctx, NULL );
 
     GError*  err = NULL;
@@ -315,8 +314,7 @@ settings_read_close_with_esc()
 void
 settings_read_restore_last_dir()
 {
-    EdaConfig* ctx = eda_config_get_context_for_path( "." );
-
+    EdaConfig* ctx = eda_config_get_user_context();
     eda_config_load( ctx, NULL );
 
     GError*  err = NULL;

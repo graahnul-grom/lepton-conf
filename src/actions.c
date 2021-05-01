@@ -247,12 +247,14 @@ a_delete( cfg_edit_dlg* dlg )
 void
 a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 {
-    EdaConfig* ctx    = eda_config_get_context_for_path( "." );
-    GError*    err1   = NULL;
-    gchar*     editor = eda_config_get_string( ctx,
-                                               "lepton-conf",
-                                               "editor",
-                                               &err1 );
+    EdaConfig* ctx = eda_config_get_user_context();
+    eda_config_load( ctx, NULL );
+
+    GError* err1   = NULL;
+    gchar*  editor = eda_config_get_string( ctx,
+                                            "lepton-conf",
+                                            "editor",
+                                            &err1 );
     g_clear_error( &err1 );
 
     if ( editor == NULL )
