@@ -15,6 +15,12 @@ that does essentially the same as
 command-line utility invoked with the `config` command.
 <br />
 
+<p align="center">
+<a href="https://graahnul-grom.github.io/lepton-conf/lepton-conf-main-window.png">
+  <img src="https://graahnul-grom.github.io/lepton-conf/lepton-conf-main-window.png" />
+</a>
+</p>
+
 Documentation
 ------------
 Information about the configuration system can be found on the
