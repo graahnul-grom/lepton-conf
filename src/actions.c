@@ -249,14 +249,21 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 {
     settings_read_editor();
 
-    gchar*   cmd = g_strdup_printf( "%s %s", g_ext_editor, fname_to_edit );
+    gchar*   cmd = NULL;
     GError*  err = NULL;
-    gboolean res = g_spawn_command_line_async( cmd, &err );
+    gboolean res = FALSE;
+
+    if ( g_ext_editor != NULL && strlen( g_ext_editor ) > 0 )
+    {
+        cmd = g_strdup_printf( "%s %s", g_ext_editor, fname_to_edit );
+        res = g_spawn_command_line_async( cmd, &err );
+    }
 
     if ( !res )
     {
 #ifdef DEBUG
-        printf( " .. a_run_editor(): [%d]:\n [%s]\n", err->code, err->message );
+        if ( err != NULL )
+            printf( " .. a_run_editor(): [%d]:\n [%s]\n", err->code, err->message );
 #endif
         GtkWidget* msgdlg = gtk_message_dialog_new_with_markup(
             GTK_WINDOW( dlg ),
@@ -268,7 +275,7 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
             "\n"
             "Please specify it by setting the <b>editor</b>\n"
             "configuration key in the <b>lepton-conf</b> group.",
-            g_ext_editor );
+            g_ext_editor != NULL ? g_ext_editor : "" );
 
         gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
 
