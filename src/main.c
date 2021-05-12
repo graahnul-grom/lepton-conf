@@ -28,14 +28,14 @@
 
 
 
-gboolean     g_cfg_legacy_mode         = FALSE;
-gboolean     g_close_with_esc          = FALSE;
-gboolean     g_populate_default_ctx    = TRUE;
-const gchar* g_exted_default           = "gvim";
-gboolean     g_warn_cfg_file_not_found = TRUE;
-gboolean     g_print_default_cfg       = FALSE;
-gboolean     g_tst_btn_visible         = FALSE;
-gboolean     g_restore_last_dir        = FALSE;
+gboolean g_cfg_legacy_mode         = FALSE;
+gboolean g_close_with_esc          = FALSE;
+gboolean g_populate_default_ctx    = TRUE;
+gchar*   g_ext_editor              = "gvim";
+gboolean g_warn_cfg_file_not_found = TRUE;
+gboolean g_print_default_cfg       = FALSE;
+gboolean g_tst_btn_visible         = FALSE;
+gboolean g_restore_last_dir        = FALSE;
 
 
 

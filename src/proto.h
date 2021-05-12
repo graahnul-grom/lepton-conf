@@ -112,14 +112,14 @@ typedef struct _row_cgk row_cgk;
 
 // main.c:
 //
-extern gboolean     g_cfg_legacy_mode;
-extern gboolean     g_close_with_esc;
-extern gboolean     g_populate_default_ctx;
-extern const gchar* g_exted_default;
-extern gboolean     g_warn_cfg_file_not_found;
-extern gboolean     g_print_default_cfg;
-extern gboolean     g_tst_btn_visible;
-extern gboolean     g_restore_last_dir;
+extern gboolean g_cfg_legacy_mode;
+extern gboolean g_close_with_esc;
+extern gboolean g_populate_default_ctx;
+extern gchar*   g_ext_editor;
+extern gboolean g_warn_cfg_file_not_found;
+extern gboolean g_print_default_cfg;
+extern gboolean g_tst_btn_visible;
+extern gboolean g_restore_last_dir;
 
 
 
@@ -320,6 +320,9 @@ settings_bookmarks_clear();
 
 void
 settings_read_close_with_esc();
+
+void
+settings_read_editor();
 
 void
 settings_read_restore_last_dir();

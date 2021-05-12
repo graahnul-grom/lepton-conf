@@ -259,7 +259,7 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 
     if ( editor == NULL )
     {
-        editor = g_strdup( g_exted_default );
+        editor = g_strdup( g_ext_editor );
     }
 
     gchar*   cmd  = g_strdup_printf( "%s %s", editor, fname_to_edit );
