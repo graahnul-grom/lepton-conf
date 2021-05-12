@@ -312,6 +312,31 @@ settings_read_close_with_esc()
 
 
 void
+settings_read_editor()
+{
+    EdaConfig* ctx = eda_config_get_user_context();
+    eda_config_load( ctx, NULL );
+
+    GError* err = NULL;
+    gchar* editor = eda_config_get_string( ctx,
+                                           "lepton-conf",
+                                           "editor",
+                                           &err );
+
+    if ( err == NULL && editor != NULL )
+    {
+        g_free( g_ext_editor );
+        g_ext_editor = g_strdup( editor );
+        g_free( editor );
+    }
+
+    g_clear_error( &err );
+
+} // settings_read_editor()
+
+
+
+void
 settings_read_restore_last_dir()
 {
     EdaConfig* ctx = eda_config_get_user_context();

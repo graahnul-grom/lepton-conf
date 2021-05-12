@@ -247,29 +247,16 @@ a_delete( cfg_edit_dlg* dlg )
 void
 a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 {
-    EdaConfig* ctx = eda_config_get_user_context();
-    eda_config_load( ctx, NULL );
+    settings_read_editor();
 
-    GError* err1   = NULL;
-    gchar*  editor = eda_config_get_string( ctx,
-                                            "lepton-conf",
-                                            "editor",
-                                            &err1 );
-    g_clear_error( &err1 );
-
-    if ( editor == NULL )
-    {
-        editor = g_strdup( g_ext_editor );
-    }
-
-    gchar*   cmd  = g_strdup_printf( "%s %s", editor, fname_to_edit );
-    GError*  err2 = NULL;
-    gboolean res  = g_spawn_command_line_async( cmd, &err2 );
+    gchar*   cmd = g_strdup_printf( "%s %s", g_ext_editor, fname_to_edit );
+    GError*  err = NULL;
+    gboolean res = g_spawn_command_line_async( cmd, &err );
 
     if ( !res )
     {
 #ifdef DEBUG
-        printf( " .. a_run_editor(): [%d]:\n [%s]\n", err2->code, err2->message );
+        printf( " .. a_run_editor(): [%d]:\n [%s]\n", err->code, err->message );
 #endif
         GtkWidget* msgdlg = gtk_message_dialog_new_with_markup(
             GTK_WINDOW( dlg ),
@@ -281,7 +268,7 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
             "\n"
             "Please specify it by setting the <b>editor</b>\n"
             "configuration key in the <b>lepton-conf</b> group.",
-            editor );
+            g_ext_editor );
 
         gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
 
@@ -289,9 +276,8 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
         gtk_widget_destroy( msgdlg );
     }
 
-    g_clear_error( &err2 );
+    g_clear_error( &err );
     g_free( cmd );
-    g_free( editor );
 
 } // a_run_editor()
 
