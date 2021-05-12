@@ -31,7 +31,7 @@
 gboolean g_cfg_legacy_mode         = FALSE;
 gboolean g_close_with_esc          = FALSE;
 gboolean g_populate_default_ctx    = TRUE;
-gchar*   g_ext_editor              = "gvim";
+gchar*   g_ext_editor              = NULL;
 gboolean g_warn_cfg_file_not_found = TRUE;
 gboolean g_print_default_cfg       = FALSE;
 gboolean g_tst_btn_visible         = FALSE;
@@ -82,6 +82,8 @@ int main( int argc, char* argv[] )
 
     settings_read_close_with_esc();
     settings_read_restore_last_dir();
+
+    g_ext_editor = g_strdup( "gvim" );
 
 
     int ch = -1;
