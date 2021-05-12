@@ -5,12 +5,21 @@ lepton-conf \- Lepton EDA configuration utility
 
 .SH SYNOPSIS
 .B lepton-conf
-.RI [ options ]
-.RI [ path ]
+.RI [ OPTIONS ]
+.RI [ PATH ]
 .br
 
 .SH DESCRIPTION
-This manual page explains the \fBlepton-conf\fR program.
+.B lepton-conf
+is a graphical user interface configuration utility
+for the Lepton Electronic Design Automation suite.
+It allows one to explore and modify the new-style
+settings stored in \fIlepton*.conf\fR ini-like
+configuration files.
+It preforms essentially the same tasks as the \fBlepton-cli\fR(1)
+Lepton EDA command-line tool, invoked with the \fIconfig\fR command.
+However, it's not a front-end to that utility, but uses the
+\fBliblepton\fR configuration API directly.
 
 .SH OPTIONS
 .TP
