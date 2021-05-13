@@ -99,26 +99,10 @@ if you want to install `lepton-conf` to custom location, e.g.
   $ LD_LIBRARY_PATH=/path/to/lepton-eda/lib lepton-conf
 ```
 
-  Command line arguments:
-
-```
-  $ lepton-conf -h
-
-  Usage: lepton-conf [OPTIONS] [PATH]
-  Options:
-    -l    Legacy config mode: use geda*.conf configuration files
-    -e    Close window with 'Escape' key
-    -r    Restore last working directory
-    -m    Do not warn about missing configuration files
-    -d    Do not populate the DEFAULT configuration context on startup
-    -p    Print the DEFAULT context in the *.conf file format and exit
-    -h    Show usage information
-    -v    Show version information
-```
-
 License
 -------
-The same as Lepton EDA: GNU Public License (GPL) version 2.0 or (at your option) any later version.
+The same as Lepton EDA: GNU Public License (GPL) version 2.0
+or (at your option) any later version.
 <br />
 Copyright (C) 2017-2021 [dmn](https://github.com/graahnul-grom)
 
