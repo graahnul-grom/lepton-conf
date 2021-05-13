@@ -43,6 +43,10 @@ Dec 19, 2018).
 
 - [GTK+](http://www.gtk.org) and its development files, version 2.24.0 or later.
 
+- [Autoconf](http://www.gnu.org/software/autoconf)
+
+- [Automake](http://www.gnu.org/software/automake)
+
 Installation from source
 ------------------------
 
