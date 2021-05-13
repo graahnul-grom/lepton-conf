@@ -14,7 +14,7 @@ settings_list_to_string( GList* lst )
         gstr = g_string_append( gstr, ";" );
     }
 
-    gchar* str = g_string_free( gstr, FALSE );
+    gchar* str = g_string_free( gstr, FALSE ); // take ownership
 
     return str;
 

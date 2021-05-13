@@ -1683,6 +1683,8 @@ on_mitem_bookmarks_manage( GtkMenuItem* mitem, gpointer p )
 
         settings_list_load( &g_bookmarks, "bookmarks" );
     }
+
+    g_free( str );
 }
 
 
@@ -1748,6 +1750,8 @@ on_mitem_tools_manage( GtkMenuItem* mitem, gpointer p )
 
         settings_list_load( &g_tools, "tools" );
     }
+
+    g_free( str );
 }
 
 
