@@ -14,7 +14,9 @@ lepton_conf_SOURCES = \
 	sett.c \
 	tree.c \
 	attrs_dlg.h \
-	proto.h
+	proto.h \
+	sett_list.c \
+	sett_list.h
 
 lepton_conf_CFLAGS = $(GTK_CFLAGS) $(LIBLEPTON_CFLAGS)
 lepton_conf_LDFLAGS = $(GTK_LIBS) $(LIBLEPTON_LIBS)
