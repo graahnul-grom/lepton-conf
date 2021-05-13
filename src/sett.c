@@ -12,6 +12,7 @@
 
 
 GList* g_bookmarks = NULL;
+GList* g_tools     = NULL;
 
 
 
