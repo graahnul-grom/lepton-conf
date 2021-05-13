@@ -1,4 +1,3 @@
-//#include "sett_list.h"
 #include "proto.h"
 
 gchar*

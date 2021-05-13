@@ -1,9 +1,6 @@
 #ifndef LEPTON_CONF_SETT_LIST_H_
 #define LEPTON_CONF_SETT_LIST_H_
 
-#include <gtk/gtk.h>
-
-
 gchar*
 settings_list_to_string( GList* lst );
 

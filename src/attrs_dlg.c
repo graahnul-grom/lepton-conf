@@ -6,7 +6,6 @@
  * https://github.com/lepton-eda/lepton-eda
  */
 
-#include "attrs_dlg.h"
 #include "proto.h"
 
 static void
