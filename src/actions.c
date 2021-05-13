@@ -183,7 +183,9 @@ a_init( cfg_edit_dlg* dlg )
 
     settings_restore_showinh( dlg );
     settings_restore_path( dlg );
+
     settings_list_load( &g_bookmarks, "bookmarks" );
+    settings_list_load( &g_tools, "tools" );
 
     events_setup( dlg );
 

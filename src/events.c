@@ -88,6 +88,11 @@ events_setup( cfg_edit_dlg* dlg )
                       G_CALLBACK( &on_btn_bookmarks ),
                       dlg );
 
+    g_signal_connect( G_OBJECT( dlg->btn_tools_ ),
+                      "clicked",
+                      G_CALLBACK( &on_btn_tools ),
+                      dlg );
+
 
 
 
@@ -569,6 +574,16 @@ on_key_press( GtkWidget* w, GdkEvent* e, gpointer p )
     if ( e->key.keyval == GDK_KEY_b && (e->key.state & 4) )
     {
         on_btn_bookmarks( NULL, (gpointer) dlg );
+        return TRUE;
+    }
+
+    // Ctrl + E:
+    //
+    // NOTE: 4 => control is pressed:
+    //
+    if ( e->key.keyval == GDK_KEY_e && (e->key.state & 4) )
+    {
+        on_btn_tools( NULL, (gpointer) dlg );
         return TRUE;
     }
 
@@ -1697,4 +1712,54 @@ on_btn_bookmarks( GtkButton* btn, gpointer* p )
                     0,                              // 0 => not a mouse event
                     gtk_get_current_event_time() );
 }
+
+
+
+
+void
+on_btn_tools( GtkButton* btn, gpointer* p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+
+    GtkMenu* menu = gui_mk_tools_menu( dlg );
+    gtk_menu_popup( menu,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    0,                              // 0 => not a mouse event
+                    gtk_get_current_event_time() );
+}
+
+
+
+void
+on_mitem_tools_manage( GtkMenuItem* mitem, gpointer p )
+{
+    gchar* str = settings_list_to_string( g_tools );
+    gchar* res = attrs_dlg_run( str, "External tools", "tools" );
+
+    if ( res != NULL )
+    {
+        settings_list_save_string( res, "tools" );
+        g_free( res );
+
+        settings_list_clear( &g_tools );
+
+        settings_list_load( &g_tools, "tools" );
+    }
+}
+
+
+
+void
+on_mitem_tool_execute( GtkMenuItem* mitem, gpointer p )
+{
+    cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
+
+    const gchar* str = gtk_menu_item_get_label( mitem );
+    printf( ".. on_mitem_tool_execute():\n   [%s]\n", str );
+}
+
+
 

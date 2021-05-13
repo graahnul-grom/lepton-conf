@@ -54,6 +54,7 @@ struct _cfg_edit_dlg
 
     GtkWidget* btn_open_;
     GtkWidget* btn_bmks_;
+    GtkWidget* btn_tools_;
     GtkWidget* btn_showinh_;
     GtkWidget* btn_reload_;
     GtkWidget* btn_add_;
@@ -177,6 +178,9 @@ gui_mk_popup_menu( cfg_edit_dlg* dlg, row_data* rdata );
 
 GtkMenu*
 gui_mk_bookmarks_menu( cfg_edit_dlg* dlg );
+
+GtkMenu*
+gui_mk_tools_menu( cfg_edit_dlg* dlg );
 
 
 
@@ -363,6 +367,9 @@ void
 on_btn_bookmarks( GtkButton* btn, gpointer* p );
 
 void
+on_btn_tools( GtkButton* btn, gpointer* p );
+
+void
 on_mitem_key_edit( GtkMenuItem* mitem, gpointer p );
 
 void
@@ -403,6 +410,12 @@ on_mitem_bookmarks_manage( GtkMenuItem* mitem, gpointer p );
 
 void
 on_mitem_bookmark_goto( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_tools_manage( GtkMenuItem* mitem, gpointer p );
+
+void
+on_mitem_tool_execute( GtkMenuItem* mitem, gpointer p );
 
 gboolean
 on_popup_menu( GtkWidget* widget, gpointer p );
