@@ -172,9 +172,7 @@ on_btn_tst( GtkButton* btn, gpointer* p )
 
 
 
-    gchar* str = settings_bookmarks_to_string();
-    gchar* res = attrs_dlg_run( str, "Manage Bookmarks", "bookmarks" );
-    printf( " >>     res: [%s]\n", res );
+
 
 
 
@@ -1647,7 +1645,10 @@ void
 on_mitem_bookmark_add( GtkMenuItem* mitem, gpointer p )
 {
     gchar* cwd = g_get_current_dir();
-    settings_bookmark_add( cwd );
+    if ( settings_list_add( &g_bookmarks, cwd ) )
+    {
+        settings_list_save( g_bookmarks, "bookmarks" );
+    }
 }
 
 
@@ -1655,17 +1656,17 @@ on_mitem_bookmark_add( GtkMenuItem* mitem, gpointer p )
 void
 on_mitem_bookmarks_manage( GtkMenuItem* mitem, gpointer p )
 {
-    gchar* str = settings_bookmarks_to_string();
+    gchar* str = settings_list_to_string( g_bookmarks );
     gchar* res = attrs_dlg_run( str, "Bookmarks", "bookmarks" );
 
     if ( res != NULL )
     {
-        settings_save_bookmarks_string( res );
+        settings_list_save_string( res, "bookmarks" );
         g_free( res );
 
-        settings_bookmarks_clear();
+        settings_list_clear( &g_bookmarks );
 
-        settings_load_bookmarks();
+        settings_list_load( &g_bookmarks, "bookmarks" );
     }
 }
 

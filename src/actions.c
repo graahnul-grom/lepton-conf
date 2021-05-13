@@ -183,7 +183,7 @@ a_init( cfg_edit_dlg* dlg )
 
     settings_restore_showinh( dlg );
     settings_restore_path( dlg );
-    settings_load_bookmarks();
+    settings_list_load( &g_bookmarks, "bookmarks" );
 
     events_setup( dlg );
 
@@ -193,7 +193,8 @@ a_init( cfg_edit_dlg* dlg )
     gui_update( dlg );
 
 //    printf( " -- a_init()\n" );
-}
+
+} // a_init()
 
 
 
