@@ -9,9 +9,6 @@
  * https://github.com/lepton-eda/lepton-eda
  */
 
-#include <gtk/gtk.h>
-
-
 #define ATTRS_DLG_TYPE           (attrs_dlg_get_type())
 #define ATTRS_DLG(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), ATTRS_DLG_TYPE, AttrsDlg))
 #define ATTRS_DLG_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST ((cls), ATTRS_DLG_TYPE, AttrsDlgClass))

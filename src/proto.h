@@ -12,6 +12,7 @@
 #include <gtk/gtk.h>
 #include <liblepton/liblepton.h>
 
+#include "attrs_dlg.h"
 #include "sett_list.h"
 
 
