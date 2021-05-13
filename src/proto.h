@@ -12,6 +12,8 @@
 #include <gtk/gtk.h>
 #include <liblepton/liblepton.h>
 
+#include "sett_list.h"
+
 
 
 

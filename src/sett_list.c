@@ -1,4 +1,4 @@
-#include "sett_list.h"
+//#include "sett_list.h"
 #include "proto.h"
 
 gchar*
@@ -45,15 +45,15 @@ settings_list_save( GList* lst, const gchar* name )
 
 
 gboolean
-settings_list_add( GList* lst, gchar* item )
+settings_list_add( GList** lst, gchar* item )
 {
-    GList* found = g_list_find_custom( lst,
+    GList* found = g_list_find_custom( *lst,
                                        item,
                                        (GCompareFunc) &g_strcmp0 );
 
     if ( found == NULL )
     {
-        lst = g_list_append( lst, item );
+        *lst = g_list_append( *lst, item );
         return TRUE;
     }
 
@@ -64,7 +64,7 @@ settings_list_add( GList* lst, gchar* item )
 
 
 void
-settings_list_load( GList* lst, const gchar* name )
+settings_list_load( GList** lst, const gchar* name )
 {
     EdaConfig* ctx = eda_config_get_cache_context();
 

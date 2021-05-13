@@ -14,10 +14,10 @@ void
 settings_list_save( GList* lst, const gchar* name );
 
 gboolean
-settings_list_add( GList* lst, gchar* item );
+settings_list_add( GList** lst, gchar* item );
 
 void
-settings_list_load( GList* lst, const gchar* name );
+settings_list_load( GList** lst, const gchar* name );
 
 void
 settings_list_clear( GList** lst );
