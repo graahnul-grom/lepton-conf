@@ -11,7 +11,7 @@ source code files.
 It is a graphical user interface application (using GTK 2.x, see
 [screenshots](https://graahnul-grom.github.io/lepton-conf))
 that does essentially the same as
-[lepton-cli(1)](https://graahnul-grom.github.io/ref-man/lepton-cli.html)
+[lepton-cli(1)](https://lepton-eda.github.io/man/lepton-cli.html)
 command-line utility invoked with the `config` command.
 <br />
 
