@@ -293,6 +293,42 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 
 
 
+void
+a_run_tool( cfg_edit_dlg* dlg, const gchar* cmdline )
+{
+    gchar*   cmd = NULL;
+    GError*  err = NULL;
+    gboolean res = FALSE;
+
+    if ( cmdline != NULL && strlen( cmdline ) > 0 )
+    {
+        cmd = g_strdup( cmdline );
+        res = g_spawn_command_line_async( cmd, &err );
+    }
+
+    if ( !res )
+    {
+        GtkWidget* msgdlg = gtk_message_dialog_new_with_markup(
+            GTK_WINDOW( dlg ),
+            (GtkDialogFlags) GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_OK,
+            "Could not launch external tool:\n"
+            "<b>%s</b>\n",
+            cmdline != NULL ? cmdline : "" );
+
+        gtk_window_set_title( GTK_WINDOW( msgdlg ), "lepton-conf" );
+        gtk_dialog_run( GTK_DIALOG( msgdlg ) );
+        gtk_widget_destroy( msgdlg );
+    }
+
+    g_clear_error( &err );
+    g_free( cmd );
+
+} // a_run_tool()
+
+
+
 gboolean
 a_open_dir( cfg_edit_dlg* dlg, const char* path )
 {

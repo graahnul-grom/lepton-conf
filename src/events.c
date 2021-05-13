@@ -1762,8 +1762,8 @@ on_mitem_tool_execute( GtkMenuItem* mitem, gpointer p )
     cfg_edit_dlg* dlg = (cfg_edit_dlg*) p;
 
     const gchar* str = gtk_menu_item_get_label( mitem );
-    printf( ".. on_mitem_tool_execute():\n   [%s]\n", str );
+    // printf( ".. on_mitem_tool_execute():\n   [%s]\n", str );
+
+    a_run_tool( dlg, str );
 }
-
-
 
