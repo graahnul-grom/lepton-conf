@@ -370,7 +370,7 @@ gui_mk_toolbar( cfg_edit_dlg* dlg )
     gtk_widget_set_tooltip_text( dlg->btn_bmks_,
                                  "Bookmarks (Ctrl+B)" );
     gtk_widget_set_tooltip_text( dlg->btn_tools_,
-                                 "Bookmarks (Ctrl+E)" );
+                                 "External tools (Ctrl+E)" );
     gtk_widget_set_tooltip_text( dlg->btn_reload_,
                                  "Reload configuration from disk (F5)" );
     gtk_widget_set_tooltip_text( dlg->btn_add_,
