@@ -304,24 +304,6 @@ void
 settings_restore_last_dir();
 
 void
-settings_bookmark_add( gchar* path );
-
-void
-settings_load_bookmarks();
-
-gchar*
-settings_bookmarks_to_string();
-
-void
-settings_save_bookmarks_string( const gchar* str );
-
-void
-settings_save_bookmarks();
-
-void
-settings_bookmarks_clear();
-
-void
 settings_read_close_with_esc();
 
 void
