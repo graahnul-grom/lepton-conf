@@ -563,6 +563,9 @@ a_delete( cfg_edit_dlg* dlg );
 void
 a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit );
 
+void
+a_run_tool( cfg_edit_dlg* dlg, const gchar* cmdline );
+
 gboolean
 a_open_dir( cfg_edit_dlg* dlg, const char* path );
 
