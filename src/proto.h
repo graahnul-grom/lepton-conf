@@ -281,6 +281,7 @@ conf_save( EdaConfig* ctx, cfg_edit_dlg* dlg );
 //
 
 extern GList* g_bookmarks;
+extern GList* g_tools;
 
 void
 settings_restore_showinh( cfg_edit_dlg* dlg );
