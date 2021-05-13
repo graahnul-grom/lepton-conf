@@ -23,13 +23,21 @@ settings_list_to_string( GList* lst )
 
 
 void
+settings_list_save_string( const gchar* str, const gchar* name )
+{
+    EdaConfig* ctx = eda_config_get_cache_context();
+    eda_config_set_string( ctx, "lepton-conf", name, str );
+    eda_config_save( ctx, NULL );
+}
+
+
+
+void
 settings_list_save( GList* lst, const gchar* name )
 {
     gchar* str = settings_list_to_string( lst );
 
-    EdaConfig* ctx = eda_config_get_cache_context();
-    eda_config_set_string( ctx, "lepton-conf", name, str );
-    eda_config_save( ctx, NULL );
+    settings_list_save_string( str, name );
 
     g_free( str );
 }
