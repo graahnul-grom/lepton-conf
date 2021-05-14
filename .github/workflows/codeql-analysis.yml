@@ -54,17 +54,10 @@ jobs:
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
-    - name: instdep
+    - name: build
       run: |
         sudo apt-get update
-        sudo apt-get install lepton-eda
-        sudo apt-get install autoconf
-        sudo apt-get install automake
-        sudo apt-get install libtool
-        sudo sync
-        sudo sync
-        sudo sync
-        sudo ldconfig
+        sudo apt-get install -y lepton-eda libgtk2.0-dev
         ./autogen.sh
         ./configure --prefix=/usr
         make
