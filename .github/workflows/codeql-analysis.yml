@@ -65,6 +65,9 @@ jobs:
         sudo sync
         sudo sync
         sudo ldconfig
+        ./autogen.sh
+        ./configure --prefix=/usr
+        make
 
     # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
     #    and modify them (or add more) to build your code if your project
@@ -73,12 +76,12 @@ jobs:
     #- run: |
     #   make bootstrap
     #   make release
-    - run: |
-        ./autogen.sh
-        export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
-        export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu
-        ./configure --prefix=/usr
-        make
+    # - run: |
+        # ./autogen.sh
+        # export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
+        # export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu
+        # ./configure --prefix=/usr
+        # make
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
