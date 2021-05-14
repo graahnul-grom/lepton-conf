@@ -54,7 +54,7 @@ jobs:
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
-    - name: instdep
+    - name: XXXXX-INST-DEPS
       run: |
         sudo apt-get update
         sudo apt-get install lepton-eda
@@ -66,6 +66,8 @@ jobs:
     #- run: |
     #   make bootstrap
     #   make release
+
+    - name: XXXXX-BUILD
     - run: |
         ./autogen.sh
         ./configure
