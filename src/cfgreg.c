@@ -2,7 +2,7 @@
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
  * Copyright (C) 2017-2020 dmn <graahnul.grom@gmail.com>
- * License: GPL2 - same as Lepton EDA, see
+ * License: GPLv2+ - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
 
