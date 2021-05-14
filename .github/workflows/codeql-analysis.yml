@@ -58,6 +58,10 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install lepton-eda
+        sudo sync
+        sudo sync
+        sudo sync
+        sudo ldconfig
 
     # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
     #    and modify them (or add more) to build your code if your project
@@ -68,7 +72,9 @@ jobs:
     #   make release
     - run: |
         ./autogen.sh
-        ./configure --prefix=/usr
+        export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
+        export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu
+        ./configure --prefix=/usr --disable-update-xdg-database
         make
 
     - name: Perform CodeQL Analysis
