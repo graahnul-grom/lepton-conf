@@ -13,7 +13,7 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 # how to name autotools-output files:
 #
-AC_CONFIG_FILES([Makefile src/Makefile docs/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile docs/Makefile data/Makefile])
 
 AC_PROG_CC
 

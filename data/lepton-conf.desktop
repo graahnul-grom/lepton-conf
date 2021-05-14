@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+GenericName=lepton-conf
+Name=Lepton EDA configuration utility
+Comment=Browse and change Lepton Electronic Design Automation settings
+Type=Application
+Exec=lepton-conf %f
+Icon=preferences-other
+MimeType=inode/directory;
+Categories=Development;Electronics;Engineering;
