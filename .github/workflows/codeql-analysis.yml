@@ -68,7 +68,7 @@ jobs:
     #   make release
     - run: |
         ./autogen.sh
-        ./configure
+        ./configure --prefix=/usr
         make
 
     - name: Perform CodeQL Analysis
