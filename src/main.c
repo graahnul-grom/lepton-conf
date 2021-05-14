@@ -62,8 +62,8 @@ void out_help( int exit_code )
     printf( "  -e    Close window with 'Escape' key\n" );
     printf( "  -r    Restore last working directory\n" );
     printf( "  -m    Do not warn about missing configuration files\n" );
-    printf( "  -d    Do not populate the DEFAULT configuration context on startup\n" );
-    printf( "  -p    Print the DEFAULT context in the *.conf file format and exit\n" );
+    printf( "  -d    Do not load default values on startup\n" );
+    printf( "  -p    Print default settings in the *.conf file format and exit\n" );
     printf( "  -h    Show usage information\n" );
     printf( "  -v    Show version information\n" );
 
