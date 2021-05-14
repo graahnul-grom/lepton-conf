@@ -18,8 +18,8 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: hirsute
-    # runs-on: ubuntu-latest
+    # the same as "ubuntu-20.04":
+    runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
