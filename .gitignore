@@ -25,3 +25,9 @@ depcomp
 install-sh
 missing
 .deps
+
+config.guess
+config.sub
+libtool
+ltmain.sh
+
