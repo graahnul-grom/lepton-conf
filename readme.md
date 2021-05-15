@@ -37,15 +37,21 @@ or later (at least git
 [039c08c](https://github.com/lepton-eda/lepton-eda/commit/039c08c6fd106a8402cc690206eeae3ac4d1a7e7),
 Dec 19, 2018).
 
+- The [git](http://git-scm.com) version control tool, version 1.6 or later.
+
 - A C compiler.
 
 - [pkg-config](http://pkgconfig.freedesktop.org).
 
 - [GTK+](http://www.gtk.org) and its development files, version 2.24.0 or later.
 
+- [Guile](http://www.gtk.org) and its development files, version 2.0.0 or later.
+
 - [Autoconf](http://www.gnu.org/software/autoconf)
 
 - [Automake](http://www.gnu.org/software/automake)
+
+- [Libtool](http://www.gnu.org/software/libtool)
 
 Installation from source
 ------------------------
