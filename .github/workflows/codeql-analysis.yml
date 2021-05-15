@@ -57,7 +57,7 @@ jobs:
     - name: build
       run: |
         sudo apt-get update
-        sudo apt-get install -y lepton-eda libgtk2.0-dev
+        sudo apt-get install -y lepton-eda libgtk2.0-dev guile-2.2-dev
         ./autogen.sh
         ./configure --prefix=/usr
         make
