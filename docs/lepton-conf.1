@@ -35,9 +35,16 @@ it to start in the last used directory (by passing \fB-r\fR command line
 switch or setting the \fI[lepton-conf]::restore-last-dir\fR key,
 see the section \fICONFIGURING lepton-conf\fR below).
 
-The main window contains a tree view representing a hierarchical
-configuration structure and a lower pane with details about
+\fBlepton-conf\fR's main window contains toolbar, tree view with
+configuration groups and keys and lower pane showing details about the
 currently selected tree node, configuration file and working directory.
+
+Root nodes in the tree view represent different types of
+configuration: system-wide settings (loaded from the
+\fIlepton-system.conf\fR configuration file), user-specific settings
+(\fIlepton-user.conf\fR) and settings for current directory
+(\fIlepton.conf\fR). There is also the \fIdefault values\fR node,
+under which you can find all available configuration parameters.
 
 .SH OPTIONS
 .TP
