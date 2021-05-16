@@ -1,4 +1,4 @@
-.TH lepton-conf 1 "May 12, 2021" "Lepton EDA" 1.0
+.TH lepton-conf 1 "May 16, 2021" "Lepton EDA" 1.0
 
 .SH NAME
 lepton-conf \- Lepton EDA configuration utility
@@ -58,6 +58,33 @@ Show usage information
 .TP
 \fB\-v\fR
 Show version information
+
+.SH CONFIGURING lepton-conf
+There are several keys you can set in the user configuration
+(in the \fI[lepton-conf]\fR group) to alter the behaviour
+of \fBlepton-conf\fR itself:
+.TP 4
+\fBclose-with-escape-key\fR
+Allows you to close the main window by pressing the 'Escape' key
+(the same as \fB\-e\fR command line option).
+Either \fItrue\fR or \fIfalse\fR.
+Default value: \fIfalse\fR.
+.TP 4
+\fBeditor\fR
+External text editor for configuration files, launched when
+you click on the "config file" link in the lower pane of the
+main window.
+Specify a command to launch the editor.
+Default value: \fIgvim\fR.
+.TP 4
+\fBrestore-last-dir\fR
+Restore last working directory on startup
+(the same as \fB\-r\fR command line option).
+Either \fItrue\fR or \fIfalse\fR.
+Default value: \fIfalse\fR.
+.PP
+Please note that currently these setting are loaded only
+from the user configuration file (\fIlepton-user.conf\fR).
 
 .SH AUTHOR
 dmn <graahnul.grom@gmail.com>
