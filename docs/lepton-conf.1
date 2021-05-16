@@ -29,6 +29,12 @@ https://lepton-eda.github.io/lepton-manual.html
 .BR
 https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings
 
+On startup, \fBlepton-conf\fR will load settings for the current
+directory, unless you specify \fIPATH\fR on the command line or instruct
+it to start in the last used directory (by passing \fB-r\fR command line
+switch or setting the \fI[lepton-conf]::restore-last-dir\fR key,
+see the section \fICONFIGURING lepton-conf\fR below).
+
 The main window contains a tree view representing a hierarchical
 configuration structure and a lower pane with details about
 currently selected tree node, configuration file and working directory.
