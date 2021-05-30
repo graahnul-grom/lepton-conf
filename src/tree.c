@@ -337,6 +337,8 @@ tree_add_column_1( cfg_edit_dlg* dlg )
     GtkTreeViewColumn* col = gtk_tree_view_column_new();
     gtk_tree_view_column_set_title( col, "name" );
 
+    gtk_tree_view_column_set_resizable( col, TRUE );
+
     GtkCellRenderer* ren = gtk_cell_renderer_text_new();
     gtk_tree_view_column_pack_start( col, ren, TRUE );
     gtk_tree_view_column_add_attribute( col, ren, "text", tree_colid_name() );
