@@ -41,37 +41,32 @@ dbg_printf( const char* fmt, ... )
 
 
 static gchar*
-attrs_dlg_result_to_string( AttrsDlg* dlg )
+glist_to_str( GList* lst )
 {
-    GList* items = dlg->items_result_;
+    if ( lst == NULL )
+        return NULL;
 
-    if ( items == NULL )
-        return g_strdup( "" );
+    gchar* res = NULL;
+    gchar* pre = NULL;
 
-    if ( g_list_length( items ) == 0 )
-        return g_strdup( "" );
-
-
-    // to avoid leading ';' in the result string:
-    //
-    gchar* res = (gchar*) items->data;
-
-    for ( GList* p = items->next; p != NULL; p = p->next )
+    for ( GList* p = lst; p != NULL; p = p->next )
     {
-        const gchar* str = (const gchar*) p->data;
-        dbg_printf( " .. attrs_dlg_result_to_string(): str [%s]\n", str );
+        gchar* str = (gchar*) p->data;
+        // printf( ".. p: [%s]\n", str );
 
-        gchar* res_prev = res;
+        res = g_strdup_printf( "%s%s%s",
+                               res ? res : "",
+                               res ? ";" : "",
+                               str );
+        if ( pre != NULL )
+            g_free( pre );
 
-        res = g_strdup_printf( "%s;%s", res, str );
-
-        if ( p->next != NULL )
-            g_free( res_prev );
+        pre = res;
     }
 
     return res;
 
-} // attrs_dlg_result_to_string()
+} // glist_to_str()
 
 
 
@@ -236,7 +231,7 @@ attrs_dlg_run_impl( GList* items, const gchar* title, const gchar* dlg_name )
     GtkTreeModel* mod_res = gtk_tree_view_get_model( adlg->tree_v_ );
     gtk_tree_model_foreach( mod_res, &attrs_dlg_add_to_result, dlg );
 
-    gchar* ret = attrs_dlg_result_to_string( adlg );
+    gchar* ret = glist_to_str( adlg->items_result_ );
 
     g_list_free( adlg->items_result_ );
     adlg->items_result_ = NULL;
