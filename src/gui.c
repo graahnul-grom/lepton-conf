@@ -32,33 +32,20 @@ void     gui_update_off()     { g_gui_update_enabled = FALSE; }
 // {ret}:   one\ntwo\nthree
 //
 static gchar*
-semicol_list_to_newline_list( const gchar* value )
+semicol_list_to_newline_list( const gchar* str )
 {
-    gchar** strs = g_strsplit( value, ";", 0 );
-    gchar** pp = strs;
+    g_return_val_if_fail( str != NULL, NULL );
 
-    gchar* res = NULL;
+    gchar* cpy = g_strdup( str );
 
-    while ( *strs != NULL )
+    for ( size_t i = 0; i < strlen( cpy ); ++i )
     {
-        gchar* prev = res;
-
-        res = g_strdup_printf( "%s%s%s",
-                               res ? res : "",
-                               res ? "\n" : "",
-                               *strs );
-
-        ++ strs ;
-
-        if ( *strs != NULL )
-            g_free( prev );
+        if ( cpy[i] == ';' )
+            cpy[ i ] = '\n';
     }
 
-    g_strfreev( pp );
-
-    return res;
-
-} // mk_list_tooltip()
+    return cpy;
+}
 
 
 
