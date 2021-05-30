@@ -177,6 +177,25 @@ attrs_dlg_new()
 
 
 
+static GList*
+str_to_glist( const gchar* str )
+{
+    gchar** strs = g_strsplit( str, ";", -1 );
+
+    GList* res = NULL;
+    for ( gchar** pp = strs; *pp != NULL; ++pp )
+    {
+        // printf( ".. p: [%s]\n", *pp );
+        if ( strlen( *pp ) > 0 )
+            res = g_list_append( res, g_strdup( *pp ) );
+    }
+
+    g_strfreev( strs );
+    return res;
+}
+
+
+
 static gchar*
 attrs_dlg_run_impl( GList* items, const gchar* title, const gchar* dlg_name )
 {
@@ -237,31 +256,14 @@ attrs_dlg_run_impl( GList* items, const gchar* title, const gchar* dlg_name )
 
 
 
-// [value]: semicolon-separated string
+// {pre}: [str]: semicolon-separated string
 //
 gchar*
-attrs_dlg_run( const gchar* value, const gchar* title, const gchar* dlg_name )
+attrs_dlg_run( const gchar* str, const gchar* title, const gchar* dlg_name )
 {
-    gchar** attrs = g_strsplit( value, ";", 0 );
-    dbg_printf( " .. attrs_dlg_run(): attrs: [%p]\n", attrs );
+    g_return_val_if_fail( str != NULL && "attrs_dlg_run(): !str split", NULL );
 
-    g_return_val_if_fail( attrs != NULL && "attrs_dlg_run(): !str split", NULL );
-
-
-    GList* attrs_list = NULL;
-
-    while ( *attrs != NULL )
-    {
-        dbg_printf( " .. attrs_dlg_run(): *attrs: [%s]\n", *attrs );
-
-        if ( strlen( *attrs ) > 0 )
-        {
-            attrs_list = g_list_append( attrs_list, *attrs );
-        }
-
-        ++ attrs ;
-    }
-
+    GList* attrs_list = str_to_glist( str );
 
     gchar* attrs_new_as_string = attrs_dlg_run_impl( attrs_list, title, dlg_name );
 
