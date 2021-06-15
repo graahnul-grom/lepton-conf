@@ -16,6 +16,8 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_CONFIG_FILES([Makefile src/Makefile docs/Makefile data/Makefile])
 
 AC_PROG_CC
+AC_PROG_CC_STDC
+
 AC_PROG_LIBTOOL
 
 # check for pkg-config:
