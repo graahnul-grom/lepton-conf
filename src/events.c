@@ -382,7 +382,16 @@ on_lab_fname( GtkLabel* lab, gchar* uri, gpointer* p )
     if ( !dlg )
         return;
 
-    const gchar* fname = gtk_label_get_text( lab );
+    GtkTreeIter it;
+    if ( !row_cur_get_iter( dlg, &it ) )
+        return;
+
+    row_data* rdata = row_field_get_data( dlg, &it );
+    if ( !rdata )
+        return;
+
+
+    const gchar* fname = conf_ctx_fname( rdata->ctx_, NULL, NULL, NULL );
     a_run_editor( dlg, fname );
 
 } // on_lab_fname()
