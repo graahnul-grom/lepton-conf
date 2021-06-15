@@ -258,7 +258,10 @@ a_run_editor( cfg_edit_dlg* dlg, const gchar* fname_to_edit )
 
     if ( g_ext_editor != NULL && strlen( g_ext_editor ) > 0 )
     {
-        cmd = g_strdup_printf( "%s %s", g_ext_editor, fname_to_edit );
+        cmd = g_strdup_printf( "%s %s",
+                               g_ext_editor,
+                               fname_to_edit ? fname_to_edit : "" );
+
         res = g_spawn_command_line_async( cmd, &err );
     }
 
