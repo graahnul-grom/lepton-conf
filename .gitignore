@@ -1,4 +1,5 @@
 lepton-conf
+lepton-conf.exe
 geda.conf
 *.wip.c
 *.wip.c.BCK
@@ -25,6 +26,7 @@ depcomp
 install-sh
 missing
 .deps
+.libs
 
 config.guess
 config.sub
