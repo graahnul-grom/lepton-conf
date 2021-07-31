@@ -1,0 +1,278 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Sat Jul 31 14:57:47 2021 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>lepton-conf</title>
+
+</head>
+<body>
+
+<h1 align="center">lepton-conf</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#CONFIGURING lepton-conf">CONFIGURING lepton-conf</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">lepton-conf
+&minus; Lepton EDA configuration utility</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>lepton-conf</b>
+[<i>OPTIONS</i>] [<i>PATH</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>lepton-conf</b>
+is a graphical user interface configuration utility for the
+Lepton Electronic Design Automation suite. It allows one to
+explore and modify the new-style settings stored in
+<i>lepton*.conf</i> ini-like configuration files. It
+performs essentially the same tasks as the
+<b>lepton-cli</b>(1) Lepton EDA command-line tool invoked
+with the <i>config</i> command, but in a more convenient
+way. However, it&rsquo;s not a front-end to that utility;
+<b>lepton-conf</b> uses the <b>liblepton</b> configuration
+API directly.</p>
+
+<p style="margin-left:11%; margin-top: 1em">To work with
+lepton-conf, you should be acquainted with the Lepton EDA
+configuration system. Information about it can be found in
+the reference manual and on the &quot;Configuration
+settings&quot; wiki page:
+https://lepton-eda.github.io/lepton-manual.html
+https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings</p>
+
+<p style="margin-left:11%; margin-top: 1em">On startup,
+<b>lepton-conf</b> will load settings for the current
+directory, unless you specify <i>PATH</i> on the command
+line or instruct it to start in the last used directory (by
+passing <b>-r</b> command line switch or setting the
+<i>[lepton-conf]::restore-last-dir</i> key, see the section
+<i>CONFIGURING lepton-conf</i> below).</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>lepton-conf</b>&rsquo;s
+main window contains toolbar, tree view with configuration
+groups and keys and lower pane showing details about the
+currently selected tree node, configuration file and working
+directory.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Root nodes in
+the tree view represent different types of configuration:
+system-wide settings (loaded from the
+<i>lepton-system.conf</i> configuration file), user-specific
+settings (<i>lepton-user.conf</i>) and settings for current
+directory (<i>lepton.conf</i>). There is also the <i>default
+values</i> node, under which you can find all available
+configuration parameters.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p style="margin-top: 1em"><b>&minus;d</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p style="margin-top: 1em">Do not load default values on
+startup</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;e</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Close window with &rsquo;Escape&rsquo; key</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;l</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Legacy mode: use geda*.conf configuration files</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;m</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Do not warn about missing configuration files</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;p</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Print default settings in the *.conf file format and
+exit</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;r</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Restore last working directory</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;h</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Show usage information</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;v</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Show version information</p></td></tr>
+</table>
+
+<h2>CONFIGURING lepton-conf
+<a name="CONFIGURING lepton-conf"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">There are
+several keys you can set in the <b>user</b> configuration
+(in the <i>[lepton-conf]</i> group) to alter the behaviour
+of <b>lepton-conf</b> itself: <b><br>
+close-with-escape-key</b></p>
+
+<p style="margin-left:17%;">Allows you to close the main
+window by pressing the &rsquo;Escape&rsquo; key (the same as
+<b>&minus;e</b> command line option). Either <i>true</i> or
+<i>false</i>. Default value: <i>false</i>.</p>
+
+<p style="margin-left:11%;"><b>editor</b></p>
+
+<p style="margin-left:17%;">External text editor for
+configuration files, launched when you click on the
+&quot;config file&quot; link in the lower pane of the main
+window. Specify a command to launch the editor. Default
+value: <i>gvim</i>.</p>
+
+<p style="margin-left:11%;"><b>restore-last-dir</b></p>
+
+<p style="margin-left:17%;">Restore last working directory
+on startup, unless you explicitly specify the <i>PATH</i> to
+start with on the command line (the same as <b>&minus;r</b>
+command line option). Either <i>true</i> or <i>false</i>.
+Default value: <i>false</i>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Please note
+that currently these setting are loaded only from the
+<b>user</b> configuration (<i>lepton-user.conf</i>
+file).</p>
+
+<h2>AUTHOR
+<a name="AUTHOR"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">dmn
+&lt;graahnul.grom@gmail.com&gt;</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>lepton-cli</b>(1),
+<b>lepton-upcfg</b>(1)</p>
+
+<p style="margin-left:11%; margin-top: 1em">lepton-conf
+home page (screenshots with brief annotations, layout of the
+main window):
+https://graahnul-grom.github.io/lepton-conf</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Copyright (C)
+2017-2021 dmn.</p>
+
+<p style="margin-left:11%; margin-top: 1em">License GPLv2+:
+GNU GPL version 2 or later. Please see the
+&lsquo;COPYING&rsquo; file included with this program for
+full details.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This is free
+software: you are free to change and redistribute it. There
+is NO WARRANTY, to the extent permitted by law.</p>
+<hr>
+</body>
+</html>
