@@ -28,6 +28,8 @@ Information about the configuration system can be found on the
 wiki page and in the
 [Lepton EDA Reference Manual](https://lepton-eda.github.io/lepton-manual.html/index.html).
 
+[lepton-conf(1)](https://graahnul-grom.github.io/lepton-conf/lepton-conf.html'>) man page
+
 Dependencies
 ------------
 
