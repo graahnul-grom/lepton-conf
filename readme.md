@@ -23,12 +23,11 @@ command-line utility invoked with the `config` command.
 
 Documentation
 ------------
-Information about the configuration system can be found on the
-[Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings)
-wiki page and in the
-[Lepton EDA Reference Manual](https://lepton-eda.github.io/lepton-manual.html/index.html).
-
-[lepton-conf(1)](https://graahnul-grom.github.io/lepton-conf/lepton-conf.html'>) man page
+- [Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings)
+wiki page
+- [Lepton EDA Reference Manual](https://lepton-eda.github.io/lepton-manual.html/index.html).
+- [lepton-conf(1)](https://graahnul-grom.github.io/lepton-conf/lepton-conf.html'>)
+man page
 
 Dependencies
 ------------
