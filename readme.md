@@ -9,7 +9,7 @@ new-style configuration, as opposed to settings stored in `Guile`
 source code files.
 <br />
 It is a graphical user interface application (using GTK 2.x, see
-[screenshots](https://graahnul-grom.github.io/lepton-conf))
+[screenshots](https://graahnul-grom.github.io/lepton-conf#ss))
 that does essentially the same as
 [lepton-cli(1)](https://lepton-eda.github.io/man/lepton-cli.html)
 command-line utility invoked with the `config` command.
