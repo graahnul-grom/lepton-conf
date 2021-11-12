@@ -23,9 +23,7 @@ command-line utility invoked with the `config` command.
 
 Documentation
 ------------
-- [Configuration Settings](https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings)
-wiki page
-- [Lepton EDA Reference Manual](https://lepton-eda.github.io/lepton-manual.html/index.html)
+- [Lepton EDA Reference Manual - Configuration System](https://lepton-eda.github.io/lepton-manual.html/Configuration.html)
 - [lepton-conf(1)](https://graahnul-grom.github.io/lepton-conf/lepton-conf.html)
 man page
 - [screenshots with annotations](https://graahnul-grom.github.io/lepton-conf#ss)
