@@ -495,7 +495,7 @@ run_dlg_hlp()
 
     GtkWidget* label_docs = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( label_docs ),
-        "<a href='https://github.com/lepton-eda/lepton-eda/wiki/Configuration-Settings'>"
+        "<a href='https://lepton-eda.github.io/lepton-manual.html/Configuration.html'>"
         "Configuration settings documentation"
         "</a>" );
 
