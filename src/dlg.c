@@ -490,7 +490,7 @@ run_dlg_hlp()
     GtkWidget* label_lconf = gtk_label_new( NULL );
     gtk_label_set_markup( GTK_LABEL( label_lconf ),
         "<a href='https://github.com/graahnul-grom/lepton-conf'>"
-        "github.com/graahnul-grom/lepton-conf"
+        "lepton-conf repository on github"
         "</a>" );
 
     GtkWidget* label_docs = gtk_label_new( NULL );
