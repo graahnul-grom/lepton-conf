@@ -1,4 +1,4 @@
-.TH lepton-conf 1 "September 17, 2021" "Lepton EDA" 1.0
+.TH lepton-conf 1 "January 10, 2022" "Lepton EDA" 1.0
 
 .SH NAME
 lepton-conf \- Lepton EDA configuration utility
@@ -22,12 +22,12 @@ but in a more convenient way.
 However, it's not a front-end to that utility; \fBlepton-conf\fR
 uses the \fBliblepton\fR configuration API directly.
 
-To work with \fBlepton-conf\fR, you should be acquainted with the Lepton EDA
+To work with \fBlepton-conf\fR, one should be acquainted with the Lepton EDA
 configuration system. Information about it can be found in the
 reference manual:
   https://lepton-eda.github.io/lepton-manual.html/Configuration.html
 
-For an overview of the main window layout and available controls
+For an overview of the lepton-conf main window layout and available controls
 take a look at the screenshots with annotations on the
 \fBlepton-conf\fR home page:
   https://graahnul-grom.github.io/lepton-conf#ss
@@ -45,12 +45,26 @@ currently selected tree node, configuration file and working directory.
 Root nodes in the tree view represent different types of
 configuration: system-wide settings (loaded from the
 \fIlepton-system.conf\fR configuration file), user-specific settings
-(\fIlepton-user.conf\fR) and settings for current directory
+(\fIlepton-user.conf\fR) and settings the for current directory
 (\fIlepton.conf\fR). There is also the \fIdefault values\fR node,
 under which you can find all available configuration parameters.
 
 Actions on currently selected tree node are performed using
 toolbar buttons and/or context menu or keyboard shortcuts.
+
+Normally, you edit configuration values with the \fIEdit value\fR
+dialog. However, there are special cases when the edit operation
+can be simplified. First, it is the so called "toggle" action.
+Many keys have values like true/false, yes/no, etc.
+You can simply double-click, click on the "Toggle" button or press
+the space bar to change the value. Second, there are values which
+can be edited with the special dialog boxes: this way you can change
+color, font, paper size and attributes list keys. Use the context
+menu to open these dialogs.
+
+The toolbar have additional buttons: bookmarks and external tools.
+You can bookmark current directory to quickly open it later and add
+external commands to launch in the current directory.
 
 .SH OPTIONS
 .TP
@@ -113,7 +127,7 @@ dmn <graahnul.grom@gmail.com>
 \fBlepton-cli\fR(1), \fBlepton-upcfg\fR(1)
 
 .SH COPYRIGHT
-Copyright (C) 2017-2021 dmn.
+Copyright (C) 2017-2022 dmn.
 .PP
 License GPLv2+: GNU GPL version 2 or later.
 Please see the `COPYING' file included with
