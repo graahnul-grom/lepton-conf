@@ -1,7 +1,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2022 dmn <graahnul.grom@gmail.com>
  * License: GPLv2+ - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -471,7 +471,7 @@ run_dlg_hlp()
     gtk_about_dialog_set_comments( adlg, "Lepton EDA Configuration Utility" );
 
     gtk_about_dialog_set_copyright( adlg,
-        "Copyright © 2017-2021 dmn <graahnul.grom@gmail.com>" );
+        "Copyright © 2017-2022 dmn <graahnul.grom@gmail.com>" );
 
     gtk_about_dialog_set_license( adlg,
         "lepton-conf is freely distributable under\n"
