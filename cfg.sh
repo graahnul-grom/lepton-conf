@@ -10,7 +10,8 @@ export CPPFLAGS="-DDEBUG"
 #
 # export CFLAGS="-O2"
 
-prefix=$t/LC
+prefix=/usr/local
+# prefix=$t/LC
 export PKG_CONFIG_PATH=$lepton/bin.master/lib/pkgconfig
 # export PKG_CONFIG_PATH=$lepton/bin.tb/lib/pkgconfig
 
