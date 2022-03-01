@@ -1133,7 +1133,9 @@ on_mitem_edit_attrs( GtkMenuItem* mitem, gpointer p )
 
     gchar* attrs_new_as_string = attrs_dlg_run( rdata->val_, rdata->key_, "attrs" );
 
+#ifdef DEBUG
     printf( " >> attrs_new_as_string: [%s]\n", attrs_new_as_string );
+#endif
 
     if ( attrs_new_as_string != NULL &&
          g_strcmp0( attrs_new_as_string, rdata->val_ ) != 0 )
@@ -1212,7 +1214,9 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
 
     if ( path1 != NULL )
     {
+#ifdef DEBUG
         printf( "on_mitem_add(): [%s] EXISTS\n", key );
+#endif
 
         row_select_by_path_mod( dlg, path1 );
 
@@ -1278,7 +1282,9 @@ on_mitem_grp_add( GtkMenuItem* mitem, gpointer p )
     if ( !conf_save( rdata->ctx_, dlg ) )
         return;
 
+#ifdef DEBUG
     printf( "on_mitem_add(): [%s] = [%s]\n", key, val );
+#endif
 
     // NOTE: rdata:
     //
@@ -1361,8 +1367,10 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     if ( !run_dlg_add_grp_key_val( dlg, NULL, &grp, &key, &val ) )
         return;
 
+#ifdef DEBUG
     printf( "on_mitem_ctx_add( %s ): [%s] [%s] [%s]\n",
             conf_ctx_name( rdata_ctx->ctx_ ), grp, key, val );
+#endif
 
     GtkTreeIter it_grp;
     GtkTreeIter it_key;
@@ -1374,7 +1382,9 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
     {
         // XXX: group exists:
 
+#ifdef DEBUG
         printf( "on_mitem_ctx_add(): GRP [%s] EXISTS\n", grp );
+#endif
 
         row_select_by_path_mod( dlg, path_grp );
         gtk_tree_path_free( path_grp );
@@ -1387,7 +1397,9 @@ on_mitem_ctx_add( GtkMenuItem* mitem, gpointer p )
         {
             // XXX: group exists, key exists
 
+#ifdef DEBUG
             printf( "on_mitem_ctx_add(): KEY [%s] EXISTS\n", key );
+#endif
 
             row_select_by_path_mod( dlg, path_key );
             gtk_tree_path_free( path_key );

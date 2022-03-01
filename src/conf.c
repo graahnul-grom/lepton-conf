@@ -687,7 +687,9 @@ conf_del_key( const row_data* rdata )
                                &err );
     g_clear_error( &err );
 
+#ifdef DEBUG
     printf( " >> eda_config_remove_key( %s ): [ %d ]\n", rdata->key_, res );
+#endif
 
     return res;
 }
