@@ -29,24 +29,6 @@ GtkWidget* cfg_edit_dlg_new()
 
 
 static void
-cfg_edit_dlg_get_property( GObject* obj, guint id, GValue* val, GParamSpec* spec )
-{
-    // cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
-    G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
-}
-
-
-
-static void
-cfg_edit_dlg_set_property( GObject* obj, guint id, const GValue* val, GParamSpec* spec )
-{
-    // cfg_edit_dlg* dlg = CFG_EDIT_DLG( obj );
-    G_OBJECT_WARN_INVALID_PROPERTY_ID( obj, id, spec );
-}
-
-
-
-static void
 cfg_edit_dlg_dispose( GObject* obj )
 {
     // g_debug( "cfg_edit_dlg::dispose( %p ); refcnt: %d\n",
@@ -104,8 +86,6 @@ cfg_edit_dlg_class_init( cfg_edit_dlgClass* cls )
     GObjectClass* gcls = G_OBJECT_CLASS( cls );
 
     gcls->dispose      = &cfg_edit_dlg_dispose;
-    gcls->get_property = &cfg_edit_dlg_get_property;
-    gcls->set_property = &cfg_edit_dlg_set_property;
 
 
     GtkWidgetClass* wcls = GTK_WIDGET_CLASS( cls );
