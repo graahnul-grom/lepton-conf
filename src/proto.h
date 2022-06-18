@@ -4,7 +4,7 @@
 /*
  * lepton-conf - Lepton EDA configuration utility.
  * https://github.com/graahnul-grom/lepton-conf
- * Copyright (C) 2017-2021 dmn <graahnul.grom@gmail.com>
+ * Copyright (C) 2017-2022 dmn <graahnul.grom@gmail.com>
  * License: GPL2 - same as Lepton EDA, see
  * https://github.com/lepton-eda/lepton-eda
  */
@@ -18,6 +18,8 @@
 
 
 
+// gobj.c:
+//
 #define CFG_EDIT_DLG_TYPE (cfg_edit_dlg_get_type())
 
 // cast [obj] to cfg_edit_dlg*:
@@ -29,8 +31,6 @@
 #define CFG_EDIT_DLG_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST ((cls), CFG_EDIT_DLG_TYPE, cfg_edit_dlgClass))
 #define IS_CFG_EDIT_DLG(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CFG_EDIT_DLG_TYPE))
 #define CFG_EDIT_DLG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), CFG_EDIT_DLG_TYPE, cfg_edit_dlgClass))
-
-
 
 
 struct _cfg_edit_dlgClass
@@ -72,6 +72,13 @@ struct _cfg_edit_dlg
 
 typedef struct _cfg_edit_dlgClass cfg_edit_dlgClass;
 typedef struct _cfg_edit_dlg      cfg_edit_dlg;
+
+
+GType
+cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro in gobj.c
+
+GtkWidget*
+cfg_edit_dlg_new();
 
 
 
@@ -124,18 +131,6 @@ extern gboolean g_warn_cfg_file_not_found;
 extern gboolean g_print_default_cfg;
 extern gboolean g_tst_btn_visible;
 extern gboolean g_restore_last_dir;
-
-
-
-
-// cfg_edit_dlg.c:
-//
-GType
-cfg_edit_dlg_get_type(); // implemented by G_DEFINE_TYPE macro (in .c file)
-
-GtkWidget*
-cfg_edit_dlg_new();
-
 
 
 
