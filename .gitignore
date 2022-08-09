@@ -1,10 +1,13 @@
+.tags*
+.cscope.files
+.cscope.out
+
 lepton-conf
 lepton-conf.exe
 geda.conf
 *.wip.c
 *.wip.c.BCK
 *.vim
-*tags*
 *.patch
 *.diff
 t0_*
